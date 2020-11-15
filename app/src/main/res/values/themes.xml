@@ -1,0 +1,113 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Base.JaBotMobile" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/red_heavy</item>
+        <item name="colorPrimaryVariant">@color/red_heavy</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/red_light</item>
+        <item name="colorSecondaryVariant">@color/red_heavy</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="drawerArrowStyle">@style/Theme.JaBotMobile.DrawerArrowStyle</item>
+        <item name="android:windowContentTransitions">true</item>
+        <!-- text colors -->
+        <item name="android:textColorSecondary">@color/black</item>
+
+    </style>
+    <style name="Theme.JaBotMobile" parent="Theme.Base.JaBotMobile" />
+
+
+    <style name="Theme.Base.JaBotMobile.Toolbar"
+        parent="Widget.MaterialComponents.Light.ActionBar.Solid">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:fontFamily">@font/open_sans_light</item>
+    </style>
+    <style name="Theme.JaBotMobile.Toolbar" parent="Theme.Base.JaBotMobile.Toolbar" />
+
+
+    <style name="Theme.Base.JaBotMobile.Drawer">
+        <item name="fontFamily">@font/open_sans_regular</item>
+    </style>
+    <style name="Theme.JaBotMobile.Drawer" parent="Theme.Base.JaBotMobile.Drawer" />
+
+
+    <style name="Theme.Base.JaBotMobile.Header">
+        <item name="fontFamily">@font/varela_round</item>
+    </style>
+    <style name="Theme.JaBotMobile.Header" parent="Theme.Base.JaBotMobile.Header" />
+
+
+    <style name="Theme.Base.JaBotMobile.DrawerArrowStyle"
+        parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/white</item>
+        <item name="drawableSize">64dp</item>
+    </style>
+    <style name="Theme.JaBotMobile.DrawerArrowStyle"
+        parent="Theme.Base.JaBotMobile.DrawerArrowStyle" />
+
+
+    <style name="Theme.Base.JaBotMobile.TextInputLayout"
+        parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="endIconMode">clear_text</item>
+    </style>
+    <style name="Theme.JaBotMobile.TextInputLayout"
+        parent="Theme.Base.JaBotMobile.TextInputLayout" />
+
+
+    <style name="Theme.Base.JaBotMobile.EditText">
+        <item name="singleLine">true</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="fontFamily">@font/open_sans_regular</item>
+    </style>
+    <style name="Theme.JaBotMobile.EditText" parent="Theme.Base.JaBotMobile.EditText" />
+
+    <style name="Theme.Base.JaBotMobile.Suffix">
+        <item name="android:textSize">18sp</item>
+        <item name="fontFamily">@font/open_sans_light</item>
+    </style>
+    <style name="Theme.JaBotMobile.Suffix" parent="Theme.Base.JaBotMobile.Suffix"/>
+
+
+    <style name="Theme.Base.JaBotMobile.OutlinedBT"
+        parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textSize">18sp</item>
+        <item name="fontFamily">@font/open_sans_regular</item>
+        <item name="android:textAlignment">textStart</item>
+        <item name="strokeColor">@color/grey_outline</item>
+        <item name="android:textColor">@color/grey_text</item>
+        <item name="iconTint">@color/grey_text</item>
+        <item name="android:letterSpacing">0.01</item>
+        <item name="iconGravity">end</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:paddingStart">13dp</item>
+    </style>
+    <style name="Theme.JaBotMobile.OutlinedBT" parent="Theme.Base.JaBotMobile.OutlinedBT"/>
+
+
+    <style name="Theme.Base.JaBotMobile.ContainedBT"
+        parent="Widget.MaterialComponents.Button.OutlinedButton">
+
+    </style>
+    <style name="Theme.JaBotMobile.ContainedBT" parent="Theme.Base.JaBotMobile.ContainedBT"/>
+
+
+    <style name="Theme.Base.Jabotmobile.TextBT"
+        parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="icon">@drawable/ic_baseline_add_24</item>
+        <item name="iconPadding">4dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/open_sans_regular</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:padding">0dp</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="iconGravity">start</item>
+        <item name="android:textColor">@color/grey_outline</item>
+        <item name="iconTint">@color/grey_outline</item>
+        <item name="android:clickable">false</item>
+    </style>
+    <style name="Theme.JaBotMobile.TextBT" parent="Theme.Base.Jabotmobile.TextBT" />
+</resources>

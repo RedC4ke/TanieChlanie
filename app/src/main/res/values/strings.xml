@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">Placeholder</string>
+    <!-- labels -->
+    <string name="list">Baza alkoholi</string>
+    <string name="preferences">Ustawienia</string>
+    <string name="about">O aplikacji</string>
+    <string name="details">Szczegóły</string>
+    <string name="request">Zgłoś nową pozycję!</string>
+    <string name="request_cat">Wybierz kategorię:</string>
+    <!-- welcome -->
+    <string name="start">Zaczynamy!</string>
+    <string name="welcome_text">
+        Witaj w aplikacji <b>JaBot</b>! <br />
+        Tutaj obliczysz, jak w najbardziej efektywny sposób spędzić piątkową noc.
+        Aplikacja jest na ten moment w fazie testów. Będzie poprawiana i aktualizowana na bieżąco.
+    </string>
+    <!-- image alts -->
+    <string name="wine">Butelka wina, obok dwa kieliszki</string>
+    <!-- details page -->
+    <string name="pricetag">Cena:</string>
+    <string name="mR">mR:</string>
+    <string name="volume">Objętość:</string>
+    <string name="voltage">%Vol.:</string>
+    <!-- request page -->
+    <string name="header1">Nie znalazłeś czegoś w bazie?</string>
+    <string name="header2">Dodaj procenty!</string>
+    <string name="name_req">Nazwa</string>
+    <string name="price_req">Cena</string>
+    <string name="price_req_suffix">\u00A0zł</string>
+    <string name="volume_req">Objętość</string>
+    <string name="volume_req_suffix">\u00A0ml</string>
+    <string name="voltage_req">Obj. alkoholu</string>
+    <string name="voltage_req_suffix">\u00A0%</string>
+    <string name="image_req">Zdjęcie<sup><font size="10">*</font></sup></string>
+    <string name="image_req_desc">Brak</string>
+    <string name="category_req">Dodaj kategorię</string>
+    <!-- request page - category fragment -->
+
+    <!-- transition names -->
+    <string name="row_alcohol_details_transition_name">row_alcohol_details_transition</string>
+    <!-- other -->
+    <string name="queryHint">Wyszukaj…</string>
+
+</resources>

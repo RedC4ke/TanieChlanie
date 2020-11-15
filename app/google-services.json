@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "697978368564",
+    "firebase_url": "https://jabot-5ce1f.firebaseio.com",
+    "project_id": "jabot-5ce1f",
+    "storage_bucket": "jabot-5ce1f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:697978368564:android:4e3b86efd89f7e6d661061",
+        "android_client_info": {
+          "package_name": "com.example.jabotmobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "697978368564-lb70ecb10obt1gbpcab440tuc1mi0eln.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBarFnQ_sVt9mq65bIeoT6RdEPbYNhc8Wg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "697978368564-lb70ecb10obt1gbpcab440tuc1mi0eln.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
