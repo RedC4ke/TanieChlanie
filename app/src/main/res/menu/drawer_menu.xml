@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/drawer_main">
+
+        <item
+            android:id="@+id/list_dest"
+            android:title="@string/list"
+            android:icon="@drawable/list"
+            android:checked="true" />
+
+        <item
+            android:id="@+id/about_dest"
+            android:title="@string/about"
+            android:icon="@drawable/about"/>
+
+        <item
+            android:id="@+id/request_dest"
+            android:title="@string/request"
+            android:icon="@drawable/request" />
+
+    </group>
+
+        <item
+            android:id="@+id/options_dest"
+            android:title="@string/preferences"
+            android:icon="@drawable/preferences"/>
+
+</menu>

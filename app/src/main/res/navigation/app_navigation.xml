@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_navigation"
+    app:startDestination="@id/list_dest">
+
+    <fragment
+        android:id="@+id/list_dest"
+        android:name="com.redc4ke.jabotmobile.ui.menu.MenuFragment"
+        android:label="@string/list"
+        tools:layout="@layout/fragment_menu">
+        <action
+            android:id="@+id/open_details"
+            app:destination="@id/details_dest"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_enter_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/details_dest"
+        android:name="com.redc4ke.jabotmobile.ui.menu.DetailsFragment"
+        android:label="@string/details"
+        tools:layout="@layout/fragment_details">
+        <argument
+            android:name="alcoObject"
+            app:argType="com.redc4ke.jabotmobile.data.menu.AlcoObject" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/about_dest"
+        android:name="com.redc4ke.jabotmobile.ui.about.AboutFragment"
+        android:label="@string/about"
+        tools:layout="@layout/fragment_about" />
+
+    <fragment
+        android:id="@+id/options_dest"
+        android:name="com.redc4ke.jabotmobile.ui.options.OptionsFragment"
+        android:label="@string/preferences"
+        tools:layout="@layout/fragment_options" />
+
+    <fragment
+        android:id="@+id/request_dest"
+        android:name="com.redc4ke.jabotmobile.ui.request.RequestFragment"
+        android:label="@string/request"
+        tools:layout="@layout/fragment_request">
+        <action
+            android:id="@+id/to_category"
+            app:destination="@id/category_dest" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/category_dest"
+        android:name="com.redc4ke.jabotmobile.ui.request.CategoryFragment"
+        android:label="@string/category_req"
+        tools:layout="@layout/fragment_category">
+        <action
+            android:id="@+id/from_category"
+            app:destination="@id/request_dest" />
+        <argument
+            android:name="itemCategory"
+            app:argType="com.redc4ke.jabotmobile.data.ItemCategory" />
+    </fragment>
+
+</navigation>
