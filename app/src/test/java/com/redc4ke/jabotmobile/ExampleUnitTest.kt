@@ -1,4 +1,4 @@
-package com.redc4ke.jabotmobile
+package com.redc4ke.taniechlanie
 
 import org.junit.Test
 

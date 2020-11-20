@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.redc4ke.jabotmobile">
+    package="com.redc4ke.taniechlanie">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
         android:allowBackup="true"
         android:configChanges="orientation"
@@ -11,9 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:screenOrientation="portrait"
         android:supportsRtl="true"
-        android:theme="@style/Theme.JaBotMobile">
+        android:theme="@style/Theme.taniechlanie">
         <activity
-            android:name=".ui.MainActivity"
+            android:name="com.redc4ke.taniechlanie.ui.MainActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
             <intent-filter>

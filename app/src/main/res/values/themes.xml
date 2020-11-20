@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Base.JaBotMobile" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme.Base.taniechlanie" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/red_heavy</item>
         <item name="colorPrimaryVariant">@color/red_heavy</item>
@@ -11,67 +11,67 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <item name="drawerArrowStyle">@style/Theme.JaBotMobile.DrawerArrowStyle</item>
+        <item name="drawerArrowStyle">@style/Theme.taniechlanie.DrawerArrowStyle</item>
         <item name="android:windowContentTransitions">true</item>
         <!-- text colors -->
         <item name="android:textColorSecondary">@color/black</item>
 
     </style>
-    <style name="Theme.JaBotMobile" parent="Theme.Base.JaBotMobile" />
+    <style name="Theme.taniechlanie" parent="Theme.Base.taniechlanie" />
 
 
-    <style name="Theme.Base.JaBotMobile.Toolbar"
+    <style name="Theme.Base.taniechlanie.Toolbar"
         parent="Widget.MaterialComponents.Light.ActionBar.Solid">
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:fontFamily">@font/open_sans_light</item>
     </style>
-    <style name="Theme.JaBotMobile.Toolbar" parent="Theme.Base.JaBotMobile.Toolbar" />
+    <style name="Theme.taniechlanie.Toolbar" parent="Theme.Base.taniechlanie.Toolbar" />
 
 
-    <style name="Theme.Base.JaBotMobile.Drawer">
+    <style name="Theme.Base.taniechlanie.Drawer">
         <item name="fontFamily">@font/open_sans_regular</item>
     </style>
-    <style name="Theme.JaBotMobile.Drawer" parent="Theme.Base.JaBotMobile.Drawer" />
+    <style name="Theme.taniechlanie.Drawer" parent="Theme.Base.taniechlanie.Drawer" />
 
 
-    <style name="Theme.Base.JaBotMobile.Header">
+    <style name="Theme.Base.taniechlanie.Header">
         <item name="fontFamily">@font/varela_round</item>
     </style>
-    <style name="Theme.JaBotMobile.Header" parent="Theme.Base.JaBotMobile.Header" />
+    <style name="Theme.taniechlanie.Header" parent="Theme.Base.taniechlanie.Header" />
 
 
-    <style name="Theme.Base.JaBotMobile.DrawerArrowStyle"
+    <style name="Theme.Base.taniechlanie.DrawerArrowStyle"
         parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="color">@color/white</item>
         <item name="drawableSize">64dp</item>
     </style>
-    <style name="Theme.JaBotMobile.DrawerArrowStyle"
-        parent="Theme.Base.JaBotMobile.DrawerArrowStyle" />
+    <style name="Theme.taniechlanie.DrawerArrowStyle"
+        parent="Theme.Base.taniechlanie.DrawerArrowStyle" />
 
 
-    <style name="Theme.Base.JaBotMobile.TextInputLayout"
+    <style name="Theme.Base.taniechlanie.TextInputLayout"
         parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="endIconMode">clear_text</item>
     </style>
-    <style name="Theme.JaBotMobile.TextInputLayout"
-        parent="Theme.Base.JaBotMobile.TextInputLayout" />
+    <style name="Theme.taniechlanie.TextInputLayout"
+        parent="Theme.Base.taniechlanie.TextInputLayout" />
 
 
-    <style name="Theme.Base.JaBotMobile.EditText">
+    <style name="Theme.Base.taniechlanie.EditText">
         <item name="singleLine">true</item>
         <item name="android:imeOptions">actionDone</item>
         <item name="fontFamily">@font/open_sans_regular</item>
     </style>
-    <style name="Theme.JaBotMobile.EditText" parent="Theme.Base.JaBotMobile.EditText" />
+    <style name="Theme.taniechlanie.EditText" parent="Theme.Base.taniechlanie.EditText" />
 
-    <style name="Theme.Base.JaBotMobile.Suffix">
+    <style name="Theme.Base.taniechlanie.Suffix">
         <item name="android:textSize">18sp</item>
         <item name="fontFamily">@font/open_sans_light</item>
     </style>
-    <style name="Theme.JaBotMobile.Suffix" parent="Theme.Base.JaBotMobile.Suffix"/>
+    <style name="Theme.taniechlanie.Suffix" parent="Theme.Base.taniechlanie.Suffix"/>
 
 
-    <style name="Theme.Base.JaBotMobile.OutlinedBT"
+    <style name="Theme.Base.taniechlanie.OutlinedBT"
         parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:textSize">18sp</item>
         <item name="fontFamily">@font/open_sans_regular</item>
@@ -84,17 +84,17 @@
         <item name="textAllCaps">false</item>
         <item name="android:paddingStart">13dp</item>
     </style>
-    <style name="Theme.JaBotMobile.OutlinedBT" parent="Theme.Base.JaBotMobile.OutlinedBT"/>
+    <style name="Theme.taniechlanie.OutlinedBT" parent="Theme.Base.taniechlanie.OutlinedBT"/>
 
 
-    <style name="Theme.Base.JaBotMobile.ContainedBT"
+    <style name="Theme.Base.taniechlanie.ContainedBT"
         parent="Widget.MaterialComponents.Button.OutlinedButton">
 
     </style>
-    <style name="Theme.JaBotMobile.ContainedBT" parent="Theme.Base.JaBotMobile.ContainedBT"/>
+    <style name="Theme.taniechlanie.ContainedBT" parent="Theme.Base.taniechlanie.ContainedBT"/>
 
 
-    <style name="Theme.Base.Jabotmobile.TextBT"
+    <style name="Theme.Base.taniechlanie.TextBT"
         parent="Widget.MaterialComponents.Button.TextButton">
         <item name="icon">@drawable/ic_baseline_add_24</item>
         <item name="iconPadding">4dp</item>
@@ -109,5 +109,5 @@
         <item name="iconTint">@color/grey_outline</item>
         <item name="android:clickable">false</item>
     </style>
-    <style name="Theme.JaBotMobile.TextBT" parent="Theme.Base.Jabotmobile.TextBT" />
+    <style name="Theme.taniechlanie.TextBT" parent="Theme.Base.taniechlanie.TextBT" />
 </resources>

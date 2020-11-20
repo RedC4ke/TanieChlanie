@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/list_dest"
-        android:name="com.redc4ke.jabotmobile.ui.menu.MenuFragment"
+        android:name="com.redc4ke.taniechlanie.ui.menu.MenuFragment"
         android:label="@string/list"
         tools:layout="@layout/fragment_menu">
         <action
@@ -19,29 +19,29 @@
 
     <fragment
         android:id="@+id/details_dest"
-        android:name="com.redc4ke.jabotmobile.ui.menu.DetailsFragment"
+        android:name="com.redc4ke.taniechlanie.ui.menu.DetailsFragment"
         android:label="@string/details"
         tools:layout="@layout/fragment_details">
         <argument
             android:name="alcoObject"
-            app:argType="com.redc4ke.jabotmobile.data.menu.AlcoObject" />
+            app:argType="com.redc4ke.taniechlanie.data.menu.AlcoObject" />
     </fragment>
 
     <fragment
         android:id="@+id/about_dest"
-        android:name="com.redc4ke.jabotmobile.ui.about.AboutFragment"
+        android:name="com.redc4ke.taniechlanie.ui.about.AboutFragment"
         android:label="@string/about"
         tools:layout="@layout/fragment_about" />
 
     <fragment
         android:id="@+id/options_dest"
-        android:name="com.redc4ke.jabotmobile.ui.options.OptionsFragment"
+        android:name="com.redc4ke.taniechlanie.ui.options.OptionsFragment"
         android:label="@string/preferences"
         tools:layout="@layout/fragment_options" />
 
     <fragment
         android:id="@+id/request_dest"
-        android:name="com.redc4ke.jabotmobile.ui.request.RequestFragment"
+        android:name="com.redc4ke.taniechlanie.ui.request.RequestFragment"
         android:label="@string/request"
         tools:layout="@layout/fragment_request">
         <action
@@ -51,15 +51,12 @@
 
     <fragment
         android:id="@+id/category_dest"
-        android:name="com.redc4ke.jabotmobile.ui.request.CategoryFragment"
+        android:name="com.redc4ke.taniechlanie.ui.request.CategoryFragment"
         android:label="@string/category_req"
         tools:layout="@layout/fragment_category">
-        <action
-            android:id="@+id/from_category"
-            app:destination="@id/request_dest" />
         <argument
-            android:name="itemCategory"
-            app:argType="com.redc4ke.jabotmobile.data.ItemCategory" />
+            android:name="RequestFragment"
+            app:argType="com.redc4ke.taniechlanie.ui.request.RequestFragment"/>
     </fragment>
 
 </navigation>
