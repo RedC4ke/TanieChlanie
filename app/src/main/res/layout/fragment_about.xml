@@ -14,5 +14,5 @@
         android:layout_marginHorizontal="10dp"
         android:backgroundTint="@color/white"
         app:cardElevation="6dp"
-        tools:context=".ui.about.AboutFragment" />
+        tools:context="com.redc4ke.taniechlanie.ui.about.AboutFragment" />
 </FrameLayout>

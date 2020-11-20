@@ -1,21 +1,21 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.v28.JaBotMobile" parent="Theme.Base.JaBotMobile">
+    <style name="Theme.v28.taniechlanie" parent="Theme.Base.taniechlanie">
         <!--Alpha value of the spot shadow projected by elevated views, between 0 and 1.-->
         <item name="android:spotShadowAlpha">0.4</item>
     </style>
-    <style name="Theme.JaBotMobile" parent="Theme.v28.JaBotMobile" />
+    <style name="Theme.taniechlanie" parent="Theme.v28.taniechlanie" />
 
 
-    <style name="Theme.v28.JaBotMobile.Toolbar" parent="Theme.Base.JaBotMobile.Toolbar">
-
-    </style>
-    <style name="Theme.JaBotMobile.Toolbar" parent="Theme.v28.JaBotMobile.Toolbar" />
-
-
-    <style name="Theme.v28.JaBotMobile.Drawer" parent="Theme.Base.JaBotMobile.Drawer">
+    <style name="Theme.v28.taniechlanie.Toolbar" parent="Theme.Base.taniechlanie.Toolbar">
 
     </style>
-    <style name="Theme.JaBotMobile.Drawer" parent="Theme.v28.JaBotMobile.Drawer" />
+    <style name="Theme.taniechlanie.Toolbar" parent="Theme.v28.taniechlanie.Toolbar" />
+
+
+    <style name="Theme.v28.taniechlanie.Drawer" parent="Theme.Base.taniechlanie.Drawer">
+
+    </style>
+    <style name="Theme.taniechlanie.Drawer" parent="Theme.v28.taniechlanie.Drawer" />
 
 </resources>

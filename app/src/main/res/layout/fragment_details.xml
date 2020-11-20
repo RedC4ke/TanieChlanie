@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:backgroundTint="@color/white"
     android:foregroundTint="@color/white"
-    tools:context=".ui.menu.DetailsFragment"
+    tools:context="com.redc4ke.taniechlanie.ui.menu.DetailsFragment"
     android:background="@color/white"
     android:clipChildren="false"
     android:transitionName="@string/row_alcohol_details_transition_name">

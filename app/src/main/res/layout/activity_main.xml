@@ -15,7 +15,7 @@
         android:clipChildren="false"
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context="com.redc4ke.jabotmobile.ui.MainActivity">
+        tools:context="com.redc4ke.taniechlanie.com.redc4ke.TanieChlanie.ui.MainActivity">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,7 +38,7 @@
                     android:background="?attr/colorPrimary"
                     android:elevation="10dp"
                     android:fitsSystemWindows="true"
-                    android:theme="@style/Theme.JaBotMobile.Toolbar">
+                    android:theme="@style/Theme.taniechlanie.Toolbar">
 
                 </androidx.appcompat.widget.Toolbar>
 
@@ -89,8 +89,8 @@
         app:menu="@menu/drawer_menu"
         app:headerLayout="@layout/drawer_header"
         android:clipChildren="false"
-        app:itemTextAppearance="@style/Theme.JaBotMobile.Drawer"
-        android:theme="@style/Theme.JaBotMobile.Drawer"/>
+        app:itemTextAppearance="@style/Theme.taniechlanie.Drawer"
+        android:theme="@style/Theme.taniechlanie.Drawer"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>
 
