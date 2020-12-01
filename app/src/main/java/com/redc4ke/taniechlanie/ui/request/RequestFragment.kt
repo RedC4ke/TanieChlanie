@@ -4,6 +4,8 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.transition.TransitionInflater
 import androidx.fragment.app.Fragment
@@ -11,11 +13,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputLayout
 import com.redc4ke.taniechlanie.R
+import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.data.ItemCategory
+import com.redc4ke.taniechlanie.ui.setTransitions
 import kotlinx.android.synthetic.main.fragment_request.*
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -30,21 +36,12 @@ class RequestFragment : Fragment(), Serializable {
     private lateinit var containerList: ArrayList<ViewGroup>
     private var catButtonPosition = 0
     private var pickImage: Int = 1
-    object Transitions {
-        var enter: Int = R.transition.slide_from_right
-        var exit: Int = R.transition.slide_to_right
-    }
+    private var hasImage = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val inflater = TransitionInflater.from(requireContext())
-        enterTransition = inflater.inflateTransition(Transitions.enter)
-        reenterTransition = inflater.inflateTransition(Transitions.enter)
-        exitTransition = inflater.inflateTransition(Transitions.exit)
-        returnTransition = inflater.inflateTransition(Transitions.exit)
-        allowEnterTransitionOverlap = true
-        allowReturnTransitionOverlap = true
+        setTransitions(this, R.transition.slide_from_right, R.transition.slide_to_right)
     }
 
     override fun onCreateView(
@@ -69,6 +66,15 @@ class RequestFragment : Fragment(), Serializable {
         containerList = arrayListOf(
                 cat_FL1, cat_FL2, cat_FL3, cat_FL4)
 
+        req_upload_BT.setOnClickListener {
+            if (proceedCheck()) {
+                setTransitions(this,
+                    R.transition.slide_from_left,
+                    R.transition.slide_to_left)
+                openShopList()
+            }
+        }
+        addTextChangedListeners()
         categorySetOnClickListener(0)
         refreshCategories()
 
@@ -90,7 +96,7 @@ class RequestFragment : Fragment(), Serializable {
             val bitmap = BitmapFactory.decodeStream(inputStream)
             val path = data.data!!.path
 
-            val f = File(requireContext().cacheDir, "upload.jpeg")
+            val f = File(requireActivity().cacheDir, "upload.jpg")
             f.createNewFile()
 
             val bos = ByteArrayOutputStream()
@@ -103,12 +109,39 @@ class RequestFragment : Fragment(), Serializable {
             fos.close()
 
             image_req_desc.text = path.toString()
+
+
+            hasImage = true
         }
+    }
+
+    private fun openShopList() {
+        val directions = RequestFragmentDirections.toShopFragment(gatherObjectInfo(), hasImage)
+        findNavController().navigate(directions)
     }
 
     private fun openCategoryList() {
         val directions = RequestFragmentDirections.toCategory(this)
         findNavController().navigate(directions)
+    }
+
+    private fun gatherObjectInfo(): AlcoObject {
+        val categoryIdList = arrayListOf<Int>()
+        categoryList.forEach {
+            categoryIdList.add(it!!.id)
+        }
+        return AlcoObject(
+                id = null,
+                name = name_ET.text.toString(),
+                minPrice = price1_ET.text.toString().replace(",",".").toFloat(),
+                maxPrice = null,
+                promoPrice = null,
+                volume = volume_ET.text.toString().toInt(),
+                voltage = voltage_ET.text.toString().replace(",",".").toFloat(),
+                shop = null,
+                categories = categoryIdList,
+                photo = null
+        )
     }
 
     private fun categorySetOnClickListener(pos: Int) {
@@ -138,11 +171,11 @@ class RequestFragment : Fragment(), Serializable {
         }
     }
 
+    //Redraws the category list
     private fun refreshCategories() {
         var i = 0
         categoryList.forEach {
             val parent = containerList[i]
-            Log.d("huj",parent.toString())
             layoutInflater.inflate(R.layout.row_details_category_twin,
                     parent, true) as ViewGroup
             parent.findViewById<TextView>(R.id.details_category_twin_TV).text = it!!.name
@@ -152,5 +185,63 @@ class RequestFragment : Fragment(), Serializable {
             i++
         }
         if (i<4) categorySetOnClickListener(i++)
+    }
+
+    //Checks if every required value is present
+    private fun proceedCheck(): Boolean {
+        val required: ArrayList<TextInputLayout> = arrayListOf(
+                name_ETL, volume_ETL, voltage_ETL, price1_ETL)
+        var check = true
+
+        required.forEach {
+            if (it.editText!!.text.toString().trim().isEmpty()) {
+                it.isErrorEnabled
+                it.error = "Podaj wartość!"
+                it.errorIconDrawable = getDrawable(
+                        requireContext(), R.drawable.ic_baseline_error_outline_24)
+                check = false
+            }
+        }
+
+        if (voltage_ET.text.toString().toFloat() > 100) {
+            voltage_ETL.apply {
+                isErrorEnabled
+                error = "Zła wartość!"
+                errorIconDrawable = getDrawable(
+                        requireContext(), R.drawable.ic_baseline_error_outline_24)
+            }
+            check = false
+        }
+
+        if (categoryList.size == 0) {
+            Toast.makeText(
+                    requireContext(),
+                    "Podaj przynajmniej jedną kategorię!",
+                    Toast.LENGTH_LONG).show()
+            check = false
+        }
+
+        return check
+    }
+
+    private fun addTextChangedListeners() {
+        val layouts = arrayListOf(name_ETL, volume_ETL, voltage_ETL, price1_ETL)
+        layouts.forEach {
+            it.editText!!.addTextChangedListener(object: TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    it.error = null
+                    if (s.toString().trim().isEmpty()) {
+                        it.error = "Podaj wartość!"
+                    }
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                }
+
+            })
+        }
     }
 }

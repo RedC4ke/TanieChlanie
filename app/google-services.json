@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:697978368564:android:4e3b86efd89f7e6d661061",
+        "mobilesdk_app_id": "1:697978368564:android:5db9e4e4963fc1a3661061",
         "android_client_info": {
-          "package_name": "com.example.jabotmobile"
+          "package_name": "com.redc4ke.taniechlanie"
         }
       },
       "oauth_client": [

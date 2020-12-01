@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionInflater
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.menu.AlcoListAdapter
-import com.redc4ke.taniechlanie.data.menu.AlcoObject
-import com.redc4ke.taniechlanie.data.menu.AlcoViewModel
+import com.redc4ke.taniechlanie.data.AlcoObject
+import com.redc4ke.taniechlanie.data.AlcoViewModel
 import com.redc4ke.taniechlanie.ui.MainActivity
 import java.text.Normalizer
 import kotlin.collections.ArrayList
@@ -81,7 +81,7 @@ class MenuFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.options_menu, menu)
+        inflater.inflate(R.menu.search_menu, menu)
 
         //Search setup
         val searchItem: MenuItem = menu.findItem(R.id.action_search)
