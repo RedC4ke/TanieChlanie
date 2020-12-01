@@ -52,6 +52,11 @@
     <style name="Theme.Base.taniechlanie.TextInputLayout"
         parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="endIconMode">clear_text</item>
+        <item name="boxCornerRadiusBottomEnd">14dp</item>
+        <item name="boxCornerRadiusBottomStart">14dp</item>
+        <item name="boxCornerRadiusTopEnd">14dp</item>
+        <item name="boxCornerRadiusTopStart">14dp</item>
+        <item name="errorTextColor">@color/error</item>
     </style>
     <style name="Theme.taniechlanie.TextInputLayout"
         parent="Theme.Base.taniechlanie.TextInputLayout" />
@@ -75,14 +80,15 @@
         parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:textSize">18sp</item>
         <item name="fontFamily">@font/open_sans_regular</item>
-        <item name="android:textAlignment">textStart</item>
+        <item name="android:textAlignment">viewStart</item>
         <item name="strokeColor">@color/grey_outline</item>
         <item name="android:textColor">@color/grey_text</item>
         <item name="iconTint">@color/grey_text</item>
         <item name="android:letterSpacing">0.01</item>
         <item name="iconGravity">end</item>
         <item name="textAllCaps">false</item>
-        <item name="android:paddingStart">13dp</item>
+        <item name="android:paddingStart">2dp</item>
+        <item name="android:gravity">start|center_vertical</item>
     </style>
     <style name="Theme.taniechlanie.OutlinedBT" parent="Theme.Base.taniechlanie.OutlinedBT"/>
 
@@ -97,7 +103,7 @@
     <style name="Theme.Base.taniechlanie.TextBT"
         parent="Widget.MaterialComponents.Button.TextButton">
         <item name="icon">@drawable/ic_baseline_add_24</item>
-        <item name="iconPadding">4dp</item>
+        <item name="iconPadding">0dp</item>
         <item name="android:textSize">14sp</item>
         <item name="fontFamily">@font/open_sans_regular</item>
         <item name="android:maxLines">1</item>
@@ -110,4 +116,10 @@
         <item name="android:clickable">false</item>
     </style>
     <style name="Theme.taniechlanie.TextBT" parent="Theme.Base.taniechlanie.TextBT" />
+
+
+    <style name="Theme.base.taniechlanie.Checkbox" parent="Widget.AppCompat.CompoundButton.CheckBox">
+
+    </style>
+    <style name="Theme.taniechlanie.Checkbox" parent="Theme.base.taniechlanie.Checkbox" />
 </resources>

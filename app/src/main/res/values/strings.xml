@@ -7,12 +7,16 @@
     <string name="details">Szczegóły</string>
     <string name="request">Zgłoś nową pozycję!</string>
     <string name="request_cat">Wybierz kategorię:</string>
+    <string name="request_shop">Wskaż dostępność:</string>
+    <string name="request_summary">Podsumowanie</string>
     <!-- welcome -->
     <string name="start">Zaczynamy!</string>
     <string name="welcome_text">
-        Witaj w aplikacji <b>JaBot</b>! <br />
+        Witaj w aplikacji <b>TanieChlanie</b>! \n
         Tutaj obliczysz, jak w najbardziej efektywny sposób spędzić piątkową noc.
         Aplikacja jest na ten moment w fazie testów. Będzie poprawiana i aktualizowana na bieżąco.
+        \n \n
+        Korzystając z aplikacji oświadczasz, że masz ukończone <b>18 lat</b>.
     </string>
     <!-- image alts -->
     <string name="wine">Butelka wina, obok dwa kieliszki</string>
@@ -31,14 +35,41 @@
     <string name="volume_req_suffix">\u00A0ml</string>
     <string name="voltage_req">Obj. alkoholu</string>
     <string name="voltage_req_suffix">\u00A0%</string>
-    <string name="image_req">Zdjęcie<sup><font size="10">*</font></sup></string>
+    <string name="image_req">Zdjęcie*</string>
     <string name="image_req_desc">Brak</string>
     <string name="category_req">Dodaj kategorię</string>
-    <!-- request page - category fragment -->
-
+    <string name="disclaimer_req">
+        *Przekazując zdjęcie oświadczasz że posiadasz do niego pełne prawa autorskie
+        oraz uprawniasz autora aplikacji do publikowania, edycji oraz przechowywania go
+        na jej potrzeby.
+    </string>
+    <!-- request page - summary fragment -->
+    <string name="name_summary">Nazwa:</string>
+    <string name="price_summary">Cena:</string>
+    <string name="volume_summary">Objętość:</string>
+    <string name="voltage_summary">Obj. alk.:</string>
+    <string name="categories_summary">Kategorie:</string>
+    <string name="shops_summary">Dostępność:</string>
+    <string name="info_summary">
+        Wprowadzone dane zostaną przekazane do weryfikacji. Stay tuned!
+    </string>
+    <string name="success_summary">
+        Brawo! Twoje zgłoszenie zostało dodane!
+        \nDziękujemy za twój wkład w rozwój aplikacji!
+    </string>
+    <string name="failure_summary">
+        Coś poszło nie tak! Sprawdź swoje połączenie z internetem.
+        \nJeśli błąd się powtarza, powiadom nas o tym!
+    </string>
     <!-- transition names -->
     <string name="row_alcohol_details_transition_name">row_alcohol_details_transition</string>
     <!-- other -->
     <string name="queryHint">Wyszukaj…</string>
+    <string name="forward">Dalej</string>
+    <string name="send">Prześlij</string>
+
+    <string name="suff_price">%1$Szł</string>
+    <string name="suff_volume">%1$Sml</string>
+    <string name="suff_voltage">%1$S%%</string>
 
 </resources>

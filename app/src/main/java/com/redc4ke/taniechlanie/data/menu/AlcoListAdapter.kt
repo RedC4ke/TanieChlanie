@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.redc4ke.taniechlanie.R
+import com.redc4ke.taniechlanie.data.AlcoObject
+import com.redc4ke.taniechlanie.data.AlcoViewModel
 import com.redc4ke.taniechlanie.ui.menu.MenuFragment
 import kotlinx.android.synthetic.main.row_alcohol.view.*
 

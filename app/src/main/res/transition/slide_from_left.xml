@@ -2,4 +2,5 @@
 <slide xmlns:android="http://schemas.android.com/apk/res/android"
     android:interpolator="@android:interpolator/decelerate_cubic"
     android:duration="@android:integer/config_mediumAnimTime"
-    android:slideEdge="left"/>
+    android:slideEdge="left"
+    android:startDelay="100"/>
