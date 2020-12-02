@@ -35,7 +35,7 @@ class AlcoListAdapter(
             holder.view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 this.topMargin = 25
             }
-        } else if (position == data.size) {
+        } else if (position == data.size-1) {
             holder.view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 this.bottomMargin = 12
             }

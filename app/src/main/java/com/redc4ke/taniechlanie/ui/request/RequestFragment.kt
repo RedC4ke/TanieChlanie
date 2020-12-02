@@ -1,5 +1,6 @@
 package com.redc4ke.taniechlanie.ui.request
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -21,6 +22,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.data.ItemCategory
+import com.redc4ke.taniechlanie.ui.MainActivity
 import com.redc4ke.taniechlanie.ui.setTransitions
 import kotlinx.android.synthetic.main.fragment_request.*
 import java.io.ByteArrayOutputStream
@@ -34,9 +36,16 @@ class RequestFragment : Fragment(), Serializable {
     var categoryList: MutableList<ItemCategory?> = mutableListOf()
     private lateinit var buttonList: ArrayList<MaterialButton>
     private lateinit var containerList: ArrayList<ViewGroup>
+    private lateinit var mainActivity: MainActivity
     private var catButtonPosition = 0
     private var pickImage: Int = 1
     private var hasImage = false
+
+    override fun onAttach(context: Context) {
+        mainActivity = requireActivity() as MainActivity
+
+        super.onAttach(context)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

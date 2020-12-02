@@ -2,6 +2,7 @@ package com.redc4ke.taniechlanie.ui.menu
 
 import android.app.SearchManager
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -17,17 +18,20 @@ import com.redc4ke.taniechlanie.data.menu.AlcoListAdapter
 import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.data.AlcoViewModel
 import com.redc4ke.taniechlanie.ui.MainActivity
+import com.redc4ke.taniechlanie.ui.setTransitions
+import java.io.Serializable
 import java.text.Normalizer
 import kotlin.collections.ArrayList
 
 
 
-class MenuFragment : Fragment() {
+class MenuFragment : Fragment(), Serializable {
 
     private lateinit var vm: AlcoViewModel
     private lateinit var vmData: ArrayList<AlcoObject>
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: AlcoListAdapter
+    private lateinit var mainActivity: MainActivity
 
     override fun onAttach(context: android.content.Context) {
         super.onAttach(context)
@@ -41,13 +45,13 @@ class MenuFragment : Fragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
+        mainActivity = requireActivity() as MainActivity
+
         //Transitions handling
-        val inflater = TransitionInflater.from(requireContext())
-        enterTransition = inflater.inflateTransition(R.transition.slide_up_menu)
-        exitTransition = inflater.inflateTransition(R.transition.slide_down_menu)
-        reenterTransition = inflater.inflateTransition(R.transition.slide_up_menu)
-        allowEnterTransitionOverlap = false
-        allowReturnTransitionOverlap = false
+        when (mainActivity.currentFragment) {
+            else -> setTransitions(this,
+                    R.transition.slide_up_menu, R.transition.slide_down_menu)
+        }
 
     }
 
@@ -78,6 +82,13 @@ class MenuFragment : Fragment() {
         postponeEnterTransition()
         view.doOnPreDraw { startPostponedEnterTransition() }
         super.onViewCreated(view, savedInstanceState)
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setTransitions(this,
+                R.transition.slide_up_menu, R.transition.slide_down_menu)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -117,10 +128,13 @@ class MenuFragment : Fragment() {
     }
 
     fun onItemClick(cardView: View, alcoObject: AlcoObject) {
+        setTransitions(this,
+                null, null)
+        mainActivity.currentFragment = 99
         val rowAlcoholDetailsTransitionName = getString(R.string.row_alcohol_details_transition_name)
         val extras = FragmentNavigatorExtras(cardView
                 to rowAlcoholDetailsTransitionName)
-        val directions = MenuFragmentDirections.openDetails(alcoObject)
+        val directions = MenuFragmentDirections.openDetails(alcoObject, this)
         findNavController().navigate(directions, extras)
     }
 

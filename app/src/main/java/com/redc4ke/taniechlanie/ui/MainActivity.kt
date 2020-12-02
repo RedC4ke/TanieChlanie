@@ -1,9 +1,13 @@
 package com.redc4ke.taniechlanie.ui
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -32,8 +36,6 @@ import com.redc4ke.taniechlanie.ui.menu.MenuFragment
 import com.redc4ke.taniechlanie.ui.request.RequestFragment
 import kotlin.collections.ArrayList
 
-
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mFirebaseAnalytics: FirebaseAnalytics
@@ -42,6 +44,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var menuFrag: MenuFragment
     lateinit var vm: AlcoViewModel
     lateinit var shopList: ArrayList<Shop>
+    var currentFragment = 0
     val database: FirebaseFirestore = FirebaseFirestore.getInstance()
     val storage = FirebaseStorage.getInstance()
 
@@ -94,6 +97,7 @@ class MainActivity : AppCompatActivity() {
             menuInflater.inflate(R.menu.drawer_menu, menu)
             return true
         }
+
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -203,14 +207,30 @@ class MainActivity : AppCompatActivity() {
             collection.get()
     }
 
+    fun openBrowser(view: View) {
+        val url = view.tag as String
+        val intent = Intent()
+        intent.action = Intent.ACTION_VIEW
+        intent.addCategory(Intent.CATEGORY_BROWSABLE)
+        intent.data = Uri.parse(url)
+
+        startActivity(intent)
+    }
+
 }
 
-fun setTransitions(fragment: Fragment, enter: Int, exit: Int) {
+fun setTransitions(fragment: Fragment, enter: Int?, exit: Int?) {
     val inflater = TransitionInflater.from(fragment.requireContext())
+    val enterTrans =
+            if (enter != null) inflater.inflateTransition(enter)
+            else null
+    val exitTrans =
+            if (exit != null) inflater.inflateTransition(exit)
+            else null
     fragment.apply {
-        enterTransition = inflater.inflateTransition(enter)
-        exitTransition = inflater.inflateTransition(exit)
-        returnTransition = inflater.inflateTransition(exit)
+        enterTransition = enterTrans
+        exitTransition = exitTrans
+        returnTransition = exitTrans
         allowEnterTransitionOverlap = true
         allowReturnTransitionOverlap = true
     }
