@@ -5,6 +5,7 @@
     <string name="list">Baza alkoholi</string>
     <string name="preferences">Ustawienia</string>
     <string name="about">O aplikacji</string>
+    <string name="about_credits">O autorze</string>
     <string name="details">Szczegóły</string>
     <string name="request">Zgłoś nową pozycję!</string>
     <string name="request_cat">Wybierz kategorię:</string>
@@ -31,7 +32,7 @@
     <string name="voltage">%Vol.:</string>
 
     <!-- about page -->
-    <string name="about_author">made by Redc4ke</string>
+    <string name="about_author">by Redc4ke</string>
 
     <string-array name="about_header">
         <item>Autor</item>
@@ -122,5 +123,7 @@
     <string name="suff_price">%1$Szł</string>
     <string name="suff_volume">%1$Sml</string>
     <string name="suff_voltage">%1$S%%</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

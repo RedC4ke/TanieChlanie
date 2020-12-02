@@ -71,8 +71,4 @@ class DetailsCategoryAdapter(private val categoryList: ArrayList<Int>?): Recycle
 
 }
 
-fun editText(tv: TextView, s: String) {
-    tv.text = s
-}
-
 class DetailsCategoryViewHolder(val view: View): RecyclerView.ViewHolder(view)
