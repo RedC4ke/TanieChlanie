@@ -14,6 +14,7 @@ import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.data.ItemCategories
 import com.redc4ke.taniechlanie.ui.MainActivity
+import com.redc4ke.taniechlanie.ui.setTransitions
 import kotlinx.android.synthetic.main.fragment_summary.*
 import java.io.File
 import java.util.*
@@ -26,6 +27,8 @@ class SummaryFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setTransitions(this, R.transition.slide_from_right, R.transition.slide_to_right)
 
         hasImage = arguments?.getBoolean("hasImage")!!
         mainActivity = requireActivity() as MainActivity
@@ -121,6 +124,7 @@ class SummaryFragment : Fragment() {
     }
 
     private fun onSuccess() {
+        setTransitions(this, R.transition.slide_from_right, R.transition.slide_to_left)
         findNavController().navigate(SummaryFragmentDirections.toListDest())
         Toast.makeText(mainActivity.applicationContext,
             getString(R.string.success_summary), Toast.LENGTH_LONG).show()

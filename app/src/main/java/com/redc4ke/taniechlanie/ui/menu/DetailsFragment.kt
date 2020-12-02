@@ -23,13 +23,14 @@ import java.io.File
 class DetailsFragment : Fragment() {
 
     private lateinit var mainActivity: MainActivity
+    private lateinit var parentFrag: MenuFragment
     private lateinit var alcoObject: AlcoObject
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         mainActivity = requireActivity() as MainActivity
-
+        parentFrag = arguments?.getSerializable("MenuFragment") as MenuFragment
         alcoObject = arguments?.getSerializable("alcoObject") as AlcoObject
 
         sharedElementEnterTransition = MaterialContainerTransform().apply {

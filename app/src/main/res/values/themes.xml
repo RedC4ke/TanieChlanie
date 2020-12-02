@@ -118,8 +118,16 @@
     <style name="Theme.taniechlanie.TextBT" parent="Theme.Base.taniechlanie.TextBT" />
 
 
-    <style name="Theme.base.taniechlanie.Checkbox" parent="Widget.AppCompat.CompoundButton.CheckBox">
+    <style name="Theme.base.taniechlanie.Checkbox"
+        parent="Widget.AppCompat.CompoundButton.CheckBox">
 
     </style>
     <style name="Theme.taniechlanie.Checkbox" parent="Theme.base.taniechlanie.Checkbox" />
+
+
+    <style name="Theme.Base.taniechlanie.ExpandableListView" parent="Widget.AppCompat.ListView">
+
+    </style>
+    <style name="Theme.taniechlanie.ExpandableListView"
+        parent="Theme.Base.taniechlanie.ExpandableListView" />
 </resources>

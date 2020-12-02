@@ -9,5 +9,5 @@
         android:id="@+id/category_fragment_RV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#00FF7066" />
+        android:background="@color/red_light" />
 </FrameLayout>

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">TanieChlanie</string>
+
     <!-- labels -->
     <string name="list">Baza alkoholi</string>
     <string name="preferences">Ustawienia</string>
@@ -9,6 +10,7 @@
     <string name="request_cat">Wybierz kategorię:</string>
     <string name="request_shop">Wskaż dostępność:</string>
     <string name="request_summary">Podsumowanie</string>
+
     <!-- welcome -->
     <string name="start">Zaczynamy!</string>
     <string name="welcome_text">
@@ -18,13 +20,59 @@
         \n \n
         Korzystając z aplikacji oświadczasz, że masz ukończone <b>18 lat</b>.
     </string>
+
     <!-- image alts -->
     <string name="wine">Butelka wina, obok dwa kieliszki</string>
+
     <!-- details page -->
     <string name="pricetag">Cena:</string>
     <string name="mR">mR:</string>
     <string name="volume">Objętość:</string>
     <string name="voltage">%Vol.:</string>
+
+    <!-- about page -->
+    <string name="about_author">made by Redc4ke</string>
+
+    <string-array name="about_header">
+        <item>Autor</item>
+        <item>Zgłoś błąd</item>
+        <item>Regulamin</item>
+    </string-array>
+    <string-array name="about_description">
+        <item>Informacje o autorze aplikacji</item>
+        <item>Zauważyłeś błąd? Zgłoś go tutaj!</item>
+        <item>Regulamin korzystania z aplikacji</item>
+    </string-array>
+
+    <string name="about_gr1_header">Autorzy ikon</string>
+    <string-array name="about_gr1">
+        <item>
+            <a href="https://www.flaticon.com/authors/freepik">
+                Freepik</a>
+        </item>
+        <item>
+            <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">
+                Pixel perfect</a>
+        </item>
+        <item>
+            <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">
+                Smashicons</a>
+        </item>
+        <item>
+            <a href="https://www.flaticon.com/authors/nhor-phai" title="Nhor Phai">
+                Nhor Phai</a>
+        </item>
+        <item>
+            <a href="https://www.flaticon.com/authors/monkik" title="monkik">
+                monkik</a>
+        </item>
+        <item>
+            <a href="https://www.flaticon.com/authors/linector" title="Linector">
+                Linector</a>
+        </item>
+    </string-array>
+    <string name="about_gr1_flaticon">www.flaticon.com</string>
+
     <!-- request page -->
     <string name="header1">Nie znalazłeś czegoś w bazie?</string>
     <string name="header2">Dodaj procenty!</string>
@@ -43,6 +91,7 @@
         oraz uprawniasz autora aplikacji do publikowania, edycji oraz przechowywania go
         na jej potrzeby.
     </string>
+
     <!-- request page - summary fragment -->
     <string name="name_summary">Nazwa:</string>
     <string name="price_summary">Cena:</string>
@@ -61,8 +110,10 @@
         Coś poszło nie tak! Sprawdź swoje połączenie z internetem.
         \nJeśli błąd się powtarza, powiadom nas o tym!
     </string>
+
     <!-- transition names -->
     <string name="row_alcohol_details_transition_name">row_alcohol_details_transition</string>
+
     <!-- other -->
     <string name="queryHint">Wyszukaj…</string>
     <string name="forward">Dalej</string>

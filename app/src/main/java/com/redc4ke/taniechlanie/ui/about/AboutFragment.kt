@@ -7,13 +7,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
-import androidx.transition.TransitionInflater
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
+import com.redc4ke.taniechlanie.BuildConfig
 import com.redc4ke.taniechlanie.R
+import com.redc4ke.taniechlanie.data.about.AboutRecyclerViewAdapter
+import com.redc4ke.taniechlanie.ui.MainActivity
+import com.redc4ke.taniechlanie.ui.setTransitions
+import kotlinx.android.synthetic.main.fragment_about.*
 
 class AboutFragment : Fragment() {
+
+    private lateinit var mainActivity: MainActivity
 
     override fun onAttach(context: Context) {
         val actionBar = activity?.actionBar
@@ -25,22 +33,28 @@ class AboutFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val inflater = TransitionInflater.from(requireContext())
-        enterTransition = inflater.inflateTransition(R.transition.slide_down_about)
-        exitTransition = inflater.inflateTransition(R.transition.slide_up_about)
-        returnTransition = inflater.inflateTransition(R.transition.slide_up_about)
-        allowEnterTransitionOverlap = false
-        allowReturnTransitionOverlap = false
+        mainActivity = requireActivity() as MainActivity
 
+        setTransitions(this, R.transition.slide_down_about, R.transition.slide_up_about)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_about, container, false)
+        val root = inflater.inflate(R.layout.fragment_about, container, false)
+        val recyclerView = root.findViewById<RecyclerView>(R.id.about_RV)
+
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.adapter = AboutRecyclerViewAdapter(requireContext())
+
+        return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        about_version_TV.text = BuildConfig.VERSION_NAME
+
+
         cardShape(view.findViewById(R.id.about_CV))
     }
 
