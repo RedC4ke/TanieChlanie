@@ -1,16 +1,19 @@
 package com.redc4ke.taniechlanie.data.about
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isInvisible
 import androidx.core.view.updateLayoutParams
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.redc4ke.taniechlanie.R
 import kotlinx.android.synthetic.main.row_about.view.*
 
-class AboutRecyclerViewAdapter(context: Context): RecyclerView.Adapter<AboutViewHolder>() {
+class AboutRecyclerViewAdapter(private val context: Context):
+    RecyclerView.Adapter<AboutViewHolder>() {
     
     private val headers = context.resources.getStringArray(R.array.about_header)
     private val descriptions =  context.resources.getStringArray(R.array.about_description)
@@ -42,6 +45,19 @@ class AboutRecyclerViewAdapter(context: Context): RecyclerView.Adapter<AboutView
                 this.bottomMargin = 26
             }
         }
+
+        if (position == 0) {
+            val creditsList = arrayListOf<Subrow>(
+                Subrow(R.drawable.github_mark_light_120px_plus,
+                    "GitHub", "Redc4ke", "https://github.com/RedC4ke"),
+                Subrow(R.drawable.ko_fi_icon_rgbfordarkbg,
+                    "Ko-fi", "Redc4ke", ""))
+            )
+
+            val rv = view.about_row_RV
+            rv.layoutManager = LinearLayoutManager(context)
+            rv.adapter = AboutRowAdapter()
+        }
     }
 
     override fun getItemCount(): Int {
@@ -50,4 +66,31 @@ class AboutRecyclerViewAdapter(context: Context): RecyclerView.Adapter<AboutView
 }
 
 class AboutViewHolder(val view: View): RecyclerView.ViewHolder(view)
-        
+
+class AboutRowAdapter(private val data: ArrayList<Subrow>):
+    RecyclerView.Adapter<AboutRowViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AboutRowViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val row = inflater.inflate(R.layout.row_about_expanded, parent, false)
+
+        return  AboutRowViewHolder(row)
+    }
+
+    override fun onBindViewHolder(holder: AboutRowViewHolder, position: Int) {
+
+    }
+
+    override fun getItemCount(): Int {
+        return data.size
+    }
+
+}
+
+class AboutRowViewHolder(val view: View): RecyclerView.ViewHolder(view)
+
+data class Subrow(
+    val drawable: Int,
+    val header: String,
+    val text: String,
+    val url: String)

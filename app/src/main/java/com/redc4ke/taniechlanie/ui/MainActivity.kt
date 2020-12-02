@@ -1,6 +1,7 @@
 package com.redc4ke.taniechlanie.ui
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -28,6 +29,7 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
+import com.redc4ke.taniechlanie.BuildConfig
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.data.AlcoViewModel
@@ -41,6 +43,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mFirebaseAnalytics: FirebaseAnalytics
     private lateinit var appBarConfiguration : AppBarConfiguration
     private lateinit var mDrawerLayout: DrawerLayout
+    private lateinit var prefs: SharedPreferences
     lateinit var menuFrag: MenuFragment
     lateinit var vm: AlcoViewModel
     lateinit var shopList: ArrayList<Shop>
@@ -54,6 +57,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        prefs = getSharedPreferences("com.redc4ke.taniechlanie", MODE_PRIVATE)
 
         //NavHostFragment and navigation controller
         val host: NavHostFragment = supportFragmentManager
@@ -79,6 +83,8 @@ class MainActivity : AppCompatActivity() {
             ViewModelProvider(this).get(AlcoViewModel::class.java)
         }
 
+        //Preferences stuff
+        checkPrefs()
 
         //Firebase request (first from cache, then online)
         getAlcoObject(vm)
@@ -86,8 +92,6 @@ class MainActivity : AppCompatActivity() {
         //Drawer setup
         setupNavigationMenu(navController)
 
-        //Calls the welcome dialog fragment
-        WelcomeFragment().show(supportFragmentManager, "welcome")
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -205,6 +209,25 @@ class MainActivity : AppCompatActivity() {
             collection.orderBy("id").get()
         else
             collection.get()
+    }
+
+    private fun checkPrefs() {
+        val key = "VERSION_CODE"
+        val savedVersionCode = prefs.getInt(key, -1)
+        val currentVersionCode = BuildConfig.VERSION_CODE
+
+        when {
+            savedVersionCode == -1 -> welcome()
+            savedVersionCode == currentVersionCode -> return
+            savedVersionCode < currentVersionCode -> welcome()
+        }
+
+        prefs.edit().putInt(key, currentVersionCode).apply()
+    }
+
+    private fun welcome() {
+        //Display welcome fragment
+        WelcomeFragment().show(supportFragmentManager, "welcome")
     }
 
     fun openBrowser(view: View) {
