@@ -11,23 +11,26 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.transition.MaterialContainerTransform
-import com.google.firebase.storage.FirebaseStorage
 import com.redc4ke.taniechlanie.R
-import com.redc4ke.taniechlanie.data.menu.AlcoObject
+import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.data.menu.DetailsCategoryAdapter
 import com.redc4ke.taniechlanie.data.menu.DetailsShopAdapter
+import com.redc4ke.taniechlanie.ui.MainActivity
 import kotlinx.android.synthetic.main.fragment_details.*
 import kotlinx.android.synthetic.main.sheet_details.*
 import java.io.File
 
 class DetailsFragment : Fragment() {
 
-    private val mStorageRef = FirebaseStorage.getInstance().reference
+    private lateinit var mainActivity: MainActivity
+    private lateinit var parentFrag: MenuFragment
     private lateinit var alcoObject: AlcoObject
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        mainActivity = requireActivity() as MainActivity
+        parentFrag = arguments?.getSerializable("MenuFragment") as MenuFragment
         alcoObject = arguments?.getSerializable("alcoObject") as AlcoObject
 
         sharedElementEnterTransition = MaterialContainerTransform().apply {
@@ -48,7 +51,7 @@ class DetailsFragment : Fragment() {
         val recyclerViewShops = rootView.findViewById<RecyclerView>(R.id.shop_details)
         val recyclerViewCategory = rootView.findViewById<RecyclerView>(R.id.category_details)
 
-        val shopAdapter = DetailsShopAdapter(alcoObject.shop)
+        val shopAdapter = DetailsShopAdapter(mainActivity.shopList, alcoObject.shop)
         recyclerViewShops.adapter = shopAdapter
         recyclerViewShops.layoutManager = LinearLayoutManager(
                 context,
@@ -91,19 +94,21 @@ class DetailsFragment : Fragment() {
                     ).toString()
         }
 
-        val imageFile = File(requireContext().filesDir, alcoObject.name + ".jpg")
-        if (File(requireContext().filesDir, alcoObject.name + ".jpg").exists()) {
-            image_details.setImageBitmap(BitmapFactory.decodeFile(imageFile.path))
-        } else {
-            val imageRef = mStorageRef.child("itemPhotos/${alcoObject.id}.jpg")
-            imageRef.getFile(imageFile).addOnSuccessListener {
+        if (alcoObject.photo != null){
+            val imageFile = File(requireContext().filesDir, alcoObject.name + ".jpg")
+
+            if (File(requireContext().filesDir, alcoObject.name + ".jpg").exists()) {
                 image_details.setImageBitmap(BitmapFactory.decodeFile(imageFile.path))
-                Log.d("image","success ${imageFile.path}")
-            }.addOnFailureListener {
-                Log.d("image","$it")
+            } else {
+                val imageRef = mainActivity.storage.getReferenceFromUrl(alcoObject.photo!!)
+                imageRef.getFile(imageFile).addOnSuccessListener {
+                    image_details.setImageBitmap(BitmapFactory.decodeFile(imageFile.path))
+                    Log.d("image","success ${imageFile.path}")
+                }.addOnFailureListener {
+                    Log.d("image","$it")
+                }
             }
         }
-
 
     }
 

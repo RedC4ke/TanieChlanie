@@ -1,38 +1,55 @@
 package com.redc4ke.taniechlanie.ui
 
+import android.content.Intent
+import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
+import androidx.transition.TransitionInflater
 import com.google.android.gms.tasks.Task
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.storage.FirebaseStorage
+import com.redc4ke.taniechlanie.BuildConfig
 import com.redc4ke.taniechlanie.R
-import com.redc4ke.taniechlanie.data.menu.AlcoObject
-import com.redc4ke.taniechlanie.data.menu.AlcoViewModel
+import com.redc4ke.taniechlanie.data.AlcoObject
+import com.redc4ke.taniechlanie.data.AlcoViewModel
+import com.redc4ke.taniechlanie.data.Shop
 import com.redc4ke.taniechlanie.ui.menu.MenuFragment
+import com.redc4ke.taniechlanie.ui.request.RequestFragment
 import kotlin.collections.ArrayList
-
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mFirebaseAnalytics: FirebaseAnalytics
     private lateinit var appBarConfiguration : AppBarConfiguration
     private lateinit var mDrawerLayout: DrawerLayout
+    private lateinit var prefs: SharedPreferences
     lateinit var menuFrag: MenuFragment
     lateinit var vm: AlcoViewModel
+    lateinit var shopList: ArrayList<Shop>
+    var currentFragment = 0
+    val database: FirebaseFirestore = FirebaseFirestore.getInstance()
+    val storage = FirebaseStorage.getInstance()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +57,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        prefs = getSharedPreferences("com.redc4ke.taniechlanie", MODE_PRIVATE)
 
         //NavHostFragment and navigation controller
         val host: NavHostFragment = supportFragmentManager
@@ -65,16 +83,15 @@ class MainActivity : AppCompatActivity() {
             ViewModelProvider(this).get(AlcoViewModel::class.java)
         }
 
+        //Preferences stuff
+        checkPrefs()
 
         //Firebase request (first from cache, then online)
-        firebaseToRV(vm, false)
-        firebaseToRV(vm, true)
+        getAlcoObject(vm)
 
         //Drawer setup
         setupNavigationMenu(navController)
 
-        //Calls the welcome dialog fragment
-        WelcomeFragment().show(supportFragmentManager, "welcome")
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -84,6 +101,7 @@ class MainActivity : AppCompatActivity() {
             menuInflater.inflate(R.menu.drawer_menu, menu)
             return true
         }
+
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -122,51 +140,126 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun firebaseToRV(viewm: AlcoViewModel, isOnline: Boolean = false) {
-        firebaseTask(isOnline)
-                .addOnSuccessListener {
-                    val tempList: MutableList<AlcoObject> = mutableListOf()
-                    it.forEach { document ->
+    private fun getAlcoObject(viewm: AlcoViewModel, isOnline: Boolean = false) {
+        getTask(isOnline, "wines")
+            .addOnSuccessListener {
+                val tempList: MutableList<AlcoObject> = mutableListOf()
+                it.forEach { document ->
 
-                        val data = document.data
-                        val alcoObject = AlcoObject(
-                            data["id"]?.toString()?.toInt(),
-                            data["name"]?.toString(),
-                            ((data["price"] as Map<*, *>)["min"] ?: error("Mapa sie zjebala"))
-                                .toString().toFloat(),
-                            ((data["price"] as Map<*, *>)["max"] ?: error("Mapa sie zjebala"))
-                                .toString().toFloat(),
-                            (data["price"] as Map<*, *>)["promo"]
-                                ?.toString()?.toFloat(),
-                            data["volume"].toString().toInt(),
-                            (data["voltage"].toString().toFloat() * 100),
-                            data["shop"] as ArrayList<String>?,
-                            data["categories"] as ArrayList<Int>?
-                        )
-                        tempList.add(alcoObject)
-                        Log.d("FireBase", "Added: $alcoObject")
-                    }
-                    viewm.addAll(tempList)
-                    menuFrag.updateRV(viewm)
+                    val data = document.data
+                    val alcoObject = AlcoObject(
+                        data["id"]?.toString()?.toInt(),
+                        data["name"]?.toString(),
+                        ((data["price"] as Map<*, *>)["min"] ?: error("Mapa sie zjebala"))
+                            .toString().toFloat(),
+                        ((data["price"] as Map<*, *>)["max"] ?: error("Mapa sie zjebala"))
+                            .toString().toFloat(),
+                        (data["price"] as Map<*, *>)["promo"]
+                            ?.toString()?.toFloat(),
+                        data["volume"].toString().toInt(),
+                        (data["voltage"].toString().toFloat() * 100),
+                        data["shop"] as ArrayList<Int>?,
+                        data["categories"] as ArrayList<Int>?,
+                        data["photo"] as String?
+                    )
+                    tempList.add(alcoObject)
+                    Log.d("FireBase", "Added: $alcoObject")
                 }
-                .addOnFailureListener {
-                }
+                viewm.addAll(tempList)
+                menuFrag.updateRV(viewm)
 
+                if (isOnline) getShopList()
+            }
+            .addOnFailureListener {
+                Toast.makeText(applicationContext,
+                    "Połączenie z bazą nieudane. " +
+                            "Sprawdź czy posiadasz dostęp do Internetu " +
+                            "i spróbuj ponownie.", Toast.LENGTH_LONG).show()
+            }
+
+        if (!isOnline) getAlcoObject(viewm, true)
+    }
+
+    private fun getShopList(isOnline: Boolean = false) {
+        getTask(isOnline, "shops")
+            .addOnSuccessListener {
+                val tempList: MutableList<Shop> = mutableListOf()
+                it.forEach { document ->
+                    val data = document.data
+                    tempList.add(Shop(data["id"].toString().toInt(), data["name"] as String))
+                }
+                shopList = tempList as ArrayList<Shop>
+                Log.d("FireBase", "Added: ${shopList.toString()}")
+            }
+            .addOnFailureListener {
+                Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
+            }
+        if (!isOnline) getShopList(true)
+    }
+
+    private fun getTask(isOnline: Boolean = false, colName: String): Task<QuerySnapshot> {
+        if (isOnline) {
+            database.enableNetwork()
+        } else {
+            database.disableNetwork()
+        }
+        val collection: CollectionReference = database.collection(colName)
+
+        return if (colName == "shops")
+            collection.orderBy("id").get()
+        else
+            collection.get()
+    }
+
+    private fun checkPrefs() {
+        val key = "VERSION_CODE"
+        val savedVersionCode = prefs.getInt(key, -1)
+        val currentVersionCode = BuildConfig.VERSION_CODE
+
+        when {
+            savedVersionCode == -1 -> welcome()
+            savedVersionCode == currentVersionCode -> return
+            savedVersionCode < currentVersionCode -> welcome()
+        }
+
+        prefs.edit().putInt(key, currentVersionCode).apply()
+    }
+
+    private fun welcome() {
+        //Display welcome fragment
+        WelcomeFragment().show(supportFragmentManager, "welcome")
+    }
+
+    fun openBrowser(view: View) {
+        val url = view.tag as String
+        val intent = Intent()
+        intent.action = Intent.ACTION_VIEW
+        intent.addCategory(Intent.CATEGORY_BROWSABLE)
+        intent.data = Uri.parse(url)
+
+        startActivity(intent)
     }
 
 }
 
-private fun firebaseTask(isOnline: Boolean = false): Task<QuerySnapshot> {
-    val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-    val collection: CollectionReference
-    if (isOnline) {
-        db.enableNetwork()
-    } else {
-        db.disableNetwork()
+fun setTransitions(fragment: Fragment, enter: Int?, exit: Int?) {
+    val inflater = TransitionInflater.from(fragment.requireContext())
+    val enterTrans =
+            if (enter != null) inflater.inflateTransition(enter)
+            else null
+    val exitTrans =
+            if (exit != null) inflater.inflateTransition(exit)
+            else null
+    fragment.apply {
+        enterTransition = enterTrans
+        exitTransition = exitTrans
+        returnTransition = exitTrans
+        allowEnterTransitionOverlap = true
+        allowReturnTransitionOverlap = true
     }
-    collection = db.collection("wines")
-    return collection.get()
 }
+
+
 
 
 

@@ -2,8 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.redc4ke.taniechlanie">
 
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-
     <application
         android:allowBackup="true"
         android:configChanges="orientation"
@@ -11,7 +9,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:screenOrientation="portrait"
-        android:supportsRtl="true"
+        android:supportsRtl="false"
         android:theme="@style/Theme.taniechlanie">
         <activity
             android:name="com.redc4ke.taniechlanie.ui.MainActivity"

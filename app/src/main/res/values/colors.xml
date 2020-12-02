@@ -8,4 +8,5 @@
     <color name="separator">#FFDCDCDC</color>
     <color name="grey_outline">#a3a3a3</color>
     <color name="grey_text">#545454</color>
+    <color name="error">#d40e00</color>
 </resources>

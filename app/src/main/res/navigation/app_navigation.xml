@@ -24,14 +24,21 @@
         tools:layout="@layout/fragment_details">
         <argument
             android:name="alcoObject"
-            app:argType="com.redc4ke.taniechlanie.data.menu.AlcoObject" />
+            app:argType="com.redc4ke.taniechlanie.data.AlcoObject" />
+        <argument
+            android:name="MenuFragment"
+            app:argType="com.redc4ke.taniechlanie.ui.menu.MenuFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/about_dest"
         android:name="com.redc4ke.taniechlanie.ui.about.AboutFragment"
         android:label="@string/about"
-        tools:layout="@layout/fragment_about" />
+        tools:layout="@layout/fragment_about" >
+        <action
+            android:id="@+id/to_credits_dest"
+            app:destination="@id/credits_dest" />
+    </fragment>
 
     <fragment
         android:id="@+id/options_dest"
@@ -47,6 +54,9 @@
         <action
             android:id="@+id/to_category"
             app:destination="@id/category_dest" />
+        <action
+            android:id="@+id/to_shopFragment"
+            app:destination="@id/shop_dest" />
     </fragment>
 
     <fragment
@@ -56,7 +66,43 @@
         tools:layout="@layout/fragment_category">
         <argument
             android:name="RequestFragment"
-            app:argType="com.redc4ke.taniechlanie.ui.request.RequestFragment"/>
+            app:argType="com.redc4ke.taniechlanie.ui.request.RequestFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/shop_dest"
+        android:name="com.redc4ke.taniechlanie.ui.request.ShopFragment"
+        android:label="@string/request_shop"
+        tools:layout="@layout/fragment_shop">
+        <argument
+            android:name="AlcoObject"
+            app:argType="com.redc4ke.taniechlanie.data.AlcoObject" />
+        <argument
+            android:name="hasImage"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/to_summaryFragment"
+            app:destination="@id/summary_dest" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/summary_dest"
+        android:name="com.redc4ke.taniechlanie.ui.request.SummaryFragment"
+        android:label="@string/request_summary"
+        tools:layout="@layout/fragment_summary">
+        <argument
+            android:name="AlcoObject"
+            app:argType="com.redc4ke.taniechlanie.data.AlcoObject" />
+        <argument
+            android:name="hasImage"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/to_list_dest"
+            app:destination="@id/list_dest" />
+    </fragment>
+    <fragment
+        android:id="@+id/credits_dest"
+        android:name="com.redc4ke.taniechlanie.ui.about.CreditsFragment"
+        android:label="@string/about_credits"
+        tools:layout="@layout/fragment_credits" />
 
 </navigation>
