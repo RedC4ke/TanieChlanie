@@ -44,7 +44,7 @@ class AboutFragment : Fragment() {
         val recyclerView = root.findViewById<RecyclerView>(R.id.about_RV)
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter = AboutRecyclerViewAdapter(requireContext())
+        recyclerView.adapter = AboutRecyclerViewAdapter(this)
 
         return root
     }

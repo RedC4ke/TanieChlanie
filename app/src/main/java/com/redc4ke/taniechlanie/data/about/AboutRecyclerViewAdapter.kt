@@ -1,22 +1,41 @@
 package com.redc4ke.taniechlanie.data.about
 
-import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isInvisible
 import androidx.core.view.updateLayoutParams
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.redc4ke.taniechlanie.R
+import com.redc4ke.taniechlanie.ui.MainActivity
 import kotlinx.android.synthetic.main.row_about.view.*
+import kotlinx.android.synthetic.main.row_about_expanded.view.*
 
-class AboutRecyclerViewAdapter(private val context: Context):
+class AboutRecyclerViewAdapter(private val frag: Fragment):
     RecyclerView.Adapter<AboutViewHolder>() {
-    
+
+    private var expanded = arrayListOf(false, false)
+    private val context = frag.requireContext()
     private val headers = context.resources.getStringArray(R.array.about_header)
     private val descriptions =  context.resources.getStringArray(R.array.about_description)
+    private val subrows = arrayListOf(
+        arrayListOf(
+                Subrow(R.drawable.github_mark_120px_plus,
+                        "GitHub", "Przejdź", "https://github.com/RedC4ke"),
+                Subrow(R.drawable.ko_fi_icon_rgb_stroke,
+                        "Ko-fi", "Przejdź", "https://ko-fi.com/redc4ke")
+        ),
+        arrayListOf(
+                Subrow(
+                        R.drawable.github_mark_120px_plus,
+                        "TanieChlanie-issues", "Przejdź",
+                        "https://github.com/RedC4ke/TanieChlanie-issues"
+                )
+        )
+    )
+
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AboutViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -26,6 +45,7 @@ class AboutRecyclerViewAdapter(private val context: Context):
     }
 
     override fun onBindViewHolder(holder: AboutViewHolder, position: Int) {
+
         val view = holder.view
         view.about_row_IV.apply {
             setBackgroundResource(when (position) {
@@ -46,28 +66,33 @@ class AboutRecyclerViewAdapter(private val context: Context):
             }
         }
 
-        if (position == 0) {
-            val creditsList = arrayListOf<Subrow>(
-                Subrow(R.drawable.github_mark_light_120px_plus,
-                    "GitHub", "Redc4ke", "https://github.com/RedC4ke"),
-                Subrow(R.drawable.ko_fi_icon_rgbfordarkbg,
-                    "Ko-fi", "Redc4ke", ""))
-            )
-
-            val rv = view.about_row_RV
-            rv.layoutManager = LinearLayoutManager(context)
-            rv.adapter = AboutRowAdapter()
+        if (position in arrayListOf(0, 1)) {
+                addExpandable(view, subrows[position], position)
         }
     }
 
     override fun getItemCount(): Int {
         return headers.size
     }
+
+    private fun addExpandable(view: View, itemList: ArrayList<Subrow>, position: Int) {
+        val rv = view.about_row_RV
+        rv.layoutManager = LinearLayoutManager(context)
+        rv.adapter = AboutRowAdapter(itemList, frag)
+
+        view.setOnClickListener {
+            expanded[position] = !expanded[position]
+            notifyItemChanged(position)
+        }
+
+        view.about_row_subrow.visibility =
+                if (expanded[position]) View.VISIBLE else View.GONE
+    }
 }
 
 class AboutViewHolder(val view: View): RecyclerView.ViewHolder(view)
 
-class AboutRowAdapter(private val data: ArrayList<Subrow>):
+class AboutRowAdapter(private val data: ArrayList<Subrow>, private val frag: Fragment):
     RecyclerView.Adapter<AboutRowViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AboutRowViewHolder {
@@ -78,6 +103,18 @@ class AboutRowAdapter(private val data: ArrayList<Subrow>):
     }
 
     override fun onBindViewHolder(holder: AboutRowViewHolder, position: Int) {
+        val view = holder.view
+        val item = data[position]
+        with (view) {
+            about_subrow_IV.setBackgroundResource(item.drawable)
+            about_subrow_headerTV.text = item.header
+            about_subrow_textTV.text = item.text
+
+            setOnClickListener {
+                val act = frag.requireActivity() as MainActivity
+                act.openBrowser(item.url)
+            }
+        }
 
     }
 

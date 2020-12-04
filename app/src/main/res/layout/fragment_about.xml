@@ -88,6 +88,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="32dp"
+                        android:layout_marginEnd="-3dp"
                         android:orientation="horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent">
@@ -97,7 +98,7 @@
                             android:layout_width="34dp"
                             android:layout_height="35dp"
                             android:layout_weight="1"
-                            android:onClick="openBrowser"
+                            android:onClick="openBrowserFromTextView"
                             android:tag="https://taniechlanie.ml/"
                             app:srcCompat="@drawable/ic_outline_language_24"
                             app:tint="@color/red_heavy" />
@@ -113,7 +114,7 @@
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:paddingStart="30dp"
-                android:paddingEnd="30dp"
+                android:paddingEnd="32dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/about_logo_CV">
