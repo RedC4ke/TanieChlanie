@@ -230,8 +230,12 @@ class MainActivity : AppCompatActivity() {
         WelcomeFragment().show(supportFragmentManager, "welcome")
     }
 
-    fun openBrowser(view: View) {
+    fun openBrowserFromTextView(view: View) {
         val url = view.tag as String
+        openBrowser(url)
+    }
+
+    fun openBrowser(url: String) {
         val intent = Intent()
         intent.action = Intent.ACTION_VIEW
         intent.addCategory(Intent.CATEGORY_BROWSABLE)
