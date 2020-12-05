@@ -12,60 +12,80 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        android:paddingTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/about_row_headerTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            android:fontFamily="@font/varela_round"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            app:layout_constraintStart_toEndOf="@+id/about_row_IV"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Lorem ipsum" />
-
-        <ImageView
-            android:id="@+id/about_row_IV"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="2dp"
-            android:backgroundTint="@color/red_heavy"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            android:contentDescription="About section logo"
-            android:foregroundTint="@color/red_heavy"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/red_heavy" />
-
-        <TextView
-            android:id="@+id/about_row_descriptionTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            android:fontFamily="@font/open_sans_light"
-            app:layout_constraintStart_toEndOf="@+id/about_row_IV"
-            app:layout_constraintTop_toBottomOf="@+id/about_row_headerTV"
-            tools:text="Lorem ipsum dolor sit amet" />
-
-        <FrameLayout
-            android:id="@+id/frameLayout5"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/about_row_mainCL"
             android:layout_width="match_parent"
-            android:layout_height="10dp"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:paddingTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/about_row_descriptionTV">
+            app:layout_constraintTop_toTopOf="parent">
 
-        </FrameLayout>
+            <ImageView
+                android:id="@+id/about_row_IV"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="2dp"
+                android:backgroundTint="@color/red_heavy"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:contentDescription="About section logo"
+                android:foregroundTint="@color/red_heavy"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/red_heavy" />
+
+            <FrameLayout
+                android:id="@+id/frameLayout5"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/about_row_descriptionTV">
+
+            </FrameLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:layout_editor_absoluteY="10dp">
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/about_row_descriptionTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:fontFamily="@font/open_sans_light"
+                app:layout_constraintStart_toEndOf="@+id/about_row_IV"
+                app:layout_constraintTop_toBottomOf="@+id/about_row_headerTV"
+                tools:text="Lorem ipsum dolor sit amet" />
+
+            <TextView
+                android:id="@+id/about_row_headerTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:fontFamily="@font/varela_round"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@+id/about_row_IV"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Lorem ipsum" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/about_row_subrow"
@@ -74,7 +94,7 @@
             android:background="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frameLayout5">
+            app:layout_constraintTop_toBottomOf="@+id/about_row_mainCL">
 
             <View
                 android:id="@+id/divider3"

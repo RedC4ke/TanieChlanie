@@ -93,15 +93,44 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent">
 
-                        <ImageView
-                            android:id="@+id/imageView6"
-                            android:layout_width="34dp"
-                            android:layout_height="35dp"
-                            android:layout_weight="1"
-                            android:onClick="openBrowserFromTextView"
-                            android:tag="https://taniechlanie.ml/"
-                            app:srcCompat="@drawable/ic_outline_language_24"
-                            app:tint="@color/red_heavy" />
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <ImageView
+                                android:id="@+id/imageView6"
+                                android:layout_width="39dp"
+                                android:layout_height="39dp"
+                                android:layout_gravity="top"
+                                android:layout_weight="1"
+                                android:onClick="openBrowserFromTextView"
+                                android:tag="https://trello.com/b/VIVOwbak/taniechlanie-roadmap"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_bias="0.42"
+                                app:srcCompat="@drawable/mark_gradient_blue_trello" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <ImageView
+                                android:id="@+id/imageView7"
+                                android:layout_width="34dp"
+                                android:layout_height="35dp"
+                                android:layout_weight="1"
+                                android:onClick="openBrowserFromTextView"
+                                android:tag="https://taniechlanie.ml/"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/ic_outline_language_24"
+                                app:tint="@color/red_heavy" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
                     </LinearLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

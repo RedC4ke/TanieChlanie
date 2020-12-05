@@ -1,5 +1,6 @@
 package com.redc4ke.taniechlanie.data.about
 
+import android.opengl.Visibility
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -60,15 +61,25 @@ class AboutRecyclerViewAdapter(private val frag: Fragment):
 
         if (position == headers.size-1) {
             val divider = view.about_row_divider
-            (divider.parent as ViewGroup).removeView(divider)
             view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 this.bottomMargin = 26
             }
+            divider.visibility = View.GONE
         }
 
-        if (position in arrayListOf(0, 1)) {
-                addExpandable(view, subrows[position], position)
+        when (position) {
+            0,1 -> addExpandable(view, subrows[position], position)
+            2 -> view.about_row_mainCL.setOnClickListener {
+                (frag.requireActivity() as MainActivity)
+                        .openBrowser("https://taniechlanie.ml/regulamin")
+            }
         }
+
+        when (position) {
+            2 -> view.about_row_subrow.visibility = View.GONE
+        }
+
+
     }
 
     override fun getItemCount(): Int {
@@ -80,7 +91,7 @@ class AboutRecyclerViewAdapter(private val frag: Fragment):
         rv.layoutManager = LinearLayoutManager(context)
         rv.adapter = AboutRowAdapter(itemList, frag)
 
-        view.setOnClickListener {
+        view.about_row_mainCL.setOnClickListener {
             expanded[position] = !expanded[position]
             notifyItemChanged(position)
         }
@@ -91,6 +102,11 @@ class AboutRecyclerViewAdapter(private val frag: Fragment):
 }
 
 class AboutViewHolder(val view: View): RecyclerView.ViewHolder(view)
+
+
+
+
+
 
 class AboutRowAdapter(private val data: ArrayList<Subrow>, private val frag: Fragment):
     RecyclerView.Adapter<AboutRowViewHolder>() {
