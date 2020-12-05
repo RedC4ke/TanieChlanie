@@ -6,7 +6,10 @@
     android:layout_height="wrap_content"
     android:background="#00FFFFFF"
     android:paddingTop="7dp"
-    android:paddingBottom="7dp">
+    android:paddingBottom="7dp"
+    android:focusable="true"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground">
 
     <ImageView
         android:id="@+id/about_subrow_IV"
