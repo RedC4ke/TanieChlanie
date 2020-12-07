@@ -7,18 +7,19 @@
     android:background="@color/red_light">
 
     <androidx.cardview.widget.CardView
-
         android:id="@+id/about_CV"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="10dp"
         android:backgroundTint="@color/white"
         app:cardElevation="6dp"
         tools:context="com.redc4ke.taniechlanie.ui.about.AboutFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingBottom="10dp">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/about_logo_CV"
@@ -139,9 +140,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:clipChildren="false"
-                android:clipToPadding="false"
+                android:layout_marginTop="150dp"
                 android:paddingStart="30dp"
                 android:paddingEnd="32dp"
                 app:layout_constraintEnd_toEndOf="parent"

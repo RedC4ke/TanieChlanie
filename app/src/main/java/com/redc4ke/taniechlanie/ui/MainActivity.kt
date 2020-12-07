@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var menuFrag: MenuFragment
     lateinit var vm: AlcoViewModel
     lateinit var shopList: ArrayList<Shop>
+    lateinit var faq: ArrayList<Map<String, String>>
     var currentFragment = 0
     val database: FirebaseFirestore = FirebaseFirestore.getInstance()
     val storage = FirebaseStorage.getInstance()
@@ -88,6 +89,8 @@ class MainActivity : AppCompatActivity() {
 
         //Firebase request (first from cache, then online)
         getAlcoObject(vm)
+        getShopList()
+        getFaq()
 
         //Drawer setup
         setupNavigationMenu(navController)
@@ -167,8 +170,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 viewm.addAll(tempList)
                 menuFrag.updateRV(viewm)
-
-                if (isOnline) getShopList()
             }
             .addOnFailureListener {
                 Toast.makeText(applicationContext,
@@ -183,18 +184,39 @@ class MainActivity : AppCompatActivity() {
     private fun getShopList(isOnline: Boolean = false) {
         getTask(isOnline, "shops")
             .addOnSuccessListener {
-                val tempList: MutableList<Shop> = mutableListOf()
+                val tempList: ArrayList<Shop> = arrayListOf()
                 it.forEach { document ->
                     val data = document.data
                     tempList.add(Shop(data["id"].toString().toInt(), data["name"] as String))
                 }
-                shopList = tempList as ArrayList<Shop>
-                Log.d("FireBase", "Added: ${shopList.toString()}")
+                shopList = tempList
+                Log.d("FireBase", "Added: $shopList")
             }
             .addOnFailureListener {
                 Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
             }
         if (!isOnline) getShopList(true)
+    }
+
+    private fun getFaq(isOnline: Boolean = false) {
+        getTask(isOnline, "faq")
+                .addOnSuccessListener {
+                    val tempList: ArrayList<Map<String, String>> = arrayListOf()
+                    it.forEach{document ->
+                        val data = document.data
+                        tempList.add(
+                                mapOf(
+                                        "question" to data["question"] as String,
+                                        "answer" to data["answer"] as String)
+                        )
+                    }
+                    faq = tempList
+                    Log.d("FireBase", "Added: $faq")
+                }
+                .addOnFailureListener {
+                    Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
+                }
+        if (!isOnline) getFaq(true)
     }
 
     private fun getTask(isOnline: Boolean = false, colName: String): Task<QuerySnapshot> {
