@@ -5,7 +5,7 @@
     <string name="list">Baza alkoholi</string>
     <string name="preferences">Ustawienia</string>
     <string name="about">O aplikacji</string>
-    <string name="about_credits">O autorze</string>
+    <string name="about_help">Pomoc</string>
     <string name="details">Szczegóły</string>
     <string name="request">Zgłoś nową pozycję!</string>
     <string name="request_cat">Wybierz kategorię:</string>
@@ -37,42 +37,23 @@
     <string-array name="about_header">
         <item>Autor</item>
         <item>Zgłoś błąd</item>
+        <item>Autorzy ikon</item>
         <item>Regulamin</item>
+        <item>Pomoc</item>
     </string-array>
     <string-array name="about_description">
         <item>Informacje o autorze aplikacji</item>
         <item>Zauważyłeś błąd? Zgłoś go tutaj!</item>
+        <item>Twócy ikon użytych w programie</item>
         <item>Regulamin korzystania z aplikacji</item>
+        <item>Objaśnienie działania aplikacji</item>
     </string-array>
 
-    <string name="about_gr1_header">Autorzy ikon</string>
-    <string-array name="about_gr1">
-        <item>
-            <a href="https://www.flaticon.com/authors/freepik">
-                Freepik</a>
-        </item>
-        <item>
-            <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">
-                Pixel perfect</a>
-        </item>
-        <item>
-            <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">
-                Smashicons</a>
-        </item>
-        <item>
-            <a href="https://www.flaticon.com/authors/nhor-phai" title="Nhor Phai">
-                Nhor Phai</a>
-        </item>
-        <item>
-            <a href="https://www.flaticon.com/authors/monkik" title="monkik">
-                monkik</a>
-        </item>
-        <item>
-            <a href="https://www.flaticon.com/authors/linector" title="Linector">
-                Linector</a>
-        </item>
-    </string-array>
-    <string name="about_gr1_flaticon">www.flaticon.com</string>
+    <!-- about page - help fragment -->
+    <string name="faq_help">Często zadawane pytania</string>
+    <string name="mail_help">
+        Nie znalazłeś odpowiedzi?\nNapisz do nas na <b>support@taniechlanie.ml</b>
+    </string>
 
     <!-- request page -->
     <string name="header1">Nie znalazłeś czegoś w bazie?</string>

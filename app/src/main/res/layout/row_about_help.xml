@@ -17,95 +17,94 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/about_row_mainCL"
+            android:id="@+id/help_row_mainCL"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground"
-            android:paddingTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/about_row_IV"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="2dp"
+                android:id="@+id/help_row_IV"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="8dp"
                 android:backgroundTint="@color/red_heavy"
                 android:clipChildren="false"
                 android:clipToPadding="false"
-                android:contentDescription="About section logo"
+                android:contentDescription="faq section indicator"
                 android:foregroundTint="@color/red_heavy"
+                app:layout_constraintBottom_toTopOf="@+id/frameLayout8"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_outline_play_arrow_24"
                 app:tint="@color/red_heavy" />
 
-            <FrameLayout
-                android:id="@+id/frameLayout5"
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/about_row_descriptionTV">
-
-            </FrameLayout>
-
             <TextView
-                android:id="@+id/about_row_descriptionTV"
+                android:id="@+id/help_row_headerTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:fontFamily="@font/open_sans_light"
-                app:layout_constraintStart_toEndOf="@+id/about_row_IV"
-                app:layout_constraintTop_toBottomOf="@+id/about_row_headerTV"
-                tools:text="Lorem ipsum dolor sit amet" />
-
-            <TextView
-                android:id="@+id/about_row_headerTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:clipChildren="false"
-                android:clipToPadding="false"
-                android:fontFamily="@font/varela_round"
                 android:textColor="@color/black"
-                android:textSize="18sp"
-                app:layout_constraintStart_toEndOf="@+id/about_row_IV"
+                android:textSize="20sp"
+                app:layout_constraintStart_toEndOf="@+id/help_row_IV"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Lorem ipsum" />
+
+            <FrameLayout
+                android:id="@+id/frameLayout8"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/help_row_headerTV">
+
+            </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/about_row_subrow"
+            android:id="@+id/help_row_subrow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
+            android:paddingStart="16dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/about_row_mainCL">
+            app:layout_constraintTop_toBottomOf="@+id/help_row_mainCL">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/about_row_RV"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/help_row_textTV"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:fontFamily="@font/open_sans_light"
+                android:textColor="@color/grey_text"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
-        android:id="@+id/about_row_divider"
-        android:layout_width="409dp"
+        android:id="@+id/help_row_divider"
+        android:layout_width="wrap_content"
         android:layout_height="1dp"
         android:layout_gravity="bottom"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
         android:background="?android:attr/listDivider" />
 
 </androidx.cardview.widget.CardView>
