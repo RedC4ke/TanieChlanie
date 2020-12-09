@@ -5,14 +5,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.redc4ke.taniechlanie.R
-import com.redc4ke.taniechlanie.data.ItemCategories
-import com.redc4ke.taniechlanie.data.ItemCategory
+import com.redc4ke.taniechlanie.data.Categories
+import com.redc4ke.taniechlanie.ui.MainActivity
 import com.redc4ke.taniechlanie.ui.request.CategoryFragment
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.row_request_category.view.*
 
 class CategoryListAdapter(val fragment: CategoryFragment): RecyclerView.Adapter<CategoryListViewHolder>() {
 
-    private val sortedCategoryList = ItemCategories.list.sortedBy { it.name }
+    private val sortedCategoryList = (fragment.requireActivity() as MainActivity)
+        .categories.getAll().sortedBy { it.name }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -24,14 +26,15 @@ class CategoryListAdapter(val fragment: CategoryFragment): RecyclerView.Adapter<
     override fun onBindViewHolder(holder: CategoryListViewHolder, position: Int) {
         val tv = holder.view.row_cat_name_TV
         val icon = holder.view.row_cat_icon
-        val output: ItemCategory?
+        val output: Categories.Category?
         if (position == 0) {
             tv.text = "Brak"
             output = null
         } else {
             val category = sortedCategoryList[position-1]
             tv.text = category.name
-            icon.setBackgroundResource(category.icon)
+            if (category.image != null)
+                Picasso.get().load(category.image).into(icon)
             output = category
         }
 
@@ -44,7 +47,7 @@ class CategoryListAdapter(val fragment: CategoryFragment): RecyclerView.Adapter<
     }
 
     override fun getItemCount(): Int {
-        return ItemCategories.list.size + 1
+        return sortedCategoryList.size
     }
 
 }

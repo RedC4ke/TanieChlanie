@@ -31,7 +31,7 @@ class HelpRecyclerViewAdapter(private val frag: Fragment): RecyclerView.Adapter<
         view.help_row_headerTV.text = faq[position]["question"]
         view.help_row_textTV.text = faq[position]["answer"]
 
-        view.setOnClickListener {
+        view.help_row_mainCL.setOnClickListener {
             expanded[position] = !expanded[position]
 
             //Animation

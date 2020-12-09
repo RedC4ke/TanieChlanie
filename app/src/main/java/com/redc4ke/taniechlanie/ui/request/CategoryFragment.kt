@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.redc4ke.taniechlanie.R
-import com.redc4ke.taniechlanie.data.ItemCategory
+import com.redc4ke.taniechlanie.data.Categories
 import com.redc4ke.taniechlanie.data.request.CategoryListAdapter
 
 class CategoryFragment : Fragment() {
@@ -44,7 +44,7 @@ class CategoryFragment : Fragment() {
         return rootView
     }
 
-    fun onItemClick(cat: ItemCategory?) {
+    fun onItemClick(cat: Categories.Category?) {
         if (cat in parentFrag!!.categoryList) {
             Toast.makeText(requireContext(), "Już dodałeś tę kategorię!", Toast.LENGTH_LONG).show()
         } else {

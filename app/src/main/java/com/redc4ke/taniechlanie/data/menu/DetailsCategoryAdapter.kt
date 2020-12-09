@@ -1,5 +1,7 @@
 package com.redc4ke.taniechlanie.data.menu
 
+import android.graphics.BitmapFactory
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -7,31 +9,52 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.updateLayoutParams
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.redc4ke.taniechlanie.R
-import com.redc4ke.taniechlanie.data.ItemCategories
+import com.redc4ke.taniechlanie.data.Categories
+import com.redc4ke.taniechlanie.ui.MainActivity
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.row_details_category.view.*
 import kotlinx.android.synthetic.main.row_details_category_single.view.*
 import kotlinx.android.synthetic.main.row_details_category_twin.view.*
 
-class DetailsCategoryAdapter(private val categoryList: ArrayList<Int>?): RecyclerView.Adapter<DetailsCategoryViewHolder>() {
+class DetailsCategoryAdapter(private val frag: Fragment, private val positions: ArrayList<Int>?):
+        RecyclerView.Adapter<DetailsCategoryViewHolder>() {
+
+    private var catList: ArrayList<Categories.Category> = arrayListOf()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailsCategoryViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val item = when (categoryList?.size) {
+        val item = when (itemCount) {
             1 -> inflater.inflate(R.layout.row_details_category_single, parent, false)
             2 -> inflater.inflate(R.layout.row_details_category_twin, parent, false)
             else -> inflater.inflate(R.layout.row_details_category, parent, false)
         }
 
+        val act = frag.requireActivity() as MainActivity
+        val tempList: ArrayList<Categories.Category> = arrayListOf()
+        positions?.forEach {
+            val cat = act.categories.get(it)
+            if (cat != null) {
+                tempList.add(cat)
+                Log.d("huj", cat.toString())
+            }
+        }
+
+        catList = tempList
 
         return DetailsCategoryViewHolder(item)
     }
 
     override fun onBindViewHolder(holder: DetailsCategoryViewHolder, position: Int) {
-        if (categoryList != null) {
+        Log.d("huj", catList.size.toString())
+        if (catList.size > 0) {
+            val category = catList[position]
+
             val icon: ImageView
             val tv: TextView?
-            when (categoryList.size) {
+            when (catList.size) {
                 1 -> {
                     icon = holder.view.drawable_details_categoryBig
                     tv = holder.view.details_category_single_TV
@@ -55,10 +78,13 @@ class DetailsCategoryAdapter(private val categoryList: ArrayList<Int>?): Recycle
                 }
             }
 
-            icon.setBackgroundResource(ItemCategories.list[categoryList[position]].icon)
+            if (category.image != null) {
+                val img = category.image
+                Picasso.get().load(img).into(icon)
+            }
 
             if (tv != null) {
-                tv.text = ItemCategories.list[categoryList[position]].name
+                tv.text = category.name
             }
 
         }
@@ -66,7 +92,7 @@ class DetailsCategoryAdapter(private val categoryList: ArrayList<Int>?): Recycle
     }
 
     override fun getItemCount(): Int {
-        return categoryList?.size ?: 1
+        return positions!!.size
     }
 
 }

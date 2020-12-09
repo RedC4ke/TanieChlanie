@@ -18,9 +18,11 @@
         Witaj w aplikacji <b>TanieChlanie</b>! \n
         Tutaj obliczysz, jak w najbardziej efektywny sposób spędzić piątkową noc.
         Aplikacja jest na ten moment w fazie testów. Będzie poprawiana i aktualizowana na bieżąco.
-        \n \n
-        Korzystając z aplikacji oświadczasz, że masz ukończone <b>18 lat</b>.
     </string>
+    <string name="rules_welcome">Oświadczam że mam ukończone 18 lat i zapoznałem się z treścią
+        <a href="https://taniechlanie.ml/regulamin">regulaminu</a>
+    </string>
+    <string name="warning_welcome">Zaakceptuj regulamin aby kontynuować</string>
 
     <!-- image alts -->
     <string name="wine">Butelka wina, obok dwa kieliszki</string>

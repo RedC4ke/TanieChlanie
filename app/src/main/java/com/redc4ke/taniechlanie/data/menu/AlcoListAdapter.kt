@@ -1,5 +1,6 @@
 package com.redc4ke.taniechlanie.data.menu
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,11 +34,7 @@ class AlcoListAdapter(
 
         if (position == 0) {
             holder.view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                this.topMargin = 25
-            }
-        } else if (position == data.size-1) {
-            holder.view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                this.bottomMargin = 12
+                this.topMargin = 30
             }
         }
 

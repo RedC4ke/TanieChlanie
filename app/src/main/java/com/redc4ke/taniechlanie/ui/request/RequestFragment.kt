@@ -21,9 +21,10 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
-import com.redc4ke.taniechlanie.data.ItemCategory
+import com.redc4ke.taniechlanie.data.Categories
 import com.redc4ke.taniechlanie.ui.MainActivity
 import com.redc4ke.taniechlanie.ui.setTransitions
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_request.*
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -33,7 +34,7 @@ import kotlin.collections.ArrayList
 
 class RequestFragment : Fragment(), Serializable {
 
-    var categoryList: MutableList<ItemCategory?> = mutableListOf()
+    var categoryList: MutableList<Categories.Category?> = mutableListOf()
     private lateinit var buttonList: ArrayList<MaterialButton>
     private lateinit var containerList: ArrayList<ViewGroup>
     private lateinit var mainActivity: MainActivity
@@ -164,7 +165,7 @@ class RequestFragment : Fragment(), Serializable {
     }
 
     //Manages category fragment result
-    fun onCategoryResult(cat: ItemCategory?, pos: Int = catButtonPosition) {
+    fun onCategoryResult(cat: Categories.Category?, pos: Int = catButtonPosition) {
         //If category is null, delete from list or do nothing
         if (cat == null) {
             if (pos < categoryList.size && categoryList[pos] != null) {
@@ -188,8 +189,8 @@ class RequestFragment : Fragment(), Serializable {
             layoutInflater.inflate(R.layout.row_details_category_twin,
                     parent, true) as ViewGroup
             parent.findViewById<TextView>(R.id.details_category_twin_TV).text = it!!.name
-            parent.findViewById<ImageView>(R.id.drawable_details_categoryTwin)
-                    .setBackgroundResource(it.icon)
+            val icon = parent.findViewById<ImageView>(R.id.drawable_details_categoryTwin)
+            if (it.image != null) Picasso.get().load(it.image).into(icon)
             categorySetOnClickListener(i)
             i++
         }

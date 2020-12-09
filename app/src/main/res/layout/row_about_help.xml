@@ -37,37 +37,31 @@
                 android:clipToPadding="false"
                 android:contentDescription="faq section indicator"
                 android:foregroundTint="@color/red_heavy"
-                app:layout_constraintBottom_toTopOf="@+id/frameLayout8"
+                app:layout_constraintBottom_toBottomOf="@+id/help_row_headerTV"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/help_row_headerTV"
                 app:srcCompat="@drawable/ic_outline_play_arrow_24"
                 app:tint="@color/red_heavy" />
 
             <TextView
                 android:id="@+id/help_row_headerTV"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
                 android:clipChildren="false"
                 android:clipToPadding="false"
-                android:fontFamily="@font/open_sans_light"
+                android:fontFamily="@font/open_sans_regular"
                 android:textColor="@color/black"
-                android:textSize="20sp"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toEndOf="@+id/help_row_IV"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Lorem ipsum" />
-
-            <FrameLayout
-                android:id="@+id/frameLayout8"
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:layout_marginTop="4dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/help_row_headerTV">
-
-            </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
