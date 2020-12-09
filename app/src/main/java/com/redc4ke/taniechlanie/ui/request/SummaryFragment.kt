@@ -12,7 +12,6 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
-import com.redc4ke.taniechlanie.data.ItemCategories
 import com.redc4ke.taniechlanie.ui.MainActivity
 import com.redc4ke.taniechlanie.ui.setTransitions
 import kotlinx.android.synthetic.main.fragment_summary.*
@@ -52,7 +51,7 @@ class SummaryFragment : Fragment() {
         summary_voltage_TV.text = getString(R.string.suff_voltage,
                 alcoObject.voltage!!.toBigDecimal().stripTrailingZeros().toPlainString())
         alcoObject.categories!!.forEach {
-            val catName = ItemCategories.list[it].name
+            val catName = mainActivity.categories.get(it)?.name
             if (it != alcoObject.categories!!.last()) summary_categories_TV.append("$catName, ")
             else summary_categories_TV.append(catName)
         }

@@ -58,7 +58,7 @@ class DetailsFragment : Fragment() {
                 LinearLayoutManager.HORIZONTAL,
                 false)
 
-        val categoryAdapter = DetailsCategoryAdapter(alcoObject.categories)
+        val categoryAdapter = DetailsCategoryAdapter(this, alcoObject.categories)
         recyclerViewCategory.adapter = categoryAdapter
         val spanCount = when (alcoObject.categories?.size) {
             1 -> 1
@@ -79,7 +79,8 @@ class DetailsFragment : Fragment() {
 
         name_details.text = alcoObject.name
         if (alcoObject.minPrice != null)
-            price_details.text = (alcoObject.minPrice.toString() + "zł")
+            price_details.text = getString(R.string.suff_price,
+            String.format("%.2f", alcoObject.minPrice))
         if (alcoObject.volume != null)
             volume_details.text = (alcoObject.volume.toString() + "ml")
         if (alcoObject.voltage != null)

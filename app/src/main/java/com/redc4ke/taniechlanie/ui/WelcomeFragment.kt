@@ -1,6 +1,9 @@
 package com.redc4ke.taniechlanie.ui
 
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
+import android.text.method.MovementMethod
+import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +15,8 @@ class WelcomeFragment : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //Disable dismissing when clicked outside of the fragment
+        this.isCancelable = false
     }
 
     override fun onCreateView(
@@ -22,8 +27,11 @@ class WelcomeFragment : DialogFragment() {
     }
 
     override fun onStart() {
+        welcome_rulesTV.movementMethod = LinkMovementMethod()
+
         start_BT.setOnClickListener {
-            dismiss()
+            if (welcome_rulesCHB.isChecked) dismiss()
+            else welcome_warningTV.visibility = View.VISIBLE
         }
 
         super.onStart()

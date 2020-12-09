@@ -16,6 +16,7 @@
         <!-- text colors -->
         <item name="android:textColorSecondary">@color/black</item>
 
+
     </style>
     <style name="Theme.taniechlanie" parent="Theme.Base.taniechlanie" />
 

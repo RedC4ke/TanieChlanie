@@ -5,12 +5,12 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -24,18 +24,17 @@ import androidx.transition.TransitionInflater
 import com.google.android.gms.tasks.Task
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
-import com.redc4ke.taniechlanie.BuildConfig
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.data.AlcoViewModel
+import com.redc4ke.taniechlanie.data.Categories
 import com.redc4ke.taniechlanie.data.Shop
 import com.redc4ke.taniechlanie.ui.menu.MenuFragment
-import com.redc4ke.taniechlanie.ui.request.RequestFragment
+import io.grpc.android.BuildConfig
 import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
@@ -48,17 +47,23 @@ class MainActivity : AppCompatActivity() {
     lateinit var vm: AlcoViewModel
     lateinit var shopList: ArrayList<Shop>
     lateinit var faq: ArrayList<Map<String, String>>
-    var currentFragment = 0
     val database: FirebaseFirestore = FirebaseFirestore.getInstance()
     val storage = FirebaseStorage.getInstance()
-
+    var currentFragment = 0
+    val categories = Categories(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //Disable night theme (temporary)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
+
         setContentView(R.layout.activity_main)
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
         prefs = getSharedPreferences("com.redc4ke.taniechlanie", MODE_PRIVATE)
+
 
         //NavHostFragment and navigation controller
         val host: NavHostFragment = supportFragmentManager
@@ -87,10 +92,9 @@ class MainActivity : AppCompatActivity() {
         //Preferences stuff
         checkPrefs()
 
+
         //Firebase request (first from cache, then online)
-        getAlcoObject(vm)
-        getShopList()
-        getFaq()
+        getFirebaseData()
 
         //Drawer setup
         setupNavigationMenu(navController)
@@ -143,63 +147,68 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getAlcoObject(viewm: AlcoViewModel, isOnline: Boolean = false) {
-        getTask(isOnline, "wines")
-            .addOnSuccessListener {
-                val tempList: MutableList<AlcoObject> = mutableListOf()
-                it.forEach { document ->
-
-                    val data = document.data
-                    val alcoObject = AlcoObject(
-                        data["id"]?.toString()?.toInt(),
-                        data["name"]?.toString(),
-                        ((data["price"] as Map<*, *>)["min"] ?: error("Mapa sie zjebala"))
-                            .toString().toFloat(),
-                        ((data["price"] as Map<*, *>)["max"] ?: error("Mapa sie zjebala"))
-                            .toString().toFloat(),
-                        (data["price"] as Map<*, *>)["promo"]
-                            ?.toString()?.toFloat(),
-                        data["volume"].toString().toInt(),
-                        (data["voltage"].toString().toFloat() * 100),
-                        data["shop"] as ArrayList<Int>?,
-                        data["categories"] as ArrayList<Int>?,
-                        data["photo"] as String?
-                    )
-                    tempList.add(alcoObject)
-                    Log.d("FireBase", "Added: $alcoObject")
+    private fun getAlcoObject(viewm: AlcoViewModel) {
+        getTask("wines")
+                .addOnCompleteListener {
+                    getShopList()
                 }
-                viewm.addAll(tempList)
-                menuFrag.updateRV(viewm)
-            }
-            .addOnFailureListener {
-                Toast.makeText(applicationContext,
-                    "Połączenie z bazą nieudane. " +
-                            "Sprawdź czy posiadasz dostęp do Internetu " +
-                            "i spróbuj ponownie.", Toast.LENGTH_LONG).show()
-            }
-
-        if (!isOnline) getAlcoObject(viewm, true)
+                .addOnSuccessListener {
+                    val tempList: MutableList<AlcoObject> = mutableListOf()
+                    it.forEach { document ->
+                        val data = document.data
+                        val alcoObject = AlcoObject(
+                                data["id"]?.toString()?.toInt(),
+                                data["name"]?.toString(),
+                                ((data["price"] as Map<*, *>)["min"] ?: error("Mapa sie zjebala"))
+                                        .toString().toFloat(),
+                                ((data["price"] as Map<*, *>)["max"] ?: error("Mapa sie zjebala"))
+                                        .toString().toFloat(),
+                                (data["price"] as Map<*, *>)["promo"]
+                                        ?.toString()?.toFloat(),
+                                data["volume"].toString().toInt(),
+                                (data["voltage"].toString().toFloat() * 100),
+                                data["shop"] as ArrayList<Int>?,
+                                data["categories"] as ArrayList<Int>?,
+                                data["photo"] as String?
+                        )
+                        tempList.add(alcoObject)
+                        Log.d("FireBase", "Added: $alcoObject")
+                }
+                    viewm.addAll(tempList)
+                    menuFrag.updateRV()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(applicationContext,
+                            "Połączenie z bazą nieudane. " +
+                                    "Sprawdź czy posiadasz dostęp do Internetu " +
+                                    "i spróbuj ponownie.", Toast.LENGTH_LONG).show()
+                }
     }
 
-    private fun getShopList(isOnline: Boolean = false) {
-        getTask(isOnline, "shops")
-            .addOnSuccessListener {
-                val tempList: ArrayList<Shop> = arrayListOf()
-                it.forEach { document ->
-                    val data = document.data
-                    tempList.add(Shop(data["id"].toString().toInt(), data["name"] as String))
+    private fun getShopList() {
+        getTask("shops")
+                .addOnCompleteListener {
+                    getFaq()
                 }
-                shopList = tempList
-                Log.d("FireBase", "Added: $shopList")
-            }
-            .addOnFailureListener {
-                Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
-            }
-        if (!isOnline) getShopList(true)
+                .addOnSuccessListener {
+                    val tempList: ArrayList<Shop> = arrayListOf()
+                    it.forEach { document ->
+                        val data = document.data
+                        tempList.add(Shop(data["id"].toString().toInt(), data["name"] as String))
+                    }
+                    shopList = tempList
+                    Log.d("FireBase", "Added: $shopList")
+                }
+                .addOnFailureListener {
+                    Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
+                }
     }
 
-    private fun getFaq(isOnline: Boolean = false) {
-        getTask(isOnline, "faq")
+    private fun getFaq() {
+        getTask("faq")
+                .addOnCompleteListener {
+                    getCategories()
+                }
                 .addOnSuccessListener {
                     val tempList: ArrayList<Map<String, String>> = arrayListOf()
                     it.forEach{document ->
@@ -216,21 +225,36 @@ class MainActivity : AppCompatActivity() {
                 .addOnFailureListener {
                     Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
                 }
-        if (!isOnline) getFaq(true)
     }
 
-    private fun getTask(isOnline: Boolean = false, colName: String): Task<QuerySnapshot> {
-        if (isOnline) {
-            database.enableNetwork()
-        } else {
-            database.disableNetwork()
-        }
+    private fun getCategories() {
+        getTask("categories")
+                .addOnSuccessListener {
+                    it.forEach {document ->
+                        val id = document["id"].toString().toInt()
+                        val name = document["name"] as String
+                        val url = document["image"] as String
+
+                        categories.add(id, name, url)
+                        Log.d("FireBase", "Added: $name")
+                    }
+                }
+                .addOnFailureListener {
+                    Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
+                }
+    }
+
+    private fun getTask(colName: String): Task<QuerySnapshot> {
         val collection: CollectionReference = database.collection(colName)
 
         return if (colName == "shops")
             collection.orderBy("id").get()
         else
             collection.get()
+    }
+
+    private fun getFirebaseData() {
+            getAlcoObject(vm)
     }
 
     private fun checkPrefs() {

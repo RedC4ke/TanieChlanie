@@ -118,6 +118,7 @@
                 android:background="#00FF7066"
                 android:fontFamily="sans-serif-light"
                 android:text="n/a"
+                android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="30sp"
                 app:autoSizeMaxTextSize="30sp"

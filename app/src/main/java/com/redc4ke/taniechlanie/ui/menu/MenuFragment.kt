@@ -37,8 +37,8 @@ class MenuFragment : Fragment(), Serializable {
         super.onAttach(context)
 
         //Change tolbar text
-        val actionBar: Toolbar? = requireActivity().findViewById(R.id.toolbar) as Toolbar
-        actionBar!!.title = "Wybierz z listy aby zacząć:"
+        //val actionBar: Toolbar? = requireActivity().findViewById(R.id.toolbar) as Toolbar
+        //actionBar!!.title = "Wybierz z listy aby zacząć:"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,6 +54,7 @@ class MenuFragment : Fragment(), Serializable {
         }
 
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -138,7 +139,7 @@ class MenuFragment : Fragment(), Serializable {
         findNavController().navigate(directions, extras)
     }
 
-    fun updateRV(vm: AlcoViewModel) {
+    fun updateRV() {
         //Update RV data
         adapter.update(vm)
     }
