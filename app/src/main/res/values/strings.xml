@@ -32,6 +32,7 @@
     <string name="mR">mR:</string>
     <string name="volume">Objętość:</string>
     <string name="voltage">%Vol.:</string>
+    <string name="details_availability">Sprawdź dostępność</string>
 
     <!-- about page -->
     <string name="about_author">by Redc4ke</string>
@@ -103,9 +104,11 @@
     <string name="forward">Dalej</string>
     <string name="send">Prześlij</string>
 
-    <string name="suff_price">%1$Szł</string>
-    <string name="suff_volume">%1$Sml</string>
-    <string name="suff_voltage">%1$S%%</string>
+    <string name="suff_rvalue">%1$S R</string>
+    <string name="suff_mrvalue">%1$S mR</string>
+    <string name="suff_price">%1$S zł</string>
+    <string name="suff_volume">%1$S ml</string>
+    <string name="suff_voltage">%1$S %%</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

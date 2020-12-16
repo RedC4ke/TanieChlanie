@@ -9,14 +9,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.about.HelpRecyclerViewAdapter
-import com.redc4ke.taniechlanie.ui.setTransitions
+import com.redc4ke.taniechlanie.ui.BaseFragment
 
-class HelpFragment : Fragment() {
+class HelpFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setTransitions(this, R.transition.slide_up_menu, R.transition.slide_down_menu)
+        setTransitions(R.transition.slide_up_menu, R.transition.slide_down_menu)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

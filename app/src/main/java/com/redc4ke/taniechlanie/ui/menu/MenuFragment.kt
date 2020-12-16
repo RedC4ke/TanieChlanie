@@ -2,44 +2,34 @@ package com.redc4ke.taniechlanie.ui.menu
 
 import android.app.SearchManager
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.doOnPreDraw
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.TransitionInflater
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.menu.AlcoListAdapter
 import com.redc4ke.taniechlanie.data.AlcoObject
-import com.redc4ke.taniechlanie.data.AlcoViewModel
+import com.redc4ke.taniechlanie.data.AlcoObjectViewModel
+import com.redc4ke.taniechlanie.ui.BaseFragment
 import com.redc4ke.taniechlanie.ui.MainActivity
-import com.redc4ke.taniechlanie.ui.setTransitions
 import java.io.Serializable
 import java.text.Normalizer
+import java.util.*
 import kotlin.collections.ArrayList
 
 
 
-class MenuFragment : Fragment(), Serializable {
+class MenuFragment : BaseFragment(), Serializable {
 
-    private lateinit var vm: AlcoViewModel
+    private lateinit var vm: AlcoObjectViewModel
     private lateinit var vmData: ArrayList<AlcoObject>
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: AlcoListAdapter
     private lateinit var mainActivity: MainActivity
-
-    override fun onAttach(context: android.content.Context) {
-        super.onAttach(context)
-
-        //Change tolbar text
-        //val actionBar: Toolbar? = requireActivity().findViewById(R.id.toolbar) as Toolbar
-        //actionBar!!.title = "Wybierz z listy aby zacząć:"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,8 +39,7 @@ class MenuFragment : Fragment(), Serializable {
 
         //Transitions handling
         when (mainActivity.currentFragment) {
-            else -> setTransitions(this,
-                    R.transition.slide_up_menu, R.transition.slide_down_menu)
+            else -> setTransitions(R.transition.slide_up_menu, R.transition.slide_down_menu)
         }
 
     }
@@ -84,12 +73,14 @@ class MenuFragment : Fragment(), Serializable {
         view.doOnPreDraw { startPostponedEnterTransition() }
         super.onViewCreated(view, savedInstanceState)
 
+        //Change tolbar text
+        val actionBar: Toolbar = requireActivity().findViewById(R.id.toolbar) as Toolbar
+        actionBar.title = "Wybierz z listy aby zacząć:"
     }
 
     override fun onResume() {
         super.onResume()
-        setTransitions(this,
-                R.transition.slide_up_menu, R.transition.slide_down_menu)
+        setTransitions(R.transition.slide_up_menu, R.transition.slide_down_menu)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -113,10 +104,12 @@ class MenuFragment : Fragment(), Serializable {
                     }
 
                     override fun onQueryTextChange(newText: String?): Boolean {
-                        val text = Normalizer.normalize(newText?.toLowerCase(), Normalizer.Form.NFD)
+                        val text = Normalizer.normalize(
+                                newText?.toLowerCase(Locale.ROOT), Normalizer.Form.NFD)
                         val filteredList: MutableList<AlcoObject> = mutableListOf()
                         vmData.forEach {
-                            val name = Normalizer.normalize(it.name?.toLowerCase(), Normalizer.Form.NFD)
+                            val name = Normalizer.normalize(
+                                    it.name.toLowerCase(Locale.ROOT), Normalizer.Form.NFD)
                             if (name.contains(text)) filteredList.add(it)
                         }
                         adapter.setFilter(filteredList as ArrayList<AlcoObject>)
@@ -129,8 +122,7 @@ class MenuFragment : Fragment(), Serializable {
     }
 
     fun onItemClick(cardView: View, alcoObject: AlcoObject) {
-        setTransitions(this,
-                null, null)
+        setTransitions(null, null)
         mainActivity.currentFragment = 99
         val rowAlcoholDetailsTransitionName = getString(R.string.row_alcohol_details_transition_name)
         val extras = FragmentNavigatorExtras(cardView

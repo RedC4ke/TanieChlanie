@@ -7,9 +7,6 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import androidx.transition.TransitionInflater
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,9 +18,9 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
-import com.redc4ke.taniechlanie.data.Categories
+import com.redc4ke.taniechlanie.data.Category
+import com.redc4ke.taniechlanie.ui.BaseFragment
 import com.redc4ke.taniechlanie.ui.MainActivity
-import com.redc4ke.taniechlanie.ui.setTransitions
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_request.*
 import java.io.ByteArrayOutputStream
@@ -32,9 +29,9 @@ import java.io.FileOutputStream
 import java.io.Serializable
 import kotlin.collections.ArrayList
 
-class RequestFragment : Fragment(), Serializable {
+class RequestFragment : BaseFragment(), Serializable {
 
-    var categoryList: MutableList<Categories.Category?> = mutableListOf()
+    var categoryList: MutableList<Category> = mutableListOf()
     private lateinit var buttonList: ArrayList<MaterialButton>
     private lateinit var containerList: ArrayList<ViewGroup>
     private lateinit var mainActivity: MainActivity
@@ -51,7 +48,7 @@ class RequestFragment : Fragment(), Serializable {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setTransitions(this, R.transition.slide_from_right, R.transition.slide_to_right)
+        setTransitions(R.transition.slide_from_right, R.transition.slide_to_right)
     }
 
     override fun onCreateView(
@@ -78,7 +75,7 @@ class RequestFragment : Fragment(), Serializable {
 
         req_upload_BT.setOnClickListener {
             if (proceedCheck()) {
-                setTransitions(this,
+                setTransitions(
                     R.transition.slide_from_left,
                     R.transition.slide_to_left)
                 openShopList()
@@ -138,17 +135,17 @@ class RequestFragment : Fragment(), Serializable {
     private fun gatherObjectInfo(): AlcoObject {
         val categoryIdList = arrayListOf<Int>()
         categoryList.forEach {
-            categoryIdList.add(it!!.id)
+            categoryIdList.add(it.id)
         }
         return AlcoObject(
-                id = null,
+                id = 0,
                 name = name_ET.text.toString(),
                 minPrice = price1_ET.text.toString().replace(",",".").toFloat(),
                 maxPrice = null,
                 promoPrice = null,
                 volume = volume_ET.text.toString().toInt(),
                 voltage = voltage_ET.text.toString().replace(",",".").toFloat(),
-                shop = null,
+                shop = arrayListOf(),
                 categories = categoryIdList,
                 photo = null
         )
@@ -165,10 +162,10 @@ class RequestFragment : Fragment(), Serializable {
     }
 
     //Manages category fragment result
-    fun onCategoryResult(cat: Categories.Category?, pos: Int = catButtonPosition) {
+    fun onCategoryResult(cat: Category?, pos: Int = catButtonPosition) {
         //If category is null, delete from list or do nothing
         if (cat == null) {
-            if (pos < categoryList.size && categoryList[pos] != null) {
+            if (pos < categoryList.size) {
                 categoryList.removeAt(pos)
             }
         //If there is category, replace or add to category list on right index
@@ -188,7 +185,7 @@ class RequestFragment : Fragment(), Serializable {
             val parent = containerList[i]
             layoutInflater.inflate(R.layout.row_details_category_twin,
                     parent, true) as ViewGroup
-            parent.findViewById<TextView>(R.id.details_category_twin_TV).text = it!!.name
+            parent.findViewById<TextView>(R.id.details_category_twin_TV).text = it.name
             val icon = parent.findViewById<ImageView>(R.id.drawable_details_categoryTwin)
             if (it.image != null) Picasso.get().load(it.image).into(icon)
             categorySetOnClickListener(i)
@@ -212,6 +209,8 @@ class RequestFragment : Fragment(), Serializable {
                 check = false
             }
         }
+        if (check == false) return check
+
 
         if (voltage_ET.text.toString().toFloat() > 100) {
             voltage_ETL.apply {
@@ -231,7 +230,7 @@ class RequestFragment : Fragment(), Serializable {
             check = false
         }
 
-        return check
+        return true
     }
 
     private fun addTextChangedListeners() {

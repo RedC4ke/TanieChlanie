@@ -5,16 +5,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.redc4ke.taniechlanie.R
-import com.redc4ke.taniechlanie.data.Categories
-import com.redc4ke.taniechlanie.ui.MainActivity
+import com.redc4ke.taniechlanie.data.Category
 import com.redc4ke.taniechlanie.ui.request.CategoryFragment
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.row_request_category.view.*
 
-class CategoryListAdapter(val fragment: CategoryFragment): RecyclerView.Adapter<CategoryListViewHolder>() {
-
-    private val sortedCategoryList = (fragment.requireActivity() as MainActivity)
-        .categories.getAll().sortedBy { it.name }
+class CategoryListAdapter(
+        private val categoryList: Map<Int, Category>,
+        private val fragment: CategoryFragment):
+        RecyclerView.Adapter<CategoryListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -26,14 +25,14 @@ class CategoryListAdapter(val fragment: CategoryFragment): RecyclerView.Adapter<
     override fun onBindViewHolder(holder: CategoryListViewHolder, position: Int) {
         val tv = holder.view.row_cat_name_TV
         val icon = holder.view.row_cat_icon
-        val output: Categories.Category?
+        val output: Category?
         if (position == 0) {
             tv.text = "Brak"
             output = null
         } else {
-            val category = sortedCategoryList[position-1]
-            tv.text = category.name
-            if (category.image != null)
+            val category = categoryList[position-1]
+            tv.text = category?.name
+            if (category?.image != null)
                 Picasso.get().load(category.image).into(icon)
             output = category
         }
@@ -47,7 +46,8 @@ class CategoryListAdapter(val fragment: CategoryFragment): RecyclerView.Adapter<
     }
 
     override fun getItemCount(): Int {
-        return sortedCategoryList.size
+        // return sortedCategoryList.size
+        return categoryList.size + 1
     }
 
 }
