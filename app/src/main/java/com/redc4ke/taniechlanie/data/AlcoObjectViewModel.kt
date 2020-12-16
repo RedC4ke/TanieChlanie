@@ -3,7 +3,7 @@ package com.redc4ke.taniechlanie.data
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class AlcoViewModel: ViewModel() {
+class AlcoObjectViewModel: ViewModel() {
     private val tempList: MutableList<AlcoObject> = mutableListOf()
     private val alcoList = MutableLiveData(mutableListOf<AlcoObject>())
 

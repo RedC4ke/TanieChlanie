@@ -41,11 +41,12 @@ class Categories(private val activity: MainActivity) {
         return categories.size
     }
 
-    data class Category(
-            val id: Int,
-            val name: String,
-            val image: File?
-    )
+
 
 }
 
+data class Category(
+    val id: Int,
+    val name: String,
+    val image: File?
+)

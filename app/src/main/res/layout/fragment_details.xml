@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="@color/white"
-    android:foregroundTint="@color/white"
-    tools:context="com.redc4ke.taniechlanie.ui.menu.DetailsFragment"
     android:background="@color/white"
+    android:backgroundTint="@color/white"
     android:clipChildren="false"
-    android:transitionName="@string/row_alcohol_details_transition_name">
+    android:foregroundTint="@color/white"
+    android:transitionName="@string/row_alcohol_details_transition_name"
+    app:cardCornerRadius="0dp"
+    tools:context="com.redc4ke.taniechlanie.ui.menu.DetailsFragment">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="4dp">
+            android:elevation="4dp"
+            app:cardCornerRadius="0dp">
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -33,10 +37,11 @@
                     android:fontFamily="sans-serif-light"
                     android:text="Wódka Smaczna Wiśniowa Dobra"
                     android:textColor="@color/black"
-                    android:textSize="30sp"
+                    android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
                 <ToggleButton
                     android:id="@+id/fav_BT_details"
                     android:layout_width="40dp"
@@ -55,6 +60,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/name_details"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/name_details" />
+
                 <ImageButton
                     android:id="@+id/imageButton6"
                     android:layout_width="40dp"
@@ -74,16 +80,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <ImageView
-                android:id="@+id/image_details"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:src="@drawable/image_placeholder" />
-        </FrameLayout>
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/image_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/image_placeholder" />
+            </FrameLayout>
 
             <include layout="@layout/sheet_details" />
 
