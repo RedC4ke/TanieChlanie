@@ -2,7 +2,6 @@ package com.redc4ke.taniechlanie.ui.about
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,11 +14,11 @@ import com.google.android.material.shape.ShapeAppearanceModel
 import com.redc4ke.taniechlanie.BuildConfig
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.about.AboutRecyclerViewAdapter
+import com.redc4ke.taniechlanie.ui.BaseFragment
 import com.redc4ke.taniechlanie.ui.MainActivity
-import com.redc4ke.taniechlanie.ui.setTransitions
 import kotlinx.android.synthetic.main.fragment_about.*
 
-class AboutFragment : Fragment() {
+class AboutFragment : BaseFragment() {
 
     private lateinit var mainActivity: MainActivity
 
@@ -35,7 +34,7 @@ class AboutFragment : Fragment() {
 
         mainActivity = requireActivity() as MainActivity
 
-        setTransitions(this, R.transition.slide_down_about, R.transition.slide_up_about)
+        setTransitions(R.transition.slide_down_about, R.transition.slide_up_about)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

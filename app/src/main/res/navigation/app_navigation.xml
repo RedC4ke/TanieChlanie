@@ -36,8 +36,8 @@
         android:label="@string/about"
         tools:layout="@layout/fragment_about" >
         <action
-            android:id="@+id/to_credits_dest"
-            app:destination="@id/credits_dest" />
+            android:id="@+id/to_help_dest"
+            app:destination="@id/help_dest" />
     </fragment>
 
     <fragment
@@ -100,9 +100,9 @@
             app:destination="@id/list_dest" />
     </fragment>
     <fragment
-        android:id="@+id/credits_dest"
-        android:name="com.redc4ke.taniechlanie.ui.about.CreditsFragment"
-        android:label="@string/about_credits"
-        tools:layout="@layout/fragment_credits" />
+        android:id="@+id/help_dest"
+        android:name="com.redc4ke.taniechlanie.ui.about.HelpFragment"
+        android:label="@string/about_help"
+        tools:layout="@layout/fragment_help" />
 
 </navigation>

@@ -10,8 +10,10 @@ import com.redc4ke.taniechlanie.data.Shop
 import com.redc4ke.taniechlanie.ui.request.ShopFragment
 import kotlinx.android.synthetic.main.row_request_shop.view.*
 
-class ShopListAdapter(private val shopList: ArrayList<Shop>, private var frag: ShopFragment):
-    RecyclerView.Adapter<ShopListViewHolder>() {
+class ShopListAdapter(
+        private val shopList: Map<Int, Shop>,
+        private var frag: ShopFragment):
+        RecyclerView.Adapter<ShopListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -21,14 +23,18 @@ class ShopListAdapter(private val shopList: ArrayList<Shop>, private var frag: S
     }
 
     override fun onBindViewHolder(holder: ShopListViewHolder, position: Int) {
-        val shop = shopList[position]
-        holder.view.row_shop_name_TV.text = shop.name
+        val view = holder.view
+        val checkbox = view.req_shop_CHB
+        val viewModel = frag.selectedShopsViewModel
+        checkbox.isChecked = viewModel.isAdded(position + 1)
 
-        holder.view.req_shop_CHB.setOnCheckedChangeListener {_, isChecked ->
+        val shop = shopList[position + 1] ?: error("Nie ma cwela w zmiennej")
+        view.row_shop_name_TV.text = shop.name
+        checkbox.setOnCheckedChangeListener {_, isChecked ->
             if (isChecked) {
-                frag.selectedShops.add(shop.id)
+                frag.selectedShopsViewModel.add(shop.id)
             } else {
-                frag.selectedShops.remove(shop.id)
+                frag.selectedShopsViewModel.remove(shop.id)
             }
         }
     }

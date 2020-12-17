@@ -1,72 +1,43 @@
 package com.redc4ke.taniechlanie.data.menu
 
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.view.updateLayoutParams
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.redc4ke.taniechlanie.R
-import com.redc4ke.taniechlanie.data.ItemCategories
-import kotlinx.android.synthetic.main.row_details_category.view.*
-import kotlinx.android.synthetic.main.row_details_category_single.view.*
-import kotlinx.android.synthetic.main.row_details_category_twin.view.*
+import com.redc4ke.taniechlanie.data.AlcoObject
+import com.redc4ke.taniechlanie.data.Categories
+import com.redc4ke.taniechlanie.data.Category
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.row_details_catlist.view.*
 
-class DetailsCategoryAdapter(private val categoryList: ArrayList<Int>?): RecyclerView.Adapter<DetailsCategoryViewHolder>() {
+class DetailsCategoryAdapter(private val alcoObject: AlcoObject,
+                             private val categories: Map<Int, Category>):
+        RecyclerView.Adapter<DetailsCategoryViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailsCategoryViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val item = when (categoryList?.size) {
-            1 -> inflater.inflate(R.layout.row_details_category_single, parent, false)
-            2 -> inflater.inflate(R.layout.row_details_category_twin, parent, false)
-            else -> inflater.inflate(R.layout.row_details_category, parent, false)
-        }
-
+        val item = inflater.inflate(R.layout.row_details_catlist, parent, false)
 
         return DetailsCategoryViewHolder(item)
     }
 
     override fun onBindViewHolder(holder: DetailsCategoryViewHolder, position: Int) {
-        if (categoryList != null) {
-            val icon: ImageView
-            val tv: TextView?
-            when (categoryList.size) {
-                1 -> {
-                    icon = holder.view.drawable_details_categoryBig
-                    tv = holder.view.details_category_single_TV
-                }
-                2 -> {
-                    icon = holder.view.drawable_details_categoryTwin
-                    tv = holder.view.details_category_twin_TV
-                    if (position == 1) {
-                        holder.view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                            this.topMargin = TypedValue.applyDimension(
-                                TypedValue.COMPLEX_UNIT_DIP,
-                                7.5f,
-                                holder.view.resources.displayMetrics
-                            ).toInt()
-                        }
-                    }
-                }
-                else -> {
-                    icon = holder.view.drawable_details_category
-                    tv = null
-                }
-            }
+        val view = holder.view
+        val id = alcoObject.categories[position]
+        val category = categories[id]
 
-            icon.setBackgroundResource(ItemCategories.list[categoryList[position]].icon)
-
-            if (tv != null) {
-                tv.text = ItemCategories.list[categoryList[position]].name
-            }
-
+        view.catlist_nameTV.text = category?.name
+        if (category?.image != null) {
+            Picasso.get().load(category.image).into(view.catlist_IV)
         }
-
     }
 
     override fun getItemCount(): Int {
-        return categoryList?.size ?: 1
+        return alcoObject.categories.size
     }
 
 }

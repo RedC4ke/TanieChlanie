@@ -2,21 +2,27 @@ package com.redc4ke.taniechlanie.ui.request
 
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
+import com.redc4ke.taniechlanie.data.ShopViewModel
+import com.redc4ke.taniechlanie.data.request.SelectedShopsViewModel
 import com.redc4ke.taniechlanie.data.request.ShopListAdapter
+import com.redc4ke.taniechlanie.ui.BaseFragment
 import com.redc4ke.taniechlanie.ui.MainActivity
-import com.redc4ke.taniechlanie.ui.setTransitions
+import kotlinx.android.synthetic.main.fragment_shop.*
 
-class ShopFragment : Fragment() {
+class ShopFragment : BaseFragment() {
 
-    var hasImage = false
-    val selectedShops = mutableListOf<Int>()
-    lateinit var alcoObject: AlcoObject
+    lateinit var selectedShopsViewModel: SelectedShopsViewModel
+    private var hasImage = false
+    private lateinit var alcoObject: AlcoObject
+    private lateinit var shopViewModel: ShopViewModel
+    private lateinit var selectedShops: ArrayList<Int>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +30,7 @@ class ShopFragment : Fragment() {
         alcoObject = arguments?.getSerializable("AlcoObject") as AlcoObject
         hasImage = arguments?.getBoolean("hasImage")!!
 
-        setTransitions(this, R.transition.slide_from_right, R.transition.slide_to_right)
+        setTransitions(R.transition.slide_from_right, R.transition.slide_to_right)
 
     }
 
@@ -32,14 +38,8 @@ class ShopFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val root = inflater.inflate(R.layout.fragment_shop, container, false)
-        val recyclerView = root.findViewById<RecyclerView>(R.id.shopList_RV)
 
         setHasOptionsMenu(true)
-
-        val activity = requireActivity() as MainActivity
-
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter = ShopListAdapter(activity.shopList, this)
 
         return root
     }
@@ -51,13 +51,39 @@ class ShopFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_forward) {
-            alcoObject.shop = selectedShops as ArrayList<Int>
+
+            alcoObject.shop = selectedShops
             val directions = ShopFragmentDirections.toSummaryFragment(alcoObject, hasImage)
-            setTransitions(this, R.transition.slide_from_left, R.transition.slide_to_left)
+            setTransitions(R.transition.slide_from_left, R.transition.slide_to_left)
             findNavController().navigate(directions)
         } else {
-            setTransitions(this, R.transition.slide_from_right, R.transition.slide_to_right)
+            setTransitions(R.transition.slide_from_right, R.transition.slide_to_right)
         }
         return super.onOptionsItemSelected(item)
     }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+
+        selectedShopsViewModel = ViewModelProvider(this)
+                .get(SelectedShopsViewModel::class.java)
+        selectedShopsViewModel.get().observe(viewLifecycleOwner, Observer {
+            selectedShops = it
+        })
+
+
+        shopViewModel = requireActivity().run {
+            ViewModelProvider(this).get(ShopViewModel::class.java)
+        }
+        val recyclerView = shopList_RV
+
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        shopViewModel.getData().observe(viewLifecycleOwner, Observer {
+            val adapter = ShopListAdapter(it, this)
+            recyclerView.adapter = adapter
+            adapter.notifyDataSetChanged()
+        })
+    }
+
 }
