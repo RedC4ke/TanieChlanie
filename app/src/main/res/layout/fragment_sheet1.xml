@@ -105,7 +105,8 @@
             app:iconGravity="start"
             app:iconPadding="4dp"
             app:iconSize="32dp"
-            app:iconTint="@color/red_heavy" />
+            app:iconTint="@color/red_heavy"
+            android:foreground="?android:attr/selectableItemBackground"/>
     </androidx.cardview.widget.CardView>
 
     <LinearLayout
