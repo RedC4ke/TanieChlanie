@@ -15,6 +15,8 @@ class DetailsShopAdapter(
     private val shops: Map<Int, Shop>):
     RecyclerView.Adapter<DetailsShopViewHolder>() {
 
+    var list = alcoObject.shop
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailsShopViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val row = inflater.inflate(R.layout.row_sheet2, parent, false)
@@ -23,12 +25,17 @@ class DetailsShopAdapter(
     }
 
     override fun onBindViewHolder(holder: DetailsShopViewHolder, position: Int) {
-        val shopId = alcoObject.shop[position]
+        val shopId = list[position]
         holder.view.sheet2_shopTV.text = shops[shopId]?.name
     }
 
     override fun getItemCount(): Int {
-        return alcoObject.shop.size
+        return list.size
+    }
+
+    fun update(filtered: ArrayList<Int>) {
+        list = filtered
+        notifyDataSetChanged()
     }
 
 }
