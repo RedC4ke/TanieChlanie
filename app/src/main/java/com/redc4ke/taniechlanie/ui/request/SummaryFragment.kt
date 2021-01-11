@@ -2,6 +2,7 @@ package com.redc4ke.taniechlanie.ui.request
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +33,8 @@ class SummaryFragment : BaseFragment() {
         mainActivity = requireActivity() as MainActivity
         hasImage = arguments?.getBoolean("hasImage")!!
         alcoObject = arguments?.getSerializable("AlcoObject") as AlcoObject
+
+        Log.d("huj", alcoObject.voltage.toString())
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -120,9 +123,9 @@ class SummaryFragment : BaseFragment() {
         val pendingRef = mainActivity.database.collection("pending")
         val data = hashMapOf(
                 "name" to alcoObject.name,
-                "price" to mapOf("min" to alcoObject.minPrice),
+                "price" to mapOf("min" to alcoObject.minPrice.toDouble()),
                 "volume" to alcoObject.volume,
-                "voltage" to alcoObject.voltage,
+                "voltage" to alcoObject.voltage.toDouble(),
                 "categories" to alcoObject.categories,
                 "shop" to alcoObject.shop,
                 "photo" to photoUrl

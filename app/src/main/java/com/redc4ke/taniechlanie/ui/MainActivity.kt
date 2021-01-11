@@ -30,6 +30,7 @@ import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.*
 import com.redc4ke.taniechlanie.ui.menu.MenuFragment
 import io.grpc.android.BuildConfig
+import java.math.BigDecimal
 import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
@@ -158,13 +159,13 @@ class MainActivity : AppCompatActivity() {
                                 data["id"].toString().toInt(),
                                 data["name"].toString(),
                                 ((data["price"] as Map<*, *>)["min"] ?: error("Mapa sie zjebala"))
-                                        .toString().toFloat(),
-                                ((data["price"] as Map<*, *>)["max"] ?: error("Mapa sie zjebala"))
-                                        .toString().toFloat(),
+                                        .toString().toBigDecimal(),
+                                (data["price"] as Map<*, *>)["max"]
+                                        ?.toString()?.toBigDecimal(),
                                 (data["price"] as Map<*, *>)["promo"]
-                                        ?.toString()?.toFloat(),
+                                        ?.toString()?.toBigDecimal(),
                                 data["volume"].toString().toInt(),
-                                (data["voltage"].toString().toFloat() * 100),
+                                data["voltage"].toString().toBigDecimal(),
                                 data["shop"] as ArrayList<Int>,
                                 data["categories"] as ArrayList<Int>,
                                 data["photo"] as String?
