@@ -96,6 +96,9 @@
         \nJeśli błąd się powtarza, powiadom nas o tym!
     </string>
 
+    <!-- options page -->
+    <string name="romper_unit">Jednostka opłacalności</string>
+
     <!-- transition names -->
     <string name="row_alcohol_details_transition_name">row_alcohol_details_transition</string>
 
