@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="8dp"
-    tools:context=".ui.menu.CatListFragment">
+    tools:context=".ui.menu.details.CatListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/catlist_RV"

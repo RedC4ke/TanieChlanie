@@ -1,4 +1,4 @@
-package com.redc4ke.taniechlanie.ui.menu
+package com.redc4ke.taniechlanie.ui.menu.details
 
 import android.os.Bundle
 import android.text.Editable
@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager

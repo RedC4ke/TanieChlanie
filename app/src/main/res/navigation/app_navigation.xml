@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/details_dest"
-        android:name="com.redc4ke.taniechlanie.ui.menu.DetailsFragment"
+        android:name="com.redc4ke.taniechlanie.ui.menu.details.DetailsFragment"
         android:label="@string/details"
         tools:layout="@layout/fragment_details">
         <argument

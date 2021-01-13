@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/sheet1_dest"
-        android:name="com.redc4ke.taniechlanie.ui.menu.Sheet1Fragment"
+        android:name="com.redc4ke.taniechlanie.ui.menu.details.Sheet1Fragment"
         android:label="fragment_sheet1"
         tools:layout="@layout/fragment_sheet1" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/sheet2_dest"
-        android:name="com.redc4ke.taniechlanie.ui.menu.Sheet2Fragment"
+        android:name="com.redc4ke.taniechlanie.ui.menu.details.Sheet2Fragment"
         android:label="fragment_sheet2"
         tools:layout="@layout/fragment_sheet2" >
         <action

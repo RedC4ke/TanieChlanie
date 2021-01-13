@@ -1,6 +1,7 @@
-package com.redc4ke.taniechlanie.ui.menu
+package com.redc4ke.taniechlanie.ui.menu.details
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,7 +32,7 @@ class Sheet1Fragment : BaseFragment() {
         val rootView = inflater.inflate(R.layout.fragment_sheet1, container, false)
 
         rootView.details_priceTV.text = getString(R.string.suff_price,
-            String.format("%.2f", alcoObject.minPrice))
+            String.format("%.2f", alcoObject.price))
 
         rootView.details_valueTV.text = valueString(alcoObject, this)
         rootView.details_volumeTV.text = volumeString(alcoObject, this)

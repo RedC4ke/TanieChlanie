@@ -1,4 +1,4 @@
-package com.redc4ke.taniechlanie.ui.menu
+package com.redc4ke.taniechlanie.ui.menu.details
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

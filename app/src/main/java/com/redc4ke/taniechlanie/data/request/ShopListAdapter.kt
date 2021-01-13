@@ -15,6 +15,8 @@ class ShopListAdapter(
         private var frag: ShopFragment):
         RecyclerView.Adapter<ShopListViewHolder>() {
 
+    private val list = shopList.values.toMutableList()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val row = inflater.inflate(R.layout.row_request_shop, parent, false)
@@ -28,7 +30,7 @@ class ShopListAdapter(
         val viewModel = frag.selectedShopsViewModel
         checkbox.isChecked = viewModel.isAdded(position + 1)
 
-        val shop = shopList[position + 1] ?: error("Nie ma cwela w zmiennej")
+        val shop = list[position]
         view.row_shop_name_TV.text = shop.name
         checkbox.setOnCheckedChangeListener {_, isChecked ->
             if (isChecked) {
@@ -40,7 +42,7 @@ class ShopListAdapter(
     }
 
     override fun getItemCount(): Int {
-        return shopList.size
+        return list.size
     }
 
 }

@@ -123,7 +123,7 @@ class SummaryFragment : BaseFragment() {
         val pendingRef = mainActivity.database.collection("pending")
         val data = hashMapOf(
                 "name" to alcoObject.name,
-                "price" to mapOf("min" to alcoObject.minPrice.toDouble()),
+                "price" to mapOf("min" to alcoObject.price.toDouble()),
                 "volume" to alcoObject.volume,
                 "voltage" to alcoObject.voltage.toDouble(),
                 "categories" to alcoObject.categories,

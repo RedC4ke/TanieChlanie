@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
+import android.text.BoringLayout
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -22,6 +23,7 @@ import androidx.navigation.ui.*
 import com.google.android.gms.tasks.Task
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
@@ -146,7 +148,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getAlcoObject(viewm: AlcoObjectViewModel) {
+    private fun getAlcoObject() {
         getTask("wines")
                 .addOnCompleteListener {
                     getShopList()
@@ -155,26 +157,16 @@ class MainActivity : AppCompatActivity() {
                     val tempList: MutableList<AlcoObject> = mutableListOf()
                     it.forEach { document ->
                         val data = document.data
-                        val alcoObject = AlcoObject(
-                                data["id"].toString().toInt(),
-                                data["name"].toString(),
-                                ((data["price"] as Map<*, *>)["min"] ?: error("Mapa sie zjebala"))
-                                        .toString().toBigDecimal(),
-                                (data["price"] as Map<*, *>)["max"]
-                                        ?.toString()?.toBigDecimal(),
-                                (data["price"] as Map<*, *>)["promo"]
-                                        ?.toString()?.toBigDecimal(),
-                                data["volume"].toString().toInt(),
-                                data["voltage"].toString().toBigDecimal(),
-                                data["shop"] as ArrayList<Int>,
-                                data["categories"] as ArrayList<Int>,
-                                data["photo"] as String?
+                        val output = mutableMapOf<String, Any?> (
+                                "id" to data["id"].toString().toInt(),
+                                "name" to data["name"].toString(),
+                                "volume" to data["volume"].toString().toInt(),
+                                "voltage" to data["voltage"].toString().toBigDecimal(),
+                                "categories" to data["categories"] as ArrayList<Int>,
+                                "photo" to data["photo"] as String?
                         )
-                        tempList.add(alcoObject)
-                        Log.d("FireBase", "Added: $alcoObject")
-                }
-                    viewm.addAll(tempList)
-                    menuFrag.updateRV()
+                        getPrices(output)
+                    }
                 }
                 .addOnFailureListener {
                     Toast.makeText(applicationContext,
@@ -182,6 +174,45 @@ class MainActivity : AppCompatActivity() {
                                     "Sprawdź czy posiadasz dostęp do Internetu " +
                                     "i spróbuj ponownie.", Toast.LENGTH_LONG).show()
                 }
+    }
+
+    private fun getPrices(input: MutableMap<String, Any?>) {
+        val result: MutableMap<String, Any?> = input
+        database.collection("prices").document(input["id"].toString()).get()
+            .addOnSuccessListener { it ->
+                val data = it.data
+                val shopList = (data?.get("shop") as Map<String, Map<String, Any>>)
+                val shopIds = mutableListOf<Int>()
+                shopList.forEach {
+                    shopIds.add(it.key.toInt())
+                }
+                result["shop"] = shopIds
+
+                val priceList = arrayListOf<BigDecimal>()
+                shopList.forEach {
+                    val price = it.value["price"]?.toString()?.toBigDecimal()
+                    if (price != null)
+                        priceList.add(price)
+                }
+                result["price"] = priceList.minByOrNull { it }
+                    ?: (0).toBigDecimal()
+
+                val alcoObject = AlcoObject(
+                    result["id"] as Int,
+                    result["name"] as String,
+                    result["price"] as BigDecimal,
+                    result["volume"] as Int,
+                    result["voltage"] as BigDecimal,
+                    result["shop"] as ArrayList<Int>,
+                    result["categories"] as ArrayList<Int>,
+                    result["photo"] as String?
+                 )
+
+                Log.d("FireBase", "Added: $alcoObject")
+                vm.addObject(alcoObject)
+                menuFrag.updateRV()
+
+            }
     }
 
     private fun getShopList() {
@@ -250,7 +281,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getFirebaseData() {
-            getAlcoObject(vm)
+            getAlcoObject()
     }
 
     private fun checkPrefs() {
@@ -286,6 +317,10 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun dataMigration() {
+
+
+    }
 }
 
 
