@@ -12,12 +12,15 @@ import kotlin.math.round
 fun valueString(alcoObject: AlcoObject, fragment: Fragment): String {
     val volume = alcoObject.volume.toBigDecimal()
     val voltage = alcoObject.voltage.times(100.toBigDecimal())
-    val price = alcoObject.minPrice
+    val price = alcoObject.price
     val rounded = fragment.requireActivity().getPreferences(MODE_PRIVATE)
             .getBoolean("rounded_mR", false)
 
-    val value = ((voltage * volume) / price)
-    Log.d("huj", value.toString())
+    val value =
+        if (price != (0).toBigDecimal())
+                ((voltage * volume) / price)
+        else
+            (0).toBigDecimal()
 
     val substring = if (rounded) {
         (value.setScale(0, RoundingMode.CEILING).div(100.toBigDecimal())).toString()
@@ -32,7 +35,7 @@ fun valueString(alcoObject: AlcoObject, fragment: Fragment): String {
 
 fun priceString(alcoObject: AlcoObject, fragment: Fragment): String {
     return fragment.getString(R.string.suff_price,
-            String.format("%.2f", alcoObject.minPrice))
+            String.format("%.2f", alcoObject.price))
 }
 
 fun volumeString(alcoObject: AlcoObject, fragment: Fragment): String {

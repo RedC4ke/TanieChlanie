@@ -7,7 +7,7 @@
     android:background="@color/red_light"
     android:clipChildren="false"
     android:clipToPadding="false"
-    tools:context=".ui.menu.Sheet1Fragment">
+    tools:context=".ui.menu.details.Sheet1Fragment">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView7"

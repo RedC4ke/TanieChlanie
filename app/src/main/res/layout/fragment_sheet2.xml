@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/red_light"
     android:orientation="vertical"
-    tools:context=".ui.menu.Sheet2Fragment" >
+    tools:context=".ui.menu.details.Sheet2Fragment" >
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -21,17 +21,19 @@
             android:orientation="horizontal">
 
             <FrameLayout
-                android:layout_width="wrap_content"
+                android:layout_width="30dp"
                 android:layout_height="match_parent"
-                android:layout_weight="30">
+                android:layout_weight="1">
 
                 <Button
                     android:id="@+id/sheet2_returnBT"
                     style="@style/Widget.AppCompat.Button"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_gravity="center"
                     android:background="#00FFFFFF"
                     android:foreground="?android:attr/selectableItemBackground"
+                    android:gravity="center"
                     app:iconTint="@color/white" />
 
                 <ImageView
@@ -47,7 +49,7 @@
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="0">
 
                 <TextView
                     android:id="@+id/textView2"
@@ -59,15 +61,16 @@
             </FrameLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="50">
+                android:layout_weight="2">
 
                 <EditText
                     android:id="@+id/sheet2_ET"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
                     android:backgroundTint="@color/red_heavy"
                     android:ems="10"
                     android:fontFamily="@font/open_sans_light"
@@ -85,6 +88,27 @@
                     app:layout_constraintVertical_bias="0.0" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <FrameLayout
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/sheet2_add_BT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="#00FFFFFF" />
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_baseline_add_24"
+                    app:tint="@color/red_heavy" />
+            </FrameLayout>
 
         </LinearLayout>
 

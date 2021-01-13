@@ -1,4 +1,4 @@
-package com.redc4ke.taniechlanie.ui.menu
+package com.redc4ke.taniechlanie.ui.menu.details
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -11,10 +11,9 @@ import com.google.android.material.transition.MaterialContainerTransform
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.*
 import com.redc4ke.taniechlanie.ui.MainActivity
+import com.redc4ke.taniechlanie.ui.menu.MenuFragment
 import kotlinx.android.synthetic.main.fragment_details.*
 import kotlinx.android.synthetic.main.fragment_details.view.*
-import kotlinx.android.synthetic.main.row_alcohol.view.*
-import kotlinx.android.synthetic.main.sheet_details.view.*
 import java.io.File
 
 class DetailsFragment : Fragment() {

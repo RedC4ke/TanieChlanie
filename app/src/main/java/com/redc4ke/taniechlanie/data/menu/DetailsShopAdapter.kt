@@ -1,5 +1,6 @@
 package com.redc4ke.taniechlanie.data.menu
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
