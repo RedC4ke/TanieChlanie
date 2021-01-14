@@ -34,8 +34,8 @@
     <string name="voltage">%Vol.:</string>
     <string name="details_availability">Sprawdź dostępność</string>
 
-    <!-- details page - shop submit -->
-    <string name="av_submit_header">Dodaj miejsce występowania</string>
+    <!-- details page - shop submit popup -->
+    <string name="av_submit_header">Dodaj miejsce występowania!</string>
 
     <!-- about page -->
     <string name="about_author">by Redc4ke</string>

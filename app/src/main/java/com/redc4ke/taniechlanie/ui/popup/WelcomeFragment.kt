@@ -1,4 +1,4 @@
-package com.redc4ke.taniechlanie.ui
+package com.redc4ke.taniechlanie.ui.popup
 
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
