@@ -3,13 +3,9 @@ package com.redc4ke.taniechlanie.data.menu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
-import com.redc4ke.taniechlanie.data.Categories
 import com.redc4ke.taniechlanie.data.Category
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.row_details_catlist.view.*

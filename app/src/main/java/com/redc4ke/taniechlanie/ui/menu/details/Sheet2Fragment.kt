@@ -16,6 +16,7 @@ import com.redc4ke.taniechlanie.data.Shop
 import com.redc4ke.taniechlanie.data.ShopViewModel
 import com.redc4ke.taniechlanie.data.menu.DetailsShopAdapter
 import com.redc4ke.taniechlanie.ui.BaseFragment
+import com.redc4ke.taniechlanie.ui.popup.AvailabilitySubmitFragment
 import kotlinx.android.synthetic.main.fragment_sheet2.*
 import java.util.*
 
@@ -60,6 +61,10 @@ class Sheet2Fragment : BaseFragment() {
 
         sheet2_returnBT.setOnClickListener {
             findNavController().navigate(R.id.action_sheet2_dest_to_sheet1_dest)
+        }
+
+        sheet2_add_BT.setOnClickListener {
+            AvailabilitySubmitFragment().show(parentFragmentManager, "av_submit")
         }
     }
 
