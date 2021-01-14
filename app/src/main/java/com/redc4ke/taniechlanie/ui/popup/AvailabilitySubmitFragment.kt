@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.LifecycleOwner
@@ -37,7 +38,8 @@ class AvailabilitySubmitFragment : DialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_availability_submit, container, false)
+        return inflater.inflate(
+                R.layout.fragment_availability_submit, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,11 +54,27 @@ class AvailabilitySubmitFragment : DialogFragment() {
 
     fun setSpinner(list: Map<Int, Shop>) {
         val shopList = arrayListOf<Shop>()
+        val namesList = arrayListOf<String>()
         list.forEach {
             shopList.add(it.value)
+            namesList.add(it.value.name)
         }
+
         av_submit_name_SPINNER.adapter = ArrayAdapter(
-                requireContext(), android.R.layout.simple_spinner_dropdown_item, shopList)
+                requireContext(), android.R.layout.simple_spinner_dropdown_item, namesList)
+
+        av_submit_name_SPINNER.onItemSelectedListener = object:
+                AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                    parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                selectedShop = shopList[position]
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+        }
     }
 
 }
