@@ -4,7 +4,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
-import android.text.BoringLayout
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -23,7 +22,6 @@ import androidx.navigation.ui.*
 import com.google.android.gms.tasks.Task
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
@@ -31,6 +29,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.*
 import com.redc4ke.taniechlanie.ui.menu.MenuFragment
+import com.redc4ke.taniechlanie.ui.popup.WelcomeFragment
 import io.grpc.android.BuildConfig
 import java.math.BigDecimal
 import kotlin.collections.ArrayList
@@ -44,7 +43,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var categoryViewModel: CategoryViewModel
     lateinit var prefs: SharedPreferences
     lateinit var menuFrag: MenuFragment
-    lateinit var vm: AlcoObjectViewModel
+    lateinit var alcoObjectViewModel: AlcoObjectViewModel
     lateinit var faq: ArrayList<Map<String, String>>
     val database: FirebaseFirestore = FirebaseFirestore.getInstance()
     val storage = FirebaseStorage.getInstance()
@@ -83,14 +82,11 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBar(navController, appBarConfiguration)
 
-        vm = this.run {
-            ViewModelProvider(this).get(AlcoObjectViewModel::class.java)
-        }
-
         //Preferences stuff
         checkPrefs()
 
         //ViewModels
+        alcoObjectViewModel = ViewModelProvider(this).get(AlcoObjectViewModel::class.java)
         shopViewModel = ViewModelProvider(this).get(ShopViewModel::class.java)
         categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
 
@@ -209,7 +205,7 @@ class MainActivity : AppCompatActivity() {
                  )
 
                 Log.d("FireBase", "Added: $alcoObject")
-                vm.addObject(alcoObject)
+                alcoObjectViewModel.addObject(alcoObject)
                 menuFrag.updateRV()
 
             }

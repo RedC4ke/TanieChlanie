@@ -56,7 +56,7 @@ class MenuFragment : BaseFragment(), Serializable {
         //and retrieve data from FireBase tasks
         val act = activity as MainActivity
         act.menuFrag = this
-        vm = act.vm
+        vm = act.alcoObjectViewModel
 
         //Set up the recycler view
         vmData = vm.getAll().value as ArrayList<AlcoObject>
