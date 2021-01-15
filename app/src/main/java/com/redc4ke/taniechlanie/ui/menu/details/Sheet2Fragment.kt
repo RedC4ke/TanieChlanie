@@ -64,7 +64,8 @@ class Sheet2Fragment : BaseFragment() {
         }
 
         sheet2_add_BT.setOnClickListener {
-            AvailabilitySubmitFragment().show(parentFragmentManager, "av_submit")
+            AvailabilitySubmitFragment(detailsFragment)
+                    .show(parentFragmentManager, "av_submit")
         }
     }
 

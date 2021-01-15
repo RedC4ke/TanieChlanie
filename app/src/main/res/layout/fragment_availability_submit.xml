@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -24,7 +25,9 @@
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="6dp"
+            android:layout_marginEnd="12dp"
             android:fontFamily="@font/open_sans_light"
             android:text="@string/av_submit_header"
             android:textColor="@color/red_heavy"
@@ -33,27 +36,75 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/av_submit_price_ET"
-            android:layout_width="80dp"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/av_submit_price_ETL"
+            style="@style/Theme.taniechlanie.TextInputLayout_Filled"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="@string/price_req"
+            app:boxBackgroundColor="#00FF7066"
+            app:hintEnabled="false"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/av_submit_name_SPINNER" />
+            app:layout_constraintTop_toBottomOf="@+id/textView7"
+            app:suffixText="@string/price_req_suffix"
+            app:suffixTextAppearance="@style/Theme.taniechlanie.Suffix">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/price_req"
+                android:digits="1234567890,."
+                android:imeOptions="actionDone"
+                android:inputType="numberDecimal"
+                android:maxLength="7"
+                android:singleLine="true"
+                android:textSize="18sp"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Spinner
             android:id="@+id/av_submit_name_SPINNER"
-            android:layout_width="220dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintEnd_toStartOf="@+id/av_submit_price_ET"
+            android:layout_marginTop="6dp"
+            android:gravity="top|left"
+            app:layout_constraintBottom_toBottomOf="@+id/av_submit_price_ETL"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+            app:layout_constraintTop_toTopOf="@+id/av_submit_price_ETL" />
+
+        <TextView
+            android:id="@+id/textView20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/open_sans_light"
+            android:text="@string/av_submit_disclaimer"
+            android:textAllCaps="false"
+            android:textColor="@color/red_light"
+            app:layout_constraintBottom_toBottomOf="@+id/button2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/button2" />
+
+        <Button
+            android:id="@+id/button2"
+            style="@style/Theme.taniechlanie.OutlinedBT"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="8dp"
+            android:drawableTint="#FFFFFF"
+            android:fontFamily="@font/open_sans_light"
+            android:foregroundTint="#FFFFFF"
+            android:text="@string/submit"
+            android:textAllCaps="false"
+            android:textColor="@color/red_heavy"
+            android:textSize="18sp"
+            app:iconTint="#00611A1A"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/av_submit_price_ETL"
+            app:strokeColor="@color/red_heavy" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
