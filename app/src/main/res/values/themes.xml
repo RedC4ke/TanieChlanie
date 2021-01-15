@@ -50,7 +50,7 @@
         parent="Theme.Base.taniechlanie.DrawerArrowStyle" />
 
 
-    <style name="Theme.Base.taniechlanie.TextInputLayout"
+    <style name="Theme.Base.taniechlanie.TextInputLayout_Outlined"
         parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="endIconMode">clear_text</item>
         <item name="boxCornerRadiusBottomEnd">14dp</item>
@@ -59,8 +59,27 @@
         <item name="boxCornerRadiusTopStart">14dp</item>
         <item name="errorTextColor">@color/error</item>
     </style>
-    <style name="Theme.taniechlanie.TextInputLayout"
-        parent="Theme.Base.taniechlanie.TextInputLayout" />
+    <style name="Theme.taniechlanie.TextInputLayout_Outlined"
+        parent="Theme.Base.taniechlanie.TextInputLayout_Outlined" />
+
+
+
+    <style name="Theme.Base.taniechlanie.TextInputLayout_Filled"
+        parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
+        <item name="materialThemeOverlay">@style/MyThemeOverlayOutlinedDense</item>
+
+    </style>
+    <style name="MyThemeOverlayOutlinedDense">
+        <item name="editTextStyle">@style/MyTextInputEditText_outlinedBox_dense_h
+        </item>
+    </style>
+    <style name="MyTextInputEditText_outlinedBox_dense_h"
+        parent="@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox.Dense">
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+    <style name="Theme.taniechlanie.TextInputLayout_Filled"
+        parent="Theme.Base.taniechlanie.TextInputLayout_Filled" />
 
 
     <style name="Theme.Base.taniechlanie.EditText">

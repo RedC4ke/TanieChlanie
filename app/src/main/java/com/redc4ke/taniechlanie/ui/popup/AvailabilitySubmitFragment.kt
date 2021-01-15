@@ -14,15 +14,19 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.textfield.TextInputLayout
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.Shop
 import com.redc4ke.taniechlanie.data.ShopViewModel
 import com.redc4ke.taniechlanie.ui.BaseFragment
+import com.redc4ke.taniechlanie.ui.menu.details.DetailsFragment
+import com.redc4ke.taniechlanie.ui.menu.details.Sheet2Fragment
 import kotlinx.android.synthetic.main.fragment_availability_submit.*
 
-class AvailabilitySubmitFragment : DialogFragment() {
+class AvailabilitySubmitFragment(detailsFragment: DetailsFragment) : DialogFragment() {
 
     private lateinit var selectedShop: Shop
+    private val alcoObject = detailsFragment.alcoObject
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,13 +50,16 @@ class AvailabilitySubmitFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val shopVM = ViewModelProvider(requireActivity()).get(ShopViewModel::class.java)
-        shopVM.getData().observe(viewLifecycleOwner, {
-            setSpinner(it)
+        shopVM.getData().observe(viewLifecycleOwner, {map ->
+            val mutableMap = map.toMutableMap()
+            alcoObject.shop.forEach {
+                mutableMap.remove(it)
+            }
+            setSpinner(mutableMap)
         })
-
     }
 
-    fun setSpinner(list: Map<Int, Shop>) {
+    private fun setSpinner(list: Map<Int, Shop>) {
         val shopList = arrayListOf<Shop>()
         val namesList = arrayListOf<String>()
         list.forEach {

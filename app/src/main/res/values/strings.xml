@@ -36,6 +36,7 @@
 
     <!-- details page - shop submit popup -->
     <string name="av_submit_header">Dodaj miejsce występowania!</string>
+    <string name="av_submit_disclaimer"><u>Sklepu nie ma na liście</u></string>
 
     <!-- about page -->
     <string name="about_author">by Redc4ke</string>
@@ -108,7 +109,8 @@
     <!-- other -->
     <string name="queryHint">Wyszukaj…</string>
     <string name="forward">Dalej</string>
-    <string name="send">Prześlij</string>
+    <string name="submit">Prześlij</string>
+    <string name="accept">Zatwierdź</string>
 
     <string name="suff_rvalue">%1$S R</string>
     <string name="suff_mrvalue">%1$S mR</string>
