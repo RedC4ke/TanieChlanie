@@ -10,7 +10,7 @@
     android:foregroundTint="@color/white"
     android:transitionName="@string/row_alcohol_details_transition_name"
     app:cardCornerRadius="0dp"
-    tools:context="com.redc4ke.taniechlanie.ui.menu.DetailsFragment">
+    tools:context="com.redc4ke.taniechlanie.ui.menu.details.DetailsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

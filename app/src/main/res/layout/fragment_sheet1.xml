@@ -7,7 +7,7 @@
     android:background="@color/red_light"
     android:clipChildren="false"
     android:clipToPadding="false"
-    tools:context=".ui.menu.Sheet1Fragment">
+    tools:context=".ui.menu.details.Sheet1Fragment">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView7"
@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         app:cardCornerRadius="0dp"
-        app:cardElevation="4dp"
+        app:cardElevation="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -62,7 +62,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="12dp"
         app:cardCornerRadius="0dp"
-        app:cardElevation="4dp"
+        app:cardElevation="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
@@ -82,7 +82,7 @@
         android:layout_marginTop="12dp"
         android:background="@color/white"
         app:cardCornerRadius="0dp"
-        app:cardElevation="4dp"
+        app:cardElevation="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView9">
@@ -93,6 +93,7 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:fontFamily="@font/varela_round"
+            android:foreground="?android:attr/selectableItemBackground"
             android:gravity="start"
             android:letterSpacing="0"
             android:padding="5dp"
@@ -105,8 +106,7 @@
             app:iconGravity="start"
             app:iconPadding="4dp"
             app:iconSize="32dp"
-            app:iconTint="@color/red_heavy"
-            android:foreground="?android:attr/selectableItemBackground"/>
+            app:iconTint="@color/red_heavy" />
     </androidx.cardview.widget.CardView>
 
     <LinearLayout
@@ -126,7 +126,7 @@
             android:layout_weight="1"
             android:background="@color/white"
             app:cardCornerRadius="0dp"
-            app:cardElevation="4dp">
+            app:cardElevation="2dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -161,7 +161,7 @@
             android:layout_marginEnd="4dp"
             android:layout_weight="1.1"
             app:cardCornerRadius="0dp"
-            app:cardElevation="4dp">
+            app:cardElevation="2dp">
 
             <TextView
                 android:id="@+id/details_voltageTV"
@@ -187,7 +187,7 @@
             android:layout_weight="1"
             android:background="@color/white"
             app:cardCornerRadius="0dp"
-            app:cardElevation="4dp">
+            app:cardElevation="2dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -224,7 +224,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         app:cardCornerRadius="0dp"
-        app:cardElevation="4dp"
+        app:cardElevation="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView8">

@@ -215,7 +215,7 @@
             android:layout_height="60dp"
             android:layout_marginTop="16dp"
             android:fontFamily="sans-serif-light"
-            android:text="@string/send"
+            android:text="@string/submit"
             android:textSize="30sp"
             app:cornerRadius="14dp"
             app:icon="@drawable/ic_baseline_send_24"

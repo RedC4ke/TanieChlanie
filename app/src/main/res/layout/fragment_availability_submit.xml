@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
+    android:background="#00FFFFFF"
+    android:backgroundTint="#FFFFFF"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="2dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="8dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="12dp">
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="12dp"
+            android:fontFamily="@font/open_sans_light"
+            android:text="@string/av_submit_header"
+            android:textColor="@color/red_heavy"
+            android:textSize="22sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/av_submit_price_ETL"
+            style="@style/Theme.taniechlanie.TextInputLayout_Filled"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            app:boxBackgroundColor="#00FF7066"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView7"
+            app:suffixText="@string/price_req_suffix"
+            app:suffixTextAppearance="@style/Theme.taniechlanie.Suffix">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="1234567890,."
+                android:fontFamily="@font/open_sans_light"
+                android:hint="@string/price_req"
+                android:imeOptions="actionDone"
+                android:inputType="numberDecimal"
+                android:maxLength="7"
+                android:singleLine="true"
+                android:textSize="18sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Spinner
+            android:id="@+id/av_submit_name_SPINNER"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="6dp"
+            android:gravity="top|left"
+            app:layout_constraintBottom_toBottomOf="@+id/av_submit_price_ETL"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/av_submit_price_ETL" />
+
+        <Button
+            android:id="@+id/av_submit_apply_BT"
+            style="@style/Theme.taniechlanie.ContainedBT"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"
+            android:drawableTint="#FFFFFF"
+            android:fontFamily="@font/open_sans_regular"
+            android:foregroundTint="@color/red_heavy"
+            android:text="@string/submit"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:iconTint="#00611A1A"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/av_submit_price_ETL"
+            app:strokeColor="@color/red_heavy" />
+
+        <Button
+            android:id="@+id/av_submit_missingShop_BT"
+            style="@style/Theme.taniechlanie.TextBT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="4dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/av_submit_disclaimer"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toStartOf="@+id/av_submit_apply_BT"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/av_submit_apply_BT" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

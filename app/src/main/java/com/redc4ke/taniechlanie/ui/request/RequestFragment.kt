@@ -140,11 +140,10 @@ class RequestFragment : BaseFragment(), Serializable {
         return AlcoObject(
                 id = 0,
                 name = name_ET.text.toString(),
-                minPrice = price1_ET.text.toString().replace(",",".").toFloat(),
-                maxPrice = null,
-                promoPrice = null,
+                price = price1_ET.text.toString().replace(",",".").toBigDecimal(),
                 volume = volume_ET.text.toString().toInt(),
-                voltage = voltage_ET.text.toString().replace(",",".").toFloat(),
+                voltage = voltage_ET.text.toString().replace(",",".")
+                        .toBigDecimal().divide(100.toBigDecimal()),
                 shop = arrayListOf(),
                 categories = categoryIdList,
                 photo = null

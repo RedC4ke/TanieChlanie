@@ -6,8 +6,7 @@ import android.view.ViewGroup
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.redc4ke.taniechlanie.R
-import com.redc4ke.taniechlanie.data.AlcoObject
-import com.redc4ke.taniechlanie.data.AlcoObjectViewModel
+import com.redc4ke.taniechlanie.data.*
 import com.redc4ke.taniechlanie.ui.menu.MenuFragment
 import kotlinx.android.synthetic.main.row_alcohol.view.*
 
@@ -33,15 +32,15 @@ class AlcoListAdapter(
 
         if (position == 0) {
             holder.view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                this.topMargin = 30
+                //this.topMargin = 30
             }
         }
 
         //Set views for this row
         name.text = data[position].name
-        price.text = (data[position].minPrice.toString() + "zł")
-        volume.text = (data[position].volume.toString() + "ml")
-        voltage.text = (data[position].voltage.toString() + "%")
+        price.text = priceString(data[position], fragment)
+        volume.text = volumeString(data[position], fragment)
+        voltage.text = voltageString(data[position], fragment)
 
         val id = data[position].id
         holder.view.transitionName = "rowAlcoholTransitionName_$id"

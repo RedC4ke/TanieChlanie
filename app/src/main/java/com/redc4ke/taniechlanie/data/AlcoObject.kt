@@ -1,15 +1,14 @@
 package com.redc4ke.taniechlanie.data
 
 import java.io.Serializable
+import java.math.BigDecimal
 
 data class AlcoObject(
         var id: Int,
         var name: String,
-        var minPrice: Float,
-        var maxPrice: Float?,
-        var promoPrice: Float?,
+        var price: BigDecimal,
         var volume: Int,
-        var voltage: Float,
+        var voltage: BigDecimal,
         var shop: ArrayList<Int>,
         var categories: ArrayList<Int>,
         var photo: String?
