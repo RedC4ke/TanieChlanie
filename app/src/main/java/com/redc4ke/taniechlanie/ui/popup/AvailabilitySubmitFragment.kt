@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
@@ -57,20 +58,28 @@ class AvailabilitySubmitFragment(detailsFragment: DetailsFragment) : DialogFragm
             }
             setSpinner(mutableMap)
         })
+
+        //TEMPORARY
+        arrayListOf(av_submit_apply_BT, av_submit_missingShop_BT).forEach {
+            it.setOnClickListener {
+                Toast.makeText(requireContext(), "Funkcja w budowie!", Toast.LENGTH_SHORT)
+                        .show()
+            }
+        }
     }
 
     private fun setSpinner(list: Map<Int, Shop>) {
         val shopList = arrayListOf<Shop>()
         val namesList = arrayListOf<String>()
+        val spinner = av_submit_name_SPINNER
         list.forEach {
             shopList.add(it.value)
             namesList.add(it.value.name)
         }
 
-        av_submit_name_SPINNER.adapter = ArrayAdapter(
-                requireContext(), android.R.layout.simple_spinner_dropdown_item, namesList)
-
-        av_submit_name_SPINNER.onItemSelectedListener = object:
+        spinner.adapter = ArrayAdapter(
+                requireContext(), R.layout.spinner1, namesList)
+        spinner.onItemSelectedListener = object:
                 AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                     parent: AdapterView<*>?, view: View?, position: Int, id: Long) {

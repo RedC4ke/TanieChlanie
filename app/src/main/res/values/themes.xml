@@ -114,13 +114,21 @@
 
 
     <style name="Theme.Base.taniechlanie.ContainedBT"
-        parent="Widget.MaterialComponents.Button.OutlinedButton">
+        parent="Widget.MaterialComponents.Button">
 
     </style>
-    <style name="Theme.taniechlanie.ContainedBT" parent="Theme.Base.taniechlanie.ContainedBT"/>
+    <style name="Theme.taniechlanie.ContainedBT" parent="Theme.Base.taniechlanie.ContainedBT" />
 
 
     <style name="Theme.Base.taniechlanie.TextBT"
+        parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="fontFamily">@font/open_sans_regular</item>
+        <item name="android:maxLines">1</item>
+    </style>
+    <style name="Theme.taniechlanie.TextBT" parent="Theme.Base.taniechlanie.TextBT" />
+
+
+    <style name="Theme.Base.taniechlanie.TextBT_add"
         parent="Widget.MaterialComponents.Button.TextButton">
         <item name="icon">@drawable/ic_baseline_add_24</item>
         <item name="iconPadding">0dp</item>
@@ -135,7 +143,7 @@
         <item name="iconTint">@color/grey_outline</item>
         <item name="android:clickable">false</item>
     </style>
-    <style name="Theme.taniechlanie.TextBT" parent="Theme.Base.taniechlanie.TextBT" />
+    <style name="Theme.taniechlanie.TextBT_add" parent="Theme.Base.taniechlanie.TextBT_add" />
 
 
     <style name="Theme.base.taniechlanie.Checkbox"
@@ -150,4 +158,11 @@
     </style>
     <style name="Theme.taniechlanie.ExpandableListView"
         parent="Theme.Base.taniechlanie.ExpandableListView" />
+
+
+    <style name="Theme.Base.taniechlanie.Spinner1">
+        <item name="android:fontFamily">@font/open_sans_light</item>
+        <item name="android:textColor">@color/red_heavy</item>
+    </style>
+    <style name="Theme.taniechlanie.Spinner1" parent="Theme.Base.taniechlanie.Spinner1"/>
 </resources>

@@ -36,7 +36,7 @@
 
     <!-- details page - shop submit popup -->
     <string name="av_submit_header">Dodaj miejsce występowania!</string>
-    <string name="av_submit_disclaimer"><u>Sklepu nie ma na liście</u></string>
+    <string name="av_submit_disclaimer">Sklepu nie ma na liście</string>
 
     <!-- about page -->
     <string name="about_author">by Redc4ke</string>
@@ -117,7 +117,5 @@
     <string name="suff_price">%1$S zł</string>
     <string name="suff_volume">%1$S ml</string>
     <string name="suff_voltage">%1$S %%</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
