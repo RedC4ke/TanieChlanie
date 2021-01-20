@@ -211,7 +211,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/cat_req_BT1"
-                    style="@style/Theme.taniechlanie.TextBT"
+                    style="@style/Theme.taniechlanie.TextBT_add"
                     android:layout_width="155dp"
                     android:layout_height="42dp"
                     android:clickable="false"
@@ -232,7 +232,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/cat_req_BT2"
-                    style="@style/Theme.taniechlanie.TextBT"
+                    style="@style/Theme.taniechlanie.TextBT_add"
                     android:layout_width="155dp"
                     android:layout_height="42dp"
                     android:clickable="false"
@@ -253,7 +253,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/cat_req_BT3"
-                    style="@style/Theme.taniechlanie.TextBT"
+                    style="@style/Theme.taniechlanie.TextBT_add"
                     android:layout_width="155dp"
                     android:layout_height="42dp"
                     android:clickable="false"
@@ -276,7 +276,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/cat_req_BT4"
-                    style="@style/Theme.taniechlanie.TextBT"
+                    style="@style/Theme.taniechlanie.TextBT_add"
                     android:layout_width="155dp"
                     android:layout_height="42dp"
                     android:clickable="false"
