@@ -8,31 +8,26 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.data.CategoryViewModel
 import com.redc4ke.taniechlanie.data.menu.DetailsCategoryAdapter
-import kotlinx.android.synthetic.main.fragment_cat_list.*
+import com.redc4ke.taniechlanie.databinding.FragmentCatListBinding
+import com.redc4ke.taniechlanie.ui.BaseFragment
 
-class CatListFragment(private val alcoObject: AlcoObject) : Fragment() {
+class CatListFragment(private val alcoObject: AlcoObject) : BaseFragment<FragmentCatListBinding>() {
 
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentCatListBinding
+        get() = FragmentCatListBinding::inflate
     private lateinit var categoryViewModel: CategoryViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_cat_list, container, false)
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val recyclerView = catlist_RV
+        val recyclerView = binding.catlistRV
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         categoryViewModel = requireActivity().run {

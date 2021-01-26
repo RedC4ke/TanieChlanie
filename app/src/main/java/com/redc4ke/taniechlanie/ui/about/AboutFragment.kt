@@ -7,20 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.redc4ke.taniechlanie.BuildConfig
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.about.AboutRecyclerViewAdapter
+import com.redc4ke.taniechlanie.databinding.FragmentAboutBinding
 import com.redc4ke.taniechlanie.ui.BaseFragment
 import com.redc4ke.taniechlanie.ui.MainActivity
-import kotlinx.android.synthetic.main.fragment_about.*
 
-class AboutFragment : BaseFragment() {
+class AboutFragment : BaseFragment<FragmentAboutBinding>() {
 
     private lateinit var mainActivity: MainActivity
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentAboutBinding
+        get() = FragmentAboutBinding::inflate
 
     override fun onAttach(context: Context) {
         val actionBar = activity?.actionBar
@@ -37,26 +38,17 @@ class AboutFragment : BaseFragment() {
         setTransitions(R.transition.slide_down_about, R.transition.slide_up_about)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        val root = inflater.inflate(R.layout.fragment_about, container, false)
-        val recyclerView = root.findViewById<RecyclerView>(R.id.about_RV)
-
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter = AboutRecyclerViewAdapter(this)
-
-        return root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        about_version_TV.text = BuildConfig.VERSION_NAME
+        val recyclerView = binding.aboutRV
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.adapter = AboutRecyclerViewAdapter(this)
 
+        binding.aboutVersionTV.text = BuildConfig.VERSION_NAME
 
         cardShape(view.findViewById(R.id.about_CV))
     }
-
 }
 
 fun cardShape(cv: CardView) {

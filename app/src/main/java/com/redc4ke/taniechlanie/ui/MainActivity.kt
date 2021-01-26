@@ -150,10 +150,9 @@ class MainActivity : AppCompatActivity() {
                     getShopList()
                 }
                 .addOnSuccessListener {
-                    val tempList: MutableList<AlcoObject> = mutableListOf()
                     it.forEach { document ->
                         val data = document.data
-                        val output = mutableMapOf<String, Any?> (
+                        val output = mapOf<String, Any?> (
                                 "id" to data["id"].toString().toInt(),
                                 "name" to data["name"].toString(),
                                 "volume" to data["volume"].toString().toInt(),
@@ -161,7 +160,7 @@ class MainActivity : AppCompatActivity() {
                                 "categories" to data["categories"] as ArrayList<Int>,
                                 "photo" to data["photo"] as String?
                         )
-                        getPrices(output)
+                        getPrices(output as MutableMap<String, Any?>)
                     }
                 }
                 .addOnFailureListener {
