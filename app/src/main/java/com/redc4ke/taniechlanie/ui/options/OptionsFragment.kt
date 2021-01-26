@@ -3,30 +3,19 @@ package com.redc4ke.taniechlanie.ui.options
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.redc4ke.taniechlanie.R
-import kotlinx.android.synthetic.main.fragment_options.*
-import kotlin.math.round
+import com.redc4ke.taniechlanie.databinding.FragmentOptionsBinding
+import com.redc4ke.taniechlanie.ui.BaseFragment
 
-class OptionsFragment : Fragment() {
+class OptionsFragment : BaseFragment<FragmentOptionsBinding>() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_options, container, false)
-    }
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentOptionsBinding
+        get() = FragmentOptionsBinding::inflate
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,7 +24,8 @@ class OptionsFragment : Fragment() {
     }
 
     private fun optionPickUnit() {
-        val spinner = options_unit_SPINNER
+
+        val spinner = binding.optionsUnitSPINNER
         val list = arrayListOf("R", "mR")
         val adapter = ArrayAdapter(
             requireContext(), android.R.layout.simple_spinner_dropdown_item, list)

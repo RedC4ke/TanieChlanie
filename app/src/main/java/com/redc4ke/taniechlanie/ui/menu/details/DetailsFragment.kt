@@ -10,14 +10,16 @@ import android.view.ViewGroup
 import com.google.android.material.transition.MaterialContainerTransform
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.*
+import com.redc4ke.taniechlanie.databinding.FragmentDetailsBinding
+import com.redc4ke.taniechlanie.ui.BaseFragment
 import com.redc4ke.taniechlanie.ui.MainActivity
 import com.redc4ke.taniechlanie.ui.menu.MenuFragment
-import kotlinx.android.synthetic.main.fragment_details.*
-import kotlinx.android.synthetic.main.fragment_details.view.*
 import java.io.File
 
-class DetailsFragment : Fragment() {
+class DetailsFragment : BaseFragment<FragmentDetailsBinding>() {
 
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentDetailsBinding
+        get() = FragmentDetailsBinding::inflate
     private lateinit var mainActivity: MainActivity
     private lateinit var parentFrag: MenuFragment
     lateinit var alcoObject: AlcoObject
@@ -43,12 +45,12 @@ class DetailsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.fragment_details, container, false)
 
-        rootView.name_details.text = alcoObject.name
+        val root = super.onCreateView(inflater, container, savedInstanceState)
+        binding.nameDetails.text = alcoObject.name
 
         // Inflate the layout for this fragment
-        return rootView
+        return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,11 +60,11 @@ class DetailsFragment : Fragment() {
             val imageFile = File(requireContext().filesDir, alcoObject.name + ".jpg")
 
             if (File(requireContext().filesDir, alcoObject.name + ".jpg").exists()) {
-                image_details.setImageBitmap(BitmapFactory.decodeFile(imageFile.path))
+                binding.imageDetails.setImageBitmap(BitmapFactory.decodeFile(imageFile.path))
             } else {
                 val imageRef = mainActivity.storage.getReferenceFromUrl(alcoObject.photo!!)
                 imageRef.getFile(imageFile).addOnSuccessListener {
-                    image_details.setImageBitmap(BitmapFactory.decodeFile(imageFile.path))
+                    binding.imageDetails.setImageBitmap(BitmapFactory.decodeFile(imageFile.path))
                     Log.d("image","success ${imageFile.path}")
                 }.addOnFailureListener {
                     Log.d("image","$it")
@@ -71,7 +73,4 @@ class DetailsFragment : Fragment() {
         }
 
     }
-
-
-
 }

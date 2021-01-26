@@ -19,18 +19,20 @@ import com.google.android.material.textfield.TextInputLayout
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.data.Category
+import com.redc4ke.taniechlanie.databinding.FragmentRequestBinding
 import com.redc4ke.taniechlanie.ui.BaseFragment
 import com.redc4ke.taniechlanie.ui.MainActivity
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_request.*
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.Serializable
 import kotlin.collections.ArrayList
 
-class RequestFragment : BaseFragment(), Serializable {
+class RequestFragment : BaseFragment<FragmentRequestBinding>(), Serializable {
 
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentRequestBinding
+        get() = FragmentRequestBinding::inflate
     var categoryList: MutableList<Category> = mutableListOf()
     private lateinit var buttonList: ArrayList<MaterialButton>
     private lateinit var containerList: ArrayList<ViewGroup>
@@ -51,29 +53,21 @@ class RequestFragment : BaseFragment(), Serializable {
         setTransitions(R.transition.slide_from_right, R.transition.slide_to_right)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_request, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        image_req_BT.setOnClickListener {
+        binding.imageReqBT.setOnClickListener {
             val getIntent = Intent(Intent.ACTION_GET_CONTENT)
             getIntent.type = "image/*"
             startActivityForResult(getIntent, pickImage)
         }
 
         buttonList = arrayListOf(
-                cat_req_BT1, cat_req_BT2, cat_req_BT3, cat_req_BT4)
+                binding.catReqBT1, binding.catReqBT2, binding.catReqBT3, binding.catReqBT4)
         containerList = arrayListOf(
-                cat_FL1, cat_FL2, cat_FL3, cat_FL4)
+                binding.catFL1, binding.catFL2, binding.catFL3, binding.catFL4)
 
-        req_upload_BT.setOnClickListener {
+        binding.reqUploadBT.setOnClickListener {
             if (proceedCheck()) {
                 setTransitions(
                     R.transition.slide_from_left,
@@ -115,7 +109,7 @@ class RequestFragment : BaseFragment(), Serializable {
             fos.flush()
             fos.close()
 
-            image_req_desc.text = path.toString()
+            binding.imageReqDesc.text = path.toString()
 
 
             hasImage = true
@@ -139,10 +133,10 @@ class RequestFragment : BaseFragment(), Serializable {
         }
         return AlcoObject(
                 id = 0,
-                name = name_ET.text.toString(),
-                price = price1_ET.text.toString().replace(",",".").toBigDecimal(),
-                volume = volume_ET.text.toString().toInt(),
-                voltage = voltage_ET.text.toString().replace(",",".")
+                name = binding.nameET.text.toString(),
+                price = binding.price1ET.text.toString().replace(",",".").toBigDecimal(),
+                volume = binding.volumeET.text.toString().toInt(),
+                voltage = binding.voltageET.text.toString().replace(",",".")
                         .toBigDecimal().divide(100.toBigDecimal()),
                 shop = arrayListOf(),
                 categories = categoryIdList,
@@ -196,7 +190,7 @@ class RequestFragment : BaseFragment(), Serializable {
     //Checks if every required value is present
     private fun proceedCheck(): Boolean {
         val required: ArrayList<TextInputLayout> = arrayListOf(
-                name_ETL, volume_ETL, voltage_ETL, price1_ETL)
+            binding.nameETL, binding.volumeETL, binding.voltageETL, binding.price1ETL)
         var check = true
 
         required.forEach {
@@ -211,8 +205,8 @@ class RequestFragment : BaseFragment(), Serializable {
         if (check == false) return check
 
 
-        if (voltage_ET.text.toString().toFloat() > 100) {
-            voltage_ETL.apply {
+        if (binding.voltageET.text.toString().toFloat() > 100) {
+            binding.voltageETL.apply {
                 isErrorEnabled
                 error = "Zła wartość!"
                 errorIconDrawable = getDrawable(
@@ -233,7 +227,8 @@ class RequestFragment : BaseFragment(), Serializable {
     }
 
     private fun addTextChangedListeners() {
-        val layouts = arrayListOf(name_ETL, volume_ETL, voltage_ETL, price1_ETL)
+        val layouts = arrayListOf(
+            binding.nameETL, binding.volumeETL, binding.voltageETL, binding.price1ETL)
         layouts.forEach {
             it.editText!!.addTextChangedListener(object: TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {

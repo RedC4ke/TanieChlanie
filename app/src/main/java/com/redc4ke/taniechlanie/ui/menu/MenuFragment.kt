@@ -14,6 +14,7 @@ import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.menu.AlcoListAdapter
 import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.data.AlcoObjectViewModel
+import com.redc4ke.taniechlanie.databinding.FragmentMenuBinding
 import com.redc4ke.taniechlanie.ui.BaseFragment
 import com.redc4ke.taniechlanie.ui.MainActivity
 import java.io.Serializable
@@ -23,8 +24,10 @@ import kotlin.collections.ArrayList
 
 
 
-class MenuFragment : BaseFragment(), Serializable {
+class MenuFragment : BaseFragment<FragmentMenuBinding>(), Serializable {
 
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMenuBinding
+        get() = FragmentMenuBinding::inflate
     private lateinit var vm: AlcoObjectViewModel
     private lateinit var vmData: ArrayList<AlcoObject>
     private lateinit var recyclerView: RecyclerView
@@ -44,34 +47,24 @@ class MenuFragment : BaseFragment(), Serializable {
 
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val rootView = inflater.inflate(R.layout.fragment_menu, container, false)
-        recyclerView = rootView.findViewById(R.id.alcoList_RV) as RecyclerView
+        postponeEnterTransition()
+        view.doOnPreDraw { startPostponedEnterTransition() }
+        super.onViewCreated(view, savedInstanceState)
 
+        recyclerView = binding.alcoListRV
         //Connection between this fragment and activity, send a reference to the activity
         //and retrieve data from FireBase tasks
         val act = activity as MainActivity
         act.menuFrag = this
         vm = act.alcoObjectViewModel
-
         //Set up the recycler view
         vmData = vm.getAll().value as ArrayList<AlcoObject>
         adapter = AlcoListAdapter(vmData, this)
         adapter.update(vm)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this.context)
-
-        return rootView
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        postponeEnterTransition()
-        view.doOnPreDraw { startPostponedEnterTransition() }
-        super.onViewCreated(view, savedInstanceState)
 
         //Change tolbar text
         val actionBar: Toolbar = requireActivity().findViewById(R.id.toolbar) as Toolbar

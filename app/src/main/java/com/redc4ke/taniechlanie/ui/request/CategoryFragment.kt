@@ -2,7 +2,6 @@ package com.redc4ke.taniechlanie.ui.request
 
 import android.os.Bundle
 import androidx.transition.TransitionInflater
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,10 +13,13 @@ import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.Category
 import com.redc4ke.taniechlanie.data.CategoryViewModel
 import com.redc4ke.taniechlanie.data.request.CategoryListAdapter
-import kotlinx.android.synthetic.main.fragment_category.*
+import com.redc4ke.taniechlanie.databinding.FragmentCategoryBinding
+import com.redc4ke.taniechlanie.ui.BaseFragment
 
-class CategoryFragment : Fragment() {
+class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
 
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentCategoryBinding
+        get() = FragmentCategoryBinding::inflate
     private var parentFrag: RequestFragment? = null
     private lateinit var categoryViewModel: CategoryViewModel
 
@@ -48,7 +50,7 @@ class CategoryFragment : Fragment() {
         categoryViewModel = requireActivity().run {
             ViewModelProvider(this).get(CategoryViewModel::class.java)
         }
-        val recyclerView = category_fragment_RV
+        val recyclerView = binding.categoryFragmentRV
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 

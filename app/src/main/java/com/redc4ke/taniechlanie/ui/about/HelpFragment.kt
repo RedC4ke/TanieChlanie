@@ -1,17 +1,19 @@
 package com.redc4ke.taniechlanie.ui.about
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.about.HelpRecyclerViewAdapter
+import com.redc4ke.taniechlanie.databinding.FragmentHelpBinding
 import com.redc4ke.taniechlanie.ui.BaseFragment
 
-class HelpFragment : BaseFragment() {
+class HelpFragment : BaseFragment<FragmentHelpBinding>() {
+
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentHelpBinding
+        get() = FragmentHelpBinding::inflate
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,13 +23,14 @@ class HelpFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        val root = inflater.inflate(R.layout.fragment_help, container, false)
-        val recyclerView = root.findViewById<RecyclerView>(R.id.help_RV)
 
+        val root = super.onCreateView(inflater, container, savedInstanceState)
+
+        val recyclerView = binding.helpRV
         recyclerView.adapter = HelpRecyclerViewAdapter(this)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         return root
     }
+
 }
