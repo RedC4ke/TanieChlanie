@@ -15,13 +15,15 @@ import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.data.Shop
 import com.redc4ke.taniechlanie.data.ShopViewModel
 import com.redc4ke.taniechlanie.data.menu.DetailsShopAdapter
+import com.redc4ke.taniechlanie.databinding.FragmentSheet2Binding
 import com.redc4ke.taniechlanie.ui.BaseFragment
 import com.redc4ke.taniechlanie.ui.popup.AvailabilitySubmitFragment
-import kotlinx.android.synthetic.main.fragment_sheet2.*
 import java.util.*
 
-class Sheet2Fragment : BaseFragment() {
+class Sheet2Fragment : BaseFragment<FragmentSheet2Binding>() {
 
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentSheet2Binding
+        get() = FragmentSheet2Binding::inflate
     lateinit var shopViewModel: ShopViewModel
     lateinit var detailsFragment: DetailsFragment
 
@@ -33,18 +35,10 @@ class Sheet2Fragment : BaseFragment() {
         detailsFragment = requireParentFragment().parentFragment as DetailsFragment
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sheet2, container, false)
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val recyclerView = sheet2_RV
+        val recyclerView = binding.sheet2RV
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         shopViewModel = requireActivity().run {
@@ -55,15 +49,15 @@ class Sheet2Fragment : BaseFragment() {
             val adapter = DetailsShopAdapter(detailsFragment.alcoObject, it)
             recyclerView.adapter = adapter
             adapter.notifyDataSetChanged()
-            setupSearchBar(sheet2_ET, detailsFragment.alcoObject, it, adapter)
+            setupSearchBar(binding.sheet2ET, detailsFragment.alcoObject, it, adapter)
         })
 
 
-        sheet2_returnBT.setOnClickListener {
+        binding.sheet2ReturnBT.setOnClickListener {
             findNavController().navigate(R.id.action_sheet2_dest_to_sheet1_dest)
         }
 
-        sheet2_add_BT.setOnClickListener {
+        binding.sheet2AddBT.setOnClickListener {
             AvailabilitySubmitFragment(detailsFragment)
                     .show(parentFragmentManager, "av_submit")
         }

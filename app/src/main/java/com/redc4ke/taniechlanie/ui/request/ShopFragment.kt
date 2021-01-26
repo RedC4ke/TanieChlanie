@@ -6,18 +6,18 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.data.ShopViewModel
 import com.redc4ke.taniechlanie.data.request.SelectedShopsViewModel
 import com.redc4ke.taniechlanie.data.request.ShopListAdapter
+import com.redc4ke.taniechlanie.databinding.FragmentShopBinding
 import com.redc4ke.taniechlanie.ui.BaseFragment
-import com.redc4ke.taniechlanie.ui.MainActivity
-import kotlinx.android.synthetic.main.fragment_shop.*
 
-class ShopFragment : BaseFragment() {
+class ShopFragment : BaseFragment<FragmentShopBinding>() {
 
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentShopBinding
+        get() = FragmentShopBinding::inflate
     lateinit var selectedShopsViewModel: SelectedShopsViewModel
     private var hasImage = false
     private lateinit var alcoObject: AlcoObject
@@ -36,12 +36,9 @@ class ShopFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        val root = inflater.inflate(R.layout.fragment_shop, container, false)
-
         setHasOptionsMenu(true)
 
-        return root
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -76,7 +73,7 @@ class ShopFragment : BaseFragment() {
         shopViewModel = requireActivity().run {
             ViewModelProvider(this).get(ShopViewModel::class.java)
         }
-        val recyclerView = shopList_RV
+        val recyclerView = binding.shopListRV
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         shopViewModel.getData().observe(viewLifecycleOwner, Observer {

@@ -13,14 +13,16 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.*
+import com.redc4ke.taniechlanie.databinding.FragmentSummaryBinding
 import com.redc4ke.taniechlanie.ui.BaseFragment
 import com.redc4ke.taniechlanie.ui.MainActivity
-import kotlinx.android.synthetic.main.fragment_summary.*
 import java.io.File
 import java.util.*
 
-class SummaryFragment : BaseFragment() {
+class SummaryFragment : BaseFragment<FragmentSummaryBinding>() {
 
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentSummaryBinding
+        get() = FragmentSummaryBinding::inflate
     private var hasImage = false
     private lateinit var mainActivity: MainActivity
     private lateinit var alcoObject: AlcoObject
@@ -37,12 +39,6 @@ class SummaryFragment : BaseFragment() {
         Log.d("huj", alcoObject.voltage.toString())
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-
-        return inflater.inflate(R.layout.fragment_summary, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -55,32 +51,34 @@ class SummaryFragment : BaseFragment() {
 
         var categories: Map<Int, Category>
         categoryViewModel.get().observe(viewLifecycleOwner, {
-            summary_categories_TV.text = ""
+            binding.summaryCategoriesTV.text = ""
             categories = it
             alcoObject.categories.forEach {position ->
                 val catName = categories[position]?.name
-                if (position != alcoObject.categories.last()) summary_categories_TV.append("$catName, ")
-                else summary_categories_TV.append(catName)
+                if (position != alcoObject.categories.last())
+                    binding.summaryCategoriesTV.append("$catName, ")
+                else
+                    binding.summaryCategoriesTV.append(catName)
             }
         })
 
         var shops: Map<Int, Shop>
         shopViewModel.getData().observe(viewLifecycleOwner, {
-            summary_shops_TV.text = ""
+            binding.summaryShopsTV.text = ""
             shops = it
             alcoObject.shop.forEach {position ->
                 val shopName = shops[position]?.name
-                if (position != alcoObject.shop.last()) summary_shops_TV.append("$shopName, ")
-                else summary_shops_TV.append(shopName)
+                if (position != alcoObject.shop.last()) binding.summaryShopsTV.append("$shopName, ")
+                else binding.summaryShopsTV.append(shopName)
             }
         })
 
-        summary_name_TV.text = alcoObject.name
-        summary_price_TV.text = priceString(alcoObject, this)
-        summary_volume_TV.text = volumeString(alcoObject, this)
-        summary_voltage_TV.text = voltageString(alcoObject, this)
+        binding.summaryNameTV.text = alcoObject.name
+        binding.summaryPriceTV.text = priceString(alcoObject, this)
+        binding.summaryVolumeTV.text = volumeString(alcoObject, this)
+        binding.summaryVoltageTV.text = voltageString(alcoObject, this)
 
-        req_upload_BT.setOnClickListener {
+        binding.reqUploadBT.setOnClickListener {
             upload()
         }
     }

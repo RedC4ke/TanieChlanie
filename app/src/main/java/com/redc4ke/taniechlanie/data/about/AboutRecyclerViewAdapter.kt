@@ -8,12 +8,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.redc4ke.taniechlanie.R
+import com.redc4ke.taniechlanie.data.BaseRecyclerViewAdapter
+import com.redc4ke.taniechlanie.databinding.RowAboutBinding
 import com.redc4ke.taniechlanie.ui.MainActivity
-import kotlinx.android.synthetic.main.row_about.view.*
 
 class AboutRecyclerViewAdapter(private val frag: Fragment):
-    RecyclerView.Adapter<AboutViewHolder>() {
+    BaseRecyclerViewAdapter<AboutViewHolder, RowAboutBinding>() {
 
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> RowAboutBinding
+        get() = RowAboutBinding::inflate
     private val act = frag.requireActivity() as MainActivity
     private val context = frag.requireContext()
     private val expanded = arrayListOf<Boolean>()
@@ -63,25 +66,22 @@ class AboutRecyclerViewAdapter(private val frag: Fragment):
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AboutViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val row = inflater.inflate(R.layout.row_about, parent, false)
-
+        _binding = bindingInflater.invoke(inflater, parent, false)
 
         headers.forEach { _ ->
             expanded.add(false)
         }
         
-        return  AboutViewHolder(row)
+        return  AboutViewHolder(binding.root)
     }
 
     override fun onBindViewHolder(holder: AboutViewHolder, position: Int) {
-        val view = holder.view
 
-        if (position == 4) {
-            view.about_row_divider.visibility = View.INVISIBLE
-        }
-        else view.findViewById<View>(R.id.about_row_divider).visibility = View.VISIBLE
+        binding.aboutRowDivider.visibility =
+                if (position == 4) View.INVISIBLE
+                else View.VISIBLE
 
-        view.about_row_IV.apply {
+        binding.aboutRowIV.apply {
             setBackgroundResource(when (position) {
                 0 -> R.drawable.ic_baseline_person_outline_24
                 1 -> R.drawable.ic_outline_bug_report_24
@@ -91,16 +91,16 @@ class AboutRecyclerViewAdapter(private val frag: Fragment):
                 else -> R.drawable.ic_baseline_error_outline_24
             })
         }
-        view.about_row_headerTV.text = headers[position]
-        view.about_row_descriptionTV.text = descriptions[position]
+        binding.aboutRowHeaderTV.text = headers[position]
+        binding.aboutRowDescriptionTV.text = descriptions[position]
 
         //Expandable or link
         when (position) {
-            0,1,2 -> addExpandable(view, subrows[position], position)
-            3 -> view.about_row_mainCL.setOnClickListener {
+            0,1,2 -> addExpandable(binding.root, subrows[position], position)
+            3 -> binding.aboutRowMainCL.setOnClickListener {
                 act.openBrowser("https://taniechlanie.ml/regulamin")
             }
-            4 -> view.about_row_mainCL.setOnClickListener {
+            4 -> binding.aboutRowMainCL.setOnClickListener {
                 frag.findNavController().navigate(R.id.to_help_dest)
             }
         }
@@ -112,16 +112,16 @@ class AboutRecyclerViewAdapter(private val frag: Fragment):
     }
 
     private fun addExpandable(view: View, itemList: ArrayList<Subrow>, position: Int) {
-        val rv = view.about_row_RV
+        val rv = binding.aboutRowRV
         rv.layoutManager = LinearLayoutManager(context)
         rv.adapter = AboutSubrowAdapter(itemList, frag)
 
-        view.about_row_mainCL.setOnClickListener {
+        binding.aboutRowMainCL.setOnClickListener {
             expanded[position] = !expanded[position]
             notifyItemChanged(position)
         }
 
-        view.about_row_subrow.visibility =
+        binding.aboutRowSubrow.visibility =
                 if (expanded[position]) View.VISIBLE else View.GONE
     }
 }
