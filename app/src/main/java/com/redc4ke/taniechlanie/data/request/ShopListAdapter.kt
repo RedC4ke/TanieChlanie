@@ -4,8 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.redc4ke.taniechlanie.R
-import com.redc4ke.taniechlanie.data.BaseRecyclerViewAdapter
 import com.redc4ke.taniechlanie.data.Shop
 import com.redc4ke.taniechlanie.databinding.RowRequestShopBinding
 import com.redc4ke.taniechlanie.ui.request.ShopFragment
@@ -13,21 +11,19 @@ import com.redc4ke.taniechlanie.ui.request.ShopFragment
 class ShopListAdapter(
         shopList: Map<Int, Shop>,
         private var frag: ShopFragment):
-        BaseRecyclerViewAdapter<ShopListViewHolder, RowRequestShopBinding>() {
+        RecyclerView.Adapter<ShopListViewHolder>() {
 
-    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> RowRequestShopBinding
-        get() = RowRequestShopBinding::inflate
     private val list = shopList.values.toMutableList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        _binding = bindingInflater.invoke(inflater, parent, false)
+        val binding = RowRequestShopBinding.inflate(inflater, parent, false)
 
-        return ShopListViewHolder(binding.root)
+        return ShopListViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ShopListViewHolder, position: Int) {
-        with (binding) {
+        with (holder.vb) {
             val checkbox = reqShopCHB
             val viewModel = frag.selectedShopsViewModel
             checkbox.isChecked = viewModel.isAdded(position + 1)
@@ -50,4 +46,4 @@ class ShopListAdapter(
 
 }
 
-class ShopListViewHolder(val view: View): RecyclerView.ViewHolder(view)
+class ShopListViewHolder(var vb: RowRequestShopBinding): RecyclerView.ViewHolder(vb.root)

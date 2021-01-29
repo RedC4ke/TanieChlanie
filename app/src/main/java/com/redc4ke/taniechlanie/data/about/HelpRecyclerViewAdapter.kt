@@ -5,31 +5,28 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.redc4ke.taniechlanie.data.BaseRecyclerViewAdapter
 import com.redc4ke.taniechlanie.databinding.RowAboutHelpBinding
 import com.redc4ke.taniechlanie.ui.MainActivity
 
 class HelpRecyclerViewAdapter(private val frag: Fragment) :
-        BaseRecyclerViewAdapter<HelpViewHolder, RowAboutHelpBinding>() {
+        RecyclerView.Adapter<HelpViewHolder>() {
 
-    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> RowAboutHelpBinding
-        get() = RowAboutHelpBinding::inflate
     private val faq = (frag.activity as MainActivity).faq
     private val expanded = arrayListOf<Boolean>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HelpViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        _binding = bindingInflater.invoke(inflater, parent, false)
+        val binding = RowAboutHelpBinding.inflate(inflater, parent, false)
 
         faq.forEach{ _ ->
             expanded.add(false)
         }
 
-        return HelpViewHolder(binding.root)
+        return HelpViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: HelpViewHolder, position: Int) {
-        with(binding) {
+        with(holder.vb) {
 
             helpRowHeaderTV.text = faq[position]["question"]
             helpRowTextTV.text = faq[position]["answer"]
@@ -56,4 +53,4 @@ class HelpRecyclerViewAdapter(private val frag: Fragment) :
 
 }
 
-class HelpViewHolder(val view: View): RecyclerView.ViewHolder(view)
+class HelpViewHolder(var vb: RowAboutHelpBinding): RecyclerView.ViewHolder(vb.root)
