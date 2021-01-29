@@ -4,9 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
-import com.redc4ke.taniechlanie.data.BaseRecyclerViewAdapter
 import com.redc4ke.taniechlanie.data.Shop
 import com.redc4ke.taniechlanie.databinding.RowSheet2Binding
 
@@ -14,22 +12,20 @@ import com.redc4ke.taniechlanie.databinding.RowSheet2Binding
 class DetailsShopAdapter(
     alcoObject: AlcoObject,
     private val shops: Map<Int, Shop>):
-    BaseRecyclerViewAdapter<DetailsShopViewHolder, RowSheet2Binding>() {
+    RecyclerView.Adapter<DetailsShopViewHolder>() {
 
-    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> RowSheet2Binding
-        get() = RowSheet2Binding::inflate
     var list = alcoObject.shop
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailsShopViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        _binding = bindingInflater.invoke(inflater, parent, false)
+        val binding = RowSheet2Binding.inflate(inflater, parent, false)
 
-        return DetailsShopViewHolder(binding.root)
+        return DetailsShopViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: DetailsShopViewHolder, position: Int) {
         val shopId = list[position]
-        binding.sheet2ShopTV.text = shops[shopId]?.name
+        holder.vb.sheet2ShopTV.text = shops[shopId]?.name
     }
 
     override fun getItemCount(): Int {
@@ -43,4 +39,4 @@ class DetailsShopAdapter(
 
 }
 
-class DetailsShopViewHolder(val view: View): RecyclerView.ViewHolder(view)
+class DetailsShopViewHolder(var vb: RowSheet2Binding): RecyclerView.ViewHolder(vb.root)

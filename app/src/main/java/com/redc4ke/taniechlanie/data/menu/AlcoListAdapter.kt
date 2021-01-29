@@ -13,24 +13,20 @@ import com.redc4ke.taniechlanie.ui.menu.MenuFragment
 
 class AlcoListAdapter(
         private var data: ArrayList<AlcoObject>,
-        private val fragment: MenuFragment
-) : BaseRecyclerViewAdapter<AlcoViewHolder, RowAlcoholBinding>() {
-
-    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> RowAlcoholBinding
-        get() = RowAlcoholBinding::inflate
+        val fragment: MenuFragment) : RecyclerView.Adapter<AlcoViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlcoViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        _binding = bindingInflater.invoke(inflater, parent, false)
+        val binding = RowAlcoholBinding.inflate(inflater, parent, false)
 
-        return AlcoViewHolder(binding.root)
+        return AlcoViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: AlcoViewHolder, position: Int) {
 
-        with (binding) {
+        with (holder.vb) {
             if (position == 0) {
-                holder.view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                holder.vb.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                     //this.topMargin = 30
                 }
             }
@@ -42,10 +38,10 @@ class AlcoListAdapter(
             voltageTV.text = voltageString(data[position], fragment)
 
             val id = data[position].id
-            holder.view.transitionName = "rowAlcoholTransitionName_$id"
+            root.transitionName = "rowAlcoholTransitionName_$id"
 
-            holder.view.setOnClickListener {
-                fragment.onItemClick(holder.view, data[position])
+            root.setOnClickListener {
+                fragment.onItemClick(root, data[position])
             }
         }
     }
@@ -67,7 +63,7 @@ class AlcoListAdapter(
 }
 
 
-class AlcoViewHolder(val view: View) : RecyclerView.ViewHolder(view)
+class AlcoViewHolder(var vb: RowAlcoholBinding) : RecyclerView.ViewHolder(vb.root)
 
 
 

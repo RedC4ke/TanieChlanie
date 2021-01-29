@@ -8,15 +8,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.redc4ke.taniechlanie.R
-import com.redc4ke.taniechlanie.data.BaseRecyclerViewAdapter
 import com.redc4ke.taniechlanie.databinding.RowAboutBinding
 import com.redc4ke.taniechlanie.ui.MainActivity
 
 class AboutRecyclerViewAdapter(private val frag: Fragment):
-    BaseRecyclerViewAdapter<AboutViewHolder, RowAboutBinding>() {
+    RecyclerView.Adapter<AboutViewHolder>() {
 
-    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> RowAboutBinding
-        get() = RowAboutBinding::inflate
     private val act = frag.requireActivity() as MainActivity
     private val context = frag.requireContext()
     private val expanded = arrayListOf<Boolean>()
@@ -66,16 +63,18 @@ class AboutRecyclerViewAdapter(private val frag: Fragment):
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AboutViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        _binding = bindingInflater.invoke(inflater, parent, false)
+        val binding = RowAboutBinding.inflate(inflater, parent, false)
 
         headers.forEach { _ ->
             expanded.add(false)
         }
         
-        return  AboutViewHolder(binding.root)
+        return  AboutViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: AboutViewHolder, position: Int) {
+
+        val binding = holder.vb
 
         binding.aboutRowDivider.visibility =
                 if (position == 4) View.INVISIBLE
@@ -96,7 +95,7 @@ class AboutRecyclerViewAdapter(private val frag: Fragment):
 
         //Expandable or link
         when (position) {
-            0,1,2 -> addExpandable(binding.root, subrows[position], position)
+            0,1,2 -> addExpandable(binding, subrows[position], position)
             3 -> binding.aboutRowMainCL.setOnClickListener {
                 act.openBrowser("https://taniechlanie.ml/regulamin")
             }
@@ -111,22 +110,22 @@ class AboutRecyclerViewAdapter(private val frag: Fragment):
         return headers.size
     }
 
-    private fun addExpandable(view: View, itemList: ArrayList<Subrow>, position: Int) {
-        val rv = binding.aboutRowRV
+    private fun addExpandable(vb: RowAboutBinding, itemList: ArrayList<Subrow>, position: Int) {
+        val rv = vb.aboutRowRV
         rv.layoutManager = LinearLayoutManager(context)
         rv.adapter = AboutSubrowAdapter(itemList, frag)
 
-        binding.aboutRowMainCL.setOnClickListener {
+        vb.aboutRowMainCL.setOnClickListener {
             expanded[position] = !expanded[position]
             notifyItemChanged(position)
         }
 
-        binding.aboutRowSubrow.visibility =
+        vb.aboutRowSubrow.visibility =
                 if (expanded[position]) View.VISIBLE else View.GONE
     }
 }
 
-class AboutViewHolder(val view: View): RecyclerView.ViewHolder(view)
+class AboutViewHolder(var vb: RowAboutBinding): RecyclerView.ViewHolder(vb.root)
 
 
 
