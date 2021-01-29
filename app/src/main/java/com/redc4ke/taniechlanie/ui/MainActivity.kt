@@ -19,6 +19,7 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
+import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.tasks.Task
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -41,6 +42,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mDrawerLayout: DrawerLayout
     private lateinit var shopViewModel: ShopViewModel
     private lateinit var categoryViewModel: CategoryViewModel
+    private val RC_SIGN_IN = 1
     lateinit var prefs: SharedPreferences
     lateinit var menuFrag: MenuFragment
     lateinit var alcoObjectViewModel: AlcoObjectViewModel
@@ -312,9 +314,20 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun dataMigration() {
+    fun login(view: View?) {
+        val providers = arrayListOf(
+            AuthUI.IdpConfig.EmailBuilder().build(),
+            AuthUI.IdpConfig.GoogleBuilder().build(),
+            AuthUI.IdpConfig.TwitterBuilder().build()
+        )
 
-
+        startActivityForResult(
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .build(),
+                RC_SIGN_IN
+        )
     }
 }
 

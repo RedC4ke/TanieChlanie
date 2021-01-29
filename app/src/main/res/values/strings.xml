@@ -26,6 +26,7 @@
 
     <!-- image alts -->
     <string name="wine">Butelka wina, obok dwa kieliszki</string>
+    <string name="avatar">Awatar użytkownika</string>
 
     <!-- details page -->
     <string name="pricetag">Cena:</string>
@@ -100,6 +101,10 @@
         \nJeśli błąd się powtarza, powiadom nas o tym!
     </string>
 
+    <!-- profile page -->
+    <string name="requests">Dodanych pozycji: %1$S</string>
+    <string name="reviews">Recenzji: %1$S</string>
+
     <!-- options page -->
     <string name="romper_unit">Jednostka opłacalności</string>
 
@@ -111,6 +116,7 @@
     <string name="forward">Dalej</string>
     <string name="submit">Prześlij</string>
     <string name="accept">Zatwierdź</string>
+    <string name="login">Zaloguj</string>
 
     <string name="suff_rvalue">%1$S R</string>
     <string name="suff_mrvalue">%1$S mR</string>
