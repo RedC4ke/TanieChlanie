@@ -96,7 +96,7 @@
     <style name="Theme.taniechlanie.Suffix" parent="Theme.Base.taniechlanie.Suffix"/>
 
 
-    <style name="Theme.Base.taniechlanie.OutlinedBT"
+    <style name="Theme.Base.taniechlanie.OutlinedBT_Request"
         parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:textSize">18sp</item>
         <item name="fontFamily">@font/open_sans_regular</item>
@@ -110,7 +110,22 @@
         <item name="android:paddingStart">2dp</item>
         <item name="android:gravity">start|center_vertical</item>
     </style>
-    <style name="Theme.taniechlanie.OutlinedBT" parent="Theme.Base.taniechlanie.OutlinedBT"/>
+    <style name="Theme.taniechlanie.OutlinedBT_Request"
+        parent="Theme.Base.taniechlanie.OutlinedBT_Request"/>
+
+
+    <style name="Theme.Base.taniechlanie.OutlinedBT_Login"
+        parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="fontFamily">@font/open_sans_regular</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:letterSpacing">0.01</item>
+        <item name="iconGravity">start</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:paddingStart">2dp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+    <style name="Theme.taniechlanie.OutlinedBT_Login"
+        parent="Theme.Base.taniechlanie.OutlinedBT_Login"/>
 
 
     <style name="Theme.Base.taniechlanie.ContainedBT"

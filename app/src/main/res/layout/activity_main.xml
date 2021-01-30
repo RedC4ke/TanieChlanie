@@ -80,7 +80,8 @@
         app:headerLayout="@layout/drawer_header"
         android:clipChildren="false"
         app:itemTextAppearance="@style/Theme.taniechlanie.Drawer"
-        android:theme="@style/Theme.taniechlanie.Drawer"/>
+        android:theme="@style/Theme.taniechlanie.Drawer"
+        android:clipToPadding="false"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>
 

@@ -104,5 +104,10 @@
         android:name="com.redc4ke.taniechlanie.ui.about.HelpFragment"
         android:label="@string/about_help"
         tools:layout="@layout/fragment_help" />
+    <fragment
+        android:id="@+id/profile_dest"
+        android:name="com.redc4ke.taniechlanie.ui.profile.ProfileFragment"
+        android:label="@string/profile_page"
+        tools:layout="@layout/fragment_profile" />
 
 </navigation>

@@ -5,11 +5,90 @@
     android:id="@+id/drawerHeader"
     android:layout_width="280dp"
     android:layout_height="wrap_content"
-    android:backgroundTint="@color/white">
+    android:backgroundTint="@color/white"
+    android:clipToPadding="false"
+    android:clipChildren="false">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="200dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="8dp"
+            app:cardBackgroundColor="@color/yellow"
+            app:cardCornerRadius="27dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageView">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/drawerNameTV"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/varela_round"
+                    android:gravity="start|end"
+                    android:maxLines="1"
+                    android:text="@string/guest"
+                    android:textColor="@color/grey_text"
+                    android:textSize="14sp"
+                    android:typeface="normal"
+                    app:layout_constraintBottom_toTopOf="@+id/drawerLoginTV"
+                    app:layout_constraintStart_toEndOf="@+id/cardView2" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView2"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="8dp"
+                    android:foregroundGravity="center"
+                    app:cardCornerRadius="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/drawerAvatarIV"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:foregroundGravity="center"
+                        app:srcCompat="@drawable/ic_baseline_account_circle_24" />
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/drawerLoginTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/open_sans_regular"
+                    android:text="@string/login"
+                    android:textAllCaps="true"
+                    android:textColor="@color/red_heavy"
+                    app:layout_constraintBottom_toBottomOf="@+id/cardView2"
+                    app:layout_constraintStart_toStartOf="@+id/drawerNameTV" />
+
+                <Button
+                    android:id="@+id/drawerProfileBT"
+                    style="@style/Theme.Base.taniechlanie.TextBT"
+                    android:layout_width="120dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="2dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:foregroundTint="#00FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
 
         <ImageView
             android:id="@+id/imageView"
@@ -34,51 +113,6 @@
             android:textSize="30sp"
             app:layout_constraintStart_toStartOf="@+id/imageView"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <ImageView
-                android:id="@+id/imageView10"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                tools:srcCompat="@tools:sample/avatars" />
-        </androidx.cardview.widget.CardView>
-
-        <TextView
-            android:id="@+id/textView20"
-            android:layout_width="110dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:ellipsize="end"
-            android:fontFamily="@font/varela_round"
-            android:gravity="end"
-            android:maxLines="1"
-            android:textColor="@color/grey_text"
-            android:textSize="14sp"
-            android:typeface="normal"
-            app:layout_constraintEnd_toStartOf="@+id/cardView2"
-            app:layout_constraintTop_toTopOf="@+id/cardView2"
-            tools:text="TwujStaryPijany" />
-
-        <TextView
-            android:id="@+id/drawerLoginBT"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/open_sans_regular"
-            android:text="@string/login"
-            android:textAllCaps="true"
-            android:textColor="@color/red_heavy"
-            app:layout_constraintBottom_toBottomOf="@+id/cardView2"
-            app:layout_constraintEnd_toEndOf="@+id/textView20"
-            android:onClick="login"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
