@@ -4,85 +4,93 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/yellow"
     tools:context=".ui.profile.ProfileFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="0dp">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            app:cardCornerRadius="50dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/profilePictureIV"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:contentDescription="@string/avatar"
-                tools:src="@tools:sample/avatars" />
-        </androidx.cardview.widget.CardView>
-
-        <TextView
-            android:id="@+id/profileNameTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="14dp"
-            android:fontFamily="@font/varela_round"
-            android:textColor="@color/black"
-            android:textSize="24sp"
-            app:layout_constraintStart_toEndOf="@+id/cardView"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="xXSłodkaNiunia69Xx" />
-
-        <TextView
-            android:id="@+id/profileRankTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:layout_marginTop="2dp"
-            android:fontFamily="@font/open_sans_regular"
-            android:textColor="@color/red_heavy"
-            app:layout_constraintStart_toStartOf="@+id/profileNameTV"
-            app:layout_constraintTop_toBottomOf="@+id/profileNameTV"
-            tools:text="Doświadczony koneser" />
-
-        <TextView
-            android:id="@+id/profileSubmitsTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/open_sans_light"
-            android:text="@string/requests"
-            app:layout_constraintStart_toStartOf="@+id/profileReviewsTV"
-            app:layout_constraintTop_toBottomOf="@+id/profileReviewsTV" />
-
-        <TextView
-            android:id="@+id/profileReviewsTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:fontFamily="@font/open_sans_light"
-            android:text="@string/reviews"
-            app:layout_constraintStart_toStartOf="@+id/profileRankTV"
-            app:layout_constraintTop_toBottomOf="@+id/profileRankTV" />
-
-        <View
-            android:id="@+id/divider5"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="?android:attr/listDivider"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profileSubmitsTV" />
+            android:layout_height="match_parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="50dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/profilePictureIV"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:contentDescription="@string/avatar"
+                    app:srcCompat="@drawable/avatar" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/profileNameTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="14dp"
+                android:fontFamily="@font/varela_round"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                app:layout_constraintStart_toEndOf="@+id/cardView"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="xXSłodkaNiunia69Xx" />
+
+            <TextView
+                android:id="@+id/profileRankTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/open_sans_regular"
+                android:textColor="@color/red_heavy"
+                app:layout_constraintStart_toStartOf="@+id/profileNameTV"
+                app:layout_constraintTop_toBottomOf="@+id/profileNameTV"
+                tools:text="Doświadczony koneser" />
+
+            <TextView
+                android:id="@+id/profileSubmitsTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans_light"
+                android:text="@string/requests"
+                app:layout_constraintStart_toStartOf="@+id/profileReviewsTV"
+                app:layout_constraintTop_toBottomOf="@+id/profileReviewsTV" />
+
+            <TextView
+                android:id="@+id/profileReviewsTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/open_sans_light"
+                android:text="@string/reviews"
+                app:layout_constraintStart_toStartOf="@+id/profileRankTV"
+                app:layout_constraintTop_toBottomOf="@+id/profileRankTV" />
+
+            <View
+                android:id="@+id/divider5"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profileSubmitsTV" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
 </FrameLayout>

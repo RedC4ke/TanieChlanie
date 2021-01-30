@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TanieChlanie</string>
+    <string name="app_name">Tanie Chlanie</string>
 
     <!-- labels -->
     <string name="list">Baza alkoholi</string>
@@ -11,6 +11,7 @@
     <string name="request_cat">Wybierz kategorię:</string>
     <string name="request_shop">Wskaż dostępność:</string>
     <string name="request_summary">Podsumowanie</string>
+    <string name="profile_page">Profil</string>
 
     <!-- welcome -->
     <string name="start">Zaczynamy!</string>
@@ -101,6 +102,10 @@
         \nJeśli błąd się powtarza, powiadom nas o tym!
     </string>
 
+    <!-- log-in -->
+    <string name="login_fb">Facebook</string>
+    <string name="login_mail">E-mail</string>
+
     <!-- profile page -->
     <string name="requests">Dodanych pozycji: %1$S</string>
     <string name="reviews">Recenzji: %1$S</string>
@@ -111,17 +116,28 @@
     <!-- transition names -->
     <string name="row_alcohol_details_transition_name">row_alcohol_details_transition</string>
 
+    <!-- errors -->
+    <string name="error">Błąd: %1$S</string>
+    <string name="err_no_connection">Błąd - brak połączenia z inernetem.</string>
+
     <!-- other -->
     <string name="queryHint">Wyszukaj…</string>
     <string name="forward">Dalej</string>
     <string name="submit">Prześlij</string>
     <string name="accept">Zatwierdź</string>
     <string name="login">Zaloguj</string>
+    <string name="logout">Wyloguj</string>
+    <string name="guest">Gość</string>
+    <string name="profile">Profil</string>
 
     <string name="suff_rvalue">%1$S R</string>
     <string name="suff_mrvalue">%1$S mR</string>
     <string name="suff_price">%1$S zł</string>
     <string name="suff_volume">%1$S ml</string>
     <string name="suff_voltage">%1$S %%</string>
+
+    <string name="facebook_application_id" translatable="false">1344698109071670</string>
+    <!-- Facebook Application ID, prefixed by 'fb'. Enables Chrome Custom tabs. -->
+    <string name="facebook_login_protocol_scheme" translatable="false">fb1344698109071670</string>
 
 </resources>

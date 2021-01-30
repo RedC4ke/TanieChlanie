@@ -173,7 +173,7 @@
 
             <Button
                 android:id="@+id/image_req_BT"
-                style="@style/Theme.taniechlanie.OutlinedBT"
+                style="@style/Theme.taniechlanie.OutlinedBT_Request"
                 android:layout_width="155dp"
                 android:layout_height="68dp"
                 android:layout_marginTop="8dp"

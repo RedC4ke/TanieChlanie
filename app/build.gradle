@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs.kotlin'
     id 'com.google.gms.google-services'
@@ -10,6 +9,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        key0 {
+            storeFile file('C:\\Users\\mwycz\\keystores\\android.jks')
+            storePassword 'AZXS8521'
+            keyAlias 'key0'
+            keyPassword 'AZXS8521'
+        }
+    }
     compileSdkVersion 30
 
     defaultConfig {
@@ -26,6 +33,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.key0
         }
     }
     compileOptions {
@@ -75,7 +83,6 @@ dependencies {
 
     //Auth
     implementation 'com.firebaseui:firebase-ui-auth:6.4.0'
-    implementation 'com.facebook.android:facebook-core:8.2.0'
     implementation 'com.facebook.android:facebook-login:5.15.3'
     implementation 'com.twitter.sdk.android:twitter-core:3.3.0'
 
