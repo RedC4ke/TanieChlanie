@@ -1,12 +1,11 @@
 package com.redc4ke.taniechlanie.data.menu
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
-import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.*
+import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectViewModel
 import com.redc4ke.taniechlanie.databinding.RowAlcoholBinding
 import com.redc4ke.taniechlanie.ui.menu.MenuFragment
 

@@ -114,18 +114,20 @@
         parent="Theme.Base.taniechlanie.OutlinedBT_Request"/>
 
 
-    <style name="Theme.Base.taniechlanie.OutlinedBT_Login"
-        parent="Widget.MaterialComponents.Button.OutlinedButton">
+    <style name="Theme.Base.taniechlanie.FilledBT_Login"
+        parent="Widget.MaterialComponents.Button">
         <item name="fontFamily">@font/open_sans_regular</item>
         <item name="android:textAlignment">center</item>
-        <item name="android:letterSpacing">0.01</item>
+        <item name="android:letterSpacing">0.1</item>
         <item name="iconGravity">start</item>
         <item name="textAllCaps">true</item>
-        <item name="android:paddingStart">2dp</item>
+        <item name="android:paddingStart">16dp</item>
         <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="iconSize">24dp</item>
     </style>
-    <style name="Theme.taniechlanie.OutlinedBT_Login"
-        parent="Theme.Base.taniechlanie.OutlinedBT_Login"/>
+    <style name="Theme.taniechlanie.FilledBT_Login"
+        parent="Theme.Base.taniechlanie.FilledBT_Login"/>
 
 
     <style name="Theme.Base.taniechlanie.ContainedBT"
@@ -180,4 +182,13 @@
         <item name="android:textColor">@color/red_heavy</item>
     </style>
     <style name="Theme.taniechlanie.Spinner1" parent="Theme.Base.taniechlanie.Spinner1"/>
+
+
+    <style name="Theme.Base.taniechlanie.AuthUI" parent="FirebaseUI">
+        <item name="colorPrimary">@color/red_heavy</item>
+        <item name="colorAccent">@color/dark</item>
+        <item name="colorPrimaryDark">@color/red_heavy</item>
+        <item name="android:windowBackground">@color/yellow</item>
+    </style>
+    <style name="Theme.taniechlanie.AuthUI" parent="Theme.Base.taniechlanie.AuthUI" />
 </resources>

@@ -8,11 +8,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
-import com.redc4ke.taniechlanie.data.ShopViewModel
+import com.redc4ke.taniechlanie.data.viewmodels.ShopViewModel
 import com.redc4ke.taniechlanie.data.request.SelectedShopsViewModel
 import com.redc4ke.taniechlanie.data.request.ShopListAdapter
 import com.redc4ke.taniechlanie.databinding.FragmentShopBinding
-import com.redc4ke.taniechlanie.ui.BaseFragment
+import com.redc4ke.taniechlanie.ui.base.BaseFragment
 
 class ShopFragment : BaseFragment<FragmentShopBinding>() {
 

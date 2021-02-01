@@ -1,15 +1,11 @@
 package com.redc4ke.taniechlanie.ui
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
-import android.text.Layout
-import android.util.AttributeSet
 import android.util.Log
-import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -22,15 +18,16 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
+import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
-import com.firebase.ui.auth.data.model.User
 import com.google.android.gms.tasks.Task
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -42,14 +39,15 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.*
+import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectViewModel
+import com.redc4ke.taniechlanie.data.viewmodels.CategoryViewModel
+import com.redc4ke.taniechlanie.data.viewmodels.ShopViewModel
+import com.redc4ke.taniechlanie.data.viewmodels.UserViewModel
 import com.redc4ke.taniechlanie.databinding.ActivityMainBinding
 import com.redc4ke.taniechlanie.ui.menu.MenuFragment
 import com.redc4ke.taniechlanie.ui.popup.WelcomeFragment
-import com.redc4ke.taniechlanie.ui.profile.ProfileFragment
-import com.squareup.picasso.Picasso
 import io.grpc.android.BuildConfig
 import java.math.BigDecimal
-import kotlin.math.log
 
 
 class MainActivity : AppCompatActivity() {
@@ -59,6 +57,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mDrawerLayout: DrawerLayout
     private lateinit var shopViewModel: ShopViewModel
     private lateinit var categoryViewModel: CategoryViewModel
+    private lateinit var userViewModel: UserViewModel
     private lateinit var binding: ActivityMainBinding
     lateinit var prefs: SharedPreferences
     lateinit var menuFrag: MenuFragment
@@ -113,6 +112,7 @@ class MainActivity : AppCompatActivity() {
         alcoObjectViewModel = ViewModelProvider(this).get(AlcoObjectViewModel::class.java)
         shopViewModel = ViewModelProvider(this).get(ShopViewModel::class.java)
         categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
         //Firebase request (first from cache, then online)
         getFirebaseData()
@@ -358,31 +358,43 @@ class MainActivity : AppCompatActivity() {
             AuthUI.IdpConfig.FacebookBuilder().build()
         )
 
+        val layout = AuthMethodPickerLayout
+            .Builder(R.layout.firebase_auth)
+            .setEmailButtonId(R.id.loginMailBT)
+            .setFacebookButtonId(R.id.loginFbBT)
+            .build()
+
         startActivityForResult(
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
+                .setAuthMethodPickerLayout(layout)
+                .setTheme(R.style.Theme_taniechlanie_AuthUI)
                 .build(),
             loginRC
         )
     }
 
-    private fun afterLogin(user: FirebaseUser) {
-        with (binding.drawerLayout) {
-            val nameTV = findViewById<TextView>(R.id.drawerNameTV)
-            val loginTV = findViewById<TextView>(R.id.drawerLoginTV)
-            val avatarIV = findViewById<ImageView>(R.id.drawerAvatarIV)
-            val profileBT = findViewById<Button>(R.id.drawerProfileBT)
+    private fun afterLogin(user: FirebaseUser?) {
+        val nameTV = findViewById<TextView>(R.id.drawerNameTV)
+        val loginTV = findViewById<TextView>(R.id.drawerLoginTV)
+        val avatarIV = findViewById<ImageView>(R.id.drawerAvatarIV)
+        val profileBT = findViewById<Button>(R.id.drawerProfileBT)
 
-            nameTV.text = user.email
-            loginTV.text = getString(R.string.profile)
-            avatarIV.setImageResource(R.drawable.avatar)
-            profileBT.setOnClickListener {
-                this@MainActivity.findNavController(R.id.navHostFragment)
-                    .navigate(R.id.profile_dest)
-                closeDrawer(GravityCompat.START)
+        userViewModel.login(user)
+        userViewModel.getUser().observe(this, {
+            with (binding.drawerLayout) {
+                if (user != null)
+                nameTV.text = user.email
+                loginTV.text = getString(R.string.profile)
+                avatarIV.setImageResource(R.drawable.avatar)
+                profileBT.setOnClickListener {
+                    this@MainActivity.findNavController(R.id.navHostFragment)
+                        .navigate(R.id.profile_dest)
+                    closeDrawer(GravityCompat.START)
+                }
             }
-        }
+        })
 
     }
 

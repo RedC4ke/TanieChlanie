@@ -1,18 +1,16 @@
 package com.redc4ke.taniechlanie.ui.menu.details
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.redc4ke.taniechlanie.data.AlcoObject
-import com.redc4ke.taniechlanie.data.CategoryViewModel
+import com.redc4ke.taniechlanie.data.viewmodels.CategoryViewModel
 import com.redc4ke.taniechlanie.data.menu.DetailsCategoryAdapter
 import com.redc4ke.taniechlanie.databinding.FragmentCatListBinding
-import com.redc4ke.taniechlanie.ui.BaseFragment
+import com.redc4ke.taniechlanie.ui.base.BaseFragment
 
 class CatListFragment(private val alcoObject: AlcoObject) : BaseFragment<FragmentCatListBinding>() {
 

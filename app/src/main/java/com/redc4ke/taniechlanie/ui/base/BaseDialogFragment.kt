@@ -1,5 +1,8 @@
-package com.redc4ke.taniechlanie.ui
+package com.redc4ke.taniechlanie.ui.base
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +24,13 @@ abstract class BaseDialogFragment<VB: ViewBinding> : DialogFragment() {
         _binding = bindingInflater.invoke(inflater, container, false)
 
         return  binding.root
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        return dialog
     }
 
     override fun onDestroyView() {

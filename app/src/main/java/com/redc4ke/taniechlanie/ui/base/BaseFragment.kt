@@ -1,4 +1,4 @@
-package com.redc4ke.taniechlanie.ui
+package com.redc4ke.taniechlanie.ui.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
