@@ -13,9 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.menu.AlcoListAdapter
 import com.redc4ke.taniechlanie.data.AlcoObject
-import com.redc4ke.taniechlanie.data.AlcoObjectViewModel
+import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentMenuBinding
-import com.redc4ke.taniechlanie.ui.BaseFragment
+import com.redc4ke.taniechlanie.ui.base.BaseFragment
 import com.redc4ke.taniechlanie.ui.MainActivity
 import java.io.Serializable
 import java.text.Normalizer

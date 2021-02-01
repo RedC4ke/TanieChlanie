@@ -20,7 +20,7 @@ import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.data.Category
 import com.redc4ke.taniechlanie.databinding.FragmentRequestBinding
-import com.redc4ke.taniechlanie.ui.BaseFragment
+import com.redc4ke.taniechlanie.ui.base.BaseFragment
 import com.redc4ke.taniechlanie.ui.MainActivity
 import com.squareup.picasso.Picasso
 import java.io.ByteArrayOutputStream

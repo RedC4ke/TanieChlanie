@@ -8,7 +8,7 @@ import androidx.navigation.fragment.findNavController
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.*
 import com.redc4ke.taniechlanie.databinding.FragmentSheet1Binding
-import com.redc4ke.taniechlanie.ui.BaseFragment
+import com.redc4ke.taniechlanie.ui.base.BaseFragment
 import com.redc4ke.taniechlanie.ui.MainActivity
 
 class Sheet1Fragment : BaseFragment<FragmentSheet1Binding>() {

@@ -1,8 +1,9 @@
-package com.redc4ke.taniechlanie.data
+package com.redc4ke.taniechlanie.data.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.redc4ke.taniechlanie.data.Shop
 
 class ShopViewModel: ViewModel() {
     private val shopLiveData = MutableLiveData<Map<Int, Shop>>()

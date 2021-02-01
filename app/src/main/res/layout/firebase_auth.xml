@@ -10,7 +10,7 @@
         android:id="@+id/imageView8"
         android:layout_width="280dp"
         android:layout_height="280dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="48dp"
         android:alpha="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,29 +18,48 @@
         app:srcCompat="@drawable/beer1" />
 
     <Button
-        android:id="@+id/button2"
-        style="@style/Theme.taniechlanie.OutlinedBT_Login"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:id="@+id/loginFbBT"
+        style="@style/Theme.taniechlanie.FilledBT_Login"
+        android:layout_width="250dp"
+        android:layout_height="58dp"
         android:layout_marginBottom="64dp"
+        android:backgroundTint="@color/facebook"
         android:text="@string/login_fb"
-        android:textColor="@color/red_heavy"
         android:textSize="18sp"
+        app:icon="@drawable/f_logo_rgb_white_250"
+        app:iconSize="24dp"
+        app:iconTint="@color/white"
+        app:iconTintMode="multiply"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button3"
-        style="@style/Theme.taniechlanie.OutlinedBT_Login"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:id="@+id/loginMailBT"
+        style="@style/Theme.taniechlanie.FilledBT_Login"
+        android:layout_width="250dp"
+        android:layout_height="58dp"
+        android:layout_marginBottom="12dp"
         android:text="@string/login_mail"
-        android:textColor="@color/red_heavy"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:icon="@drawable/fui_ic_mail_white_24dp"
+        app:layout_constraintBottom_toTopOf="@+id/loginFbBT"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/varela_round"
+        android:text="@string/login_header"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView8" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
