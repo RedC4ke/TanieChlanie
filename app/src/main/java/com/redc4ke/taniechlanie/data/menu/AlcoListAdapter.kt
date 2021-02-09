@@ -25,7 +25,7 @@ class AlcoListAdapter(
 
         with (holder.vb) {
             if (position == 0) {
-                holder.vb.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                     //this.topMargin = 30
                 }
             }

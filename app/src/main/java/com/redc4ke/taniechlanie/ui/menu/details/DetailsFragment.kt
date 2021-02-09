@@ -1,8 +1,7 @@
 package com.redc4ke.taniechlanie.ui.menu.details
 
-import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,6 @@ import com.redc4ke.taniechlanie.databinding.FragmentDetailsBinding
 import com.redc4ke.taniechlanie.ui.base.BaseFragment
 import com.redc4ke.taniechlanie.ui.MainActivity
 import com.redc4ke.taniechlanie.ui.menu.MenuFragment
-import java.io.File
 
 class DetailsFragment : BaseFragment<FragmentDetailsBinding>() {
 
@@ -56,20 +54,8 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         if (alcoObject.photo != null){
-            val imageFile = File(requireContext().filesDir, alcoObject.name + ".jpg")
-
-            if (File(requireContext().filesDir, alcoObject.name + ".jpg").exists()) {
-                binding.imageDetails.setImageBitmap(BitmapFactory.decodeFile(imageFile.path))
-            } else {
-                val imageRef = mainActivity.storage.getReferenceFromUrl(alcoObject.photo!!)
-                imageRef.getFile(imageFile).addOnSuccessListener {
-                    binding.imageDetails.setImageBitmap(BitmapFactory.decodeFile(imageFile.path))
-                    Log.d("image","success ${imageFile.path}")
-                }.addOnFailureListener {
-                    Log.d("image","$it")
-                }
-            }
+            setImage(requireContext(), alcoObject.name,
+                binding.imageDetails, Uri.parse(alcoObject.photo!!))
         }
-
     }
 }

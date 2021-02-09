@@ -5,7 +5,7 @@
     android:id="@+id/fragment_request_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/red_light">
+    android:background="@color/primaryLightColor">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/request_card"
@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/open_sans_light"
                 android:text="@string/header2"
-                android:textColor="@color/red_heavy"
+                android:textColor="@color/primaryDarkColor"
                 android:textSize="30sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

@@ -33,14 +33,14 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="2dp"
-                android:backgroundTint="@color/red_heavy"
+                android:backgroundTint="@color/primaryDarkColor"
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:contentDescription="About section logo"
-                android:foregroundTint="@color/red_heavy"
+                android:foregroundTint="@color/primaryDarkColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/red_heavy" />
+                app:tint="@color/primaryDarkColor" />
 
             <FrameLayout
                 android:id="@+id/frameLayout5"

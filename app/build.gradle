@@ -23,8 +23,8 @@ android {
         applicationId "com.redc4ke.taniechlanie"
         minSdkVersion 25
         targetSdkVersion 30
-        versionCode 3
-        versionName "v2.1.2"
+        versionCode 4
+        versionName "v2.2.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -53,11 +53,11 @@ android {
 dependencies {
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.4.10"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.4.30"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
@@ -87,6 +87,8 @@ dependencies {
     implementation 'com.facebook.android:facebook-login:5.15.3'
     implementation 'com.twitter.sdk.android:twitter-core:3.3.0'
 
+    //DataProcessing
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
 
 }
 

@@ -18,7 +18,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -31,8 +30,9 @@ import com.firebase.ui.auth.IdpResponse
 import com.google.android.gms.tasks.Task
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.auth.AdditionalUserInfo
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
@@ -59,12 +59,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var categoryViewModel: CategoryViewModel
     private lateinit var userViewModel: UserViewModel
     private lateinit var binding: ActivityMainBinding
-    lateinit var prefs: SharedPreferences
+    private lateinit var prefs: SharedPreferences
     lateinit var menuFrag: MenuFragment
     lateinit var alcoObjectViewModel: AlcoObjectViewModel
     lateinit var faq: ArrayList<Map<String, String>>
     private val loginRC = 1
-    val auth = FirebaseAuth.getInstance()
+    private val auth = FirebaseAuth.getInstance()
     val database: FirebaseFirestore = FirebaseFirestore.getInstance()
     val storage = FirebaseStorage.getInstance()
     var currentFragment = 0
@@ -77,7 +77,8 @@ class MainActivity : AppCompatActivity() {
         //Disable night theme (temporary)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        //ANALYTICS DISABLED IN EXPERIMENTAL UNIT
+        //mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
         prefs = getPreferences(MODE_PRIVATE)
 
 
@@ -117,6 +118,11 @@ class MainActivity : AppCompatActivity() {
         //Firebase request (first from cache, then online)
         getFirebaseData()
 
+        //Chceck current user
+        auth.addAuthStateListener {
+            userViewModel.login(this, it.currentUser)
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -127,15 +133,32 @@ class MainActivity : AppCompatActivity() {
             return true
         }
 
-        //Check if logged in
-        val user = auth.currentUser
-        if (user != null) {
-            afterLogin(user)
-        } else {
-            binding.drawerLayout.findViewById<Button>(R.id.drawerProfileBT).setOnClickListener {
-                login()
+        //Drawer profile card
+        val nameTV = findViewById<TextView?>(R.id.drawerNameTV)
+        val loginTV = findViewById<TextView?>(R.id.drawerLoginTV)
+        val avatarIV = findViewById<ImageView?>(R.id.drawerAvatarIV)
+        val profileBT = findViewById<Button?>(R.id.drawerProfileBT)
+        userViewModel.getUser().observe(this, { user ->
+            if (user != null) {
+                nameTV.text = user.displayName
+                loginTV.text = getString(R.string.profile)
+                profileBT.setOnClickListener {
+                    this@MainActivity.findNavController(R.id.navHostFragment)
+                        .navigate(R.id.profile_dest)
+                    mDrawerLayout.closeDrawer(GravityCompat.START)
+                }
+                userViewModel.getUserUpdates().observe(this, {
+                    setImage(this, "avatar", avatarIV, user.photoUrl)
+                })
+            } else {
+                nameTV.text = getString(R.string.guest)
+                loginTV.text = getString(R.string.login)
+                avatarIV.setImageResource(R.drawable.ic_baseline_account_circle_24)
+                profileBT.setOnClickListener {
+                    login()
+                }
             }
-        }
+        })
 
         return super.onCreateOptionsMenu(menu)
     }
@@ -181,8 +204,9 @@ class MainActivity : AppCompatActivity() {
             val response = IdpResponse.fromResultIntent(data)
 
             if (resultCode == Activity.RESULT_OK) {
-                val user = FirebaseAuth.getInstance().currentUser!!
-                afterLogin(user)
+                if (response!!.isNewUser) {
+                    userViewModel.login(this, auth.currentUser, true)
+                }
             } else if (response != null) {
                 val message =
                     if (response.error?.errorCode == ErrorCodes.NO_NETWORK)
@@ -373,29 +397,6 @@ class MainActivity : AppCompatActivity() {
                 .build(),
             loginRC
         )
-    }
-
-    private fun afterLogin(user: FirebaseUser?) {
-        val nameTV = findViewById<TextView>(R.id.drawerNameTV)
-        val loginTV = findViewById<TextView>(R.id.drawerLoginTV)
-        val avatarIV = findViewById<ImageView>(R.id.drawerAvatarIV)
-        val profileBT = findViewById<Button>(R.id.drawerProfileBT)
-
-        userViewModel.login(user)
-        userViewModel.getUser().observe(this, {
-            with (binding.drawerLayout) {
-                if (user != null)
-                nameTV.text = user.email
-                loginTV.text = getString(R.string.profile)
-                avatarIV.setImageResource(R.drawable.avatar)
-                profileBT.setOnClickListener {
-                    this@MainActivity.findNavController(R.id.navHostFragment)
-                        .navigate(R.id.profile_dest)
-                    closeDrawer(GravityCompat.START)
-                }
-            }
-        })
-
     }
 
     fun openBrowserFromTextView(view: View) {

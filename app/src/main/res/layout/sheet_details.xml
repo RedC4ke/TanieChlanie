@@ -18,7 +18,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/red_light"
+        android:background="@color/primaryLightColor"
         android:clipChildren="false"
         android:clipToPadding="false">
 
@@ -26,7 +26,7 @@
             android:id="@+id/cardView10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/red_heavy"
+            app:cardBackgroundColor="@color/primaryDarkColor"
             app:cardCornerRadius="0dp"
             app:cardElevation="6dp"
             app:layout_constraintStart_toStartOf="parent"

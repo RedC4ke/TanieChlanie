@@ -39,7 +39,7 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginEnd="16dp"
-        app:tint="@color/red_heavy"
+        app:tint="@color/primaryDarkColor"
         app:layout_constraintBottom_toBottomOf="@+id/row_cat_name_TV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/row_cat_name_TV"
