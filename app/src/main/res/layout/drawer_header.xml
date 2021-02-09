@@ -17,7 +17,7 @@
             android:layout_width="200dp"
             android:layout_height="54dp"
             android:layout_marginStart="8dp"
-            app:cardBackgroundColor="@color/yellow"
+            app:cardBackgroundColor="@color/secondary50"
             app:cardCornerRadius="27dp"
             app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -61,7 +61,8 @@
                         android:layout_height="50dp"
                         android:layout_gravity="center"
                         android:foregroundGravity="center"
-                        app:srcCompat="@drawable/ic_baseline_account_circle_24" />
+                        app:srcCompat="@drawable/ic_baseline_account_circle_24"
+                        android:scaleType="centerCrop"/>
                 </androidx.cardview.widget.CardView>
 
                 <TextView
@@ -71,7 +72,7 @@
                     android:fontFamily="@font/open_sans_regular"
                     android:text="@string/login"
                     android:textAllCaps="true"
-                    android:textColor="@color/red_heavy"
+                    android:textColor="@color/primaryDarkColor"
                     app:layout_constraintBottom_toBottomOf="@+id/cardView2"
                     app:layout_constraintStart_toStartOf="@+id/drawerNameTV" />
 

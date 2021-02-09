@@ -32,16 +32,16 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="8dp"
-                android:backgroundTint="@color/red_heavy"
+                android:backgroundTint="@color/primaryDarkColor"
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:contentDescription="faq section indicator"
-                android:foregroundTint="@color/red_heavy"
+                android:foregroundTint="@color/primaryDarkColor"
                 app:layout_constraintBottom_toBottomOf="@+id/help_row_headerTV"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/help_row_headerTV"
                 app:srcCompat="@drawable/ic_outline_play_arrow_24"
-                app:tint="@color/red_heavy" />
+                app:tint="@color/primaryDarkColor" />
 
             <TextView
                 android:id="@+id/help_row_headerTV"

@@ -1,0 +1,46 @@
+package com.redc4ke.taniechlanie.data.profile
+
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.core.view.updateLayoutParams
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
+import com.redc4ke.taniechlanie.R
+import com.redc4ke.taniechlanie.databinding.RowProfileBinding
+import com.redc4ke.taniechlanie.ui.profile.ProfileMenuFragment
+
+class ProfileMenuAdapter(private val context: ProfileMenuFragment):
+    RecyclerView.Adapter<ProfileMenuViewHolder>() {
+
+    private val menu: Array<String> = context.resources.getStringArray(R.array.profile_menu)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileMenuViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = RowProfileBinding.inflate(inflater, parent, false)
+
+        return ProfileMenuViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: ProfileMenuViewHolder, position: Int) {
+        when (position) {
+            0 -> {
+                holder.vb.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    this.topMargin = 30
+                }
+                holder.vb.root.setOnClickListener {
+                    context.findNavController()
+                        .navigate(R.id.to_profileManage_dest)
+                }
+            }
+        }
+
+        holder.vb.profileRowNameTV.text = menu[position]
+    }
+
+    override fun getItemCount(): Int {
+        return menu.size
+    }
+}
+
+class ProfileMenuViewHolder(val vb: RowProfileBinding): RecyclerView.ViewHolder(vb.root)

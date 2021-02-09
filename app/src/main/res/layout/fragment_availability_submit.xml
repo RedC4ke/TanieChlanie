@@ -30,7 +30,7 @@
             android:layout_marginEnd="12dp"
             android:fontFamily="@font/open_sans_light"
             android:text="@string/av_submit_header"
-            android:textColor="@color/red_heavy"
+            android:textColor="@color/primaryDarkColor"
             android:textSize="22sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -84,7 +84,7 @@
             android:layout_marginEnd="8dp"
             android:drawableTint="#FFFFFF"
             android:fontFamily="@font/open_sans_regular"
-            android:foregroundTint="@color/red_heavy"
+            android:foregroundTint="@color/primaryDarkColor"
             android:text="@string/submit"
             android:textAlignment="center"
             android:textAllCaps="true"
@@ -94,7 +94,7 @@
             app:iconTint="#00611A1A"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/av_submit_price_ETL"
-            app:strokeColor="@color/red_heavy" />
+            app:strokeColor="@color/primaryDarkColor" />
 
         <Button
             android:id="@+id/av_submit_missingShop_BT"

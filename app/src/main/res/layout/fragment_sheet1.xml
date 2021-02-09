@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/red_light"
+    android:background="@color/primaryLightColor"
     android:clipChildren="false"
     android:clipToPadding="false"
     tools:context=".ui.menu.details.Sheet1Fragment">
@@ -99,14 +99,14 @@
             android:padding="5dp"
             android:text="@string/details_availability"
             android:textAllCaps="false"
-            android:textColor="@color/red_heavy"
+            android:textColor="@color/primaryDarkColor"
             android:textSize="24sp"
             app:backgroundTint="@color/white"
             app:icon="@drawable/ic_baseline_arrow_right_24"
             app:iconGravity="start"
             app:iconPadding="4dp"
             app:iconSize="32dp"
-            app:iconTint="@color/red_heavy" />
+            app:iconTint="@color/primaryDarkColor" />
     </androidx.cardview.widget.CardView>
 
     <LinearLayout
@@ -240,7 +240,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="6dp"
-                android:progressTint="@color/red_light"
+                android:progressTint="@color/primaryLightColor"
                 android:rating="4"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

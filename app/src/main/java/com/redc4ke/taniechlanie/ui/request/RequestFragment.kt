@@ -146,8 +146,8 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), Serializable {
 
     private fun categorySetOnClickListener(pos: Int) {
         val bt = buttonList[pos]
-        bt.setTextColor(ContextCompat.getColor(requireContext(), R.color.red_heavy))
-        bt.setIconTintResource(R.color.red_heavy)
+        bt.setTextColor(ContextCompat.getColor(requireContext(), R.color.primaryDarkColor))
+        bt.setIconTintResource(R.color.primaryDarkColor)
         bt.setOnClickListener {
             openCategoryList()
             catButtonPosition = pos

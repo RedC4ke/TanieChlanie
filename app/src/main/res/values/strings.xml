@@ -108,8 +108,24 @@
     <string name="login_header">Zaloguj /\nzarejestruj</string>
 
     <!-- profile page -->
-    <string name="requests">Dodanych pozycji: %1$S</string>
-    <string name="reviews">Recenzji: %1$S</string>
+    <string name="profile_submits">Dodanych pozycji: %1$S</string>
+    <string name="profile_reviews">Recenzji: %1$S</string>
+    <string name="profile_accmanagement">Zarządzanie kontem</string>
+    <string-array name="profile_menu">
+        <item>Zarządzanie kontem</item>
+        <item>Recenzje</item>
+        <item>Dodane alkohole</item>
+    </string-array>
+
+    <!-- profile page - management -->
+    <string name="profile_manageHeader">Dostosuj informacje profilowe</string>
+    <string-array name="profile_manageMenu">
+        <item>Nazwa wyświetlana:</item>
+        <item>Adres e-mail:</item>
+        <item>Zmień hasło</item>
+    </string-array>
+    <string name="profile_editDisplayName">Zmień nazwę konta</string>
+
 
     <!-- options page -->
     <string name="romper_unit">Jednostka opłacalności</string>
@@ -128,6 +144,8 @@
 
     <!-- toasts -->
     <string name="toast_logout">Wylogowano</string>
+    <string name="toast_error">Błąd</string>
+    <string name="toast_err_notloggedin">Musisz być zalogowany aby wykonać tę akcję!</string>
 
     <!-- other -->
     <string name="queryHint">Wyszukaj…</string>
@@ -172,12 +190,12 @@
     <string name="fui_required_field" translation_description="Inline error for required field">Pole nie może być puste</string>
     <string name="fui_invalid_email_address" translation_description="Inline error for invalid email address">Ten adres e-mail nie jest poprawny</string>
     <string name="fui_missing_email_address" translation_description="Inline error for empty email address in input field">Wprowadź adres e-mail by kontynuować.</string>
-    <string name="fui_missing_first_and_last_name" translation_description="Inline error for empty email address in input field. [CHAR_LIMIT=60]">Wprowadź imię i nazwisko.</string>
+    <string name="fui_missing_first_and_last_name" translation_description="Inline error for empty email address in input field. [CHAR_LIMIT=60]">Wprowadź nazwę.</string>
 
     <!-- Email sign up -->
     <string name="fui_progress_dialog_checking_accounts" translation_description="Progress dialog text while checking for existing accounts">Sprawdzanie istniejących kont…</string>
     <string name="fui_title_register_email" translation_description="Title for signup form">Zarejestruj</string>
-    <string name="fui_name_hint" translation_description="Hint for last name input field">Imię &amp; nazwisko</string>
+    <string name="fui_name_hint" translation_description="Hint for last name input field">Nazwa wyświetlana</string>
     <string name="fui_button_text_save" translation_description="Button text to save input form">Zapisz</string>
     <string name="fui_progress_dialog_signing_up" translation_description="Dialog text while waiting for server's signup response">Rejestrowanie…</string>
     <string name="fui_email_account_creation_error" translation_description="Inline error for signup failure">Rejestracja nie powiodła się</string>
