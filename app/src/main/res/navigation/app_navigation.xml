@@ -108,6 +108,10 @@
         android:id="@+id/profile_dest"
         android:name="com.redc4ke.taniechlanie.ui.profile.ProfileFragment"
         android:label="@string/profile_page"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profile_dest_to_list_dest"
+            app:destination="@id/list_dest" />
+    </fragment>
 
 </navigation>

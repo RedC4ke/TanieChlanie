@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.setFragmentResultListener
@@ -46,6 +47,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
         setFragmentResultListener("confirmation") {_, bundle ->
             val result = bundle.getBoolean("value")
             if (result) {
+                Log.d("login", "triggered logout")
                 AuthUI.getInstance()
                     .signOut(requireContext())
                     .addOnSuccessListener {
