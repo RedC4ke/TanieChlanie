@@ -151,9 +151,9 @@ class MainActivity : AppCompatActivity() {
                     setImage(this, "avatar", avatarIV, user.photoUrl)
                 })
             } else {
+                avatarIV.setImageResource(R.drawable.ic_baseline_account_circle_24)
                 nameTV.text = getString(R.string.guest)
                 loginTV.text = getString(R.string.login)
-                avatarIV.setImageResource(R.drawable.ic_baseline_account_circle_24)
                 profileBT.setOnClickListener {
                     login()
                 }

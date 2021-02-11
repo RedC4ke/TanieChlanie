@@ -123,8 +123,14 @@
         <item>Nazwa wyświetlana:</item>
         <item>Adres e-mail:</item>
         <item>Zmień hasło</item>
+        <item>Usuń konto</item>
     </string-array>
     <string name="profile_editDisplayName">Zmień nazwę konta</string>
+    <string name="profile_editEmail">Zmień adres e-mail</string>
+    <string name="profile_editPassword">Zmień hasło</string>
+    <string name="profile_confirm">Wymagane potwierdzenie</string>
+    <string name="profile_hint_newpwd">Nowe hasło</string>
+    <string name="profile_hint_currentpwd">Podaj obecne hasło</string>
 
 
     <!-- options page -->

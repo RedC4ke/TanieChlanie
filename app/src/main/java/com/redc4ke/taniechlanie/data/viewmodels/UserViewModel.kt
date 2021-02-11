@@ -6,11 +6,14 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.findNavController
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.redc4ke.taniechlanie.BuildConfig
+import com.redc4ke.taniechlanie.R
+import com.redc4ke.taniechlanie.ui.MainActivity
 import java.io.File
 import java.lang.Exception
 import java.lang.reflect.Array.get
@@ -19,16 +22,17 @@ import java.util.*
 class UserViewModel: ViewModel() {
     private val firestore = FirebaseFirestore.getInstance()
     private var titles: MutableMap<Int, Map<String, Any>> = mutableMapOf()
-    private val defaultAvatar = Uri.parse("gs://jabot-5ce1f.appspot.com/users/default/avatar.png")
+    private val defaultAvatar =
+        Uri.parse("gs://jabot-5ce1f.appspot.com/users/default/avatar.png")
     private var currentUser = MutableLiveData<FirebaseUser?>()
     private val staticUser get() = currentUser.value
     private val userStats = MutableLiveData<Map<String, Any>>()
     private val userTitle = MutableLiveData<Map<String, Any?>>()
     private val update = MutableLiveData<Boolean>()
+    private var updateValue = false
 
     init {
         downloadTitles()
-        update.value = false
     }
 
     fun login(context: Context, user: FirebaseUser?, new: Boolean = false) {
@@ -40,10 +44,13 @@ class UserViewModel: ViewModel() {
                 "reviews" to 0
             )
             userStats.value = stats
-            setAvatarUrl(defaultAvatar)
+
+            if (user!!.photoUrl == null) {
+                setAvatarUrl(defaultAvatar)
+            }
 
             val data = mapOf(
-                "uid" to user!!.uid,
+                "uid" to user.uid,
                 "created" to BuildConfig.VERSION_NAME + "; " + Date(),
                 "groups" to arrayListOf(
                     "user"
@@ -93,7 +100,7 @@ class UserViewModel: ViewModel() {
                         userTitle.value =
                             titles[(data["title"] as Long).toInt()] ?: mapOf("name" to "n/a")
                     }
-                    update.value = !(update.value)!!
+                    update.value = !updateValue
                 }
         }
     }
@@ -142,11 +149,11 @@ class UserViewModel: ViewModel() {
         staticUser?.updateProfile(
             UserProfileChangeRequest.Builder().setPhotoUri(uri).build())
             ?.addOnSuccessListener {
-                update.value = !(update.value)!!
-                Log.d("user", "Avatar uri set to: $uri")
+                update.value = !updateValue
+                Log.d("userVM", "Avatar uri set to: $uri")
             }
             ?.addOnFailureListener {
-                Log.d("user","Avatar uri not set: $it")
+                Log.d("userVM","Avatar uri not set: $it")
             }
     }
 
@@ -154,11 +161,54 @@ class UserViewModel: ViewModel() {
         staticUser?.updateProfile(
             UserProfileChangeRequest.Builder().setDisplayName(name).build())
             ?.addOnSuccessListener {
-                update.value = !(update.value)!!
-                Log.d("user", "DisplayName set to: $name")
+                update.value = !updateValue
+                Log.d("userVM", "DisplayName set to: $name")
             }
             ?.addOnFailureListener {
-                Log.d("user", "Display name not set: $it")
+                Log.d("userVM", "Display name not set: $it")
+            }
+    }
+
+    fun setEmail(address: String, context: Context) {
+        staticUser?.updateEmail(address)
+            ?.addOnSuccessListener {
+                update.value = !updateValue
+                Toast.makeText(context, "Adres e-mail został zaktualizowany",
+                    Toast.LENGTH_LONG).show()
+            }
+            ?.addOnFailureListener {
+                Toast.makeText(context, "Błąd: $it",
+                    Toast.LENGTH_LONG).show()
+            }
+    }
+
+    fun setPassword(password: String, context: Context) {
+        staticUser?.updatePassword(password)
+            ?.addOnSuccessListener {
+                update.value = !updateValue
+                Toast.makeText(context, "Hasło zostało zaktualizowane",
+                    Toast.LENGTH_LONG).show()
+            }
+            ?.addOnFailureListener {
+                Toast.makeText(context, "Błąd: $it",
+                    Toast.LENGTH_LONG).show()
+            }
+    }
+
+    fun deleteAccount(activity: MainActivity) {
+        val uid = staticUser?.uid
+        staticUser?.delete()
+            ?.addOnSuccessListener {
+                firestore.collection("users").document(uid!!).delete()
+                update.value = !updateValue
+                activity.findNavController(R.id.navHostFragment)
+                    .navigate(R.id.action_profile_dest_to_list_dest)
+                Toast.makeText(activity, "Konto usunięte",
+                    Toast.LENGTH_LONG).show()
+            }
+            ?.addOnFailureListener {
+                Toast.makeText(activity, "Błąd: $it",
+                    Toast.LENGTH_LONG).show()
             }
     }
 

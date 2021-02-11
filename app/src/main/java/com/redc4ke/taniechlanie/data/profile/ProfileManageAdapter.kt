@@ -1,23 +1,33 @@
 package com.redc4ke.taniechlanie.data.profile
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.viewmodels.UserViewModel
 import com.redc4ke.taniechlanie.databinding.RowProfileManageBinding
-import com.redc4ke.taniechlanie.ui.MainActivity
-import com.redc4ke.taniechlanie.ui.profile.management.DisplayNameFragment
+import com.redc4ke.taniechlanie.ui.profile.management.ProfileInputFragment
 import com.redc4ke.taniechlanie.ui.profile.management.ProfileManageFragment
 
 class ProfileManageAdapter(private val context: ProfileManageFragment, private val userViewModel: UserViewModel,
     private val viewLifecycleOwner: LifecycleOwner):
     RecyclerView.Adapter<ProfileManageViewHolder>() {
 
-    val menu: Array<String> = context.resources.getStringArray(R.array.profile_manageMenu)
+    private var menu: MutableList<String>
+    private val provider = FirebaseAuth.getInstance()
+        .currentUser?.getIdToken(false)?.result?.signInProvider
+    private val isEmail = (provider == "password")
+
+    init {
+        val list = context.resources.getStringArray(R.array.profile_manageMenu)
+        menu = mutableListOf()
+        list.forEachIndexed { index, s ->
+            if (!(index in 1..2 && !isEmail))
+                menu.add(s)
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileManageViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -29,31 +39,37 @@ class ProfileManageAdapter(private val context: ProfileManageFragment, private v
     override fun onBindViewHolder(holder: ProfileManageViewHolder, position: Int) {
         with (holder.vb) {
             rowPMNameTV.text = menu[position]
-            when (position) {
-                0 -> {
-                    userViewModel.getUserUpdates().observe(viewLifecycleOwner, {
-                        val user = userViewModel.getUser().value
-                        rowPMValueTV.text = user?.displayName
-                        PMClickableLL.setOnClickListener {
-                            DisplayNameFragment(user, userViewModel).show(
-                                context.parentFragmentManager, "DisplayNameFragment")
-                        }
-                    })
-                }
-                1 -> {
-                    userViewModel.getUser().observe(viewLifecycleOwner, {
-                        rowPMValueTV.text = it?.email
-                    })
-                }
-                2 -> {
 
+            if (isEmail)
+                rowSetup(this, position)
+            else
+                when (position) {
+                    0 -> rowSetup(this, position)
+                    else -> rowSetup(this, position+2)
                 }
-            }
+
         }
     }
 
     override fun getItemCount(): Int {
+
         return menu.size
+    }
+
+    private fun rowSetup(vb: RowProfileManageBinding, action: Int) {
+        userViewModel.getUserUpdates().observe(viewLifecycleOwner, {
+            val user = userViewModel.getUser().value
+            vb.rowPMValueTV.text = when (action) {
+                0 -> user?.displayName
+                1 -> user?.email
+                else -> ""
+            }
+            vb.PMClickableLL.setOnClickListener {
+                ProfileInputFragment(userViewModel, action).show(
+                    context.parentFragmentManager, "ProfileInputFragment"
+                )
+            }
+        })
     }
 }
 

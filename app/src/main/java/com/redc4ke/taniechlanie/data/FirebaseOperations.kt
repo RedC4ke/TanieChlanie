@@ -21,13 +21,12 @@ import java.nio.file.CopyOption
 fun setImage(context: Context, name: String, iv: ImageView,
              url: Uri?) {
 
-    Log.d("setImage", url.toString())
     val imageFile = File(context.filesDir, "$name.jpg")
-
+    Log.d("setImage", "url: $url")
     if (File(context.filesDir, "$name.jpg").exists()) {
         iv.setImageBitmap(BitmapFactory.decodeFile(imageFile.path))
     }
-    if ("firebasestorage" in url.toString()) {
+    if ("jabot" in url.toString()) {
         val imageRef = FirebaseStorage.getInstance().getReferenceFromUrl(url.toString())
         imageRef.getFile(imageFile).addOnSuccessListener {
             iv.setImageBitmap(BitmapFactory.decodeFile(imageFile.path))
