@@ -70,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:imeOptions="actionDone"
                     android:maxLength="30"
-                    android:singleLine="true"
+                    android:maxLines="1"
                     android:textSize="18sp" />
 
             </com.google.android.material.textfield.TextInputLayout>

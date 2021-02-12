@@ -38,9 +38,7 @@
                             android:id="@+id/headerTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="71dp"
                             android:layout_marginTop="16dp"
-                            android:layout_marginEnd="70dp"
                             android:fontFamily="@font/open_sans_light"
                             android:textColor="@color/black"
                             android:textSize="24sp"
@@ -55,9 +53,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
-                            android:layout_marginTop="8dp"
                             android:layout_marginEnd="16dp"
+                            android:maxLines="1"
                             android:visibility="gone"
+                            app:errorEnabled="true"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/headerTV">
@@ -65,7 +64,10 @@
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/displayname_ET"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="wrap_content"
+                                android:imeOptions="actionDone"
+                                android:inputType="text"
+                                android:maxLines="1" />
 
                         </com.google.android.material.textfield.TextInputLayout>
 
@@ -75,9 +77,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
-                            android:layout_marginTop="8dp"
                             android:layout_marginEnd="16dp"
+                            android:maxLines="1"
                             android:visibility="gone"
+                            app:errorEnabled="true"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/headerTV">
@@ -85,7 +88,10 @@
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/emailET"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="wrap_content"
+                                android:imeOptions="actionDone"
+                                android:inputType="text"
+                                android:maxLines="1" />
 
                         </com.google.android.material.textfield.TextInputLayout>
 
@@ -95,9 +101,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
-                            android:layout_marginTop="8dp"
                             android:layout_marginEnd="16dp"
                             android:visibility="gone"
+                            app:errorEnabled="true"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/headerTV">
@@ -105,7 +111,10 @@
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/passwordET"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="wrap_content"
+                                android:imeOptions="actionDone"
+                                android:inputType="textPassword"
+                                android:maxLines="1" />
 
                         </com.google.android.material.textfield.TextInputLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -141,8 +150,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
-                            android:layout_marginTop="8dp"
                             android:layout_marginEnd="16dp"
+                            app:errorEnabled="true"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/confirmTV">
@@ -150,7 +159,10 @@
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/confirmET"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="wrap_content"
+                                android:imeOptions="actionDone"
+                                android:inputType="textPassword"
+                                android:maxLines="1" />
 
                         </com.google.android.material.textfield.TextInputLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -162,7 +174,6 @@
                 android:id="@+id/buttonFL"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/headFL">
@@ -176,7 +187,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
                         android:text="@string/forward"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/cancelBT" />
 
@@ -195,8 +208,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
                         android:text="@string/fui_button_text_save"
                         android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/cancelBT" />
                 </androidx.constraintlayout.widget.ConstraintLayout>

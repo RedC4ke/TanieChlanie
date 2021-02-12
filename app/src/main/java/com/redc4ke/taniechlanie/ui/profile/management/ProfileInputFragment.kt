@@ -1,11 +1,18 @@
 package com.redc4ke.taniechlanie.ui.profile.management
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.google.android.material.internal.TextWatcherAdapter
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.EmailAuthProvider
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseUser
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.viewmodels.UserViewModel
@@ -44,34 +51,73 @@ class ProfileInputFragment(private val userViewModel: UserViewModel, private val
                     headerTV.text = getString(R.string.profile_editDisplayName)
                     displayNameTIL.visibility = View.VISIBLE
                     displaynameET.setText(user.displayName)
-                    forwardBT.setOnClickListener {
-                        step2(displaynameET.text.toString(), user)
-                    }
+                    addWatcher(displaynameET, 0, 3, 30)
                 }
                 1 -> {
                     headerTV.text = getString(R.string.profile_editEmail)
                     emailTIL.visibility = View.VISIBLE
                     emailET.setText(user.email)
-                    forwardBT.setOnClickListener {
-                        step2(emailET.text.toString(), user)
-                    }
+                    addWatcher(emailET, 1, 0, 128)
                 }
                 2 -> {
                     headerTV.text = getString(R.string.profile_editPassword)
                     passwordTIL.visibility = View.VISIBLE
                     passwordET.hint = getString(R.string.profile_hint_newpwd)
-                    forwardBT.setOnClickListener {
-                        step2(passwordET.text.toString(), user)
-                    }
+                    addWatcher(passwordET, 2, 6,128)
                 }
                 3 -> {
-                    step2("", user)
+                    step2("")
                 }
             }
         }
     }
 
-    private fun step2(value: String, user: FirebaseUser) {
+    private fun addWatcher(editText: TextInputEditText, action: Int, minLength: Int,
+                           maxLength: Int) {
+        editText.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                binding.forwardBT.setOnClickListener {}
+                when {
+                    s.toString().trim().isEmpty() -> editText.error =
+                        getString(R.string.err_emptyField)
+                    s!!.length < minLength -> editText.error =
+                        getString(R.string.err_tooShort, minLength.toString())
+                    s.length > maxLength -> editText.error =
+                        getString(R.string.err_tooLong, maxLength.toString())
+                    else -> when (action) {
+                        0 -> {
+                            binding.forwardBT.setOnClickListener {
+                                step2(editText.text.toString())
+                            }
+                        }
+                        1 -> {
+                            if (s.matches(Regex("${Patterns.EMAIL_ADDRESS}"))) {
+                                binding.forwardBT.setOnClickListener {
+                                    step2(editText.text.toString())
+                                }
+                            } else {
+                                editText.error = getString(R.string.err_wrongEmail)
+                            }
+                        }
+                        2 -> {
+                            binding.forwardBT.setOnClickListener {
+                                step2(editText.text.toString())
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    }
+
+    private fun step2(value: String) {
+        val user = userViewModel.getUser().value!!
         with (binding) {
             when (action) {
                 0 -> {
@@ -105,8 +151,11 @@ class ProfileInputFragment(private val userViewModel: UserViewModel, private val
 
                             }
                             .addOnFailureListener {
-                                Toast.makeText(context, "Błąd: $it",
-                                    Toast.LENGTH_LONG).show()
+                                confirmET.error = when (it) {
+                                    is FirebaseAuthInvalidCredentialsException ->
+                                        getString(R.string.err_invalidPassword)
+                                    else -> it.toString()
+                                }
                             }
                     }
                 }

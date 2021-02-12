@@ -142,6 +142,11 @@
     <!-- errors -->
     <string name="error">Błąd: %1$S</string>
     <string name="err_no_connection">Błąd - brak połączenia z inernetem.</string>
+    <string name="err_emptyField">Pole nie może być puste!</string>
+    <string name="err_tooLong">Maksymalnie %1$S znaków!</string>
+    <string name="err_wrongEmail">Podaj poprawny adres e-mail!</string>
+    <string name="err_tooShort">Przynajmniej %1$S znaków!</string>
+    <string name="err_invalidPassword">Hasło niepoprawne!</string>
 
     <!-- dialog strings -->
     <string name="dialog_bt1">Anuluj</string>
