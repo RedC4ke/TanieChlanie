@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/profile_navigation"
+    app:startDestination="@id/profileMenu_dest">
+
+    <fragment
+        android:id="@+id/profileMenu_dest"
+        android:name="com.redc4ke.taniechlanie.ui.profile.ProfileMenuFragment"
+        android:label="ProfileMenuFragment" >
+        <action
+            android:id="@+id/to_profileManage_dest"
+            app:destination="@id/profileManage_dest" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileManage_dest"
+        android:name="com.redc4ke.taniechlanie.ui.profile.management.ProfileManageFragment"
+        android:label="ProfileManageFragment" >
+        <action
+            android:id="@+id/to_profileMenu_dest"
+            app:destination="@id/profileMenu_dest" />
+    </fragment>
+
+</navigation>

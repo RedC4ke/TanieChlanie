@@ -11,10 +11,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.Category
-import com.redc4ke.taniechlanie.data.CategoryViewModel
+import com.redc4ke.taniechlanie.data.viewmodels.CategoryViewModel
 import com.redc4ke.taniechlanie.data.request.CategoryListAdapter
 import com.redc4ke.taniechlanie.databinding.FragmentCategoryBinding
-import com.redc4ke.taniechlanie.ui.BaseFragment
+import com.redc4ke.taniechlanie.ui.base.BaseFragment
 
 class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
 

@@ -13,8 +13,10 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.*
+import com.redc4ke.taniechlanie.data.viewmodels.CategoryViewModel
+import com.redc4ke.taniechlanie.data.viewmodels.ShopViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentSummaryBinding
-import com.redc4ke.taniechlanie.ui.BaseFragment
+import com.redc4ke.taniechlanie.ui.base.BaseFragment
 import com.redc4ke.taniechlanie.ui.MainActivity
 import java.io.File
 import java.util.*

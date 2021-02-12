@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.lifecycle.ViewModelProvider
@@ -13,10 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.data.Shop
-import com.redc4ke.taniechlanie.data.ShopViewModel
+import com.redc4ke.taniechlanie.data.viewmodels.ShopViewModel
 import com.redc4ke.taniechlanie.data.menu.DetailsShopAdapter
 import com.redc4ke.taniechlanie.databinding.FragmentSheet2Binding
-import com.redc4ke.taniechlanie.ui.BaseFragment
+import com.redc4ke.taniechlanie.ui.base.BaseFragment
 import com.redc4ke.taniechlanie.ui.popup.AvailabilitySubmitFragment
 import java.util.*
 

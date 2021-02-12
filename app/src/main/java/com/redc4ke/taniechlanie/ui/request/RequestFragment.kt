@@ -20,7 +20,7 @@ import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.data.Category
 import com.redc4ke.taniechlanie.databinding.FragmentRequestBinding
-import com.redc4ke.taniechlanie.ui.BaseFragment
+import com.redc4ke.taniechlanie.ui.base.BaseFragment
 import com.redc4ke.taniechlanie.ui.MainActivity
 import com.squareup.picasso.Picasso
 import java.io.ByteArrayOutputStream
@@ -146,8 +146,8 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), Serializable {
 
     private fun categorySetOnClickListener(pos: Int) {
         val bt = buttonList[pos]
-        bt.setTextColor(ContextCompat.getColor(requireContext(), R.color.red_heavy))
-        bt.setIconTintResource(R.color.red_heavy)
+        bt.setTextColor(ContextCompat.getColor(requireContext(), R.color.primaryDarkColor))
+        bt.setIconTintResource(R.color.primaryDarkColor)
         bt.setOnClickListener {
             openCategoryList()
             catButtonPosition = pos

@@ -5,39 +5,35 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.redc4ke.taniechlanie.data.BaseRecyclerViewAdapter
 import com.redc4ke.taniechlanie.databinding.RowAboutExpandedBinding
 import com.redc4ke.taniechlanie.ui.MainActivity
 
 class AboutSubrowAdapter(private val data: ArrayList<Subrow>, private val frag: Fragment):
-    BaseRecyclerViewAdapter<AboutSubrowViewHolder, RowAboutExpandedBinding>() {
-
-    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> RowAboutExpandedBinding
-        get() = RowAboutExpandedBinding::inflate
+    RecyclerView.Adapter<AboutSubrowViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AboutSubrowViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        _binding = bindingInflater.invoke(inflater, parent, false)
+        val binding = RowAboutExpandedBinding.inflate(inflater, parent, false)
 
-        return  AboutSubrowViewHolder(binding.root)
+        return  AboutSubrowViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: AboutSubrowViewHolder, position: Int) {
         val item = data[position]
-        with (binding) {
-            if (item.drawable != null) {
-                aboutSubrowIV.setBackgroundResource(item.drawable)
-            } else {
-                aboutSubrowIV.visibility = View.GONE
-            }
-            aboutSubrowHeaderTV.text = item.header
-            aboutSubrowTextTV.text = item.text
+        val vb = holder.vb
 
-            root.setOnClickListener {
-                val act = frag.requireActivity() as MainActivity
-                act.openBrowser(item.url)
-            }
+        if (item.drawable != null) {
+            vb.aboutSubrowIV.setBackgroundResource(item.drawable)
+        } else {
+            vb.aboutSubrowIV.visibility = View.GONE
         }
+        vb.aboutSubrowHeaderTV.text = item.header
+        vb.aboutSubrowTextTV.text = item.text
+        vb.root.setOnClickListener {
+            val act = frag.requireActivity() as MainActivity
+            act.openBrowser(item.url)
+        }
+
 
     }
 
@@ -47,7 +43,7 @@ class AboutSubrowAdapter(private val data: ArrayList<Subrow>, private val frag: 
 
 }
 
-class AboutSubrowViewHolder(val view: View): RecyclerView.ViewHolder(view)
+class AboutSubrowViewHolder(var vb: RowAboutExpandedBinding): RecyclerView.ViewHolder(vb.root)
 
 data class Subrow(
     val drawable: Int?,

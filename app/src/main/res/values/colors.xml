@@ -2,11 +2,22 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="red_light">#ff7066</color>
-    <color name="red_heavy">#9B1D20</color>
+    <color name="primaryColor">#d32f2f</color>
+    <color name="primaryLightColor">#ff6659</color>
+    <color name="primaryDarkColor">#9a0007</color>
+    <color name="secondaryColor">#ffd54f</color>
+    <color name="secondaryLightColor">#ffff81</color>
+    <color name="secondaryDarkColor">#c8a415</color>
+    <color name="primaryTextColor">#ffffff</color>
+    <color name="secondaryTextColor">#000000</color>
+    <color name="primary50">#ffebee</color>
+    <color name="primary100">#ffcdd2</color>
+    <color name="secondary50">#fff8e1</color>
+
     <color name="dark">#1D201F</color>
     <color name="separator">#FFDCDCDC</color>
     <color name="grey_outline">#a3a3a3</color>
     <color name="grey_text">#545454</color>
     <color name="error">#d40e00</color>
+    <color name="facebook">#4267B2</color>
 </resources>

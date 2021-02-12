@@ -5,9 +5,8 @@ import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.databinding.FragmentWelcomeBinding
-import com.redc4ke.taniechlanie.ui.BaseDialogFragment
+import com.redc4ke.taniechlanie.ui.base.BaseDialogFragment
 
 class WelcomeFragment : BaseDialogFragment<FragmentWelcomeBinding>() {
 

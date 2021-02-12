@@ -5,23 +5,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.redc4ke.taniechlanie.data.AlcoObject
-import com.redc4ke.taniechlanie.data.BaseRecyclerViewAdapter
 import com.redc4ke.taniechlanie.data.Category
 import com.redc4ke.taniechlanie.databinding.RowDetailsCatlistBinding
 import com.squareup.picasso.Picasso
 
 class DetailsCategoryAdapter(private val alcoObject: AlcoObject,
                              private val categories: Map<Int, Category>):
-        BaseRecyclerViewAdapter<DetailsCategoryViewHolder, RowDetailsCatlistBinding>() {
-
-    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> RowDetailsCatlistBinding
-        get() = RowDetailsCatlistBinding::inflate
+        RecyclerView.Adapter<DetailsCategoryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailsCategoryViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        _binding = bindingInflater.invoke(inflater, parent, false)
+        val binding = RowDetailsCatlistBinding.inflate(inflater, parent, false)
 
-        return DetailsCategoryViewHolder(binding.root)
+        return DetailsCategoryViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: DetailsCategoryViewHolder, position: Int) {
@@ -29,9 +25,9 @@ class DetailsCategoryAdapter(private val alcoObject: AlcoObject,
         val id = alcoObject.categories[position]
         val category = categories[id]
 
-        binding.catlistNameTV.text = category?.name
+        holder.vb.catlistNameTV.text = category?.name
         if (category?.image != null) {
-            Picasso.get().load(category.image).into(binding.catlistIV)
+            Picasso.get().load(category.image).into(holder.vb.catlistIV)
         }
     }
 
@@ -41,4 +37,4 @@ class DetailsCategoryAdapter(private val alcoObject: AlcoObject,
 
 }
 
-class DetailsCategoryViewHolder(val view: View): RecyclerView.ViewHolder(view)
+class DetailsCategoryViewHolder(var vb: RowDetailsCatlistBinding): RecyclerView.ViewHolder(vb.root)

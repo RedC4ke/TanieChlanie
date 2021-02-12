@@ -2,12 +2,12 @@
     <!-- Base application theme. -->
     <style name="Theme.Base.taniechlanie" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/red_heavy</item>
-        <item name="colorPrimaryVariant">@color/red_heavy</item>
+        <item name="colorPrimary">@color/primaryDarkColor</item>
+        <item name="colorPrimaryVariant">@color/primaryDarkColor</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/red_light</item>
-        <item name="colorSecondaryVariant">@color/red_heavy</item>
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorSecondaryVariant">@color/secondaryDarkColor</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
@@ -58,25 +58,17 @@
         <item name="boxCornerRadiusTopEnd">14dp</item>
         <item name="boxCornerRadiusTopStart">14dp</item>
         <item name="errorTextColor">@color/error</item>
+        <item name="boxStrokeErrorColor">@color/error</item>
     </style>
     <style name="Theme.taniechlanie.TextInputLayout_Outlined"
         parent="Theme.Base.taniechlanie.TextInputLayout_Outlined" />
 
 
-
     <style name="Theme.Base.taniechlanie.TextInputLayout_Filled"
         parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
-        <item name="materialThemeOverlay">@style/MyThemeOverlayOutlinedDense</item>
-
-    </style>
-    <style name="MyThemeOverlayOutlinedDense">
-        <item name="editTextStyle">@style/MyTextInputEditText_outlinedBox_dense_h
-        </item>
-    </style>
-    <style name="MyTextInputEditText_outlinedBox_dense_h"
-        parent="@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox.Dense">
-        <item name="android:paddingTop">8dp</item>
-        <item name="android:paddingBottom">8dp</item>
+        <item name="boxBackgroundColor">@color/white</item>
+        <item name="android:textColorHint">@color/black</item>
+        <item name="fontFamily">@font/open_sans_light</item>
     </style>
     <style name="Theme.taniechlanie.TextInputLayout_Filled"
         parent="Theme.Base.taniechlanie.TextInputLayout_Filled" />
@@ -96,7 +88,7 @@
     <style name="Theme.taniechlanie.Suffix" parent="Theme.Base.taniechlanie.Suffix"/>
 
 
-    <style name="Theme.Base.taniechlanie.OutlinedBT"
+    <style name="Theme.Base.taniechlanie.OutlinedBT_Request"
         parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:textSize">18sp</item>
         <item name="fontFamily">@font/open_sans_regular</item>
@@ -110,7 +102,24 @@
         <item name="android:paddingStart">2dp</item>
         <item name="android:gravity">start|center_vertical</item>
     </style>
-    <style name="Theme.taniechlanie.OutlinedBT" parent="Theme.Base.taniechlanie.OutlinedBT"/>
+    <style name="Theme.taniechlanie.OutlinedBT_Request"
+        parent="Theme.Base.taniechlanie.OutlinedBT_Request"/>
+
+
+    <style name="Theme.Base.taniechlanie.FilledBT_Login"
+        parent="Widget.MaterialComponents.Button">
+        <item name="fontFamily">@font/open_sans_regular</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="iconGravity">start</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="iconSize">24dp</item>
+    </style>
+    <style name="Theme.taniechlanie.FilledBT_Login"
+        parent="Theme.Base.taniechlanie.FilledBT_Login"/>
 
 
     <style name="Theme.Base.taniechlanie.ContainedBT"
@@ -162,7 +171,16 @@
 
     <style name="Theme.Base.taniechlanie.Spinner1">
         <item name="android:fontFamily">@font/open_sans_light</item>
-        <item name="android:textColor">@color/red_heavy</item>
+        <item name="android:textColor">@color/primaryDarkColor</item>
     </style>
     <style name="Theme.taniechlanie.Spinner1" parent="Theme.Base.taniechlanie.Spinner1"/>
+
+
+    <style name="Theme.Base.taniechlanie.AuthUI" parent="FirebaseUI">
+        <item name="colorPrimary">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/dark</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="android:windowBackground">@color/secondary50</item>
+    </style>
+    <style name="Theme.taniechlanie.AuthUI" parent="Theme.Base.taniechlanie.AuthUI" />
 </resources>

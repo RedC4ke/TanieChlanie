@@ -1,5 +1,6 @@
 package com.redc4ke.taniechlanie.ui
 
+import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
@@ -8,6 +9,9 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -19,20 +23,32 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
+import com.firebase.ui.auth.AuthMethodPickerLayout
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.ErrorCodes
+import com.firebase.ui.auth.IdpResponse
 import com.google.android.gms.tasks.Task
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.auth.AdditionalUserInfo
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.*
+import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectViewModel
+import com.redc4ke.taniechlanie.data.viewmodels.CategoryViewModel
+import com.redc4ke.taniechlanie.data.viewmodels.ShopViewModel
+import com.redc4ke.taniechlanie.data.viewmodels.UserViewModel
+import com.redc4ke.taniechlanie.databinding.ActivityMainBinding
 import com.redc4ke.taniechlanie.ui.menu.MenuFragment
 import com.redc4ke.taniechlanie.ui.popup.WelcomeFragment
 import io.grpc.android.BuildConfig
 import java.math.BigDecimal
-import kotlin.collections.ArrayList
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,24 +57,28 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mDrawerLayout: DrawerLayout
     private lateinit var shopViewModel: ShopViewModel
     private lateinit var categoryViewModel: CategoryViewModel
-    lateinit var prefs: SharedPreferences
+    private lateinit var userViewModel: UserViewModel
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var prefs: SharedPreferences
     lateinit var menuFrag: MenuFragment
     lateinit var alcoObjectViewModel: AlcoObjectViewModel
     lateinit var faq: ArrayList<Map<String, String>>
+    private val loginRC = 1
+    private val auth = FirebaseAuth.getInstance()
     val database: FirebaseFirestore = FirebaseFirestore.getInstance()
     val storage = FirebaseStorage.getInstance()
     var currentFragment = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         //Disable night theme (temporary)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-
-        setContentView(R.layout.activity_main)
-
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        //ANALYTICS DISABLED IN EXPERIMENTAL UNIT
+        //mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
         prefs = getPreferences(MODE_PRIVATE)
 
 
@@ -67,18 +87,22 @@ class MainActivity : AppCompatActivity() {
                 .findFragmentById(R.id.navHostFragment) as NavHostFragment
         val navController = host.navController
 
+        //Drawer setup
+        setupNavigationMenu(navController)
+
         //Toolbar setup
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         mDrawerLayout = findViewById(R.id.drawer_layout)
         setSupportActionBar(toolbar)
         appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.list_dest,
-                R.id.about_dest,
-                R.id.request_dest,
-                R.id.options_dest
-            ),
-            mDrawerLayout
+                setOf(
+                        R.id.profile_dest,
+                        R.id.list_dest,
+                        R.id.about_dest,
+                        R.id.request_dest,
+                        R.id.options_dest
+                ),
+                mDrawerLayout
         )
         setupActionBar(navController, appBarConfiguration)
 
@@ -89,12 +113,15 @@ class MainActivity : AppCompatActivity() {
         alcoObjectViewModel = ViewModelProvider(this).get(AlcoObjectViewModel::class.java)
         shopViewModel = ViewModelProvider(this).get(ShopViewModel::class.java)
         categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
         //Firebase request (first from cache, then online)
         getFirebaseData()
 
-        //Drawer setup
-        setupNavigationMenu(navController)
+        //Chceck current user
+        auth.addAuthStateListener {
+            userViewModel.login(this, it.currentUser)
+        }
 
     }
 
@@ -105,6 +132,33 @@ class MainActivity : AppCompatActivity() {
             menuInflater.inflate(R.menu.drawer_menu, menu)
             return true
         }
+
+        //Drawer profile card
+        val nameTV = findViewById<TextView?>(R.id.drawerNameTV)
+        val loginTV = findViewById<TextView?>(R.id.drawerLoginTV)
+        val avatarIV = findViewById<ImageView?>(R.id.drawerAvatarIV)
+        val profileBT = findViewById<Button?>(R.id.drawerProfileBT)
+        userViewModel.getUser().observe(this, { user ->
+            if (user != null) {
+                nameTV.text = user.displayName
+                loginTV.text = getString(R.string.profile)
+                profileBT.setOnClickListener {
+                    this@MainActivity.findNavController(R.id.navHostFragment)
+                        .navigate(R.id.profile_dest)
+                    mDrawerLayout.closeDrawer(GravityCompat.START)
+                }
+                userViewModel.getUserUpdates().observe(this, {
+                    setImage(this, "avatar", avatarIV, user.photoUrl)
+                })
+            } else {
+                avatarIV.setImageResource(R.drawable.ic_baseline_account_circle_24)
+                nameTV.text = getString(R.string.guest)
+                loginTV.text = getString(R.string.login)
+                profileBT.setOnClickListener {
+                    login()
+                }
+            }
+        })
 
         return super.onCreateOptionsMenu(menu)
     }
@@ -120,8 +174,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupActionBar(
-        navController: NavController,
-        appBarConfiguration: AppBarConfiguration
+            navController: NavController,
+            appBarConfiguration: AppBarConfiguration
     ) {
         // This allows NavigationUI to decide what label to show in the action bar
         // By using appBarConfig, it will also determine whether to
@@ -144,6 +198,30 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        //Login
+        if (requestCode == loginRC) {
+            val response = IdpResponse.fromResultIntent(data)
+
+            if (resultCode == Activity.RESULT_OK) {
+                if (response!!.isNewUser) {
+                    userViewModel.login(this, auth.currentUser, true)
+                }
+            } else if (response != null) {
+                val message =
+                    if (response.error?.errorCode == ErrorCodes.NO_NETWORK)
+                        getString(R.string.err_no_connection)
+                    else
+                        getString(R.string.error, response.error?.errorCode.toString())
+                Toast.makeText(
+                        applicationContext,
+                        message,
+                        Toast.LENGTH_LONG).show()
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
     private fun getAlcoObject() {
         getTask("wines")
                 .addOnCompleteListener {
@@ -152,7 +230,7 @@ class MainActivity : AppCompatActivity() {
                 .addOnSuccessListener {
                     it.forEach { document ->
                         val data = document.data
-                        val output = mapOf<String, Any?> (
+                        val output = mapOf<String, Any?>(
                                 "id" to data["id"].toString().toInt(),
                                 "name" to data["name"].toString(),
                                 "volume" to data["volume"].toString().toInt(),
@@ -193,15 +271,15 @@ class MainActivity : AppCompatActivity() {
                     ?: (0).toBigDecimal()
 
                 val alcoObject = AlcoObject(
-                    result["id"] as Int,
-                    result["name"] as String,
-                    result["price"] as BigDecimal,
-                    result["volume"] as Int,
-                    result["voltage"] as BigDecimal,
-                    result["shop"] as ArrayList<Int>,
-                    result["categories"] as ArrayList<Int>,
-                    result["photo"] as String?
-                 )
+                        result["id"] as Int,
+                        result["name"] as String,
+                        result["price"] as BigDecimal,
+                        result["volume"] as Int,
+                        result["voltage"] as BigDecimal,
+                        result["shop"] as ArrayList<Int>,
+                        result["categories"] as ArrayList<Int>,
+                        result["photo"] as String?
+                )
 
                 Log.d("FireBase", "Added: $alcoObject")
                 alcoObjectViewModel.addObject(alcoObject)
@@ -233,7 +311,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 .addOnSuccessListener {
                     val tempList: ArrayList<Map<String, String>> = arrayListOf()
-                    it.forEach{document ->
+                    it.forEach{ document ->
                         val data = document.data
                         tempList.add(
                                 mapOf(
@@ -252,7 +330,7 @@ class MainActivity : AppCompatActivity() {
     private fun getCategories() {
         getTask("categories")
                 .addOnSuccessListener {
-                    it.forEach {document ->
+                    it.forEach { document ->
                         val id = document["id"].toString().toInt()
                         val name = document["name"] as String
                         val url = document["image"] as String
@@ -298,6 +376,29 @@ class MainActivity : AppCompatActivity() {
         WelcomeFragment().show(supportFragmentManager, "welcome")
     }
 
+    private fun login() {
+        val providers = arrayListOf(
+            AuthUI.IdpConfig.EmailBuilder().build(),
+            AuthUI.IdpConfig.FacebookBuilder().build()
+        )
+
+        val layout = AuthMethodPickerLayout
+            .Builder(R.layout.firebase_auth)
+            .setEmailButtonId(R.id.loginMailBT)
+            .setFacebookButtonId(R.id.loginFbBT)
+            .build()
+
+        startActivityForResult(
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .setAuthMethodPickerLayout(layout)
+                .setTheme(R.style.Theme_taniechlanie_AuthUI)
+                .build(),
+            loginRC
+        )
+    }
+
     fun openBrowserFromTextView(view: View) {
         val url = view.tag as String
         openBrowser(url)
@@ -312,10 +413,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun dataMigration() {
-
-
-    }
 }
 
 

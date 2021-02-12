@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="12dp"
+    android:layout_marginEnd="8dp"
+    app:cardBackgroundColor="@color/primary50"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="0dp">
+
+    <LinearLayout
+
+        android:id="@+id/PMClickable_LL"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="32dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0">
+
+            <ImageView
+                android:id="@+id/rowPMIconIV"
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="1dp"
+                app:srcCompat="@drawable/ic_baseline_edit_24"
+                app:tint="@color/primaryLightColor" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/rowPMNameTV"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:gravity="center_vertical|start"
+            android:textAlignment="textStart"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            tools:text="Nazwa wyświetlana" />
+
+        <TextView
+            android:id="@+id/rowPMValueTV"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="12dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:fontFamily="@font/open_sans_light"
+            android:gravity="center_vertical|end"
+            android:maxLines="1"
+            android:textAlignment="textEnd"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            tools:text="xXSłodkaNiunia69Xx" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

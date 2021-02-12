@@ -1,5 +1,5 @@
-<resources>
-    <string name="app_name">TanieChlanie</string>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">Tanie Chlanie</string>
 
     <!-- labels -->
     <string name="list">Baza alkoholi</string>
@@ -11,6 +11,7 @@
     <string name="request_cat">Wybierz kategorię:</string>
     <string name="request_shop">Wskaż dostępność:</string>
     <string name="request_summary">Podsumowanie</string>
+    <string name="profile_page">Profil</string>
 
     <!-- welcome -->
     <string name="start">Zaczynamy!</string>
@@ -26,6 +27,7 @@
 
     <!-- image alts -->
     <string name="wine">Butelka wina, obok dwa kieliszki</string>
+    <string name="avatar">Awatar użytkownika</string>
 
     <!-- details page -->
     <string name="pricetag">Cena:</string>
@@ -100,22 +102,151 @@
         \nJeśli błąd się powtarza, powiadom nas o tym!
     </string>
 
+    <!-- log-in -->
+    <string name="login_fb">Facebook</string>
+    <string name="login_mail">E-mail</string>
+    <string name="login_header">Zaloguj /\nzarejestruj</string>
+
+    <!-- profile page -->
+    <string name="profile_submits">Dodanych pozycji: %1$S</string>
+    <string name="profile_reviews">Recenzji: %1$S</string>
+    <string name="profile_accmanagement">Zarządzanie kontem</string>
+    <string-array name="profile_menu">
+        <item>Zarządzanie kontem</item>
+        <item>Recenzje</item>
+        <item>Dodane alkohole</item>
+    </string-array>
+
+    <!-- profile page - management -->
+    <string name="profile_manageHeader">Dostosuj informacje profilowe</string>
+    <string-array name="profile_manageMenu">
+        <item>Nazwa wyświetlana:</item>
+        <item>Adres e-mail:</item>
+        <item>Zmień hasło</item>
+        <item>Usuń konto</item>
+    </string-array>
+    <string name="profile_editDisplayName">Zmień nazwę konta</string>
+    <string name="profile_editEmail">Zmień adres e-mail</string>
+    <string name="profile_editPassword">Zmień hasło</string>
+    <string name="profile_confirm">Wymagane potwierdzenie</string>
+    <string name="profile_hint_newpwd">Nowe hasło</string>
+    <string name="profile_hint_currentpwd">Podaj obecne hasło</string>
+
+
     <!-- options page -->
     <string name="romper_unit">Jednostka opłacalności</string>
 
     <!-- transition names -->
     <string name="row_alcohol_details_transition_name">row_alcohol_details_transition</string>
 
+    <!-- errors -->
+    <string name="error">Błąd: %1$S</string>
+    <string name="err_no_connection">Błąd - brak połączenia z inernetem.</string>
+    <string name="err_emptyField">Pole nie może być puste!</string>
+    <string name="err_tooLong">Maksymalnie %1$S znaków!</string>
+    <string name="err_wrongEmail">Podaj poprawny adres e-mail!</string>
+    <string name="err_tooShort">Przynajmniej %1$S znaków!</string>
+    <string name="err_invalidPassword">Hasło niepoprawne!</string>
+
+    <!-- dialog strings -->
+    <string name="dialog_bt1">Anuluj</string>
+    <string name="dialog_bt2">Potwierdź</string>
+    <string name="dialog_logout_h">Nastąpi wylogowanie</string>
+
+    <!-- toasts -->
+    <string name="toast_logout">Wylogowano</string>
+    <string name="toast_error">Błąd</string>
+    <string name="toast_err_notloggedin">Musisz być zalogowany aby wykonać tę akcję!</string>
+
     <!-- other -->
     <string name="queryHint">Wyszukaj…</string>
     <string name="forward">Dalej</string>
     <string name="submit">Prześlij</string>
     <string name="accept">Zatwierdź</string>
+    <string name="login">Zaloguj</string>
+    <string name="logout">Wyloguj</string>
+    <string name="guest">Gość</string>
+    <string name="profile">Profil</string>
 
     <string name="suff_rvalue">%1$S R</string>
     <string name="suff_mrvalue">%1$S mR</string>
     <string name="suff_price">%1$S zł</string>
     <string name="suff_volume">%1$S ml</string>
     <string name="suff_voltage">%1$S %%</string>
+
+    <string name="facebook_application_id" translatable="false">1344698109071670</string>
+
+    <!-- Facebook Application ID, prefixed by 'fb'. Enables Chrome Custom tabs. -->
+    <string name="facebook_login_protocol_scheme" translatable="false">fb1344698109071670</string>
+
+    <!-- AuthUI strings -->
+    <plurals name="fui_error_weak_password" translation_description="Inline error for weak password">
+        <item quantity="one" translation_description="Inline error for weak password">Hasło zbyt słabe. Użyj co najmniej %1$d znaków oraz połączenia liter i cyfr.</item>
+        <item quantity="other" translation_description="Inline error for weak password">Hasło zbyt słabe. Użyj co najmniej %1$d znaków oraz połączenia liter i cyfr.</item>
+    </plurals>
+
+    <!-- Common -->
+    <string name="fui_progress_dialog_loading" translation_description="Loading text in dialog">Ładowanie…</string>
+    <string name="fui_sign_in_default" translation_description="Button text to sign in">Zaloguj</string>
+    <string name="fui_cancel" translation_description="Button text to cancel">Anuluj</string>
+    <string name="fui_continue" translation_description="Button text to continue">Kontynuuj</string>
+
+    <!-- Email common-->
+    <string name="fui_sign_in_with_yahoo" translation_description="Sign in button text. [CHAR_LIMIT=40]">Zaloguj z Yahoo</string>
+    <string name="fui_next_default" translation_description="Button text to continue">Dalej</string>
+    <string name="fui_email_hint" translation_description="Hint in email input field">e-mail</string>
+    <string name="fui_phone_hint" translation_description="Hint for phone input field">Numer telefonu</string>
+    <string name="fui_password_hint" translation_description="Hint for password input field for existing passwords">Hasło</string>
+    <string name="fui_new_password_hint" translation_description="Hint for password input field for new passwords">Nowe hasło</string>
+    <string name="fui_required_field" translation_description="Inline error for required field">Pole nie może być puste</string>
+    <string name="fui_invalid_email_address" translation_description="Inline error for invalid email address">Ten adres e-mail nie jest poprawny</string>
+    <string name="fui_missing_email_address" translation_description="Inline error for empty email address in input field">Wprowadź adres e-mail by kontynuować.</string>
+    <string name="fui_missing_first_and_last_name" translation_description="Inline error for empty email address in input field. [CHAR_LIMIT=60]">Wprowadź nazwę.</string>
+
+    <!-- Email sign up -->
+    <string name="fui_progress_dialog_checking_accounts" translation_description="Progress dialog text while checking for existing accounts">Sprawdzanie istniejących kont…</string>
+    <string name="fui_title_register_email" translation_description="Title for signup form">Zarejestruj</string>
+    <string name="fui_name_hint" translation_description="Hint for last name input field">Nazwa wyświetlana</string>
+    <string name="fui_button_text_save" translation_description="Button text to save input form">Zapisz</string>
+    <string name="fui_progress_dialog_signing_up" translation_description="Dialog text while waiting for server's signup response">Rejestrowanie…</string>
+    <string name="fui_email_account_creation_error" translation_description="Inline error for signup failure">Rejestracja nie powiodła się</string>
+    <string name="fui_terms_of_service" translation_description="Link text to web url containing the app's terms of service">Warunki Użytkowania</string>
+    <string name="fui_privacy_policy" translation_description="Link text to web url containing the app's privacy policy">Polityka Prywatności</string>
+
+    <!-- Idp/Email welcome back -->
+    <string name="fui_welcome_back_idp_header" translation_description="Inline subtitle to users whose signup was interrupted since an existing account was detected">Już posiadasz konto</string>
+    <string name="fui_welcome_back_email_header" translation_description="Message for returning users">Witaj z powrotem!</string>
+    <string name="fui_welcome_back_email_link_header" translation_description="Message for returning users">Już posiadasz konto\n</string>
+
+    <string name="fui_welcome_back_idp_prompt" translation_description="Message to users that need to signin using existing IDP accounts">
+        Już użyłeś adresu <xliff:g example="jane.doe@example.com" id="email_addr" translation_description="">%1$s</xliff:g>.
+        Zaloguj z <xliff:g example="Google" id="provider_name" translation_description="">%2$s</xliff:g> aby kontynuować.
+    </string>
+    <string name="fui_welcome_back_password_prompt_body" translation_description="Message to users that need to signin using existing email accounts">
+        Już użyłeś adresu <xliff:g example="jane.doe@example.com" id="email_addr" translation_description="">%1$s</xliff:g>
+        aby się zalogować. Wpisz hasło dla tego konta.
+    </string>
+    <string name="fui_welcome_back_email_link_prompt_body" translation_description="Message to users that need to signin using existing email link accounts">
+        Już użyłeś <xliff:g example="jane.doe@example.com" id="email_addr" translation_description="">%1$s</xliff:g>.
+        Możesz połączyć konto %2$s z %1$s rejestrując się linkiem e-mail poniżej.\n\nŻeby skutecznie połączyć konto %2$s z tym adresem e-mail, musisz otworzyć link na tym samym urządzeniu lub przeglądarce.
+    </string>
+    <string name="fui_progress_dialog_signing_in" translation_description="Progress dialog text">Logowanie…</string>
+    <string name="fui_trouble_signing_in" translation_description="Link leading to forgot password flow">Problem z logowaniem?</string>
+
+    <!-- Password recovery -->
+    <string name="fui_title_recover_password_activity" translation_description="Recover password screen title">Odzyskaj hasło</string>
+    <string name="fui_title_confirm_recover_password" translation_description="Password recovery confirmation message">Sprawdź swoją skrzynkę e-mail</string>
+    <string name="fui_password_recovery_body" translation_description="Password recovery message body">Otrzymaj instrukcje jak zresetować hasło na swój adres e-mail.</string>
+    <string name="fui_button_text_send" translation_description="Button text to send recovery email">Wyślij</string>
+    <string name="fui_confirm_recovery_body" translation_description="Alert dialog displayed after password recovery email is sent">Podażaj instrukcją wysłaną do %1$s aby odzyskać hasło.</string>
+    <string name="fui_progress_dialog_sending" translation_description="Progress dialog while password recovery email or email link is being sent">Wysyłanie…</string>
+    <string name="fui_error_email_does_not_exist" translation_description="Inline error when user attempt signin with invalid account">Nie znaleziono konta zarejestrowanego na ten adres e-mail.</string>
+
+    <!-- Other error messages -->
+    <string name="fui_error_unknown" translation_description="General error messages for an unknown failure.">Wystąpił nieznany błąd.</string>
+    <string name="fui_error_invalid_password" translation_description="Error message for when the user enters an invalid or wrong password.">Hasło niepoprawne.</string>
+
+    <!-- Accessibility -->
+    <string name="fui_accessibility_logo" translation_description="Content description for app logo">Logo aplikacji</string>
 
 </resources>

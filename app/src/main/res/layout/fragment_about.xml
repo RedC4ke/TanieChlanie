@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/red_light">
+    android:background="@color/primaryLightColor">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/about_CV"
@@ -129,7 +129,7 @@
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:srcCompat="@drawable/ic_outline_language_24"
-                                app:tint="@color/red_heavy" />
+                                app:tint="@color/primaryDarkColor" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </LinearLayout>

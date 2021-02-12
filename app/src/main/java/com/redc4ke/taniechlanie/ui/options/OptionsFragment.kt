@@ -8,9 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.databinding.FragmentOptionsBinding
-import com.redc4ke.taniechlanie.ui.BaseFragment
+import com.redc4ke.taniechlanie.ui.base.BaseFragment
 
 class OptionsFragment : BaseFragment<FragmentOptionsBinding>() {
 

@@ -13,9 +13,9 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.Shop
-import com.redc4ke.taniechlanie.data.ShopViewModel
+import com.redc4ke.taniechlanie.data.viewmodels.ShopViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentAvailabilitySubmitBinding
-import com.redc4ke.taniechlanie.ui.BaseDialogFragment
+import com.redc4ke.taniechlanie.ui.base.BaseDialogFragment
 import com.redc4ke.taniechlanie.ui.menu.details.DetailsFragment
 
 class AvailabilitySubmitFragment(detailsFragment: DetailsFragment) :

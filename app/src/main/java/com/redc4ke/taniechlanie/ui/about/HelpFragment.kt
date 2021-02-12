@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.about.HelpRecyclerViewAdapter
 import com.redc4ke.taniechlanie.databinding.FragmentHelpBinding
-import com.redc4ke.taniechlanie.ui.BaseFragment
+import com.redc4ke.taniechlanie.ui.base.BaseFragment
 
 class HelpFragment : BaseFragment<FragmentHelpBinding>() {
 

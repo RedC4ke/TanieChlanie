@@ -14,7 +14,7 @@ import com.redc4ke.taniechlanie.BuildConfig
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.about.AboutRecyclerViewAdapter
 import com.redc4ke.taniechlanie.databinding.FragmentAboutBinding
-import com.redc4ke.taniechlanie.ui.BaseFragment
+import com.redc4ke.taniechlanie.ui.base.BaseFragment
 import com.redc4ke.taniechlanie.ui.MainActivity
 
 class AboutFragment : BaseFragment<FragmentAboutBinding>() {

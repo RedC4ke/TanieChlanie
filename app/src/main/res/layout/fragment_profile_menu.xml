@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/secondary50"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/profileMenuRV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:clipToPadding="false" />
+
+</FrameLayout>
