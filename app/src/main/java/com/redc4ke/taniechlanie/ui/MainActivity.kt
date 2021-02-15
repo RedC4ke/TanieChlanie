@@ -334,8 +334,9 @@ class MainActivity : AppCompatActivity() {
                         val id = document["id"].toString().toInt()
                         val name = document["name"] as String
                         val url = document["image"] as String
+                        val major = document["major"] as Boolean
 
-                        categoryViewModel.add(id, name, url, this)
+                        categoryViewModel.add(id, name, url, major, this)
                         Log.d("FireBase", "Added: $name")
                     }
                 }
