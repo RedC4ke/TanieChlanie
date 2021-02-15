@@ -2,10 +2,12 @@ package com.redc4ke.taniechlanie.ui.menu
 
 import android.app.SearchManager
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.doOnPreDraw
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,7 +31,7 @@ class MenuFragment : BaseFragment<FragmentMenuBinding>(), Serializable {
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMenuBinding
         get() = FragmentMenuBinding::inflate
     private lateinit var vm: AlcoObjectViewModel
-    private lateinit var vmData: ArrayList<AlcoObject>
+    private var vmData: List<AlcoObject>? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: AlcoListAdapter
     private lateinit var mainActivity: MainActivity
@@ -58,13 +60,16 @@ class MenuFragment : BaseFragment<FragmentMenuBinding>(), Serializable {
         //and retrieve data from FireBase tasks
         val act = activity as MainActivity
         act.menuFrag = this
-        vm = act.alcoObjectViewModel
+        vm = ViewModelProvider(act).get(AlcoObjectViewModel::class.java)
         //Set up the recycler view
-        vmData = vm.getAll().value as ArrayList<AlcoObject>
-        adapter = AlcoListAdapter(vmData, this)
-        adapter.update(vm)
+        vmData = vm.getAll().value
+        adapter = AlcoListAdapter(vmData!!, mainActivity)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this.context)
+
+        vm.getAll().observe(viewLifecycleOwner, {
+            vmData = it
+        })
 
         //Change tolbar text
         val actionBar: Toolbar = requireActivity().findViewById(R.id.toolbar) as Toolbar
@@ -100,12 +105,13 @@ class MenuFragment : BaseFragment<FragmentMenuBinding>(), Serializable {
                         val text = Normalizer.normalize(
                                 newText?.toLowerCase(Locale.ROOT), Normalizer.Form.NFD)
                         val filteredList: MutableList<AlcoObject> = mutableListOf()
-                        vmData.forEach {
+                        vmData?.forEach {
                             val name = Normalizer.normalize(
                                     it.name.toLowerCase(Locale.ROOT), Normalizer.Form.NFD)
                             if (name.contains(text)) filteredList.add(it)
                         }
-                        adapter.setFilter(filteredList as ArrayList<AlcoObject>)
+                        adapter.setFilter(filteredList as List<AlcoObject>)
+                        Log.d("menuFilter", "$vmData")
 
                         return true
                     }

@@ -76,9 +76,9 @@ class SummaryFragment : BaseFragment<FragmentSummaryBinding>() {
         })
 
         binding.summaryNameTV.text = alcoObject.name
-        binding.summaryPriceTV.text = priceString(alcoObject, this)
-        binding.summaryVolumeTV.text = volumeString(alcoObject, this)
-        binding.summaryVoltageTV.text = voltageString(alcoObject, this)
+        binding.summaryPriceTV.text = priceString(alcoObject, requireContext())
+        binding.summaryVolumeTV.text = volumeString(alcoObject, requireContext())
+        binding.summaryVoltageTV.text = voltageString(alcoObject, requireContext())
 
         binding.reqUploadBT.setOnClickListener {
             upload()
