@@ -7,6 +7,8 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
+import com.firebase.ui.auth.data.model.User
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
@@ -18,6 +20,7 @@ import java.io.File
 import java.lang.Exception
 import java.lang.reflect.Array.get
 import java.util.*
+import kotlin.collections.ArrayList
 
 class UserViewModel: ViewModel() {
     private val firestore = FirebaseFirestore.getInstance()
@@ -26,7 +29,7 @@ class UserViewModel: ViewModel() {
         Uri.parse("gs://jabot-5ce1f.appspot.com/users/default/avatar.png")
     private var currentUser = MutableLiveData<FirebaseUser?>()
     private val staticUser get() = currentUser.value
-    private val userStats = MutableLiveData<Map<String, Any>>()
+    private val userStats = MutableLiveData<Map<String, Any>?>()
     private val userTitle = MutableLiveData<Map<String, Any?>>()
     private val update = MutableLiveData<Boolean>()
     private var updateValue = false
@@ -39,6 +42,7 @@ class UserViewModel: ViewModel() {
         currentUser.value = user
 
         if (new) {
+            var avatar = defaultAvatar.toString()
             val stats = mapOf(
                 "submits" to 0,
                 "reviews" to 0
@@ -47,16 +51,20 @@ class UserViewModel: ViewModel() {
 
             if (user!!.photoUrl == null) {
                 setAvatarUrl(defaultAvatar)
+            } else {
+                avatar = user.photoUrl.toString()
             }
 
             val data = mapOf(
                 "uid" to user.uid,
-                "created" to BuildConfig.VERSION_NAME + "; " + Date(),
+                "name" to user.displayName,
+                "created" to Timestamp.now(),
                 "groups" to arrayListOf(
                     "user"
                 ),
                 "stats" to stats,
-                "title" to 1
+                "title" to 1,
+                "avatar" to avatar
             )
             firestore.collection("users").document(user.uid).set(data)
                 .addOnSuccessListener {
@@ -78,7 +86,7 @@ class UserViewModel: ViewModel() {
         return currentUser
     }
 
-    fun getStats(): MutableLiveData<Map<String, Any>> {
+    fun getStats(): MutableLiveData<Map<String, Any>?> {
         return userStats
     }
 
@@ -96,9 +104,21 @@ class UserViewModel: ViewModel() {
                 .addOnSuccessListener {
                     val data = it.data
                     if (data != null) {
-                        userStats.value = data["stats"] as Map<String, Any>?
+                        val userData = UserData(
+                            data["uid"] as String,
+                            data["name"] as String?,
+                            data["created"] as Timestamp?,
+                            @Suppress("UNCHECKED_CAST")
+                            data["groups"] as ArrayList<String>?,
+                            data["stats"] as Map<String, Int>?,
+                            data["title"].toString().toInt(),
+                            data["avatar"] as String?
+                        )
+                        userStats.value = userData.stats
                         userTitle.value =
                             titles[(data["title"] as Long).toInt()] ?: mapOf("name" to "n/a")
+
+                        if (staticUser != null) userData.integrityCheck(firestore, staticUser!!)
                     }
                     update.value = !updateValue
                 }
@@ -149,8 +169,15 @@ class UserViewModel: ViewModel() {
         staticUser?.updateProfile(
             UserProfileChangeRequest.Builder().setPhotoUri(uri).build())
             ?.addOnSuccessListener {
-                update.value = !updateValue
-                Log.d("userVM", "Avatar uri set to: $uri")
+                firestore.collection("users").document(staticUser?.uid.toString())
+                    .update("avatar", uri)
+                    .addOnSuccessListener {
+                        update.value = !updateValue
+                        Log.d("userVM", "Avatar uri set to: $uri")
+                    }
+                    .addOnFailureListener {
+                        Log.d("userVM","Avatar uri sync failed: $it")
+                    }
             }
             ?.addOnFailureListener {
                 Log.d("userVM","Avatar uri not set: $it")
@@ -161,8 +188,15 @@ class UserViewModel: ViewModel() {
         staticUser?.updateProfile(
             UserProfileChangeRequest.Builder().setDisplayName(name).build())
             ?.addOnSuccessListener {
-                update.value = !updateValue
-                Log.d("userVM", "DisplayName set to: $name")
+                firestore.collection("users").document(staticUser?.uid.toString())
+                    .update("name", name)
+                    .addOnSuccessListener {
+                        update.value = !updateValue
+                        Log.d("userVM", "DisplayName set to: $name")
+                    }
+                    .addOnFailureListener {
+                        Log.d("userVM", "Display name sync failed: $it")
+                    }
             }
             ?.addOnFailureListener {
                 Log.d("userVM", "Display name not set: $it")
@@ -212,4 +246,33 @@ class UserViewModel: ViewModel() {
             }
     }
 
+}
+
+private data class UserData(
+    val uid: String,
+    var name: String?,
+    val created: Timestamp?,
+    val groups: ArrayList<String>?,
+    val stats: Map<String, Int>?,
+    val title: Int?,
+    var avatar: String?
+) {
+    fun integrityCheck(firestore: FirebaseFirestore, user: FirebaseUser) {
+        if (uid == user.uid) {
+            if (name != user.displayName || avatar != user.photoUrl.toString()) {
+
+                firestore.collection("users").document(uid).update(
+                    mapOf(
+                        "name" to user.displayName,
+                        "avatar" to user.photoUrl.toString())
+                )
+                    .addOnSuccessListener {
+                        Log.d("UserData", "Updated!")
+                    }
+                    .addOnFailureListener {
+                        Log.d("UserData", "Error: $it")
+                    }
+            }
+        }
+    }
 }

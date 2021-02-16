@@ -37,8 +37,6 @@ class SummaryFragment : BaseFragment<FragmentSummaryBinding>() {
         mainActivity = requireActivity() as MainActivity
         hasImage = arguments?.getBoolean("hasImage")!!
         alcoObject = arguments?.getSerializable("AlcoObject") as AlcoObject
-
-        Log.d("huj", alcoObject.voltage.toString())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
