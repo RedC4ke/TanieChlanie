@@ -20,7 +20,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="4dp"
+            android:elevation="2dp"
             app:cardCornerRadius="0dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout

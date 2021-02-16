@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
 import android.view.Display
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.ui.MainActivity
@@ -90,4 +91,16 @@ fun autoBreak(s: String): String {
     }
 
     return r
+}
+
+fun textWrap(context: Context, s: String, tv: TextView, maxLines: Int = 6) {
+    tv.text = s
+
+    if (tv.lineCount > maxLines) {
+        val lastCharShown = tv.layout.getLineVisibleEnd(maxLines - 1)
+        tv.maxLines = maxLines
+
+        val showMore = "  ${context.getString(R.string.show_more)}"
+
+    }
 }

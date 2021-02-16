@@ -49,7 +49,7 @@
                         android:fontFamily="@font/varela_round"
                         android:maxLines="2"
                         android:textAllCaps="false"
-                        android:textColor="@color/dark"
+                        android:textColor="@color/secondaryTextColor"
                         android:textSize="18sp"
                         tools:text="Amarena Wiśniowa Amarena Wiśniowa" />
 
