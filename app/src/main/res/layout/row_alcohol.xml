@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -13,59 +14,159 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_margin="4dp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="5dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/price_TV"
-                android:layout_width="wrap_content"
+            <FrameLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="Price"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/name_TV" />
+                android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/volume_TV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="Volume"
-                app:layout_constraintBottom_toBottomOf="@+id/price_TV"
-                app:layout_constraintStart_toEndOf="@+id/price_TV" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@drawable/gradient_primary_light"
+                    android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/voltage_TV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="Voltage"
-                app:layout_constraintBottom_toBottomOf="@+id/volume_TV"
-                app:layout_constraintStart_toEndOf="@+id/volume_TV" />
+                    <TextView
+                        android:id="@+id/name_TV"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/varela_round"
+                        android:maxLines="2"
+                        android:textAllCaps="false"
+                        android:textColor="@color/secondaryTextColor"
+                        android:textSize="18sp"
+                        tools:text="Amarena Wiśniowa Amarena Wiśniowa" />
 
-            <TextView
-                android:id="@+id/name_TV"
+                    <ImageView
+                        android:id="@+id/imageView19"
+                        android:layout_width="30dp"
+                        android:layout_height="60dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY"
+                        app:srcCompat="@drawable/arrow" />
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="90dp"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:clipChildren="false"
+                android:clipToPadding="false">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp">
+
+                    <TextView
+                        android:id="@+id/price_TV"
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp"
+                        android:fontFamily="@font/open_sans_regular"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toStartOf="@+id/imageView13"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="39.99zł" />
+
+                    <ImageView
+                        android:id="@+id/imageView13"
+                        android:layout_width="19sp"
+                        android:layout_height="19sp"
+                        android:layout_marginEnd="4dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/price_TV"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/price_TV"
+                        app:srcCompat="@drawable/coins" />
+
+                    <TextView
+                        android:id="@+id/valueTV"
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="3dp"
+                        android:fontFamily="@font/open_sans_light"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toStartOf="@+id/imageView16"
+                        app:layout_constraintTop_toBottomOf="@+id/price_TV"
+                        tools:text="1200mR" />
+
+                    <ImageView
+                        android:id="@+id/imageView16"
+                        android:layout_width="19sp"
+                        android:layout_height="19sp"
+                        android:layout_marginEnd="5dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/valueTV"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/valueTV"
+                        app:srcCompat="@drawable/piggy_bank" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </FrameLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:fontFamily="sans-serif-light"
-                android:text="Name"
-                android:textAlignment="viewStart"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                android:textSize="24sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:paddingStart="4dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="4dp"
+                android:paddingBottom="8dp">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@color/secondary50"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    app:cardBackgroundColor="@color/secondaryColor"
+                    app:cardCornerRadius="22.5dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/categoryIV"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/ic_baseline_help_outline_24" />
+                </androidx.cardview.widget.CardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 

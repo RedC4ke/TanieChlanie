@@ -15,20 +15,20 @@
 
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/primaryLightColor"
+        android:background="@color/secondary50"
         android:clipChildren="false"
-        android:clipToPadding="false">
+        android:clipToPadding="false"
+        android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/primaryDarkColor"
+            app:cardBackgroundColor="@color/secondaryColor"
             app:cardCornerRadius="0dp"
-            app:cardElevation="6dp"
+            app:cardElevation="4dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 

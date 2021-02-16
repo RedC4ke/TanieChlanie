@@ -3,16 +3,22 @@ package com.redc4ke.taniechlanie.data.menu
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.updateLayoutParams
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.redc4ke.taniechlanie.data.*
 import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectViewModel
+import com.redc4ke.taniechlanie.data.viewmodels.CategoryViewModel
 import com.redc4ke.taniechlanie.databinding.RowAlcoholBinding
+import com.redc4ke.taniechlanie.ui.MainActivity
 import com.redc4ke.taniechlanie.ui.menu.MenuFragment
 
 
 class AlcoListAdapter(
-        private var data: ArrayList<AlcoObject>,
-        val fragment: MenuFragment) : RecyclerView.Adapter<AlcoViewHolder>() {
+        private var data: List<AlcoObject>,
+        private val context: MainActivity) : RecyclerView.Adapter<AlcoViewHolder>() {
+
+    private val categoryViewModel = ViewModelProvider(context).get(CategoryViewModel::class.java)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlcoViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -26,21 +32,24 @@ class AlcoListAdapter(
         with (holder.vb) {
             if (position == 0) {
                 root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                    //this.topMargin = 30
+                    this.topMargin = 30
                 }
             }
 
             //Set views for this row
-            nameTV.text = data[position].name
-            priceTV.text = priceString(data[position], fragment)
-            volumeTV.text = volumeString(data[position], fragment)
-            voltageTV.text = voltageString(data[position], fragment)
+            nameTV.text = autoBreak(data[position].name)
+            priceTV.text = priceString(data[position], context)
+            valueTV.text = valueString(data[position], context)
+            categoryViewModel.get().observe((context), {
+                val image = categoryViewModel.getMajor(data[position])?.image
+                Glide.with(context).load(image).into(categoryIV)
+            })
 
             val id = data[position].id
             root.transitionName = "rowAlcoholTransitionName_$id"
 
             root.setOnClickListener {
-                fragment.onItemClick(root, data[position])
+                context.menuFrag.onItemClick(root, data[position])
             }
         }
     }
@@ -49,13 +58,13 @@ class AlcoListAdapter(
         return data.size
     }
 
-    fun setFilter (f: ArrayList<AlcoObject>) {
+    fun setFilter (f: List<AlcoObject>) {
         data = f
         notifyDataSetChanged()
     }
 
     fun update (vm: AlcoObjectViewModel) {
-        data = vm.getAll().value as ArrayList<AlcoObject>
+        data = vm.getAll().value as List<AlcoObject>
         notifyDataSetChanged()
     }
 

@@ -7,20 +7,23 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
 import android.view.Display
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.redc4ke.taniechlanie.R
+import com.redc4ke.taniechlanie.ui.MainActivity
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.math.MathContext
 import java.math.RoundingMode
 import kotlin.math.round
+import kotlin.text.Typography.nbsp
 
-fun valueString(alcoObject: AlcoObject, fragment: Fragment): String {
+fun valueString(alcoObject: AlcoObject, context: MainActivity): String {
     val volume = alcoObject.volume.toBigDecimal()
     val voltage = alcoObject.voltage.times(100.toBigDecimal())
     val price = alcoObject.price
-    val rounded = fragment.requireActivity().getPreferences(MODE_PRIVATE)
+    val rounded = context.getPreferences(MODE_PRIVATE)
             .getBoolean("rounded_mR", false)
 
     val value =
@@ -37,21 +40,21 @@ fun valueString(alcoObject: AlcoObject, fragment: Fragment): String {
 
     val string = if (rounded) R.string.suff_rvalue else R.string.suff_mrvalue
 
-    return fragment.getString(string, substring)
+    return context.getString(string, substring)
 }
 
-fun priceString(alcoObject: AlcoObject, fragment: Fragment): String {
-    return fragment.getString(R.string.suff_price,
+fun priceString(alcoObject: AlcoObject, context: Context): String {
+    return context.getString(R.string.suff_price,
             String.format("%.2f", alcoObject.price))
 }
 
-fun volumeString(alcoObject: AlcoObject, fragment: Fragment): String {
-    return fragment.getString(R.string.suff_volume,
+fun volumeString(alcoObject: AlcoObject, context: Context): String {
+    return context.getString(R.string.suff_volume,
             alcoObject.volume.toString())
 }
 
-fun voltageString(alcoObject: AlcoObject, fragment: Fragment): String {
-    return fragment.getString(R.string.suff_voltage,
+fun voltageString(alcoObject: AlcoObject, context: Context): String {
+    return context.getString(R.string.suff_voltage,
             (alcoObject.voltage.times(100.toBigDecimal()).round(MathContext(2)))
                     .stripTrailingZeros().toPlainString())
 }
@@ -77,4 +80,27 @@ fun imageFromIntent(context: Context, intent: Intent, filename: String): File {
     val bitmap = BitmapFactory.decodeStream(inputStream)
 
     return imageFromBitmap(context, bitmap, filename)
+}
+
+fun autoBreak(s: String): String {
+    val count = s.count { it.isWhitespace() }
+    var r = s
+
+    if (count == 1) {
+        r = r.replace("\\s".toRegex(), "\n")
+    }
+
+    return r
+}
+
+fun textWrap(context: Context, s: String, tv: TextView, maxLines: Int = 6) {
+    tv.text = s
+
+    if (tv.lineCount > maxLines) {
+        val lastCharShown = tv.layout.getLineVisibleEnd(maxLines - 1)
+        tv.maxLines = maxLines
+
+        val showMore = "  ${context.getString(R.string.show_more)}"
+
+    }
 }

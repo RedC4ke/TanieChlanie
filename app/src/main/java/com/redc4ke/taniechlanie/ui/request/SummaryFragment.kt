@@ -37,8 +37,6 @@ class SummaryFragment : BaseFragment<FragmentSummaryBinding>() {
         mainActivity = requireActivity() as MainActivity
         hasImage = arguments?.getBoolean("hasImage")!!
         alcoObject = arguments?.getSerializable("AlcoObject") as AlcoObject
-
-        Log.d("huj", alcoObject.voltage.toString())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -76,9 +74,9 @@ class SummaryFragment : BaseFragment<FragmentSummaryBinding>() {
         })
 
         binding.summaryNameTV.text = alcoObject.name
-        binding.summaryPriceTV.text = priceString(alcoObject, this)
-        binding.summaryVolumeTV.text = volumeString(alcoObject, this)
-        binding.summaryVoltageTV.text = voltageString(alcoObject, this)
+        binding.summaryPriceTV.text = priceString(alcoObject, requireContext())
+        binding.summaryVolumeTV.text = volumeString(alcoObject, requireContext())
+        binding.summaryVoltageTV.text = voltageString(alcoObject, requireContext())
 
         binding.reqUploadBT.setOnClickListener {
             upload()

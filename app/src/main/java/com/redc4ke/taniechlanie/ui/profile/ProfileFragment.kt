@@ -89,8 +89,12 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
                         startActivityForResult(getIntent, pickAvatar)
                     }
                     userViewModel.getStats().observe(viewLifecycleOwner, {
-                        profileSubmitsTV.text = getString(R.string.profile_submits, it["submits"])
-                        profileReviewsTV.text = getString(R.string.profile_reviews, it["reviews"])
+                        profileSubmitsTV.text = getString(R.string.profile_submits,
+                            it?.get("submits") ?: "n/a"
+                        )
+                        profileReviewsTV.text = getString(R.string.profile_reviews,
+                            it?.get("reviews") ?: "n/a"
+                        )
                     })
                     userViewModel.getTitle().observe(viewLifecycleOwner, {
                         profileRankTV.text = it["name"] as String

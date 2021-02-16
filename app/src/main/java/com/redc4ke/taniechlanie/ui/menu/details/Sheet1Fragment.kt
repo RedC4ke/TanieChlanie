@@ -34,9 +34,9 @@ class Sheet1Fragment : BaseFragment<FragmentSheet1Binding>() {
 
         binding.detailsPriceTV.text = getString(R.string.suff_price,
             String.format("%.2f", alcoObject.price))
-        binding.detailsValueTV.text = valueString(alcoObject, this)
-        binding.detailsVolumeTV.text = volumeString(alcoObject, this)
-        binding.detailsVoltageTV.text = voltageString(alcoObject, this)
+        binding.detailsValueTV.text = valueString(alcoObject, (requireActivity() as MainActivity))
+        binding.detailsVolumeTV.text = volumeString(alcoObject, requireContext())
+        binding.detailsVoltageTV.text = voltageString(alcoObject, requireContext())
 
         mainActivity.supportFragmentManager
             .beginTransaction()

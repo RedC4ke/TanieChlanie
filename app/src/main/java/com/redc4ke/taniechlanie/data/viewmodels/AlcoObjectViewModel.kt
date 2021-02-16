@@ -6,14 +6,15 @@ import com.redc4ke.taniechlanie.data.AlcoObject
 
 class AlcoObjectViewModel: ViewModel() {
     private val tempList: MutableList<AlcoObject> = mutableListOf()
-    private val alcoList = MutableLiveData(mutableListOf<AlcoObject>())
+    private val alcoList = MutableLiveData(listOf<AlcoObject>())
 
     fun addObject(o: AlcoObject) {
         tempList.add(o)
         alcoList.value = tempList
     }
 
-    fun getAll(): MutableLiveData<MutableList<AlcoObject>> {
+    fun getAll(): MutableLiveData<List<AlcoObject>> {
+        alcoList.value = alcoList.value?.sortedWith(compareBy { it.name })
         return alcoList
     }
 
