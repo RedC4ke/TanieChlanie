@@ -1,5 +1,6 @@
 package com.redc4ke.taniechlanie.data.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -45,5 +46,17 @@ class CategoryViewModel: ViewModel() {
             }
         }
         return null
+    }
+
+    fun getWithMajor(alcoObject: AlcoObject): List<Category?> {
+        val list = mutableListOf(getMajor(alcoObject))
+        alcoObject.categories.forEach {
+            val category = categoryLiveData.value?.get(it)
+            if (category != null && category != list[0]) {
+                list.add(category)
+            }
+        }
+
+        return list
     }
 }
