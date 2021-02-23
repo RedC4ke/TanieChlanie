@@ -140,7 +140,8 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), Serializable {
                         .toBigDecimal().divide(100.toBigDecimal()),
                 shop = arrayListOf(),
                 categories = categoryIdList,
-                photo = null
+                photo = null,
+                description = null
         )
     }
 

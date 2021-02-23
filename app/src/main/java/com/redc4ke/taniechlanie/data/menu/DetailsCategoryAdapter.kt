@@ -1,5 +1,6 @@
 package com.redc4ke.taniechlanie.data.menu
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +10,7 @@ import com.redc4ke.taniechlanie.data.Category
 import com.redc4ke.taniechlanie.databinding.RowDetailsCatlistBinding
 import com.squareup.picasso.Picasso
 
-class DetailsCategoryAdapter(private val alcoObject: AlcoObject,
-                             private val categories: Map<Int, Category>):
+class DetailsCategoryAdapter(private val categories: List<Category?>):
         RecyclerView.Adapter<DetailsCategoryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailsCategoryViewHolder {
@@ -21,18 +21,11 @@ class DetailsCategoryAdapter(private val alcoObject: AlcoObject,
     }
 
     override fun onBindViewHolder(holder: DetailsCategoryViewHolder, position: Int) {
-
-        val id = alcoObject.categories[position]
-        val category = categories[id]
-
-        holder.vb.catlistNameTV.text = category?.name
-        if (category?.image != null) {
-            Picasso.get().load(category.image).into(holder.vb.catlistIV)
-        }
+        holder.vb.nameTV.text = categories[position]?.name
     }
 
     override fun getItemCount(): Int {
-        return alcoObject.categories.size
+        return categories.size
     }
 
 }

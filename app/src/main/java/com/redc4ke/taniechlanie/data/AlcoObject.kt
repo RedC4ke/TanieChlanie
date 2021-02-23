@@ -11,5 +11,6 @@ data class AlcoObject(
         var voltage: BigDecimal,
         var shop: ArrayList<Int>,
         var categories: ArrayList<Int>,
-        var photo: String?
+        var photo: String?,
+        var description: String?
 ): Serializable

@@ -111,7 +111,7 @@ class UserViewModel: ViewModel() {
                             @Suppress("UNCHECKED_CAST")
                             data["groups"] as ArrayList<String>?,
                             data["stats"] as Map<String, Int>?,
-                            data["title"].toString().toInt(),
+                            data["title"] as Long,
                             data["avatar"] as String?
                         )
                         userStats.value = userData.stats
@@ -248,13 +248,13 @@ class UserViewModel: ViewModel() {
 
 }
 
-private data class UserData(
+data class UserData(
     val uid: String,
     var name: String?,
     val created: Timestamp?,
     val groups: ArrayList<String>?,
     val stats: Map<String, Int>?,
-    val title: Int?,
+    val title: Long?,
     var avatar: String?
 ) {
     fun integrityCheck(firestore: FirebaseFirestore, user: FirebaseUser) {

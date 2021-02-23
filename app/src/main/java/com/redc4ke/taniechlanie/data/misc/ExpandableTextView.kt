@@ -1,7 +1,10 @@
 package com.redc4ke.taniechlanie.data.misc
 
 import android.content.Context
+import android.text.Spannable
 import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
 import com.redc4ke.taniechlanie.R
 
@@ -34,7 +37,12 @@ class ExpandableTextView @JvmOverloads constructor(context: Context, attrs: Attr
 
     private fun getTrimmedText(text: CharSequence?): CharSequence? {
         return if (originalText != null && originalText!!.length > trimLength) {
+            val append = SpannableStringBuilder(" " + context.getString(R.string.show_more))
+            val color = ForegroundColorSpan(resources.getColor(
+                R.color.primaryDarkColor, resources.newTheme()))
+            append.setSpan(color, 0, append.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             SpannableStringBuilder(originalText, 0, trimLength + 1).append(ELLIPSIS)
+                .append(append)
         } else {
             originalText
         }
@@ -52,7 +60,7 @@ class ExpandableTextView @JvmOverloads constructor(context: Context, attrs: Attr
 
     companion object {
         private const val DEFAULT_TRIM_LENGTH = 200
-        private const val ELLIPSIS = "....."
+        private const val ELLIPSIS = "..."
     }
 
     init {

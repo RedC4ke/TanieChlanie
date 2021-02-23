@@ -34,8 +34,15 @@
     <string name="mR">mR:</string>
     <string name="volume">Objętość:</string>
     <string name="voltage">%Vol.:</string>
+    <string name="details_description">Opis</string>
     <string name="details_availability">Sprawdź dostępność</string>
     <string name="details_reviews">Najpopularniejsze recenzje</string>
+    <string name="details_allReviews">Zobacz wszystkie recenzje</string>
+    <string name="details_rating">Oceny</string>
+    <string name="details_rate">Dodaj recenzję</string>
+    <string name="details_count">%1$S ocen</string>
+    <string name="details_reviewhint">Piwo? Piwo. Piwo piwo piwo....</string>
+    <string name="details_ratingError">Ocena musi wynosić przynajmniej 0.5 gwiazdki!</string>
 
     <!-- details page - shop submit popup -->
     <string name="av_submit_header">Dodaj miejsce występowania!</string>
@@ -168,7 +175,10 @@
     <string name="logout">Wyloguj</string>
     <string name="guest">Gość</string>
     <string name="profile">Profil</string>
-    <string name="show_more"><u><font color="#d32f2f">Pokaż więcej</font></u></string>
+    <string name="categories">Kategorie</string>
+    <string name="availability">Dostępność</string>
+    <string name="show_more"><font fgcolor="#9a0007">Pokaż więcej</font></string>
+    <string name="send">Prześlij</string>
 
     <string name="suff_rvalue">%1$S R</string>
     <string name="suff_mrvalue">%1$S mR</string>

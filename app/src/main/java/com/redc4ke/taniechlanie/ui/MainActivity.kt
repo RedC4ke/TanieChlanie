@@ -278,7 +278,11 @@ class MainActivity : AppCompatActivity() {
                         result["voltage"] as BigDecimal,
                         result["shop"] as ArrayList<Int>,
                         result["categories"] as ArrayList<Int>,
-                        result["photo"] as String?
+                        result["photo"] as String?,
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+                                "Sed bibendum rutrum accumsan. Curabitur vel felis ullamcorper, " +
+                                "tincidunt dolor vel, ultricies ligula. Sed posuere elit sit amet" +
+                                " tincidunt quis."
                 )
 
                 Log.d("FireBase", "Added: $alcoObject")
