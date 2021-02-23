@@ -1,151 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="6dp"
+    app:cardBackgroundColor="@color/primary50"
+    app:cardCornerRadius="18dp"
+    app:cardElevation="0dp">
 
-    <View
-        android:id="@+id/divider4"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@color/primary100"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:id="@+id/linearLayout4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical">
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardView5"
-                    android:layout_width="34dp"
-                    android:layout_height="34dp"
-                    android:layout_marginStart="8dp"
-                    app:cardCornerRadius="18dp"
-                    app:cardElevation="1dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageView
-                        android:id="@+id/avatarIV"
-                        android:layout_width="34dp"
-                        android:layout_height="34dp"
-                        android:layout_gravity="center"
-                        app:srcCompat="@drawable/avatar" />
-                </androidx.cardview.widget.CardView>
-
-                <TextView
-                    android:id="@+id/usernameTV"
-                    android:layout_width="160dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="6dp"
-                    android:fontFamily="@font/varela_round"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toEndOf="@+id/cardView5"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="xXDyrektorSzkolyXx"
-                    android:maxLines="1"
-                    android:ellipsize="end"/>
-
-                <TextView
-                    android:id="@+id/timestampTV"
-                    android:layout_width="160dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginBottom="6dp"
-                    android:fontFamily="@font/open_sans_light"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/cardView5"
-                    app:layout_constraintTop_toBottomOf="@+id/usernameTV"
-                    tools:text="16.02.2021, 16:20"
-                    android:maxLines="1"
-                    android:ellipsize="end"/>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:background="@color/white">
-
-            <me.zhanghai.android.materialratingbar.MaterialRatingBar
-                style="@style/Widget.MaterialRatingBar.RatingBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="12dp"
-                android:elevation="2dp"
-                android:isIndicator="true"
-                android:maxHeight="36dp"
-                android:minHeight="36dp"
-                android:numStars="5"
-                android:rating="2.5"
-                app:mrb_progressBackgroundTint="@color/secondary50"
-                app:mrb_progressTint="@color/secondaryColor"
-                app:mrb_secondaryProgressTint="@color/secondary100" />
-
-        </FrameLayout>
-
-    </LinearLayout>
-
-    <View
-        android:id="@+id/divider3"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@color/primary50"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider3">
-
-        <com.redc4ke.taniechlanie.data.misc.ExpandableTextView
-            android:id="@+id/contentTV"
+        <LinearLayout
+            android:id="@+id/linearLayout4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="6dp"
-            android:fontFamily="@font/open_sans_light"
-            android:textAlignment="viewStart"
-            android:textColor="@color/black"
-            android:textSize="12sp"
-            tools:text="Piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo" />
-    </FrameLayout>
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="4dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardView5"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_marginStart="8dp"
+                        app:cardCornerRadius="18dp"
+                        app:cardElevation="1dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/avatarIV"
+                            android:layout_width="34dp"
+                            android:layout_height="34dp"
+                            android:layout_gravity="center"
+                            android:scaleType="centerCrop"
+                            app:srcCompat="@drawable/avatar" />
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/usernameTV"
+                        android:layout_width="140dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="6dp"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/varela_round"
+                        android:maxLines="1"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toEndOf="@+id/cardView5"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="xXDyrektorSzkolyXx" />
+
+                    <TextView
+                        android:id="@+id/timestampTV"
+                        android:layout_width="140dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="6dp"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/open_sans_light"
+                        android:maxLines="1"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/cardView5"
+                        app:layout_constraintTop_toBottomOf="@+id/usernameTV"
+                        tools:text="16.02.2021, 16:20" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical">
+
+                <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                    android:id="@+id/reviewRB"
+                    style="@style/Widget.MaterialRatingBar.RatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="12dp"
+                    android:elevation="2dp"
+                    android:isIndicator="true"
+                    android:maxHeight="30dp"
+                    android:minHeight="30dp"
+                    android:numStars="5"
+                    android:rating="2.5"
+                    app:mrb_progressBackgroundTint="@color/white"
+                    app:mrb_progressTint="@color/primaryColor"
+                    app:mrb_secondaryProgressTint="@color/primaryLightColor" />
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="12dp"
+            android:background="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider3">
+
+            <com.redc4ke.taniechlanie.data.misc.ExpandableTextView
+                android:id="@+id/contentTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/open_sans_light"
+                android:textAlignment="viewStart"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                tools:text="Piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo" />
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
