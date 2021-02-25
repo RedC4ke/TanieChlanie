@@ -98,7 +98,7 @@ class UserViewModel: ViewModel() {
         return update
     }
 
-    private fun downloadData() {
+    fun downloadData() {
         if (staticUser != null) {
             firestore.collection("users").document(staticUser!!.uid).get()
                 .addOnSuccessListener {
@@ -110,7 +110,7 @@ class UserViewModel: ViewModel() {
                             data["created"] as Timestamp?,
                             @Suppress("UNCHECKED_CAST")
                             data["groups"] as ArrayList<String>?,
-                            data["stats"] as Map<String, Int>?,
+                            data["stats"] as Map<String, Int>,
                             data["title"] as Long,
                             data["avatar"] as String?
                         )
@@ -253,7 +253,7 @@ data class UserData(
     var name: String?,
     val created: Timestamp?,
     val groups: ArrayList<String>?,
-    val stats: Map<String, Int>?,
+    val stats: Map<String, Any>,
     val title: Long?,
     var avatar: String?
 ) {
