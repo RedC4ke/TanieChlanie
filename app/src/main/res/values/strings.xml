@@ -43,6 +43,8 @@
     <string name="details_count">%1$S ocen</string>
     <string name="details_reviewhint">Piwo? Piwo. Piwo piwo piwo....</string>
     <string name="details_ratingError">Ocena musi wynosić przynajmniej 0.5 gwiazdki!</string>
+    <string name="details_editReview">Zmień recenzję</string>
+    <string name="details_report">Zgłoś</string>
 
     <!-- details page - shop submit popup -->
     <string name="av_submit_header">Dodaj miejsce występowania!</string>
@@ -179,6 +181,8 @@
     <string name="availability">Dostępność</string>
     <string name="show_more"><font fgcolor="#9a0007">Pokaż więcej</font></string>
     <string name="send">Prześlij</string>
+    <string name="edit">Edytuj</string>
+    <string name="delete">Usuń</string>
 
     <string name="suff_rvalue">%1$S R</string>
     <string name="suff_mrvalue">%1$S mR</string>

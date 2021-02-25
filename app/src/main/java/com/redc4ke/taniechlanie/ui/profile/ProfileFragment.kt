@@ -77,6 +77,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
 
             with (binding) {
                 if (user != null) {
+                    userViewModel.downloadData()
                     userViewModel.getUserUpdates().observe(viewLifecycleOwner, {
                         val name = user!!.displayName
                         val photo = user!!.photoUrl

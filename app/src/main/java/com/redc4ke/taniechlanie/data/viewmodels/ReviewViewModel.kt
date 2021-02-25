@@ -11,12 +11,10 @@ import androidx.lifecycle.ViewModel
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.*
 import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.data.setImage
+import kotlinx.coroutines.flow.merge
 import me.zhanghai.android.materialratingbar.MaterialRatingBar
 import java.math.BigDecimal
 import java.text.DateFormat
@@ -77,6 +75,7 @@ class ReviewViewModel: ViewModel() {
                     val data = doc.data
                     val review = Review(
                         data["id"] as HashMap<*, *>,
+                        data["object_id"] as Long,
                         data["author"] as String,
                         data["rating"] as Double,
                         data["timestamp"] as Timestamp,
@@ -94,31 +93,47 @@ class ReviewViewModel: ViewModel() {
     }
 
     fun addReview(context: Context, id: Int, user: FirebaseUser,
-                  rating: Double, content: String): Task<DocumentReference> {
+                  rating: Double, content: String): Task<Void> {
         val data = mapOf(
             "id" to UUID.randomUUID(),
+            "object_id" to id,
             "author" to user.uid,
             "rating" to rating,
             "timestamp" to Timestamp.now(),
             "content" to content,
             "usefulness" to 0
         )
-        Log.d("huj", "sdfsfdg")
         return ref.collection("reviews").document("accepted")
-            .collection(id.toString()).add(data)
+            .collection(id.toString()).document(user.uid).set(data, SetOptions.merge())
             .addOnSuccessListener {
-                Toast.makeText(context, "Recenzja dodana!", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Recenzja dodana!", Toast.LENGTH_SHORT).show()
+                download(id)
+                reviewsUpdate(user, 1)
             }
             .addOnFailureListener {
                 Toast.makeText(context, "Nieznany błąd", Toast.LENGTH_LONG).show()
             }
     }
 
+    fun remove(review: Review, user: FirebaseUser): Task<Void> {
+        return ref.collection("reviews").document("accepted")
+            .collection(review.objectID.toString()).document(user.uid).delete()
+            .addOnSuccessListener {
+                download(review.objectID.toInt())
+                reviewsUpdate(user, -1)
+            }
+    }
+
+    fun reviewsUpdate(user: FirebaseUser, value: Long) {
+        ref.collection("users").document(user.uid).update(
+            "stats.reviews", FieldValue.increment(value))
+    }
 
 }
 
 data class Review(
     val reviewID: HashMap<*, *>,
+    val objectID: Long,
     val author: String,
     val rating: Double,
     val timestamp: Timestamp,
