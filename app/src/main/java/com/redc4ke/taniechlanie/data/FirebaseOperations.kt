@@ -12,6 +12,9 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
@@ -24,12 +27,12 @@ fun setImage(context: Context, name: String, iv: ImageView,
     val imageFile = File(context.filesDir, "$name.jpg")
     Log.d("setImage", "url: $url")
     if (File(context.filesDir, "$name.jpg").exists()) {
-        iv.setImageBitmap(BitmapFactory.decodeFile(imageFile.path))
+        Glide.with(context).load(imageFile.absolutePath).into(iv)
     }
     if ("jabot" in url.toString()) {
         val imageRef = FirebaseStorage.getInstance().getReferenceFromUrl(url.toString())
         imageRef.getFile(imageFile).addOnSuccessListener {
-            iv.setImageBitmap(BitmapFactory.decodeFile(imageFile.path))
+            Glide.with(context).load(imageFile).into(iv)
             Log.d("setImage","success ${imageFile.path}")
         }.addOnFailureListener {
             Log.d("setImage","$it")

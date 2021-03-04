@@ -3,35 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="30px"
-    android:background="@color/secondary50"
-    android:clipChildren="false"
-    android:clipToPadding="false">
+    android:layout_height="match_parent"
+    android:layout_marginTop="30px">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipChildren="false"
-        android:clipToPadding="false"
+        android:background="@color/secondary50"
         android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardView3"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@color/white"
-            app:cardCornerRadius="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="60dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <Button
-                    android:id="@+id/profileManageReturnBT"
+                    android:id="@+id/profileReviewsReturnBT"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_marginStart="6dp"
@@ -41,7 +31,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:id="@+id/imageView11"
+                    android:id="@+id/imageView20"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginStart="16dp"
@@ -53,42 +43,27 @@
                     app:tint="@color/primaryLightColor" />
 
                 <TextView
-                    android:id="@+id/textView23"
+                    android:id="@+id/textView24"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
                     android:fontFamily="@font/varela_round"
-                    android:text="@string/profile_manageHeader"
+                    android:text="@string/profile_your_reviews"
                     android:textColor="@color/black"
                     android:textSize="21sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/profileManageReturnBT"
+                    app:layout_constraintStart_toEndOf="@+id/profileReviewsReturnBT"
                     app:layout_constraintTop_toTopOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView4"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/profileReviewsRV"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="12dp"
-            android:background="@color/white"
-            android:clipChildren="false"
+            android:paddingBottom="10dp"
             android:clipToPadding="false"
-            app:cardCornerRadius="0dp"
-            app:cardElevation="2dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frameLayout2">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/profileManageRV"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingBottom="12dp" />
-
-        </androidx.cardview.widget.CardView>
+            android:clipChildren="false"/>
 
     </LinearLayout>
 

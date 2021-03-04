@@ -11,11 +11,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.*
 import com.redc4ke.taniechlanie.data.menu.DetailsCategoryAdapter
 import com.redc4ke.taniechlanie.data.menu.ReviewAdapter
 import com.redc4ke.taniechlanie.data.viewmodels.CategoryViewModel
+import com.redc4ke.taniechlanie.data.viewmodels.Review
 import com.redc4ke.taniechlanie.data.viewmodels.ReviewViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentSheet1Binding
 import com.redc4ke.taniechlanie.ui.base.BaseFragment
@@ -31,6 +33,8 @@ class Sheet1Fragment : BaseFragment<FragmentSheet1Binding>() {
     private lateinit var mainActivity: MainActivity
     private lateinit var categoryViewModel: CategoryViewModel
     private lateinit var reviewViewModel: ReviewViewModel
+    private var userReview: Review? = null
+    private val user = FirebaseAuth.getInstance().currentUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,12 +68,16 @@ class Sheet1Fragment : BaseFragment<FragmentSheet1Binding>() {
                 categoryRV.adapter = DetailsCategoryAdapter(categories)
             })
             reviewViewModel.getAll().observe(viewLifecycleOwner, {
-                val reviews = it[alcoObject.id] ?: listOf()
+                val reviews: MutableList<Review> =
+                    (it[alcoObject.id] ?: mutableListOf()) as MutableList<Review>
                 val ratings = mutableListOf<Double>()
                 reviews.forEach { review ->
                     ratings.add(review.rating)
                 }
-                Log.d("huj", reviews.toString())
+
+                userReview = reviews.find {review ->  review.author ==
+                        user?.uid}
+
                 reviewCountTV.text = getString(R.string.details_count, reviews.size.toString())
                 if (ratings.isNotEmpty()) {
                     ratingTV.text = String.format(BigDecimal(ratings.average())
@@ -80,16 +88,24 @@ class Sheet1Fragment : BaseFragment<FragmentSheet1Binding>() {
 
                 ratingBar.rating = ratings.average().toFloat()
                 reviewRV.layoutManager = LinearLayoutManager(context)
-                val size = if (reviews.size >=4) {
-                    4
+                val size = if (reviews.size >= 6) {
+                    6
                 } else {
                     reviews.size
                 }
-                reviewRV.adapter = ReviewAdapter(
-                    requireContext(), reviews.take(size), reviewViewModel)
+
+                if (userReview != null) {
+                    reviewAddTV.text = getString(R.string.details_editReview)
+                } else {
+                    reviewAddTV.text = getString(R.string.details_rate)
+                }
+
+                reviewRV.adapter = ReviewAdapter(this@Sheet1Fragment,
+                    reviews.take(size), reviewViewModel, userReview, alcoObject.id)
             })
             reviewAddTV.setOnClickListener {
-                AddReviewFragment(alcoObject.id).show(parentFragmentManager, "addReview")
+                AddReviewFragment(alcoObject.id, userReview).show(parentFragmentManager,
+                    "addReview")
             }
         }
 

@@ -32,7 +32,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
         get() = FragmentProfileBinding::inflate
     private lateinit var userViewModel: UserViewModel
     private val pickAvatar = 1
-    private var user: FirebaseUser? = null
+    var user: FirebaseUser? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -77,6 +77,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
 
             with (binding) {
                 if (user != null) {
+                    userViewModel.downloadData()
                     userViewModel.getUserUpdates().observe(viewLifecycleOwner, {
                         val name = user!!.displayName
                         val photo = user!!.photoUrl

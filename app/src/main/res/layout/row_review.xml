@@ -103,17 +103,39 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="12dp"
                     android:elevation="2dp"
                     android:isIndicator="true"
-                    android:maxHeight="30dp"
-                    android:minHeight="30dp"
+                    android:maxHeight="24dp"
+                    android:minHeight="24dp"
                     android:numStars="5"
                     android:rating="2.5"
                     app:mrb_progressBackgroundTint="@color/white"
                     app:mrb_progressTint="@color/primaryColor"
                     app:mrb_secondaryProgressTint="@color/primaryLightColor" />
 
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <Button
+                    android:id="@+id/reviewMenuBT"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="#00FFFFFF" />
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginEnd="2dp"
+                    app:srcCompat="@drawable/ic_baseline_more_vert_24"
+                    app:tint="@color/secondaryTextColor" />
             </FrameLayout>
 
         </LinearLayout>
@@ -146,7 +168,7 @@
                 android:layout_marginEnd="12dp"
                 android:layout_marginBottom="10dp"
                 android:fontFamily="@font/open_sans_light"
-                android:textAlignment="viewStart"
+                android:textAlignment="textStart"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 tools:text="Piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo" />
