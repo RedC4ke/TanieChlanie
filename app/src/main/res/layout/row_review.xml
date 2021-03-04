@@ -168,7 +168,7 @@
                 android:layout_marginEnd="12dp"
                 android:layout_marginBottom="10dp"
                 android:fontFamily="@font/open_sans_light"
-                android:textAlignment="viewStart"
+                android:textAlignment="textStart"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 tools:text="Piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo piwo" />

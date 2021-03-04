@@ -33,6 +33,13 @@ class ProfileMenuAdapter(private val context: ProfileMenuFragment):
                         .navigate(R.id.to_profileManage_dest)
                 }
             }
+
+            1 -> {
+                holder.vb.root.setOnClickListener {
+                    context.findNavController()
+                        .navigate(R.id.action_profileMenu_dest_to_profileReviews_dest)
+                }
+            }
         }
 
         holder.vb.profileRowNameTV.text = menu[position]

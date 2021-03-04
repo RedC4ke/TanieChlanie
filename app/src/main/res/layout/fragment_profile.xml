@@ -63,13 +63,13 @@
 
                 <TextView
                     android:id="@+id/profileNameTV"
-                    android:layout_width="250dp"
+                    android:layout_width="240dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="12dp"
                     android:ellipsize="end"
                     android:fontFamily="@font/varela_round"
-                    android:maxLines="1"
+                    android:maxLines="2"
                     android:textColor="@color/black"
                     android:textSize="24sp"
                     app:layout_constraintStart_toEndOf="@+id/cardView"

@@ -141,6 +141,7 @@
     <string name="profile_confirm">Wymagane potwierdzenie</string>
     <string name="profile_hint_newpwd">Nowe hasło</string>
     <string name="profile_hint_currentpwd">Podaj obecne hasło</string>
+    <string name="profile_your_reviews">Twoje recenzje</string>
 
 
     <!-- options page -->
