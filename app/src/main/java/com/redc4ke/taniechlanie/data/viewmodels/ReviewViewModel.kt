@@ -24,6 +24,7 @@ import kotlin.collections.HashMap
 
 class ReviewViewModel: ViewModel() {
     private val reviews = MutableLiveData<Map<Int, List<Review>>>()
+    private val userReview = MutableLiveData<MutableMap<String, List<Review>>>(mutableMapOf())
     private val tempList = mutableMapOf<Int, MutableList<Review>>()
     private val ref = FirebaseFirestore.getInstance()
 
@@ -39,6 +40,20 @@ class ReviewViewModel: ViewModel() {
 
     fun get(id: Int): List<Review> {
         return reviews.value!![id]!!.sortedByDescending { it.usefulness }
+    }
+
+    fun getUser(uid: String, alcoObjectViewModel: AlcoObjectViewModel):
+            List<Pair<AlcoObject, Review>> {
+
+        val list = userReview.value?.get(uid) ?: listOf()
+        val result = mutableListOf<Pair<AlcoObject, Review>>()
+        list.sortedBy { it.timestamp }.forEach {
+            val alcoObject = alcoObjectViewModel.get(it.objectID.toInt())
+            if (alcoObject != null) {
+                result.add(Pair(alcoObject, it))
+            }
+        }
+        return result
     }
 
     fun parse(context: Context, review: Review, iv: ImageView,
@@ -64,31 +79,36 @@ class ReviewViewModel: ViewModel() {
             }
     }
 
-    fun download(id: Int): com.google.android.gms.tasks.Task<QuerySnapshot> {
+    fun download(id: Int): Task<QuerySnapshot> {
         val col = ref.collection("reviews")
-            .document("accepted").collection(id.toString())
+            .whereEqualTo("object_id", id)
 
         return col.get()
             .addOnSuccessListener {
                 val list = mutableListOf<Review>()
                 it.forEach {doc ->
-                    val data = doc.data
-                    val review = Review(
-                        data["id"] as HashMap<*, *>,
-                        data["object_id"] as Long,
-                        data["author"] as String,
-                        data["rating"] as Double,
-                        data["timestamp"] as Timestamp,
-                        data["content"] as String,
-                        data["usefulness"] as Long
-                    )
-                    list.add(review)
+                    Log.d("huj", "guwno")
+                    list.add(retrieve(doc))
                 }
                 add(id, list)
                 Log.d("ReviewViewModel", "Added ${list.size} reviews for $id")
             }
             .addOnFailureListener {
                 Log.d("ReviewViewModel", "Review download failed: $it")
+            }
+    }
+
+    fun downloadUser(uid: String): Task<QuerySnapshot> {
+        val col = ref.collection("reviews")
+        return col.whereEqualTo("author", uid).get()
+            .addOnSuccessListener {
+                val list = mutableListOf<Review>()
+                it.forEach {document ->
+                    Log.d("ReviewViewModel", "Retrieved $document")
+                    list.add(retrieve(document))
+                    Log.d("ReviewViewModel", "Retrieved $list")
+                }
+                userReview.value!![uid] = list
             }
     }
 
@@ -103,8 +123,8 @@ class ReviewViewModel: ViewModel() {
             "content" to content,
             "usefulness" to 0
         )
-        return ref.collection("reviews").document("accepted")
-            .collection(id.toString()).document(user.uid).set(data, SetOptions.merge())
+        return ref.collection("reviews")
+            .document(id.toString() + ":" + user.uid).set(data, SetOptions.merge())
             .addOnSuccessListener {
                 Toast.makeText(context, "Recenzja dodana!", Toast.LENGTH_SHORT).show()
                 download(id)
@@ -115,18 +135,36 @@ class ReviewViewModel: ViewModel() {
             }
     }
 
-    fun remove(review: Review, user: FirebaseUser): Task<Void> {
-        return ref.collection("reviews").document("accepted")
-            .collection(review.objectID.toString()).document(user.uid).delete()
+    fun remove(review: Review, user: FirebaseUser): Task<QuerySnapshot> {
+        return ref.collection("reviews")
+            .whereEqualTo("reviewID", review.reviewID).get()
             .addOnSuccessListener {
-                download(review.objectID.toInt())
-                reviewsUpdate(user, -1)
+                it.forEach { document ->
+                    document.reference.delete()
+                        .addOnSuccessListener {
+                            download(review.objectID.toInt())
+                            reviewsUpdate(user, -1)
+                        }
+                }
             }
     }
 
-    fun reviewsUpdate(user: FirebaseUser, value: Long) {
+    private fun reviewsUpdate(user: FirebaseUser, value: Long) {
         ref.collection("users").document(user.uid).update(
             "stats.reviews", FieldValue.increment(value))
+    }
+
+    private fun retrieve(doc: DocumentSnapshot): Review {
+        val data = doc.data
+        return Review(
+            data?.get("id") as HashMap<*, *>,
+            data["object_id"] as Long,
+            data["author"] as String,
+            data["rating"] as Double,
+            data["timestamp"] as Timestamp,
+            data["content"] as String,
+            data["usefulness"] as Long
+        )
     }
 
 }

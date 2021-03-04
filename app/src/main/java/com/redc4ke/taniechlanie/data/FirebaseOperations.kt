@@ -27,12 +27,12 @@ fun setImage(context: Context, name: String, iv: ImageView,
     val imageFile = File(context.filesDir, "$name.jpg")
     Log.d("setImage", "url: $url")
     if (File(context.filesDir, "$name.jpg").exists()) {
-        iv.setImageBitmap(BitmapFactory.decodeFile(imageFile.path))
+        Glide.with(context).load(imageFile.absolutePath).into(iv)
     }
     if ("jabot" in url.toString()) {
         val imageRef = FirebaseStorage.getInstance().getReferenceFromUrl(url.toString())
         imageRef.getFile(imageFile).addOnSuccessListener {
-            iv.setImageBitmap(BitmapFactory.decodeFile(imageFile.path))
+            Glide.with(context).load(imageFile).into(iv)
             Log.d("setImage","success ${imageFile.path}")
         }.addOnFailureListener {
             Log.d("setImage","$it")

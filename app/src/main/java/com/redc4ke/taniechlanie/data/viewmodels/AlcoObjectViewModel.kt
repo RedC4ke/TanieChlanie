@@ -18,11 +18,9 @@ class AlcoObjectViewModel: ViewModel() {
         return alcoList
     }
 
-    fun addAll(o: MutableList<AlcoObject>) {
-        alcoList.value = o
+    fun get(id: Int): AlcoObject? {
+        return tempList.find { it.id == id }
     }
-
-    
 }
 
 

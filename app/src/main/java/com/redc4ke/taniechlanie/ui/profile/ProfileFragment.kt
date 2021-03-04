@@ -32,7 +32,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
         get() = FragmentProfileBinding::inflate
     private lateinit var userViewModel: UserViewModel
     private val pickAvatar = 1
-    private var user: FirebaseUser? = null
+    var user: FirebaseUser? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
