@@ -30,19 +30,19 @@ class FavouriteFragment: BaseFragment<FragmentFavouriteBinding>() {
     override fun onStart() {
         super.onStart()
 
-        userViewModel.getFavourites().observe(viewLifecycleOwner, {
-            val list = mutableListOf<AlcoObject>()
-            it.forEach {id ->
-                alcoObjectViewModel.get(id.toInt())?.let { alcoObject ->
-                    list.add(alcoObject)
-                }
-            }
-            binding.favouriteRV.run {
-                layoutManager = LinearLayoutManager(requireContext())
-                adapter = AlcoListAdapter(list, activity as MainActivity)
-            }
-
-        })
+        //userViewModel.getFavourites().observe(viewLifecycleOwner, {
+        //    val list = mutableListOf<AlcoObject>()
+        //    it.forEach {id ->
+        //        alcoObjectViewModel.get(id.toInt())?.let { alcoObject ->
+        //            list.add(alcoObject)
+        //        }
+        //    }
+        //    binding.favouriteRV.run {
+        //        layoutManager = LinearLayoutManager(requireContext())
+        //        adapter = AlcoListAdapter(list, activity as MainActivity, )
+        //    }
+//
+        //})
     }
 
 

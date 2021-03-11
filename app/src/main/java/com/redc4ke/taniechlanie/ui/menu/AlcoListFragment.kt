@@ -1,13 +1,14 @@
 package com.redc4ke.taniechlanie.ui.menu
 
-import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
-import android.view.*
-import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.Toolbar
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.doOnPreDraw
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,108 +16,51 @@ import androidx.recyclerview.widget.RecyclerView
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.data.menu.AlcoListAdapter
-import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentAlcoListBinding
 import com.redc4ke.taniechlanie.ui.MainActivity
 import com.redc4ke.taniechlanie.ui.base.BaseFragment
+import com.redc4ke.taniechlanie.ui.base.BaseListFragment
 import java.io.Serializable
 import java.text.Normalizer
 import java.util.*
 
 
-class MenuFragment(
-    private var list: List<AlcoObject>
-) : BaseFragment<FragmentAlcoListBinding>(), Serializable {
+class AlcoListFragment() : BaseFragment<FragmentAlcoListBinding>(), Serializable {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentAlcoListBinding
         get() = FragmentAlcoListBinding::inflate
-    private lateinit var alcoObjectViewModel: AlcoObjectViewModel
-    private var vmData: List<AlcoObject>? = null
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: AlcoListAdapter
     private lateinit var mainActivity: MainActivity
+    private lateinit var alAdapter: AlcoListAdapter
+    private var list = listOf<AlcoObject>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
         mainActivity = requireActivity() as MainActivity
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         postponeEnterTransition()
         view.doOnPreDraw { startPostponedEnterTransition() }
         super.onViewCreated(view, savedInstanceState)
+    }
 
-        recyclerView = binding.alcoListRV
-        //Connection between this fragment and activity, send a reference to the activity
-        //and retrieve data from FireBase tasks
-        val act = activity as MainActivity
-        act.menuFrag = this
-        alcoObjectViewModel = ViewModelProvider(act).get(AlcoObjectViewModel::class.java)
-        //Set up the recycler view
-        vmData = alcoObjectViewModel.getAll().value
-        adapter = AlcoListAdapter(vmData!!, mainActivity)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this.context)
+    override fun onStart() {
+        super.onStart()
 
-        alcoObjectViewModel.getAll().observe(viewLifecycleOwner, {
-            vmData = it
+        val parent = parentFragment?.parentFragment as BaseListFragment<*>
+        parent.alcoObjectList.observe(viewLifecycleOwner, {
+            list = it
+            alAdapter.update(it)
         })
 
-        //Change toolbar text
-        val actionBar: Toolbar = requireActivity().findViewById(R.id.toolbar) as Toolbar
-        actionBar.title = "Wybierz z listy aby zacząć:"
-    }
+        alAdapter = AlcoListAdapter(listOf(), mainActivity, this)
+        binding.alcoListRV.run {
+            this.adapter = alAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
 
-    override fun onResume() {
-        super.onResume()
-        setTransitions(R.transition.slide_up_menu, R.transition.slide_down_menu)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.search_menu, menu)
-
-        //Search setup
-        val searchItem: MenuItem = menu.findItem(R.id.action_search)
-        val searchManager: SearchManager =
-            activity?.getSystemService(
-                android.content.Context
-                    .SEARCH_SERVICE
-            ) as SearchManager
-        val searchView: SearchView = searchItem.actionView as SearchView
-
-        searchView.queryHint = "Szukaj..."
-
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
-        searchView.setIconifiedByDefault(true)
-
-        val queryTextListener: SearchView.OnQueryTextListener =
-            object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    return false
-                }
-
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    val text = Normalizer.normalize(
-                        newText?.toLowerCase(Locale.ROOT), Normalizer.Form.NFD
-                    )
-                    val filteredList: MutableList<AlcoObject> = mutableListOf()
-                    vmData?.forEach {
-                        val name = Normalizer.normalize(
-                            it.name.toLowerCase(Locale.ROOT), Normalizer.Form.NFD
-                        )
-                        if (name.contains(text)) filteredList.add(it)
-                    }
-                    adapter.update(filteredList as List<AlcoObject>)
-                    Log.d("menuFilter", "$vmData")
-
-                    return true
-                }
-            }
-
-        searchView.setOnQueryTextListener(queryTextListener)
+        setSearch(alAdapter)
     }
 
     fun onItemClick(cardView: View, alcoObject: AlcoObject) {
@@ -125,16 +69,59 @@ class MenuFragment(
         val rowAlcoholDetailsTransitionName =
             getString(R.string.row_alcohol_details_transition_name)
         val extras = FragmentNavigatorExtras(
-            cardView
-                    to rowAlcoholDetailsTransitionName
+            cardView to rowAlcoholDetailsTransitionName
         )
-        val directions = MenuFragmentDirections.openDetails(alcoObject, this)
+        val directions = AlcoListFragmentDirections.openDetails(alcoObject, this)
         findNavController().navigate(directions, extras)
+    }
+
+    private fun setSearch(adapter: AlcoListAdapter) {
+        val textChangedListener: TextWatcher =
+            object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    val text = Normalizer.normalize(
+                        s?.toString()?.toLowerCase(Locale.ROOT), Normalizer.Form.NFD
+                    )
+                    val filteredList: MutableList<AlcoObject> = mutableListOf()
+                    list.forEach {
+                        val name = Normalizer.normalize(
+                            it.name.toLowerCase(Locale.ROOT), Normalizer.Form.NFD
+                        )
+                        if (name.contains(text)) filteredList.add(it)
+                    }
+                    adapter.update(filteredList as List<AlcoObject>)
+                    Log.d("menuFilter", "$list")
+                }
+
+                override fun afterTextChanged(s: Editable?) {}
+            }
+        binding.alcoListSearchET.addTextChangedListener(textChangedListener)
+
+        //Set animation
+        val searchBar = binding.alcoListSearchBarCV
+        binding.alcoListRV.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy > 10 && searchBar.visibility == View.VISIBLE) {
+                    searchBar.visibility = View.GONE
+                } else if (dy < -10 && searchBar.visibility == View.GONE) {
+                    searchBar.visibility = View.VISIBLE
+                }
+            }
+        })
     }
 
     fun updateRV(l: List<AlcoObject>) {
         //Update RV data
-        adapter.update(l)
+        alAdapter.update(l)
     }
 
 }

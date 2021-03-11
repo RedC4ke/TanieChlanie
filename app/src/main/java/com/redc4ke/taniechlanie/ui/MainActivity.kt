@@ -58,7 +58,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var userViewModel: UserViewModel
     private lateinit var binding: ActivityMainBinding
     private lateinit var prefs: SharedPreferences
-    lateinit var menuFrag: MenuFragment
     lateinit var alcoObjectViewModel: AlcoObjectViewModel
     lateinit var faq: ArrayList<Map<String, String>>
     private val loginRC = 1
