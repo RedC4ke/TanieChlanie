@@ -12,6 +12,7 @@
     <string name="request_shop">Wskaż dostępność:</string>
     <string name="request_summary">Podsumowanie</string>
     <string name="profile_page">Profil</string>
+    <string name="favourite_page">Ulubione</string>
 
     <!-- welcome -->
     <string name="start">Zaczynamy!</string>
@@ -45,10 +46,14 @@
     <string name="details_ratingError">Ocena musi wynosić przynajmniej 0.5 gwiazdki!</string>
     <string name="details_editReview">Zmień recenzję</string>
     <string name="details_report">Zgłoś</string>
+    <string name="details_favtoast">Dodano do ulubionych</string>
+    <string name="details_favremove">Usunięto z ulubionych</string>
 
     <!-- details page - shop submit popup -->
     <string name="av_submit_header">Dodaj miejsce występowania!</string>
     <string name="av_submit_disclaimer">Sklepu nie ma na liście</string>
+
+    <!-- favourite page -->
 
     <!-- about page -->
     <string name="about_author">by Redc4ke</string>

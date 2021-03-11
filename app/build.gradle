@@ -23,8 +23,8 @@ android {
         applicationId "com.redc4ke.taniechlanie"
         minSdkVersion 25
         targetSdkVersion 30
-        versionCode 4
-        versionName "v0.4.0"
+        versionCode 5
+        versionName "v0.5.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -7,22 +7,19 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
-import com.firebase.ui.auth.data.model.User
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.redc4ke.taniechlanie.BuildConfig
 import com.redc4ke.taniechlanie.R
+import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.ui.MainActivity
 import java.io.File
-import java.lang.Exception
-import java.lang.reflect.Array.get
-import java.util.*
-import kotlin.collections.ArrayList
+import kotlin.collections.set
 
-class UserViewModel: ViewModel() {
+class UserViewModel : ViewModel() {
     private val firestore = FirebaseFirestore.getInstance()
     private var titles: MutableMap<Int, Map<String, Any>> = mutableMapOf()
     private val defaultAvatar =
@@ -33,6 +30,7 @@ class UserViewModel: ViewModel() {
     private val userTitle = MutableLiveData<Map<String, Any?>>()
     private val update = MutableLiveData<Boolean>()
     private var updateValue = false
+    private var favourites = MutableLiveData<ArrayList<Long>>()
 
     init {
         downloadTitles()
@@ -75,7 +73,8 @@ class UserViewModel: ViewModel() {
                     Toast.makeText(
                         context,
                         it.toString(),
-                        Toast.LENGTH_LONG).show()
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
         } else if (user != null) {
             downloadData()
@@ -98,6 +97,10 @@ class UserViewModel: ViewModel() {
         return update
     }
 
+    fun getFavourites(): MutableLiveData<ArrayList<Long>> {
+        return favourites
+    }
+
     fun downloadData() {
         if (staticUser != null) {
             firestore.collection("users").document(staticUser!!.uid).get()
@@ -108,15 +111,16 @@ class UserViewModel: ViewModel() {
                             data["uid"] as String,
                             data["name"] as String?,
                             data["created"] as Timestamp?,
-                            @Suppress("UNCHECKED_CAST")
                             data["groups"] as ArrayList<String>?,
                             data["stats"] as Map<String, Int>,
                             data["title"] as Long,
-                            data["avatar"] as String?
+                            data["avatar"] as String?,
+                            data["favourites"] as ArrayList<Long>? ?: arrayListOf()
                         )
                         userStats.value = userData.stats
                         userTitle.value =
                             titles[(data["title"] as Long).toInt()] ?: mapOf("name" to "n/a")
+                        favourites.value = userData.favourites
 
                         if (staticUser != null) userData.integrityCheck(firestore, staticUser!!)
                     }
@@ -128,7 +132,7 @@ class UserViewModel: ViewModel() {
     private fun downloadTitles() {
         firestore.collection("titles").get()
             .addOnSuccessListener {
-                it.forEach{document ->
+                it.forEach { document ->
                     val data = document.data
                     titles[(data["id"] as Long).toInt()] = mapOf(
                         "name" to data["name"] as String
@@ -141,6 +145,46 @@ class UserViewModel: ViewModel() {
             }
     }
 
+    fun addFavourite(context: Context, alcoObject: AlcoObject) {
+        if (staticUser != null) {
+            firestore.collection("users").document(staticUser!!.uid)
+                .update("favourites", FieldValue.arrayUnion(alcoObject.id))
+                .addOnSuccessListener {
+                    Toast.makeText(
+                        context, context.getString(R.string.details_favtoast),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    downloadData()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(
+                        context, context.getString(R.string.error, it.toString()),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+        }
+    }
+
+    fun removeFavourite(context: Context, alcoObject: AlcoObject) {
+        if (staticUser != null) {
+            firestore.collection("users").document(staticUser!!.uid)
+                .update("favourites", FieldValue.arrayRemove(alcoObject.id))
+                .addOnSuccessListener {
+                    Toast.makeText(
+                        context, context.getString(R.string.details_favremove),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    downloadData()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(
+                        context, context.getString(R.string.error, it.toString()),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+        }
+    }
+
     fun setAvatar(context: Context, file: File) {
         try {
             val imageUri = Uri.fromFile(file)
@@ -150,7 +194,7 @@ class UserViewModel: ViewModel() {
                 .child(file.name)
 
             storageRef.putFile(imageUri)
-                .addOnSuccessListener {imageUpload ->
+                .addOnSuccessListener { imageUpload ->
                     imageUpload.metadata!!.reference!!.downloadUrl
                         .addOnSuccessListener {
                             setAvatarUrl(it)
@@ -161,13 +205,15 @@ class UserViewModel: ViewModel() {
             Toast.makeText(
                 context,
                 "Błąd: $e",
-                Toast.LENGTH_SHORT).show()
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
     private fun setAvatarUrl(uri: Uri) {
         staticUser?.updateProfile(
-            UserProfileChangeRequest.Builder().setPhotoUri(uri).build())
+            UserProfileChangeRequest.Builder().setPhotoUri(uri).build()
+        )
             ?.addOnSuccessListener {
                 firestore.collection("users").document(staticUser?.uid.toString())
                     .update("avatar", uri)
@@ -176,17 +222,18 @@ class UserViewModel: ViewModel() {
                         Log.d("userVM", "Avatar uri set to: $uri")
                     }
                     .addOnFailureListener {
-                        Log.d("userVM","Avatar uri sync failed: $it")
+                        Log.d("userVM", "Avatar uri sync failed: $it")
                     }
             }
             ?.addOnFailureListener {
-                Log.d("userVM","Avatar uri not set: $it")
+                Log.d("userVM", "Avatar uri not set: $it")
             }
     }
 
     fun setDisplayName(name: String) {
         staticUser?.updateProfile(
-            UserProfileChangeRequest.Builder().setDisplayName(name).build())
+            UserProfileChangeRequest.Builder().setDisplayName(name).build()
+        )
             ?.addOnSuccessListener {
                 firestore.collection("users").document(staticUser?.uid.toString())
                     .update("name", name)
@@ -207,12 +254,16 @@ class UserViewModel: ViewModel() {
         staticUser?.updateEmail(address)
             ?.addOnSuccessListener {
                 update.value = !updateValue
-                Toast.makeText(context, "Adres e-mail został zaktualizowany",
-                    Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context, "Adres e-mail został zaktualizowany",
+                    Toast.LENGTH_LONG
+                ).show()
             }
             ?.addOnFailureListener {
-                Toast.makeText(context, "Błąd: $it",
-                    Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context, "Błąd: $it",
+                    Toast.LENGTH_LONG
+                ).show()
             }
     }
 
@@ -220,12 +271,16 @@ class UserViewModel: ViewModel() {
         staticUser?.updatePassword(password)
             ?.addOnSuccessListener {
                 update.value = !updateValue
-                Toast.makeText(context, "Hasło zostało zaktualizowane",
-                    Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context, "Hasło zostało zaktualizowane",
+                    Toast.LENGTH_LONG
+                ).show()
             }
             ?.addOnFailureListener {
-                Toast.makeText(context, "Błąd: $it",
-                    Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context, "Błąd: $it",
+                    Toast.LENGTH_LONG
+                ).show()
             }
     }
 
@@ -235,14 +290,18 @@ class UserViewModel: ViewModel() {
             ?.addOnSuccessListener {
                 firestore.collection("users").document(uid!!).delete()
                 update.value = !updateValue
-                activity.findNavController(R.id.navHostFragment)
+                activity.findNavController(R.id.alcoListNH)
                     .navigate(R.id.action_profile_dest_to_list_dest)
-                Toast.makeText(activity, "Konto usunięte",
-                    Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    activity, "Konto usunięte",
+                    Toast.LENGTH_LONG
+                ).show()
             }
             ?.addOnFailureListener {
-                Toast.makeText(activity, "Błąd: $it",
-                    Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    activity, "Błąd: $it",
+                    Toast.LENGTH_LONG
+                ).show()
             }
     }
 
@@ -255,7 +314,8 @@ data class UserData(
     val groups: ArrayList<String>?,
     val stats: Map<String, Any>,
     val title: Long?,
-    var avatar: String?
+    var avatar: String?,
+    var favourites: ArrayList<Long>
 ) {
     fun integrityCheck(firestore: FirebaseFirestore, user: FirebaseUser) {
         if (uid == user.uid) {
@@ -264,7 +324,8 @@ data class UserData(
                 firestore.collection("users").document(uid).update(
                     mapOf(
                         "name" to user.displayName,
-                        "avatar" to user.photoUrl.toString())
+                        "avatar" to user.photoUrl.toString()
+                    )
                 )
                     .addOnSuccessListener {
                         Log.d("UserData", "Updated!")

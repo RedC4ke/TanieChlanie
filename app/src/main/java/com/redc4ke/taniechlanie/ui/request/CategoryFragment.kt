@@ -33,25 +33,16 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
         allowReturnTransitionOverlap = true
 
         parentFrag = arguments?.getSerializable("RequestFragment") as RequestFragment
-
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_category, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onStart() {
+        super.onStart()
 
         categoryViewModel = requireActivity().run {
             ViewModelProvider(this).get(CategoryViewModel::class.java)
         }
-        val recyclerView = binding.categoryFragmentRV
 
+        val recyclerView = binding.categoryFragmentRV
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         categoryViewModel.get().observe(viewLifecycleOwner, Observer {

@@ -1,13 +1,16 @@
 package com.redc4ke.taniechlanie.ui.menu.details
 
+import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.transition.MaterialContainerTransform
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.*
+import com.redc4ke.taniechlanie.data.viewmodels.UserViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentDetailsBinding
 import com.redc4ke.taniechlanie.ui.base.BaseFragment
 import com.redc4ke.taniechlanie.ui.MainActivity
@@ -20,6 +23,13 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>() {
     private lateinit var mainActivity: MainActivity
     private lateinit var parentFrag: MenuFragment
     lateinit var alcoObject: AlcoObject
+    lateinit var userViewModel: UserViewModel
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        userViewModel = ViewModelProvider(requireActivity())[UserViewModel::class.java]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,12 +39,12 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>() {
         alcoObject = arguments?.getSerializable("alcoObject") as AlcoObject
 
         sharedElementEnterTransition = MaterialContainerTransform().apply {
-            drawingViewId = R.id.navHostFragment
+            drawingViewId = R.id.alcoListNH
             duration = 500
         }
 
         sharedElementReturnTransition = MaterialContainerTransform().apply {
-            drawingViewId = R.id.navHostFragment
+            drawingViewId = R.id.alcoListNH
             duration = 200
         }
 
@@ -52,6 +62,17 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val list = userViewModel.getFavourites().value.orEmpty()
+        binding.favouriteCHB.isChecked = list.contains(alcoObject.id.toLong())
+
+        binding.favouriteCHB.setOnCheckedChangeListener {_, isChecked ->
+            if (isChecked) {
+                userViewModel.addFavourite(requireContext(), alcoObject)
+            } else {
+                userViewModel.removeFavourite(requireContext(), alcoObject)
+            }
+        }
 
         if (alcoObject.photo != null){
             setImage(requireContext(), alcoObject.name,

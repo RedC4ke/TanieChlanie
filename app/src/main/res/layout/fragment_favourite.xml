@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.redc4ke.taniechlanie.ui.request.CategoryFragment">
+    android:background="@color/secondary50">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/categoryFragmentRV"
+        android:id="@+id/favouriteRV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/secondary50" />
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"/>
+
 </FrameLayout>

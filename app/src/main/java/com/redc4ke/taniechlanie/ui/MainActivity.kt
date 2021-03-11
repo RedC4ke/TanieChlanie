@@ -30,9 +30,7 @@ import com.firebase.ui.auth.IdpResponse
 import com.google.android.gms.tasks.Task
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.auth.AdditionalUserInfo
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
@@ -53,7 +51,7 @@ import java.math.BigDecimal
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mFirebaseAnalytics: FirebaseAnalytics
-    private lateinit var appBarConfiguration : AppBarConfiguration
+    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var mDrawerLayout: DrawerLayout
     private lateinit var shopViewModel: ShopViewModel
     private lateinit var categoryViewModel: CategoryViewModel
@@ -84,7 +82,7 @@ class MainActivity : AppCompatActivity() {
 
         //NavHostFragment and navigation controller
         val host: NavHostFragment = supportFragmentManager
-                .findFragmentById(R.id.navHostFragment) as NavHostFragment
+            .findFragmentById(R.id.alcoListNH) as NavHostFragment
         val navController = host.navController
 
         //Drawer setup
@@ -95,14 +93,15 @@ class MainActivity : AppCompatActivity() {
         mDrawerLayout = findViewById(R.id.drawer_layout)
         setSupportActionBar(toolbar)
         appBarConfiguration = AppBarConfiguration(
-                setOf(
-                        R.id.profile_dest,
-                        R.id.list_dest,
-                        R.id.about_dest,
-                        R.id.request_dest,
-                        R.id.options_dest
-                ),
-                mDrawerLayout
+            setOf(
+                R.id.profile_dest,
+                R.id.list_dest,
+                R.id.favourite_dest,
+                R.id.about_dest,
+                //R.id.request_dest,
+                R.id.options_dest
+            ),
+            mDrawerLayout
         )
         setupActionBar(navController, appBarConfiguration)
 
@@ -122,6 +121,17 @@ class MainActivity : AppCompatActivity() {
         auth.addAuthStateListener {
             userViewModel.login(this, it.currentUser)
         }
+
+        //Temporary
+        //binding.navigation.setNavigationItemSelectedListener {
+        //    if (it.itemId == R.id.request_dest_) {
+        //        Toast.makeText(applicationContext, "Funkcja w przebudowie!",
+        //            Toast.LENGTH_LONG).show()
+        //        true
+        //    } else {
+        //        false
+        //    }
+        //}
 
     }
 
@@ -143,7 +153,7 @@ class MainActivity : AppCompatActivity() {
                 nameTV.text = user.displayName
                 loginTV.text = getString(R.string.profile)
                 profileBT.setOnClickListener {
-                    this@MainActivity.findNavController(R.id.navHostFragment)
+                    this@MainActivity.findNavController(R.id.alcoListNH)
                         .navigate(R.id.profile_dest)
                     mDrawerLayout.closeDrawer(GravityCompat.START)
                 }
@@ -164,8 +174,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return item.onNavDestinationSelected(findNavController(R.id.navHostFragment))
-                || super.onOptionsItemSelected(item)
+        return item.onNavDestinationSelected(findNavController(R.id.alcoListNH))
+                    || super.onOptionsItemSelected(item)
     }
 
     private fun setupNavigationMenu(navController: NavController) {
@@ -174,8 +184,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupActionBar(
-            navController: NavController,
-            appBarConfiguration: AppBarConfiguration
+        navController: NavController,
+        appBarConfiguration: AppBarConfiguration
     ) {
         // This allows NavigationUI to decide what label to show in the action bar
         // By using appBarConfig, it will also determine whether to
@@ -186,7 +196,7 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         // Allows NavigationUI to support proper up navigation or the drawer layout
         // drawer menu, depending on the situation
-        return findNavController(R.id.navHostFragment).navigateUp(appBarConfiguration)
+        return findNavController(R.id.alcoListNH).navigateUp(appBarConfiguration)
     }
 
     override fun onBackPressed() {
@@ -214,9 +224,10 @@ class MainActivity : AppCompatActivity() {
                     else
                         getString(R.string.error, response.error?.errorCode.toString())
                 Toast.makeText(
-                        applicationContext,
-                        message,
-                        Toast.LENGTH_LONG).show()
+                    applicationContext,
+                    message,
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
@@ -224,29 +235,31 @@ class MainActivity : AppCompatActivity() {
 
     private fun getAlcoObject() {
         getTask("wines")
-                .addOnCompleteListener {
-                    getShopList()
+            .addOnCompleteListener {
+                getShopList()
+            }
+            .addOnSuccessListener {
+                it.forEach { document ->
+                    val data = document.data
+                    val output = mapOf<String, Any?>(
+                        "id" to data["id"].toString().toInt(),
+                        "name" to data["name"].toString(),
+                        "volume" to data["volume"].toString().toInt(),
+                        "voltage" to data["voltage"].toString().toBigDecimal(),
+                        "categories" to data["categories"] as ArrayList<Int>,
+                        "photo" to data["photo"] as String?
+                    )
+                    getPrices(output as MutableMap<String, Any?>)
                 }
-                .addOnSuccessListener {
-                    it.forEach { document ->
-                        val data = document.data
-                        val output = mapOf<String, Any?>(
-                                "id" to data["id"].toString().toInt(),
-                                "name" to data["name"].toString(),
-                                "volume" to data["volume"].toString().toInt(),
-                                "voltage" to data["voltage"].toString().toBigDecimal(),
-                                "categories" to data["categories"] as ArrayList<Int>,
-                                "photo" to data["photo"] as String?
-                        )
-                        getPrices(output as MutableMap<String, Any?>)
-                    }
-                }
-                .addOnFailureListener {
-                    Toast.makeText(applicationContext,
-                            "Połączenie z bazą nieudane. " +
-                                    "Sprawdź czy posiadasz dostęp do Internetu " +
-                                    "i spróbuj ponownie.", Toast.LENGTH_LONG).show()
-                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(
+                    applicationContext,
+                    "Połączenie z bazą nieudane. " +
+                            "Sprawdź czy posiadasz dostęp do Internetu " +
+                            "i spróbuj ponownie.", Toast.LENGTH_LONG
+                ).show()
+            }
     }
 
     private fun getPrices(input: MutableMap<String, Any?>) {
@@ -271,82 +284,81 @@ class MainActivity : AppCompatActivity() {
                     ?: (0).toBigDecimal()
 
                 val alcoObject = AlcoObject(
-                        result["id"] as Int,
-                        result["name"] as String,
-                        result["price"] as BigDecimal,
-                        result["volume"] as Int,
-                        result["voltage"] as BigDecimal,
-                        result["shop"] as ArrayList<Int>,
-                        result["categories"] as ArrayList<Int>,
-                        result["photo"] as String?,
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
-                                "Sed bibendum rutrum accumsan. Curabitur vel felis ullamcorper, " +
-                                "tincidunt dolor vel, ultricies ligula. Sed posuere elit sit amet" +
-                                " tincidunt quis."
+                    result["id"] as Int,
+                    result["name"] as String,
+                    result["price"] as BigDecimal,
+                    result["volume"] as Int,
+                    result["voltage"] as BigDecimal,
+                    result["shop"] as ArrayList<Int>,
+                    result["categories"] as ArrayList<Int>,
+                    result["photo"] as String?,
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+                            "Sed bibendum rutrum accumsan. Curabitur vel felis ullamcorper, " +
+                            "tincidunt dolor vel, ultricies ligula. Sed posuere elit sit amet" +
+                            " tincidunt quis."
                 )
 
                 Log.d("FireBase", "Added: $alcoObject")
                 alcoObjectViewModel.addObject(alcoObject)
-                menuFrag.updateRV()
-
             }
     }
 
     private fun getShopList() {
         getTask("shops")
-                .addOnCompleteListener {
-                    getFaq()
+            .addOnCompleteListener {
+                getFaq()
+            }
+            .addOnSuccessListener {
+                it.forEach { document ->
+                    val data = document.data
+                    shopViewModel.add(Shop(data["id"].toString().toInt(), data["name"] as String))
                 }
-                .addOnSuccessListener {
-                    it.forEach { document ->
-                        val data = document.data
-                        shopViewModel.add(Shop(data["id"].toString().toInt(), data["name"] as String))
-                    }
-                }
-                .addOnFailureListener {
-                    Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
-                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
+            }
     }
 
     private fun getFaq() {
         getTask("faq")
-                .addOnCompleteListener {
-                    getCategories()
-                }
-                .addOnSuccessListener {
-                    val tempList: ArrayList<Map<String, String>> = arrayListOf()
-                    it.forEach{ document ->
-                        val data = document.data
-                        tempList.add(
-                                mapOf(
-                                        "question" to data["question"] as String,
-                                        "answer" to data["answer"] as String)
+            .addOnCompleteListener {
+                getCategories()
+            }
+            .addOnSuccessListener {
+                val tempList: ArrayList<Map<String, String>> = arrayListOf()
+                it.forEach { document ->
+                    val data = document.data
+                    tempList.add(
+                        mapOf(
+                            "question" to data["question"] as String,
+                            "answer" to data["answer"] as String
                         )
-                    }
-                    faq = tempList
-                    Log.d("FireBase", "Added: $faq")
+                    )
                 }
-                .addOnFailureListener {
-                    Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
-                }
+                faq = tempList
+                Log.d("FireBase", "Added: $faq")
+            }
+            .addOnFailureListener {
+                Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
+            }
     }
 
     private fun getCategories() {
         getTask("categories")
-                .addOnSuccessListener {
-                    it.forEach { document ->
-                        val id = document["id"].toString().toInt()
-                        val name = document["name"] as String
-                        val url = document["image"] as String
-                        val major = document["major"] as Boolean
+            .addOnSuccessListener {
+                it.forEach { document ->
+                    val id = document["id"].toString().toInt()
+                    val name = document["name"] as String
+                    val url = document["image"] as String
+                    val major = document["major"] as Boolean
 
-                        categoryViewModel.add(id, name, url, major, this)
-                        Log.d("FireBase", "Added: $name")
-                    }
+                    categoryViewModel.add(id, name, url, major, this)
+                    Log.d("FireBase", "Added: $name")
                 }
-                .addOnFailureListener {
-                    Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
-                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
+            }
     }
 
     private fun getTask(colName: String): Task<QuerySnapshot> {
@@ -359,7 +371,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getFirebaseData() {
-            getAlcoObject()
+        getAlcoObject()
     }
 
     private fun checkPrefs() {
