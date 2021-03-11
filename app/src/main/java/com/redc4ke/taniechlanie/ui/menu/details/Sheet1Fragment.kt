@@ -67,6 +67,13 @@ class Sheet1Fragment : BaseFragment<FragmentSheet1Binding>() {
                 val categories = categoryViewModel.getWithMajor(alcoObject)
                 categoryRV.adapter = DetailsCategoryAdapter(categories)
             })
+
+            detailsAvailabilityBT.setOnClickListener {
+                findNavController().navigate(
+                    R.id.action_sheet1_dest_to_sheet2_dest
+                )
+            }
+
             reviewViewModel.getAll().observe(viewLifecycleOwner, {
                 val reviews: MutableList<Review> =
                     (it[alcoObject.id] ?: mutableListOf()) as MutableList<Review>

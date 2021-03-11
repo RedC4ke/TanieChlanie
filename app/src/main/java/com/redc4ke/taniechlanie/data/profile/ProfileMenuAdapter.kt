@@ -1,6 +1,5 @@
 package com.redc4ke.taniechlanie.data.profile
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.updateLayoutParams
@@ -10,7 +9,7 @@ import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.databinding.RowProfileBinding
 import com.redc4ke.taniechlanie.ui.profile.ProfileMenuFragment
 
-class ProfileMenuAdapter(private val context: ProfileMenuFragment):
+class ProfileMenuAdapter(private val context: ProfileMenuFragment) :
     RecyclerView.Adapter<ProfileMenuViewHolder>() {
 
     private val menu: Array<String> = context.resources.getStringArray(R.array.profile_menu)
@@ -50,4 +49,4 @@ class ProfileMenuAdapter(private val context: ProfileMenuFragment):
     }
 }
 
-class ProfileMenuViewHolder(val vb: RowProfileBinding): RecyclerView.ViewHolder(vb.root)
+class ProfileMenuViewHolder(val vb: RowProfileBinding) : RecyclerView.ViewHolder(vb.root)

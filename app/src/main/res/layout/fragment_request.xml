@@ -5,7 +5,7 @@
     android:id="@+id/fragment_request_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryLightColor">
+    android:background="@color/secondary50">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/request_card"
@@ -70,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:imeOptions="actionDone"
                     android:maxLength="30"
-                    android:maxLines="1"
+                    android:singleLine="true"
                     android:textSize="18sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -179,6 +179,8 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="20dp"
                 android:elevation="0dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="8dp"
                 android:text="@string/image_req"
                 app:cornerRadius="14dp"
                 app:icon="@drawable/ic_baseline_image_24"
@@ -189,7 +191,7 @@
                 android:id="@+id/image_req_desc"
                 android:layout_width="135dp"
                 android:layout_height="15dp"
-                android:layout_marginTop="62dp"
+                android:layout_marginTop="66dp"
                 android:layout_marginEnd="10dp"
                 android:text="@string/image_req_desc"
                 android:textAlignment="textEnd"
@@ -223,12 +225,11 @@
                 android:id="@+id/cat_FL2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/image_req_desc">
+                app:layout_constraintTop_toTopOf="@+id/cat_FL1">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/cat_req_BT2"
@@ -293,6 +294,7 @@
                 android:layout_marginStart="60dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="60dp"
+                android:backgroundTint="@color/primaryLightColor"
                 android:fontFamily="sans-serif-light"
                 android:text="@string/forward"
                 android:textSize="30sp"

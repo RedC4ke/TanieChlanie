@@ -13,4 +13,4 @@ data class AlcoObject(
         var categories: ArrayList<Int>,
         var photo: String?,
         var description: String?
-): Serializable
+) : Serializable

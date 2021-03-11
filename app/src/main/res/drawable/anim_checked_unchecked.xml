@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:drawable="@drawable/favourite_empty">
+
+    <target
+        android:name="fill1">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="@android:integer/config_shortAnimTime"
+                android:interpolator="@android:interpolator/accelerate_decelerate"
+                android:propertyName="fillColor"
+                android:valueFrom="#FFDC64"
+                android:valueTo="#00000000"
+                android:valueType="intType"/>
+        </aapt:attr>
+    </target>
+
+    <target
+        android:name="fill2">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="@android:integer/config_shortAnimTime"
+                android:interpolator="@android:interpolator/accelerate_decelerate"
+                android:propertyName="fillColor"
+                android:valueFrom="#FFC850"
+                android:valueTo="#00000000"
+                android:valueType="intType"/>
+        </aapt:attr>
+    </target>
+
+
+</animated-vector>

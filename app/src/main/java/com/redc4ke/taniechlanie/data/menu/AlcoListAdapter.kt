@@ -30,12 +30,6 @@ class AlcoListAdapter(
     override fun onBindViewHolder(holder: AlcoViewHolder, position: Int) {
 
         with (holder.vb) {
-            if (position == 0) {
-                root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                    this.topMargin = 30
-                }
-            }
-
             //Set views for this row
             nameTV.text = autoBreak(data[position].name)
             priceTV.text = priceString(data[position], context)
@@ -58,13 +52,8 @@ class AlcoListAdapter(
         return data.size
     }
 
-    fun setFilter (f: List<AlcoObject>) {
-        data = f
-        notifyDataSetChanged()
-    }
-
-    fun update (vm: AlcoObjectViewModel) {
-        data = vm.getAll().value as List<AlcoObject>
+    fun update (list: List<AlcoObject>) {
+        data = list
         notifyDataSetChanged()
     }
 
