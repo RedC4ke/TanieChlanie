@@ -9,7 +9,8 @@
         android:id="@+id/list_dest"
         android:name="com.redc4ke.taniechlanie.ui.menu.MenuFragment"
         android:label="@string/list"
-        tools:layout="@layout/fragment_alco_list"/>
+        tools:layout="@layout/fragment_menu">
+    </fragment>
 
     <fragment
         android:id="@+id/about_dest"
