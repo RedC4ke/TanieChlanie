@@ -3,6 +3,7 @@ package com.redc4ke.taniechlanie.ui.favourite
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.redc4ke.taniechlanie.data.AlcoObject
@@ -12,11 +13,13 @@ import com.redc4ke.taniechlanie.data.viewmodels.UserViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentFavouriteBinding
 import com.redc4ke.taniechlanie.ui.MainActivity
 import com.redc4ke.taniechlanie.ui.base.BaseFragment
+import com.redc4ke.taniechlanie.ui.base.BaseListFragment
 
-class FavouriteFragment: BaseFragment<FragmentFavouriteBinding>() {
+class FavouriteFragment: BaseListFragment<FragmentFavouriteBinding>() {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentFavouriteBinding
         get() = FragmentFavouriteBinding::inflate
+    override val alcoObjectList: MutableLiveData<List<AlcoObject>> = MutableLiveData()
     private lateinit var userViewModel: UserViewModel
     private lateinit var alcoObjectViewModel: AlcoObjectViewModel
 
@@ -30,19 +33,16 @@ class FavouriteFragment: BaseFragment<FragmentFavouriteBinding>() {
     override fun onStart() {
         super.onStart()
 
-        //userViewModel.getFavourites().observe(viewLifecycleOwner, {
-        //    val list = mutableListOf<AlcoObject>()
-        //    it.forEach {id ->
-        //        alcoObjectViewModel.get(id.toInt())?.let { alcoObject ->
-        //            list.add(alcoObject)
-        //        }
-        //    }
-        //    binding.favouriteRV.run {
-        //        layoutManager = LinearLayoutManager(requireContext())
-        //        adapter = AlcoListAdapter(list, activity as MainActivity, )
-        //    }
-//
-        //})
+        userViewModel.getFavourites().observe(viewLifecycleOwner, {
+            val tempList = mutableListOf<AlcoObject>()
+            it.forEach { id ->
+                val obj = alcoObjectViewModel.get(id.toInt())
+                if (obj != null) {
+                    tempList.add(obj)
+                }
+            }
+            alcoObjectList.value = tempList
+        })
     }
 
 

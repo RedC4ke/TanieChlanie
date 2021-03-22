@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.transition.MaterialContainerTransform
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.*
@@ -49,7 +50,7 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>() {
             duration = 200
         }
 
-        (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        (requireActivity() as MainActivity).supportActionBar!!.hide()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -79,6 +80,10 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>() {
         if (alcoObject.photo != null){
             setImage(requireContext(), alcoObject.name,
                 binding.imageDetails, Uri.parse(alcoObject.photo!!))
+        }
+
+        binding.detailsBackBT.setOnClickListener {
+            findNavController().navigate(R.id.details_dest_pop)
         }
     }
 }

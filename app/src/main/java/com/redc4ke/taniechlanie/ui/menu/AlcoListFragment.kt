@@ -35,31 +35,42 @@ class AlcoListFragment() : BaseFragment<FragmentAlcoListBinding>(), Serializable
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        mainActivity = requireActivity() as MainActivity
 
+        mainActivity = requireActivity() as MainActivity
+        alAdapter = AlcoListAdapter(listOf(), mainActivity, this)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val parent = parentFragment?.parentFragment as BaseListFragment<*>
+        parent.alcoObjectList.observe(viewLifecycleOwner, {
+            if (it.isNotEmpty()) {
+                list = it
+                alAdapter.update(it)
+            }
+        })
+
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         postponeEnterTransition()
         view.doOnPreDraw { startPostponedEnterTransition() }
         super.onViewCreated(view, savedInstanceState)
+
+        binding.alcoListRV.run {
+            this.adapter = alAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
     }
 
     override fun onStart() {
         super.onStart()
 
-        val parent = parentFragment?.parentFragment as BaseListFragment<*>
-        parent.alcoObjectList.observe(viewLifecycleOwner, {
-            list = it
-            alAdapter.update(it)
-        })
-
-        alAdapter = AlcoListAdapter(listOf(), mainActivity, this)
-        binding.alcoListRV.run {
-            this.adapter = alAdapter
-            layoutManager = LinearLayoutManager(requireContext())
-        }
-
+        mainActivity.supportActionBar!!.show()
         setSearch(alAdapter)
     }
 
@@ -118,12 +129,6 @@ class AlcoListFragment() : BaseFragment<FragmentAlcoListBinding>(), Serializable
             }
         })
     }
-
-    fun updateRV(l: List<AlcoObject>) {
-        //Update RV data
-        alAdapter.update(l)
-    }
-
 }
 
 
