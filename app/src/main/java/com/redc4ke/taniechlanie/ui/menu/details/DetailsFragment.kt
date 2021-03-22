@@ -14,6 +14,7 @@ import com.redc4ke.taniechlanie.data.viewmodels.UserViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentDetailsBinding
 import com.redc4ke.taniechlanie.ui.base.BaseFragment
 import com.redc4ke.taniechlanie.ui.MainActivity
+import com.redc4ke.taniechlanie.ui.menu.AlcoListFragment
 import com.redc4ke.taniechlanie.ui.menu.MenuFragment
 
 class DetailsFragment : BaseFragment<FragmentDetailsBinding>() {
@@ -21,7 +22,7 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>() {
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentDetailsBinding
         get() = FragmentDetailsBinding::inflate
     private lateinit var mainActivity: MainActivity
-    private lateinit var parentFrag: MenuFragment
+    private lateinit var parentFrag: AlcoListFragment
     lateinit var alcoObject: AlcoObject
     lateinit var userViewModel: UserViewModel
 
@@ -35,7 +36,7 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>() {
         super.onCreate(savedInstanceState)
 
         mainActivity = requireActivity() as MainActivity
-        parentFrag = arguments?.getSerializable("MenuFragment") as MenuFragment
+        parentFrag = arguments?.getSerializable("AlcoListFragment") as AlcoListFragment
         alcoObject = arguments?.getSerializable("alcoObject") as AlcoObject
 
         sharedElementEnterTransition = MaterialContainerTransform().apply {
@@ -48,6 +49,7 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>() {
             duration = 200
         }
 
+        (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

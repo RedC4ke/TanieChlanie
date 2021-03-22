@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
@@ -8,18 +9,37 @@
     android:background="@color/secondary50"
     android:outlineProvider="none">
 
-    <FrameLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/alcoList_RV"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingLeft="10dp"
+        android:paddingTop="76dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/alcoListSearchBarCV"
+        android:layout_width="match_parent"
+        android:layout_height="82dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="-18dp"
+        android:layout_marginEnd="10dp"
+        android:backgroundTint="@color/white"
+        app:cardCornerRadius="18dp"
+        app:cardElevation="2dp">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            app:cardCornerRadius="18dp">
+            android:layout_gravity="bottom"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="4dp"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -27,20 +47,22 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/sheet2_ET"
+                    android:id="@+id/alcoListSearchET"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="16dp"
                     android:layout_weight="1"
                     android:backgroundTint="@color/primaryLightColor"
-                    android:ems="10"
+                    android:drawableStart="@drawable/ic_baseline_search_24"
+                    android:drawableTint="@color/primaryColor"
                     android:fontFamily="@font/open_sans_light"
                     android:hint="@string/queryHint"
                     android:imeOptions="actionDone"
                     android:inputType="textPersonName"
-                    android:maxLength="20"
+                    android:maxLength="30"
                     android:singleLine="true"
                     android:textColor="@color/black"
+                    android:textColorHint="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -74,19 +96,5 @@
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
-    </FrameLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/alcoList_RV"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:paddingLeft="8dp"
-        android:paddingTop="10dp"
-        android:paddingRight="8dp"
-        android:paddingBottom="10dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-</LinearLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
