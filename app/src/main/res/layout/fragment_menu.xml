@@ -9,7 +9,7 @@
     android:layout_weight="1"
     android:background="#00FFFFFF"
     android:backgroundTint="#00FFFFFF"
-    app:defaultNavHost="false"
+    app:defaultNavHost="true"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"

@@ -57,6 +57,10 @@ class AboutRecyclerViewAdapter(private val frag: Fragment):
                 "flaticon.com",
                 "https://www.flaticon.com/authors/linector"),
             Subrow(null,
+                "Kirill Kazachek",
+                "flaticon.com",
+                "https://www.flaticon.com/authors/kirill-kazachek"),
+            Subrow(null,
                 "_cunningham",
                 "instagram",
                 "https://www.instagram.com/_cunningham/")

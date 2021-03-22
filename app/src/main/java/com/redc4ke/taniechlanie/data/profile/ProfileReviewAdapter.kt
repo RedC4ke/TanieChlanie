@@ -15,7 +15,7 @@ import java.text.DateFormat
 
 class ProfileReviewAdapter(
     private val context: Context,
-    private val reviewList: List<Pair<AlcoObject, Review>>
+    private var reviewList: List<Pair<AlcoObject, Review>>
 ) : RecyclerView.Adapter<ProfileReviewViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileReviewViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -46,6 +46,12 @@ class ProfileReviewAdapter(
         } else {
             iv.setImageResource(R.drawable.liquor)
         }
+    }
+
+    fun addData(list: List<Pair<AlcoObject, Review>>) {
+        val pos = reviewList.size
+        reviewList = list
+        notifyItemRangeChanged(pos-1, reviewList.size)
     }
 
 }

@@ -22,6 +22,10 @@
         android:name="com.redc4ke.taniechlanie.ui.menu.details.DetailsFragment"
         android:label="@string/details"
         tools:layout="@layout/fragment_details">
+        <action
+            android:id="@+id/details_dest_pop"
+            app:popUpTo="@id/alcoList_dest"
+            app:popUpToInclusive="false" />
         <argument
             android:name="alcoObject"
             app:argType="com.redc4ke.taniechlanie.data.AlcoObject" />

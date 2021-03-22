@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.fragment.app.FragmentContainerView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/alcoListNH"
+    android:name="androidx.navigation.fragment.NavHostFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/secondary50">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/favouriteRV"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:clipChildren="false"
-        android:clipToPadding="false"/>
-
-</FrameLayout>
+    android:layout_weight="1"
+    android:background="#00FFFFFF"
+    android:backgroundTint="#00FFFFFF"
+    app:defaultNavHost="true"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="1.0"
+    app:navGraph="@navigation/alcolist_navigation" />
