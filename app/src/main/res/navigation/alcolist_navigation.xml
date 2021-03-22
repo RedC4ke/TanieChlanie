@@ -3,30 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/alcolist_navigation"
-    app:startDestination="@id/alcoList_dest">
+    app:startDestination="@id/alcoListFragment">
 
     <fragment
-        android:id="@+id/alcoList_dest"
+        android:id="@+id/alcoListFragment"
         android:name="com.redc4ke.taniechlanie.ui.menu.AlcoListFragment"
-        android:label="@string/list"
-        tools:layout="@layout/fragment_alco_list">
+        android:label="AlcoListFragment" >
         <action
-            android:id="@+id/openDetails"
-            app:destination="@id/details_dest"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_enter_anim" />
+            android:id="@+id/action_alcoListFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
     </fragment>
-
     <fragment
-        android:id="@+id/details_dest"
+        android:id="@+id/detailsFragment"
         android:name="com.redc4ke.taniechlanie.ui.menu.details.DetailsFragment"
-        android:label="@string/details"
-        tools:layout="@layout/fragment_details">
-        <argument
-            android:name="alcoObject"
-            app:argType="com.redc4ke.taniechlanie.data.AlcoObject" />
-        <argument
-            android:name="AlcoListFragment"
-            app:argType="com.redc4ke.taniechlanie.ui.menu.AlcoListFragment" />
-    </fragment>
+        android:label="fragment_details"
+        tools:layout="@layout/fragment_details" />
 </navigation>

@@ -11,14 +11,12 @@ import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectViewModel
 import com.redc4ke.taniechlanie.data.viewmodels.CategoryViewModel
 import com.redc4ke.taniechlanie.databinding.RowAlcoholBinding
 import com.redc4ke.taniechlanie.ui.MainActivity
-import com.redc4ke.taniechlanie.ui.menu.AlcoListFragment
 import com.redc4ke.taniechlanie.ui.menu.MenuFragment
 
 
 class AlcoListAdapter(
         private var data: List<AlcoObject>,
-        private val context: MainActivity,
-        private val parentFrag: AlcoListFragment) : RecyclerView.Adapter<AlcoViewHolder>() {
+        private val context: MainActivity) : RecyclerView.Adapter<AlcoViewHolder>() {
 
     private val categoryViewModel = ViewModelProvider(context).get(CategoryViewModel::class.java)
 
@@ -45,7 +43,7 @@ class AlcoListAdapter(
             root.transitionName = "rowAlcoholTransitionName_$id"
 
             root.setOnClickListener {
-                parentFrag.onItemClick(root, data[position])
+                context.menuFrag.onItemClick(root, data[position])
             }
         }
     }
