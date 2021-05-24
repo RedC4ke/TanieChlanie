@@ -7,10 +7,13 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
@@ -20,14 +23,13 @@ import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.data.Category
 import com.redc4ke.taniechlanie.databinding.FragmentRequestBinding
-import com.redc4ke.taniechlanie.ui.base.BaseFragment
 import com.redc4ke.taniechlanie.ui.MainActivity
+import com.redc4ke.taniechlanie.ui.base.BaseFragment
 import com.squareup.picasso.Picasso
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.Serializable
-import kotlin.collections.ArrayList
 
 class RequestFragment : BaseFragment<FragmentRequestBinding>(), Serializable {
 
@@ -63,15 +65,18 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), Serializable {
         }
 
         buttonList = arrayListOf(
-                binding.catReqBT1, binding.catReqBT2, binding.catReqBT3, binding.catReqBT4)
+            binding.catReqBT1, binding.catReqBT2, binding.catReqBT3, binding.catReqBT4
+        )
         containerList = arrayListOf(
-                binding.catFL1, binding.catFL2, binding.catFL3, binding.catFL4)
+            binding.catFL1, binding.catFL2, binding.catFL3, binding.catFL4
+        )
 
         binding.reqUploadBT.setOnClickListener {
             if (proceedCheck()) {
                 setTransitions(
                     R.transition.slide_from_left,
-                    R.transition.slide_to_left)
+                    R.transition.slide_to_left
+                )
                 openShopList()
             }
         }
@@ -111,7 +116,6 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), Serializable {
 
             binding.imageReqDesc.text = path.toString()
 
-
             hasImage = true
         }
     }
@@ -132,23 +136,23 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), Serializable {
             categoryIdList.add(it.id)
         }
         return AlcoObject(
-                id = 0,
-                name = binding.nameET.text.toString(),
-                price = binding.price1ET.text.toString().replace(",",".").toBigDecimal(),
-                volume = binding.volumeET.text.toString().toInt(),
-                voltage = binding.voltageET.text.toString().replace(",",".")
-                        .toBigDecimal().divide(100.toBigDecimal()),
-                shop = arrayListOf(),
-                categories = categoryIdList,
-                photo = null,
-                description = null
+            id = 0,
+            name = binding.nameET.text.toString(),
+            price = binding.price1ET.text.toString().replace(",", ".").toBigDecimal(),
+            volume = binding.volumeET.text.toString().toInt(),
+            voltage = binding.voltageET.text.toString().replace(",", ".")
+                .toBigDecimal().divide(100.toBigDecimal()),
+            shop = arrayListOf(),
+            categories = categoryIdList,
+            photo = null,
+            description = null
         )
     }
 
     private fun categorySetOnClickListener(pos: Int) {
         val bt = buttonList[pos]
-        bt.setTextColor(ContextCompat.getColor(requireContext(), R.color.primaryDarkColor))
-        bt.setIconTintResource(R.color.primaryDarkColor)
+        bt.setTextColor(ContextCompat.getColor(requireContext(), R.color.primaryLightColor))
+        bt.setIconTintResource(R.color.primaryLightColor)
         bt.setOnClickListener {
             openCategoryList()
             catButtonPosition = pos
@@ -162,7 +166,7 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), Serializable {
             if (pos < categoryList.size) {
                 categoryList.removeAt(pos)
             }
-        //If there is category, replace or add to category list on right index
+            //If there is category, replace or add to category list on right index
         } else {
             if (pos < categoryList.size) {
                 categoryList[pos] = cat
@@ -175,23 +179,27 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), Serializable {
     //Redraws the category list
     private fun refreshCategories() {
         var i = 0
+        Log.d("refreshCategories", "Refreshing $categoryList")
         categoryList.forEach {
             val parent = containerList[i]
-            layoutInflater.inflate(R.layout.row_details_category_twin,
-                    parent, true) as ViewGroup
+            layoutInflater.inflate(
+                R.layout.row_details_category_twin,
+                parent, true
+            ) as ViewGroup
             parent.findViewById<TextView>(R.id.details_category_twin_TV).text = it.name
             val icon = parent.findViewById<ImageView>(R.id.drawable_details_categoryTwin)
             if (it.image != null) Picasso.get().load(it.image).into(icon)
             categorySetOnClickListener(i)
             i++
         }
-        if (i<4) categorySetOnClickListener(i++)
+        if (i < 4) categorySetOnClickListener(i++)
     }
 
     //Checks if every required value is present
     private fun proceedCheck(): Boolean {
         val required: ArrayList<TextInputLayout> = arrayListOf(
-            binding.nameETL, binding.volumeETL, binding.voltageETL, binding.price1ETL)
+            binding.nameETL, binding.volumeETL, binding.voltageETL, binding.price1ETL
+        )
         var check = true
 
         required.forEach {
@@ -199,40 +207,66 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), Serializable {
                 it.isErrorEnabled
                 it.error = "Podaj wartość!"
                 it.errorIconDrawable = getDrawable(
-                        requireContext(), R.drawable.ic_baseline_error_outline_24)
+                    requireContext(), R.drawable.ic_baseline_error_outline_24
+                )
                 check = false
             }
         }
-        if (check == false) return check
+        if (!check) return check
 
+        val voltage = binding.voltageET
+        val volume = binding.volumeET
+        val price = binding.price1ET
+        val et = listOf(voltage, volume, price)
 
-        if (binding.voltageET.text.toString().toFloat() > 100) {
+        if (voltage.text.toString().toFloat() > 100) {
             binding.voltageETL.apply {
                 isErrorEnabled
                 error = "Zła wartość!"
                 errorIconDrawable = getDrawable(
-                        requireContext(), R.drawable.ic_baseline_error_outline_24)
+                    requireContext(), R.drawable.ic_baseline_error_outline_24
+                )
             }
             check = false
         }
 
+        et.forEach {
+            if (it.text.toString().toFloat() <= 0F) {
+                (it.parent.parent as TextInputLayout).apply {
+                    isErrorEnabled
+                    error = "Zła wartość!"
+                    errorIconDrawable = getDrawable(
+                        requireContext(), R.drawable.ic_baseline_error_outline_24
+                    )
+                }
+                check = false
+            }
+        }
+
         if (categoryList.size == 0) {
             Toast.makeText(
-                    requireContext(),
-                    "Podaj przynajmniej jedną kategorię!",
-                    Toast.LENGTH_LONG).show()
+                requireContext(),
+                "Podaj przynajmniej jedną kategorię!",
+                Toast.LENGTH_LONG
+            ).show()
             check = false
         }
 
-        return true
+        return check
     }
 
     private fun addTextChangedListeners() {
         val layouts = arrayListOf(
-            binding.nameETL, binding.volumeETL, binding.voltageETL, binding.price1ETL)
+            binding.nameETL, binding.volumeETL, binding.voltageETL, binding.price1ETL
+        )
         layouts.forEach {
-            it.editText!!.addTextChangedListener(object: TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            it.editText!!.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {

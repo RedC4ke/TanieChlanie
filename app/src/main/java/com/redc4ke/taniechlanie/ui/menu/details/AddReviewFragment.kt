@@ -26,6 +26,7 @@ class AddReviewFragment(
     private var correct2 = false
     private lateinit var reviewViewModel: ReviewViewModel
     private val user = FirebaseAuth.getInstance().currentUser
+    private var update = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +43,7 @@ class AddReviewFragment(
             if (review != null) {
                 reviewAddET.setText(review.content)
                 reviewAddRB.rating = review.rating.toFloat()
+                update = true
             }
             reviewAddET.addTextChangedListener(object: TextWatcher {
                 override fun beforeTextChanged(
@@ -89,7 +91,7 @@ class AddReviewFragment(
                 }
                 if (correct1 && correct2 && user != null) {
                     reviewViewModel.addReview(requireContext(), alcoobject_id, user,
-                        reviewAddRB.rating.toDouble(), reviewAddET.text.toString())
+                        reviewAddRB.rating.toDouble(), reviewAddET.text.toString(), update)
                         .addOnSuccessListener {
                             this@AddReviewFragment.dismiss()
                         }

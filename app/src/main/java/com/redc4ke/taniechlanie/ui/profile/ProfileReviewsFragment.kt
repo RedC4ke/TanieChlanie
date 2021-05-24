@@ -25,6 +25,7 @@ class ProfileReviewsFragment: BaseFragment<FragmentProfileReviewBinding>() {
         get() = FragmentProfileReviewBinding::inflate
     private lateinit var alcoObjectViewModel: AlcoObjectViewModel
     private lateinit var reviewViewModel: ReviewViewModel
+    private lateinit var madapter: ProfileReviewAdapter
     private var user: FirebaseUser? = null
 
     override fun onAttach(context: Context) {
@@ -32,34 +33,50 @@ class ProfileReviewsFragment: BaseFragment<FragmentProfileReviewBinding>() {
 
         setTransitions(R.transition.slide_from_right, R.transition.slide_to_right)
         user = (parentFragment?.parentFragment as ProfileFragment).user
-    }
-
-    override fun onStart() {
-        super.onStart()
 
         alcoObjectViewModel = ViewModelProvider(requireActivity())
             .get(AlcoObjectViewModel::class.java)
         reviewViewModel = ViewModelProvider(requireActivity())
             .get(ReviewViewModel::class.java)
+
         if (user != null) {
             reviewViewModel.downloadUser(user!!.uid)
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        madapter = ProfileReviewAdapter(requireContext(), listOf())
+
+        if (user != null) {
+            reviewViewModel.downloadUser(user!!.uid)
+                .addOnSuccessListener {
+                    val list = reviewViewModel.getUser(user!!.uid, alcoObjectViewModel)
+                    madapter.addData(list)
+                }
+                .addOnFailureListener {
+                    Toast.makeText(requireContext(), getString(R.string.error,
+                        it.toString()), Toast.LENGTH_LONG).show()
+                }
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.profileReviewsRV.run {
+            this.layoutManager = LinearLayoutManager(requireContext())
+            this.adapter = madapter
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
 
         with (binding) {
             profileReviewsReturnBT.setOnClickListener {
                 findNavController().navigate(R.id.action_profileReviews_dest_to_profileMenu_dest)
-            }
-            if (user != null) {
-                reviewViewModel.downloadUser(user!!.uid)
-                    .addOnSuccessListener {
-                        profileReviewsRV.layoutManager = LinearLayoutManager(requireContext())
-                        val list = reviewViewModel.getUser(user!!.uid, alcoObjectViewModel)
-                        profileReviewsRV.adapter = ProfileReviewAdapter(requireContext(), list)
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(requireContext(), getString(R.string.error,
-                            it.toString()), Toast.LENGTH_LONG).show()
-                    }
             }
         }
     }

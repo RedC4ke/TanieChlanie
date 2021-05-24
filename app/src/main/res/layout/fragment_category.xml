@@ -6,8 +6,8 @@
     tools:context="com.redc4ke.taniechlanie.ui.request.CategoryFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/category_fragment_RV"
+        android:id="@+id/categoryFragmentRV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/primaryLightColor" />
+        android:background="@color/secondary50" />
 </FrameLayout>

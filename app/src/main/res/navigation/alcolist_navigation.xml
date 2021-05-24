@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/alcolist_navigation"
+    app:startDestination="@id/alcoList_dest">
+
+    <fragment
+        android:id="@+id/alcoList_dest"
+        android:name="com.redc4ke.taniechlanie.ui.menu.AlcoListFragment"
+        android:label="@string/list"
+        tools:layout="@layout/fragment_alco_list">
+        <action
+            android:id="@+id/openDetails"
+            app:destination="@id/details_dest"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_enter_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/details_dest"
+        android:name="com.redc4ke.taniechlanie.ui.menu.details.DetailsFragment"
+        android:label="@string/details"
+        tools:layout="@layout/fragment_details">
+        <action
+            android:id="@+id/details_dest_pop"
+            app:popUpTo="@id/alcoList_dest"
+            app:popUpToInclusive="false" />
+        <argument
+            android:name="alcoObject"
+            app:argType="com.redc4ke.taniechlanie.data.AlcoObject" />
+        <argument
+            android:name="AlcoListFragment"
+            app:argType="com.redc4ke.taniechlanie.ui.menu.AlcoListFragment" />
+    </fragment>
+</navigation>

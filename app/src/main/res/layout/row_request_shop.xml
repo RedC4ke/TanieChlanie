@@ -22,10 +22,12 @@
 
     <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/req_shop_CHB"
+        style="@style/Theme.taniechlanie.Checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:checked="true"
+        app:buttonTint="@color/primaryLightColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        style="@style/Theme.taniechlanie.Checkbox"/>
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

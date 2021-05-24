@@ -25,7 +25,7 @@
             android:layout_marginTop="12dp"
             android:layout_marginEnd="9dp"
             android:background="@color/white"
-            app:cardCornerRadius="100dp"
+            app:cardCornerRadius="18dp"
             app:cardElevation="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -85,7 +85,7 @@
                 android:layout_marginEnd="4dp"
                 android:layout_weight="1"
                 android:background="@color/white"
-                app:cardCornerRadius="100dp"
+                app:cardCornerRadius="18dp"
                 app:cardElevation="2dp">
 
                 <LinearLayout
@@ -125,7 +125,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:layout_weight="1.1"
-                app:cardCornerRadius="100dp"
+                app:cardCornerRadius="18dp"
                 app:cardElevation="2dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -176,7 +176,7 @@
                 android:layout_marginEnd="12dp"
                 android:layout_weight="1"
                 android:background="@color/white"
-                app:cardCornerRadius="100dp"
+                app:cardCornerRadius="18dp"
                 app:cardElevation="2dp">
 
                 <LinearLayout
@@ -301,6 +301,7 @@
                     android:layout_height="match_parent">
 
                     <FrameLayout
+                        android:id="@+id/detailsAvailabilityBT"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -311,7 +312,7 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
-                            android:id="@+id/textView28"
+                            android:id="@+id/detailsAvailabilityTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"

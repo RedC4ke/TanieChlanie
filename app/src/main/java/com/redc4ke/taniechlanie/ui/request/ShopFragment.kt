@@ -22,7 +22,7 @@ class ShopFragment : BaseFragment<FragmentShopBinding>() {
     private var hasImage = false
     private lateinit var alcoObject: AlcoObject
     private lateinit var shopViewModel: ShopViewModel
-    private lateinit var selectedShops: ArrayList<Int>
+    private var selectedShops = arrayListOf<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -28,6 +28,27 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView22"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="4dp"
+                        android:src="@drawable/lineal_arrow"
+                        app:tint="@color/primaryColor" />
+
+                    <Button
+                        android:id="@+id/detailsBackBT"
+                        android:layout_width="44dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="#00FFFFFF" />
+                </FrameLayout>
+
                 <TextView
                     android:id="@+id/name_details"
                     android:layout_width="0dp"
@@ -35,7 +56,7 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="6dp"
-                    android:layout_marginEnd="6dp"
+                    android:layout_marginEnd="8dp"
                     android:layout_marginBottom="6dp"
                     android:layout_weight="1"
                     android:fontFamily="sans-serif-light"
@@ -48,20 +69,15 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center">
 
-                    <Button
-                        android:id="@+id/button2"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center"
-                        android:background="#00C5E1A5" />
-
-                    <ImageView
-                        android:id="@+id/imageView17"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_outline_star_outline_24"
-                        app:tint="@color/grey_outline" />
+                    <CheckBox
+                        android:id="@+id/favouriteCHB"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:layout_marginEnd="6dp"
+                        android:layout_marginBottom="1dp"
+                        android:background="@drawable/selector_favourite"
+                        android:button="@null"
+                        android:checked="true" />
                 </FrameLayout>
 
                 <FrameLayout

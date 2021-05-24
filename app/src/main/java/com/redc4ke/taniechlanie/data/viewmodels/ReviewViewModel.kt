@@ -62,18 +62,11 @@ class ReviewViewModel: ViewModel() {
         ref.collection("users").document(review.author).get()
             .addOnSuccessListener {
                 val data = it.data!!
-                user = UserData(
-                    review.author,
-                    data["name"] as String,
-                    data["created"] as Timestamp,
-                    data["groups"] as ArrayList<String>,
-                    data["stats"] as Map<String, Int>,
-                    data["title"] as Long,
-                    data["avatar"] as String
-                )
+                val name = data["name"] as String
+                val avatar = data["avatar"] as String
 
-                setImage(context, review.author, iv, Uri.parse(user.avatar))
-                username.text = user.name
+                setImage(context, review.author, iv, Uri.parse(avatar))
+                username.text = name
                 timestamp.text = DateFormat.getDateInstance().format(review.timestamp.toDate())
                 ratingBar.rating = review.rating.toFloat()
             }
@@ -113,7 +106,7 @@ class ReviewViewModel: ViewModel() {
     }
 
     fun addReview(context: Context, id: Int, user: FirebaseUser,
-                  rating: Double, content: String): Task<Void> {
+                  rating: Double, content: String, update: Boolean = false): Task<Void> {
         val data = mapOf(
             "id" to UUID.randomUUID(),
             "object_id" to id,
@@ -128,7 +121,9 @@ class ReviewViewModel: ViewModel() {
             .addOnSuccessListener {
                 Toast.makeText(context, "Recenzja dodana!", Toast.LENGTH_SHORT).show()
                 download(id)
-                reviewsUpdate(user, 1)
+                if (!update) {
+                    reviewsUpdate(user, 1)
+                }
             }
             .addOnFailureListener {
                 Toast.makeText(context, "Nieznany błąd", Toast.LENGTH_LONG).show()
