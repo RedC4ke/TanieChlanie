@@ -12,12 +12,12 @@
     app:cardCornerRadius="0dp"
     tools:context="com.redc4ke.taniechlanie.ui.menu.details.DetailsFragment">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardView8"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="2dp"
@@ -29,24 +29,20 @@
                 android:orientation="horizontal">
 
                 <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
+                    android:id="@+id/detailsBackBT"
+                    android:layout_width="40dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center">
 
                     <ImageView
-                        android:id="@+id/imageView22"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_gravity="center"
-                        android:layout_marginStart="4dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="8dp"
                         android:src="@drawable/lineal_arrow"
                         app:tint="@color/primaryColor" />
 
-                    <Button
-                        android:id="@+id/detailsBackBT"
-                        android:layout_width="44dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="#00FFFFFF" />
                 </FrameLayout>
 
                 <TextView
@@ -64,52 +60,36 @@
                     android:textSize="24sp"
                     tools:text="Wódka Smaczna Wiśniowa Dobra" />
 
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center">
-
-                    <CheckBox
-                        android:id="@+id/favouriteCHB"
-                        android:layout_width="26dp"
-                        android:layout_height="26dp"
-                        android:layout_marginEnd="6dp"
-                        android:layout_marginBottom="1dp"
-                        android:background="@drawable/selector_favourite"
-                        android:button="@null"
-                        android:checked="true" />
-                </FrameLayout>
-
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <CheckBox
+                    android:id="@+id/favouriteCHB"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
                     android:layout_gravity="center"
-                    android:background="#00FFFFFF">
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginBottom="1dp"
+                    android:background="@drawable/selector_favourite"
+                    android:button="@null"
+                    android:checked="true" />
 
-                    <Button
-                        android:id="@+id/button3"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center"
-                        android:background="#00FFFFFF" />
+                <ImageView
+                    android:id="@+id/imageView18"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginEnd="12dp"
+                    android:src="@drawable/ic_outline_report_24"
+                    app:tint="@color/error" />
 
-                    <ImageView
-                        android:id="@+id/imageView18"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="start|center_vertical"
-                        android:src="@drawable/ic_outline_report_24"
-                        app:tint="@color/error" />
-                </FrameLayout>
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_below="@id/cardView8">
 
-            <FrameLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -118,13 +98,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
-                    android:src="@drawable/image_placeholder" />
-            </FrameLayout>
+                    android:src="@drawable/image_placeholder"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <include layout="@layout/sheet_details" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
+
 </androidx.cardview.widget.CardView>
 

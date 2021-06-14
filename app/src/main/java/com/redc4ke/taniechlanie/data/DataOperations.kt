@@ -5,30 +5,33 @@ import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.util.Log
-import android.view.Display
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.ui.MainActivity
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
-import kotlin.math.round
-import kotlin.text.Typography.nbsp
 
 fun valueString(alcoObject: AlcoObject, context: MainActivity): String {
     val volume = alcoObject.volume.toBigDecimal()
     val voltage = alcoObject.voltage.times(100.toBigDecimal())
-    val price = alcoObject.price
+    val price = alcoObject.shopToPrice.entries
+        .minByOrNull {
+            if (it.value == null) {
+                BigDecimal.valueOf(9999)
+            } else {
+                it.value!!
+            }
+        }?.value ?: BigDecimal.valueOf(0)
     val rounded = context.getPreferences(MODE_PRIVATE)
-            .getBoolean("rounded_mR", false)
+        .getBoolean("rounded_mR", false)
 
     val value =
         if (price != (0).toBigDecimal())
-                ((voltage * volume) / price)
+            ((voltage * volume) / price)
         else
             (0).toBigDecimal()
 
@@ -43,20 +46,40 @@ fun valueString(alcoObject: AlcoObject, context: MainActivity): String {
     return context.getString(string, substring)
 }
 
-fun priceString(alcoObject: AlcoObject, context: Context): String {
+fun lowestPriceString(alcoObject: AlcoObject, context: Context): String {
     return context.getString(R.string.suff_price,
-            String.format("%.2f", alcoObject.price))
+        String.format("%.2f", alcoObject.shopToPrice.entries
+            .minByOrNull {
+                if (it.value == null) {
+                    BigDecimal.valueOf(9999)
+                } else {
+                    it.value!!
+                }
+            }?.value ?: BigDecimal.valueOf(0)
+        )
+    )
+}
+
+fun priceString(price: BigDecimal, context: Context): String {
+    return context.getString(
+        R.string.suff_price,
+        String.format("%.2f", price)
+    )
 }
 
 fun volumeString(alcoObject: AlcoObject, context: Context): String {
-    return context.getString(R.string.suff_volume,
-            alcoObject.volume.toString())
+    return context.getString(
+        R.string.suff_volume,
+        alcoObject.volume.toString()
+    )
 }
 
 fun voltageString(alcoObject: AlcoObject, context: Context): String {
-    return context.getString(R.string.suff_voltage,
-            (alcoObject.voltage.times(100.toBigDecimal()).round(MathContext(2)))
-                    .stripTrailingZeros().toPlainString())
+    return context.getString(
+        R.string.suff_voltage,
+        (alcoObject.voltage.times(100.toBigDecimal()).round(MathContext(2)))
+            .stripTrailingZeros().toPlainString()
+    )
 }
 
 fun imageFromBitmap(context: Context, bitmap: Bitmap, filename: String): File {

@@ -23,7 +23,6 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>() {
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentDetailsBinding
         get() = FragmentDetailsBinding::inflate
     private lateinit var mainActivity: MainActivity
-    private lateinit var parentFrag: AlcoListFragment
     lateinit var alcoObject: AlcoObject
     lateinit var userViewModel: UserViewModel
 
@@ -37,7 +36,6 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>() {
         super.onCreate(savedInstanceState)
 
         mainActivity = requireActivity() as MainActivity
-        parentFrag = arguments?.getSerializable("AlcoListFragment") as AlcoListFragment
         alcoObject = arguments?.getSerializable("alcoObject") as AlcoObject
 
         sharedElementEnterTransition = MaterialContainerTransform().apply {

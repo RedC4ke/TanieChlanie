@@ -29,7 +29,6 @@ import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.gms.tasks.Task
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -50,7 +49,6 @@ import java.math.BigDecimal
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var mFirebaseAnalytics: FirebaseAnalytics
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var mDrawerLayout: DrawerLayout
     private lateinit var shopViewModel: ShopViewModel
@@ -273,22 +271,18 @@ class MainActivity : AppCompatActivity() {
                 }
                 result["shop"] = shopIds
 
-                val priceList = arrayListOf<BigDecimal>()
+                val shopToPrice = mutableMapOf<Int, BigDecimal?>()
                 shopList.forEach {
                     val price = it.value["price"]?.toString()?.toBigDecimal()
-                    if (price != null)
-                        priceList.add(price)
+                    shopToPrice[it.key.toInt()] = price
                 }
-                result["price"] = priceList.minByOrNull { it }
-                    ?: (0).toBigDecimal()
 
                 val alcoObject = AlcoObject(
                     result["id"] as Int,
                     result["name"] as String,
-                    result["price"] as BigDecimal,
+                    shopToPrice,
                     result["volume"] as Int,
                     result["voltage"] as BigDecimal,
-                    result["shop"] as ArrayList<Int>,
                     result["categories"] as ArrayList<Int>,
                     result["photo"] as String?,
                     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
@@ -297,7 +291,6 @@ class MainActivity : AppCompatActivity() {
                             " tincidunt quis."
                 )
 
-                Log.d("FireBase", "Added: $alcoObject")
                 alcoObjectViewModel.addObject(alcoObject)
             }
     }
@@ -326,16 +319,14 @@ class MainActivity : AppCompatActivity() {
             .addOnSuccessListener {
                 val tempList: ArrayList<Map<String, String>> = arrayListOf()
                 it.forEach { document ->
-                    val data = document.data
                     tempList.add(
                         mapOf(
-                            "question" to data["question"] as String,
-                            "answer" to data["answer"] as String
+                            "question" to document["question"] as String,
+                            "answer" to document["answer"] as String
                         )
                     )
                 }
                 faq = tempList
-                Log.d("FireBase", "Added: $faq")
             }
             .addOnFailureListener {
                 Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
@@ -352,7 +343,6 @@ class MainActivity : AppCompatActivity() {
                     val major = document["major"] as Boolean
 
                     categoryViewModel.add(id, name, url, major, this)
-                    Log.d("FireBase", "Added: $name")
                 }
             }
             .addOnFailureListener {
@@ -363,10 +353,13 @@ class MainActivity : AppCompatActivity() {
     private fun getTask(colName: String): Task<QuerySnapshot> {
         val collection: CollectionReference = database.collection(colName)
 
-        return if (colName == "shops")
-            collection.orderBy("id").get()
-        else
-            collection.orderBy("name").get()
+        val orderByColum = when (colName) {
+            "shops" -> "id"
+            "faq" -> "question"
+            else -> "name"
+        }
+
+        return collection.orderBy(orderByColum).get()
     }
 
     private fun getFirebaseData() {

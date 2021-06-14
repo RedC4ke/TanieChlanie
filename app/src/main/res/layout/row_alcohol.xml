@@ -65,71 +65,63 @@
 
             </FrameLayout>
 
-            <FrameLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="90dp"
-                android:layout_height="match_parent"
-                android:background="@color/white"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
                 android:clipChildren="false"
-                android:clipToPadding="false">
+                android:clipToPadding="false"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="90dp"
+                <TextView
+                    android:id="@+id/price_TV"
+                    android:layout_width="60dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|end"
-                    android:clipChildren="false"
-                    android:clipToPadding="false"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="4dp">
+                    android:layout_marginEnd="4dp"
+                    android:fontFamily="@font/open_sans_regular"
+                    android:textAlignment="viewEnd"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toStartOf="@+id/imageView13"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="39.99zł" />
 
-                    <TextView
-                        android:id="@+id/price_TV"
-                        android:layout_width="60dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="4dp"
-                        android:fontFamily="@font/open_sans_regular"
-                        android:textAlignment="viewEnd"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        app:layout_constraintEnd_toStartOf="@+id/imageView13"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="39.99zł" />
+                <ImageView
+                    android:id="@+id/imageView13"
+                    android:layout_width="19sp"
+                    android:layout_height="19sp"
+                    android:layout_marginEnd="4dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/price_TV"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/price_TV"
+                    app:srcCompat="@drawable/coins" />
 
-                    <ImageView
-                        android:id="@+id/imageView13"
-                        android:layout_width="19sp"
-                        android:layout_height="19sp"
-                        android:layout_marginEnd="4dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/price_TV"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/price_TV"
-                        app:srcCompat="@drawable/coins" />
+                <TextView
+                    android:id="@+id/valueTV"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="3dp"
+                    android:fontFamily="@font/open_sans_light"
+                    android:textAlignment="viewEnd"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toStartOf="@+id/imageView16"
+                    app:layout_constraintTop_toBottomOf="@+id/price_TV"
+                    tools:text="1200mR" />
 
-                    <TextView
-                        android:id="@+id/valueTV"
-                        android:layout_width="60dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginEnd="3dp"
-                        android:fontFamily="@font/open_sans_light"
-                        android:textAlignment="viewEnd"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        app:layout_constraintEnd_toStartOf="@+id/imageView16"
-                        app:layout_constraintTop_toBottomOf="@+id/price_TV"
-                        tools:text="1200mR" />
+                <ImageView
+                    android:id="@+id/imageView16"
+                    android:layout_width="19sp"
+                    android:layout_height="19sp"
+                    android:layout_marginEnd="5dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/valueTV"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/valueTV"
+                    app:srcCompat="@drawable/piggy_bank" />
 
-                    <ImageView
-                        android:id="@+id/imageView16"
-                        android:layout_width="19sp"
-                        android:layout_height="19sp"
-                        android:layout_marginEnd="5dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/valueTV"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/valueTV"
-                        app:srcCompat="@drawable/piggy_bank" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </FrameLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
