@@ -29,8 +29,5 @@
         <argument
             android:name="alcoObject"
             app:argType="com.redc4ke.taniechlanie.data.AlcoObject" />
-        <argument
-            android:name="AlcoListFragment"
-            app:argType="com.redc4ke.taniechlanie.ui.menu.AlcoListFragment" />
     </fragment>
 </navigation>

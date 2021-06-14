@@ -41,7 +41,7 @@
             style="@style/Theme.taniechlanie.TextInputLayout_Filled"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="8dp"
             app:boxBackgroundColor="#00FF7066"
             app:hintEnabled="false"
@@ -51,9 +51,9 @@
             app:suffixTextAppearance="@style/Theme.taniechlanie.Suffix">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/avSubmitPriceET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:digits="1234567890,."
                 android:fontFamily="@font/open_sans_light"
                 android:hint="@string/price_req"
                 android:imeOptions="actionDone"
@@ -64,24 +64,33 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Spinner
-            android:id="@+id/av_submit_name_SPINNER"
+        <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="6dp"
-            android:gravity="top|left"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/white"
+            app:cardCornerRadius="2dp"
             app:layout_constraintBottom_toBottomOf="@+id/av_submit_price_ETL"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/av_submit_price_ETL" />
+            app:layout_constraintTop_toTopOf="@+id/av_submit_price_ETL">
+
+            <Spinner
+                android:id="@+id/av_submit_name_SPINNER"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="2dp"
+                android:dropDownWidth="wrap_content"
+                android:spinnerMode="dropdown" />
+        </androidx.cardview.widget.CardView>
 
         <Button
             android:id="@+id/av_submit_apply_BT"
             style="@style/Theme.taniechlanie.ContainedBT"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="10dp"
             android:drawableTint="#FFFFFF"
             android:fontFamily="@font/open_sans_regular"
             android:foregroundTint="@color/primaryDarkColor"
@@ -93,22 +102,59 @@
             android:textStyle="bold"
             app:iconTint="#00611A1A"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/av_submit_price_ETL"
+            app:layout_constraintTop_toTopOf="@+id/av_submit_cancel_BT"
             app:strokeColor="@color/primaryDarkColor" />
+
+        <Button
+            android:id="@+id/av_submit_cancel_BT"
+            style="@style/Theme.taniechlanie.ContainedBT"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="12dp"
+            android:drawableTint="#FFFFFF"
+            android:fontFamily="@font/open_sans_regular"
+            android:foregroundTint="@color/primaryDarkColor"
+            android:text="@string/fui_cancel"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:iconTint="#00611A1A"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView4"
+            app:strokeColor="@color/primaryDarkColor" />
+
 
         <Button
             android:id="@+id/av_submit_missingShop_BT"
             style="@style/Theme.taniechlanie.TextBT"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
             android:fontFamily="@font/open_sans_regular"
             android:text="@string/av_submit_disclaimer"
+            android:textColor="@color/primaryLightColor"
             android:textSize="14sp"
-            app:layout_constraintEnd_toStartOf="@+id/av_submit_apply_BT"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/av_submit_apply_BT" />
+            app:layout_constraintTop_toBottomOf="@+id/av_submit_price_ETL" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/open_sans_light"
+            android:text="@string/details_availabilitydisclaimer"
+            android:textColor="@color/grey_text"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/av_submit_missingShop_BT" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

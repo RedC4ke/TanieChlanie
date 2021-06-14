@@ -25,7 +25,6 @@ fun setImage(context: Context, name: String, iv: ImageView,
              url: Uri?) {
 
     val imageFile = File(context.filesDir, "$name.jpg")
-    Log.d("setImage", "url: $url")
     if (File(context.filesDir, "$name.jpg").exists()) {
         Glide.with(context).load(imageFile.absolutePath).into(iv)
     }
@@ -33,7 +32,6 @@ fun setImage(context: Context, name: String, iv: ImageView,
         val imageRef = FirebaseStorage.getInstance().getReferenceFromUrl(url.toString())
         imageRef.getFile(imageFile).addOnSuccessListener {
             Glide.with(context).load(imageFile).into(iv)
-            Log.d("setImage","success ${imageFile.path}")
         }.addOnFailureListener {
             Log.d("setImage","$it")
         }
@@ -49,7 +47,6 @@ fun setImage(context: Context, name: String, iv: ImageView,
                         val tempFile = imageFromBitmap(context, resource, name)
                         imageFile.delete()
                         tempFile.copyTo(imageFile)
-                        Log.d("setImage","success ${imageFile.path}")
                     }
                     override fun onLoadCleared(placeholder: Drawable?) {
                     }

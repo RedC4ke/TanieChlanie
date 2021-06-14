@@ -6,10 +6,9 @@ import java.math.BigDecimal
 data class AlcoObject(
         var id: Int,
         var name: String,
-        var price: BigDecimal,
+        var shopToPrice: Map<Int, BigDecimal?>,
         var volume: Int,
         var voltage: BigDecimal,
-        var shop: ArrayList<Int>,
         var categories: ArrayList<Int>,
         var photo: String?,
         var description: String?

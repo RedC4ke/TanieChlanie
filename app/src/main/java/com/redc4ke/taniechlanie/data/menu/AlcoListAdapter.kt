@@ -2,23 +2,25 @@ package com.redc4ke.taniechlanie.data.menu
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.redc4ke.taniechlanie.data.*
-import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectViewModel
+import com.redc4ke.taniechlanie.data.AlcoObject
+import com.redc4ke.taniechlanie.data.autoBreak
+import com.redc4ke.taniechlanie.data.lowestPriceString
+import com.redc4ke.taniechlanie.data.valueString
 import com.redc4ke.taniechlanie.data.viewmodels.CategoryViewModel
 import com.redc4ke.taniechlanie.databinding.RowAlcoholBinding
 import com.redc4ke.taniechlanie.ui.MainActivity
 import com.redc4ke.taniechlanie.ui.menu.AlcoListFragment
-import com.redc4ke.taniechlanie.ui.menu.MenuFragment
 
 
 class AlcoListAdapter(
-        private var data: List<AlcoObject>,
-        private val context: MainActivity,
-        private val parentFrag: AlcoListFragment) : RecyclerView.Adapter<AlcoViewHolder>() {
+    private var data: List<AlcoObject>,
+    private val context: MainActivity,
+    private val parentFrag: AlcoListFragment
+) :
+    RecyclerView.Adapter<AlcoViewHolder>() {
 
     private val categoryViewModel = ViewModelProvider(context).get(CategoryViewModel::class.java)
 
@@ -31,10 +33,10 @@ class AlcoListAdapter(
 
     override fun onBindViewHolder(holder: AlcoViewHolder, position: Int) {
 
-        with (holder.vb) {
+        with(holder.vb) {
             //Set views for this row
             nameTV.text = autoBreak(data[position].name)
-            priceTV.text = priceString(data[position], context)
+            priceTV.text = lowestPriceString(data[position], context)
             valueTV.text = valueString(data[position], context)
             categoryViewModel.get().observe((context), {
                 val image = categoryViewModel.getMajor(data[position])?.image
@@ -54,7 +56,7 @@ class AlcoListAdapter(
         return data.size
     }
 
-    fun update (list: List<AlcoObject>) {
+    fun update(list: List<AlcoObject>) {
         data = list
         notifyDataSetChanged()
     }

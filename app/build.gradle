@@ -84,9 +84,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-database'
 
     //Auth
-    implementation 'com.firebaseui:firebase-ui-auth:6.4.0'
+    implementation 'com.firebaseui:firebase-ui-auth:7.1.1'
     implementation 'com.facebook.android:facebook-login:5.15.3'
-    implementation 'com.twitter.sdk.android:twitter-core:3.3.0'
 
     //DataProcessing
     implementation 'com.github.bumptech.glide:glide:4.11.0'
