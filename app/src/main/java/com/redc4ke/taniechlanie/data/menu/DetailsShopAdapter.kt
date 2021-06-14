@@ -1,20 +1,25 @@
 package com.redc4ke.taniechlanie.data.menu
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.data.Shop
+import com.redc4ke.taniechlanie.data.priceString
 import com.redc4ke.taniechlanie.databinding.RowSheet2Binding
+import java.math.BigDecimal
 
 
 class DetailsShopAdapter(
-    alcoObject: AlcoObject,
-    private val shops: Map<Int, Shop>):
+    private val alcoObject: AlcoObject,
+    private val shops: Map<Int, Shop>,
+    private val context: Context):
     RecyclerView.Adapter<DetailsShopViewHolder>() {
 
-    var list = alcoObject.shop
+    var idList = alcoObject.shopToPrice.keys.toList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailsShopViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -24,16 +29,29 @@ class DetailsShopAdapter(
     }
 
     override fun onBindViewHolder(holder: DetailsShopViewHolder, position: Int) {
-        val shopId = list[position]
-        holder.vb.sheet2ShopTV.text = shops[shopId]?.name
+        val shopId = idList[position]
+        val price = alcoObject.shopToPrice[shopId]
+        holder.vb.sheet2shopTV.text = shops[shopId]?.name
+        if (price != null) {
+            holder.vb.sheet2priceTV.text = priceString(alcoObject
+                .shopToPrice[shopId] ?: BigDecimal.valueOf(0), context)
+        } else {
+            holder.vb.sheet2priceTV.apply {
+                text = context.getString(R.string.details_addprice)
+                setTextColor(context.getColor(R.color.primaryLightColor))
+            }
+            holder.vb.sheet2editBT.visibility = View.GONE
+        }
+
+
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return idList.size
     }
 
     fun update(filtered: ArrayList<Int>) {
-        list = filtered
+        idList = filtered
         notifyDataSetChanged()
     }
 

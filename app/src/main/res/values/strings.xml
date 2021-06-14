@@ -48,6 +48,9 @@
     <string name="details_report">Zgłoś</string>
     <string name="details_favtoast">Dodano do ulubionych</string>
     <string name="details_favremove">Usunięto z ulubionych</string>
+    <string name="details_addprice">Dodaj cenę</string>
+    <string name="details_availabilitydisclaimer">UWAGA: Ceny będące wynikiem czasowej promocji
+        należy dodawać za pomocą zakładki zgłoś promocję!</string>
 
     <!-- details page - shop submit popup -->
     <string name="av_submit_header">Dodaj miejsce występowania!</string>
@@ -163,6 +166,7 @@
     <string name="err_wrongEmail">Podaj poprawny adres e-mail!</string>
     <string name="err_tooShort">Przynajmniej %1$S znaków!</string>
     <string name="err_invalidPassword">Hasło niepoprawne!</string>
+    <string name="err_wrongInput">Podaj prawidłowe dane</string>
 
     <!-- dialog strings -->
     <string name="dialog_bt1">Anuluj</string>
@@ -173,6 +177,8 @@
     <string name="toast_logout">Wylogowano</string>
     <string name="toast_error">Błąd</string>
     <string name="toast_err_notloggedin">Musisz być zalogowany aby wykonać tę akcję!</string>
+    <string name="toast_changesuccess">Twoja zmiana została zgłoszona i oczekuje na zatwardzenie
+         administratora.</string>
 
     <!-- other -->
     <string name="queryHint">Wyszukaj…</string>

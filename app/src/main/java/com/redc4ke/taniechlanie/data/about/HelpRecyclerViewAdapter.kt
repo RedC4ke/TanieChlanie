@@ -1,5 +1,6 @@
 package com.redc4ke.taniechlanie.data.about
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.redc4ke.taniechlanie.databinding.RowAboutHelpBinding
 import com.redc4ke.taniechlanie.ui.MainActivity
 
-class HelpRecyclerViewAdapter(private val frag: Fragment) :
+class HelpRecyclerViewAdapter(frag: Fragment) :
         RecyclerView.Adapter<HelpViewHolder>() {
 
     private val faq = (frag.activity as MainActivity).faq

@@ -3,6 +3,7 @@ package com.redc4ke.taniechlanie.ui.menu.details
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.EditText
@@ -18,6 +19,7 @@ import com.redc4ke.taniechlanie.databinding.FragmentSheet2Binding
 import com.redc4ke.taniechlanie.ui.base.BaseFragment
 import com.redc4ke.taniechlanie.ui.popup.AvailabilitySubmitFragment
 import java.util.*
+import kotlin.collections.ArrayList
 
 class Sheet2Fragment : BaseFragment<FragmentSheet2Binding>() {
 
@@ -45,7 +47,7 @@ class Sheet2Fragment : BaseFragment<FragmentSheet2Binding>() {
         }
 
         shopViewModel.getData().observe(viewLifecycleOwner, {
-            val adapter = DetailsShopAdapter(detailsFragment.alcoObject, it)
+            val adapter = DetailsShopAdapter(detailsFragment.alcoObject, it, requireContext())
             recyclerView.adapter = adapter
             adapter.notifyDataSetChanged()
             setupSearchBar(binding.sheet2ET, detailsFragment.alcoObject, it, adapter)
@@ -75,7 +77,7 @@ class Sheet2Fragment : BaseFragment<FragmentSheet2Binding>() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val filtered = arrayListOf<Int>()
                 val available = mutableMapOf<Int, Shop>()
-                alcoObject.shop.forEach {
+                alcoObject.shopToPrice.keys.forEach {
                     if (shopList[it] != null) {
                         available[it] = shopList[it] as Shop
                     }
@@ -90,7 +92,7 @@ class Sheet2Fragment : BaseFragment<FragmentSheet2Binding>() {
                     }
                     adapter.update(filtered)
                 } else {
-                    adapter.update(alcoObject.shop)
+                    adapter.update(alcoObject.shopToPrice.keys.toList() as ArrayList<Int>)
                 }
             }
 

@@ -28,59 +28,6 @@
         tools:layout="@layout/fragment_options" />
 
     <fragment
-        android:id="@+id/request_dest"
-        android:name="com.redc4ke.taniechlanie.ui.request.RequestFragment"
-        android:label="@string/request"
-        tools:layout="@layout/fragment_request">
-        <action
-            android:id="@+id/to_category"
-            app:destination="@id/category_dest" />
-        <action
-            android:id="@+id/to_shopFragment"
-            app:destination="@id/shop_dest" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/category_dest"
-        android:name="com.redc4ke.taniechlanie.ui.request.CategoryFragment"
-        android:label="@string/category_req"
-        tools:layout="@layout/fragment_category">
-        <argument
-            android:name="RequestFragment"
-            app:argType="com.redc4ke.taniechlanie.ui.request.RequestFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/shop_dest"
-        android:name="com.redc4ke.taniechlanie.ui.request.ShopFragment"
-        android:label="@string/request_shop"
-        tools:layout="@layout/fragment_shop">
-        <argument
-            android:name="AlcoObject"
-            app:argType="com.redc4ke.taniechlanie.data.AlcoObject" />
-        <argument
-            android:name="hasImage"
-            app:argType="boolean" />
-        <action
-            android:id="@+id/to_summaryFragment"
-            app:destination="@id/summary_dest" />
-
-    </fragment>
-    <fragment
-        android:id="@+id/summary_dest"
-        android:name="com.redc4ke.taniechlanie.ui.request.SummaryFragment"
-        android:label="@string/request_summary"
-        tools:layout="@layout/fragment_summary">
-        <argument
-            android:name="AlcoObject"
-            app:argType="com.redc4ke.taniechlanie.data.AlcoObject" />
-        <argument
-            android:name="hasImage"
-            app:argType="boolean" />
-        <action
-            android:id="@+id/to_list_dest"
-            app:destination="@id/list_dest" />
-    </fragment>
-    <fragment
         android:id="@+id/help_dest"
         android:name="com.redc4ke.taniechlanie.ui.about.HelpFragment"
         android:label="@string/about_help"

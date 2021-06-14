@@ -25,7 +25,7 @@ import java.text.Normalizer
 import java.util.*
 
 
-class AlcoListFragment() : BaseFragment<FragmentAlcoListBinding>(), Serializable {
+class AlcoListFragment() : BaseFragment<FragmentAlcoListBinding>() {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentAlcoListBinding
         get() = FragmentAlcoListBinding::inflate
@@ -82,7 +82,7 @@ class AlcoListFragment() : BaseFragment<FragmentAlcoListBinding>(), Serializable
         val extras = FragmentNavigatorExtras(
             cardView to rowAlcoholDetailsTransitionName
         )
-        val directions = AlcoListFragmentDirections.openDetails(alcoObject, this)
+        val directions = AlcoListFragmentDirections.openDetails(alcoObject)
         findNavController().navigate(directions, extras)
     }
 

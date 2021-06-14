@@ -1,12 +1,9 @@
 package com.redc4ke.taniechlanie.ui.menu.details
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -55,8 +52,7 @@ class Sheet1Fragment : BaseFragment<FragmentSheet1Binding>() {
         val root = super.onCreateView(inflater, container, savedInstanceState)
 
         with(binding) {
-            detailsPriceTV.text = getString(R.string.suff_price,
-                String.format("%.2f", alcoObject.price))
+            detailsPriceTV.text = lowestPriceString(alcoObject, requireContext())
             detailsValueTV.text = valueString(alcoObject, (requireActivity() as MainActivity))
             detailsVolumeTV.text = volumeString(alcoObject, requireContext())
             detailsVoltageTV.text = voltageString(alcoObject, requireContext())

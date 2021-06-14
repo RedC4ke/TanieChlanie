@@ -22,9 +22,7 @@ class AboutRecyclerViewAdapter(private val frag: Fragment):
     private val subrows = arrayListOf(
         arrayListOf(
             Subrow(R.drawable.github_mark_120px_plus,
-                "GitHub", "Przejdź", "https://github.com/RedC4ke"),
-            Subrow(R.drawable.ko_fi_icon_rgb_stroke,
-                "Ko-fi", "Przejdź", "https://ko-fi.com/redc4ke")
+                "GitHub", "Przejdź", "https://github.com/RedC4ke")
         ),
         arrayListOf(
             Subrow(R.drawable.github_mark_120px_plus,
