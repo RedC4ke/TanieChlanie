@@ -18,7 +18,7 @@
         android:paddingLeft="10dp"
         android:paddingTop="76dp"
         android:paddingRight="10dp"
-        android:paddingBottom="10dp"/>
+        android:paddingBottom="10dp" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/alcoListSearchBarCV"
@@ -97,4 +97,25 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/alcolistRequestFAB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="8dp"
+        android:text="DODAJ"
+        android:textAppearance="@style/FABText"
+        android:textColor="@color/dark"
+        android:textColorHighlight="#FF4A4A"
+        android:textColorLink="#FB0000"
+        app:backgroundTint="@color/secondaryColor"
+        app:icon="@drawable/list"
+        app:iconPadding="10dp"
+        app:iconSize="32dp"
+        app:iconTint="@color/black"
+        app:rippleColor="@color/primaryLightColor"
+        app:strokeColor="@color/dark"
+        app:strokeWidth="1dp" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -13,6 +13,8 @@
     <color name="primary50">#ffebee</color>
     <color name="primary100">#ffcdd2</color>
     <color name="primary200">#ef9a9a</color>
+    <color name="primary300">#E57373</color>
+    <color name="primary500">#f44336</color>
     <color name="secondary50">#fff8e1</color>
     <color name="secondary100">#ffecb3</color>
     <color name="secondary200">#ffe182</color>

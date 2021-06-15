@@ -49,12 +49,16 @@
     <string name="details_favtoast">Dodano do ulubionych</string>
     <string name="details_favremove">Usunięto z ulubionych</string>
     <string name="details_addprice">Dodaj cenę</string>
-    <string name="details_availabilitydisclaimer">UWAGA: Ceny będące wynikiem czasowej promocji
-        należy dodawać za pomocą zakładki zgłoś promocję!</string>
+    <string name="details_editprice">Zgłoś nową cenę</string>
+
 
     <!-- details page - shop submit popup -->
-    <string name="av_submit_header">Dodaj miejsce występowania!</string>
-    <string name="av_submit_disclaimer">Sklepu nie ma na liście</string>
+    <string name="details_availabilitydisclaimer">UWAGA: Ceny będące wynikiem czasowej promocji
+        należy dodawać za pomocą zakładki zgłoś promocję!</string>
+    <string name="avsubmit_header">Dodaj miejsce występowania!</string>
+    <string name="avsubmit_shopmissing">Sklepu nie ma na liście</string>
+    <string name="avsubmit_shoppresent">Wybierz sklep z listy</string>
+    <string name="avsubmit_edit">Zgłoś cenę!</string>
 
     <!-- favourite page -->
 
@@ -166,7 +170,8 @@
     <string name="err_wrongEmail">Podaj poprawny adres e-mail!</string>
     <string name="err_tooShort">Przynajmniej %1$S znaków!</string>
     <string name="err_invalidPassword">Hasło niepoprawne!</string>
-    <string name="err_wrongInput">Podaj prawidłowe dane</string>
+    <string name="err_wrongInput">Podaj prawidłowe dane!\nUwaga: Nazwa sklepu może zawierać tylko
+        litery alfabetu łacińskiego i polskie.</string>
 
     <!-- dialog strings -->
     <string name="dialog_bt1">Anuluj</string>
@@ -181,6 +186,9 @@
          administratora.</string>
 
     <!-- other -->
+    <string name="polishalphabet"> abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+        ĄąĆćĘęŁłŃńÓóŚśŹźŻż</string>
+    <string name="hint_shopname">Nazwa sklepu</string>
     <string name="queryHint">Wyszukaj…</string>
     <string name="forward">Dalej</string>
     <string name="submit">Prześlij</string>

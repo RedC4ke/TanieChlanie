@@ -47,7 +47,7 @@ class Sheet2Fragment : BaseFragment<FragmentSheet2Binding>() {
         }
 
         shopViewModel.getData().observe(viewLifecycleOwner, {
-            val adapter = DetailsShopAdapter(detailsFragment.alcoObject, it, requireContext())
+            val adapter = DetailsShopAdapter(detailsFragment.alcoObject, it, detailsFragment)
             recyclerView.adapter = adapter
             adapter.notifyDataSetChanged()
             setupSearchBar(binding.sheet2ET, detailsFragment.alcoObject, it, adapter)
@@ -59,7 +59,7 @@ class Sheet2Fragment : BaseFragment<FragmentSheet2Binding>() {
         }
 
         binding.sheet2AddBT.setOnClickListener {
-            AvailabilitySubmitFragment(detailsFragment)
+            AvailabilitySubmitFragment(detailsFragment, null)
                     .show(parentFragmentManager, "av_submit")
         }
     }

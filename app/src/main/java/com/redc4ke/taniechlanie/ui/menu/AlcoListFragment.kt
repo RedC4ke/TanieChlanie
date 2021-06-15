@@ -72,6 +72,10 @@ class AlcoListFragment() : BaseFragment<FragmentAlcoListBinding>() {
 
         mainActivity.supportActionBar!!.show()
         setSearch(alAdapter)
+
+        binding.alcolistRequestFAB.setOnClickListener {
+            findNavController().navigate(R.id.request_dest)
+        }
     }
 
     fun onItemClick(cardView: View, alcoObject: AlcoObject) {
