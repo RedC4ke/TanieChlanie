@@ -185,4 +185,16 @@
         <item name="android:windowBackground">@color/secondary50</item>
     </style>
     <style name="Theme.taniechlanie.AuthUI" parent="Theme.Base.taniechlanie.AuthUI" />
+
+    <style name="dummyText">
+        <item name="android:textSize">0sp</item>
+    </style>
+
+    <style name="FABText">
+        <item name="fontFamily">@font/open_sans_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:layout_margin">0dp</item>
+        <item name="android:letterSpacing">0.03</item>
+    </style>
 </resources>

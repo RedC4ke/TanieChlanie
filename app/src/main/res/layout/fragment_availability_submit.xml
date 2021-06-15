@@ -22,63 +22,80 @@
         android:paddingBottom="12dp">
 
         <TextView
-            android:id="@+id/textView7"
+            android:id="@+id/avSubmitHeaderTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="6dp"
             android:layout_marginEnd="12dp"
             android:fontFamily="@font/open_sans_light"
-            android:text="@string/av_submit_header"
+            android:text="@string/avsubmit_header"
             android:textColor="@color/primaryDarkColor"
-            android:textSize="22sp"
+            android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/av_submit_price_ETL"
-            style="@style/Theme.taniechlanie.TextInputLayout_Filled"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="8dp"
-            app:boxBackgroundColor="#00FF7066"
-            app:hintEnabled="false"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView7"
-            app:suffixText="@string/price_req_suffix"
-            app:suffixTextAppearance="@style/Theme.taniechlanie.Suffix">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/avSubmitPriceET"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/open_sans_light"
-                android:hint="@string/price_req"
-                android:imeOptions="actionDone"
-                android:inputType="numberDecimal"
-                android:maxLength="7"
-                android:singleLine="true"
-                android:textSize="18sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
         <androidx.cardview.widget.CardView
+            android:id="@+id/avSubmitPriceCV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/avSubmitHeaderTV">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/av_submit_price_ETL"
+                style="@style/Theme.taniechlanie.TextInputLayout_Filled"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="-12dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
+                app:boxBackgroundColor="#00FF7066"
+                app:errorTextAppearance="@style/dummyText"
+                app:hintEnabled="false"
+                app:suffixText="@string/price_req_suffix"
+                app:suffixTextAppearance="@style/Theme.taniechlanie.Suffix">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/avSubmitPriceET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/open_sans_light"
+                    android:hint="@string/price_req"
+                    android:imeOptions="actionDone"
+                    android:inputType="numberDecimal"
+                    android:maxLength="7"
+                    android:singleLine="true"
+                    android:textSize="18sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/avSubmitSpinnerCV"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
             android:backgroundTint="@color/white"
             app:cardCornerRadius="2dp"
-            app:layout_constraintBottom_toBottomOf="@+id/av_submit_price_ETL"
+            app:layout_constraintBottom_toBottomOf="@id/avSubmitPriceCV"
+            app:layout_constraintEnd_toStartOf="@+id/avSubmitPriceCV"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/av_submit_price_ETL">
+            app:layout_constraintTop_toTopOf="@+id/avSubmitPriceCV"
+            tools:visibility="visible">
 
             <Spinner
                 android:id="@+id/av_submit_name_SPINNER"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center|start"
                 android:layout_marginStart="6dp"
                 android:layout_marginTop="2dp"
                 android:dropDownWidth="wrap_content"
@@ -100,10 +117,12 @@
             android:textColor="@color/white"
             android:textSize="14sp"
             android:textStyle="bold"
+            app:cornerRadius="18dp"
             app:iconTint="#00611A1A"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/av_submit_cancel_BT"
             app:strokeColor="@color/primaryDarkColor" />
+
 
         <Button
             android:id="@+id/av_submit_cancel_BT"
@@ -111,7 +130,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:drawableTint="#FFFFFF"
             android:fontFamily="@font/open_sans_regular"
             android:foregroundTint="@color/primaryDarkColor"
@@ -121,11 +140,11 @@
             android:textColor="@color/white"
             android:textSize="14sp"
             android:textStyle="bold"
+            app:cornerRadius="18dp"
             app:iconTint="#00611A1A"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4"
+            app:layout_constraintTop_toBottomOf="@+id/frameLayout"
             app:strokeColor="@color/primaryDarkColor" />
-
 
         <Button
             android:id="@+id/av_submit_missingShop_BT"
@@ -133,28 +152,92 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
             android:fontFamily="@font/open_sans_regular"
-            android:text="@string/av_submit_disclaimer"
+            android:text="@string/avsubmit_shopmissing"
             android:textColor="@color/primaryLightColor"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/av_submit_price_ETL" />
+            app:layout_constraintTop_toBottomOf="@+id/avSubmitPriceCV" />
 
-        <TextView
-            android:id="@+id/textView4"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/frameLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginEnd="8dp"
-            android:fontFamily="@font/open_sans_light"
-            android:text="@string/details_availabilitydisclaimer"
-            android:textColor="@color/grey_text"
-            android:textSize="12sp"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/av_submit_missingShop_BT" />
+            app:layout_constraintTop_toBottomOf="@+id/av_submit_missingShop_BT">
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="@font/open_sans_light"
+                android:text="@string/details_availabilitydisclaimer"
+                android:textColor="@color/grey_text"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/avSubmitErrorTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/open_sans_light"
+                android:text="@string/err_wrongInput"
+                android:textColor="@color/error"
+                android:textSize="12sp"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/avSubmitShopCV"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="24dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/avSubmitPriceCV"
+            app:layout_constraintEnd_toStartOf="@+id/avSubmitPriceCV"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/avSubmitPriceCV">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/avSubmitShopETL"
+                style="@style/Theme.taniechlanie.TextInputLayout_Filled"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="-12dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
+                app:errorTextAppearance="@style/dummyText"
+                app:hintEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/avSubmitShopET"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/open_sans_light"
+                    android:hint="@string/hint_shopname"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:maxLength="20"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
