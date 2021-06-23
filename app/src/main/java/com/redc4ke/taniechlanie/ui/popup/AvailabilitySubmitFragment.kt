@@ -136,12 +136,12 @@ class AvailabilitySubmitFragment(detailsFragment: DetailsFragment, private val s
                 if (FirebaseAuth.getInstance().currentUser == null) {
                     Toast.makeText(
                         requireContext(),
-                        R.string.toast_err_notloggedin, Toast.LENGTH_LONG
+                        R.string.err_notloggedin, Toast.LENGTH_LONG
                     ).show()
                 } else if (!correctInput) {
                     Toast.makeText(
                         requireContext(),
-                        R.string.err_wrongInput, Toast.LENGTH_LONG
+                        R.string.err_shopnameWrongInput, Toast.LENGTH_LONG
                     ).show()
                 } else {
                     FirebaseFirestore.getInstance().collection("pending")

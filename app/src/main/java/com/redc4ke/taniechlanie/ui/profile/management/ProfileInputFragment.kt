@@ -116,7 +116,7 @@ class ProfileInputFragment(private val userViewModel: UserViewModel, private val
         })
     }
 
-    private fun step2(value: String) {
+    internal fun step2(value: String) {
         val user = userViewModel.getUser().value!!
         with (binding) {
             when (action) {
