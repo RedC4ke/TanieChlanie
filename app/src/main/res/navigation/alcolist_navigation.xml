@@ -35,7 +35,7 @@
     </fragment>
     <fragment
         android:id="@+id/request_dest"
-        android:name="com.redc4ke.taniechlanie.data.request.RequestFragment"
+        android:name="com.redc4ke.taniechlanie.ui.request.RequestFragment"
         android:label="RequestFragment" >
         <action
             android:id="@+id/request_dets_pop"

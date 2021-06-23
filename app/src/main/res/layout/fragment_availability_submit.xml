@@ -99,7 +99,8 @@
                 android:layout_marginStart="6dp"
                 android:layout_marginTop="2dp"
                 android:dropDownWidth="wrap_content"
-                android:spinnerMode="dropdown" />
+                android:prompt="@string/hint_shopname"
+                android:spinnerMode="dialog" />
         </androidx.cardview.widget.CardView>
 
         <Button
@@ -126,11 +127,11 @@
 
         <Button
             android:id="@+id/av_submit_cancel_BT"
-            style="@style/Theme.taniechlanie.ContainedBT"
+            style="@style/Theme.Base.taniechlanie.ContainedBT"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:drawableTint="#FFFFFF"
             android:fontFamily="@font/open_sans_regular"
             android:foregroundTint="@color/primaryDarkColor"
@@ -151,7 +152,7 @@
             style="@style/Theme.taniechlanie.TextBT"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="10dp"
             android:fontFamily="@font/open_sans_regular"
             android:text="@string/avsubmit_shopmissing"
             android:textColor="@color/primaryLightColor"
@@ -163,7 +164,7 @@
             android:id="@+id/frameLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/av_submit_missingShop_BT">
@@ -189,7 +190,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="2dp"
                 android:fontFamily="@font/open_sans_light"
-                android:text="@string/err_wrongInput"
+                android:text="@string/err_shopnameWrongInput"
                 android:textColor="@color/error"
                 android:textSize="12sp"
                 android:visibility="gone"
