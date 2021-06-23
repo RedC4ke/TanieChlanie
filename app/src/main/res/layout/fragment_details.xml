@@ -58,7 +58,7 @@
                     android:fontFamily="sans-serif-light"
                     android:textColor="@color/black"
                     android:textSize="24sp"
-                    tools:text="Wódka Smaczna Wiśniowa Dobra" />
+                    tools:text="Wódka smaczna wiśniowa dobra" />
 
                 <CheckBox
                     android:id="@+id/favouriteCHB"

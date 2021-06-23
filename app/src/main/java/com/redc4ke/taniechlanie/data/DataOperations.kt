@@ -87,7 +87,7 @@ fun imageFromBitmap(context: Context, bitmap: Bitmap, filename: String): File {
     f.createNewFile()
 
     val bos = ByteArrayOutputStream()
-    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos)
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 75, bos)
     val bitmapData = bos.toByteArray()
 
     val fos = FileOutputStream(f)
