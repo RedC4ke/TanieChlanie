@@ -1,8 +1,8 @@
 package com.redc4ke.taniechlanie.data.viewmodels
 
-import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import java.io.File
 import java.math.BigDecimal
 
 class RequestViewModel : ViewModel() {
@@ -13,9 +13,9 @@ class RequestViewModel : ViewModel() {
         var volume: Int? = null
         var voltage: BigDecimal? = null
         var price: BigDecimal? = null
-        var imageUri: Uri? = null
+        var image: File? = null
     }
-
+    private val photoName = MutableLiveData<String>()
 
     fun setShop(name: String) {
         Request.shopName.value = name
@@ -34,7 +34,15 @@ class RequestViewModel : ViewModel() {
         }
     }
 
-    fun setImage(uri: Uri) {
-        Request.imageUri = uri
+    fun setImage(file: File?) {
+        Request.image = file
+    }
+
+    fun setPhotoName(name: String) {
+        photoName.value = name
+    }
+
+    fun getPhotoName(): MutableLiveData<String> {
+        return photoName
     }
 }

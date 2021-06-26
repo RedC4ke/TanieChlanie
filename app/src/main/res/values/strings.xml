@@ -221,6 +221,7 @@
     <string name="show_more"><font fgcolor="#9a0007">Pokaż więcej</font></string>
     <string name="send">Prześlij</string>
     <string name="edit">Edytuj</string>
+    <string name="photo">Zdjęcie:</string>
     <string name="ok">OK</string>
     <string name="delete">Usuń</string>
     <string name="chose_photo">Wybierz zdjęcie</string>
