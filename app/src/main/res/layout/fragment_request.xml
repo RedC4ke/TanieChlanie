@@ -197,23 +197,56 @@
             app:strokeColor="@color/grey_outline"
             app:strokeWidth="1dp">
 
-            <Button
-                android:id="@+id/requestPhotoBT"
-                style="@style/Theme.Base.taniechlanie.TextBT"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:letterSpacing="0"
-                android:text="@string/image_req"
-                android:textColor="@color/primaryLightColor"
-                android:textSize="11dp"
-                app:icon="@drawable/ic_baseline_add_24"
-                app:iconGravity="textStart"
-                app:iconPadding="4dp"
-                app:iconSize="14dp"
-                app:iconTint="@color/primaryLightColor" />
+                android:layout_height="match_parent"
+                android:layout_gravity="center">
+
+                <Button
+                    android:id="@+id/requestPhotoBT"
+                    style="@style/Theme.Base.taniechlanie.TextBT"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:letterSpacing="0"
+                    android:text="@string/image_req"
+                    android:textColor="@color/primaryLightColor"
+                    android:textSize="11dp"
+                    app:icon="@drawable/ic_baseline_add_24"
+                    app:iconGravity="textStart"
+                    app:iconPadding="4dp"
+                    app:iconSize="14dp"
+                    app:iconTint="@color/primaryLightColor"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/requestDeletephotoBT"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <FrameLayout
+                    android:id="@+id/requestDeletephotoBT"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginEnd="4dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/requestPhotoBT"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/requestPhotoBT">
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="14dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
+                        app:tint="@color/primaryLightColor" />
+                </FrameLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView

@@ -3,14 +3,20 @@ package com.redc4ke.taniechlanie.ui.request
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.ImageDecoder
+import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.redc4ke.taniechlanie.R
+import com.redc4ke.taniechlanie.data.imageFromBitmap
 import com.redc4ke.taniechlanie.data.viewmodels.RequestViewModel
 import com.redc4ke.taniechlanie.data.viewmodels.ShopViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentRequestBinding
@@ -95,11 +101,21 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
             requestPhotoBT.setOnClickListener {
                 addPhoto()
             }
+            requestDeletephotoBT.setOnClickListener {
+                requestViewModel.setImage(null)
+                it.visibility = View.GONE
+                requestPhotoBT.text = getString(R.string.image_req)
+            }
 
-            requestViewModel.getShop().observe(viewLifecycleOwner, {
-                Log.d("huj", it)
-                requestShopBT.text = "${getString(R.string.request_shopbt)} $it"
-            })
+            with(requestViewModel) {
+                getShop().observe(viewLifecycleOwner, {
+                    requestShopBT.text = "${getString(R.string.request_shopbt)} $it"
+                })
+                getPhotoName().observe(viewLifecycleOwner, {
+                    requestPhotoBT.text = "${getString(R.string.photo)} $it"
+                    requestDeletephotoBT.visibility = View.VISIBLE
+                })
+            }
 
             requestSendBT.setOnClickListener {
                 listOf(
@@ -145,9 +161,23 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
-            if (data?.data != null) {
-                requestViewModel.setImage(data.data!!)
+        if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK && data?.data != null) {
+            val bitmap =
+                if (Build.VERSION.SDK_INT < 28) {
+                    MediaStore.Images.Media.getBitmap(
+                        requireContext().contentResolver,
+                        data.data
+                    )
+                } else {
+                    val src = ImageDecoder.createSource(
+                        requireContext().contentResolver,
+                        data.data!!
+                    )
+                    ImageDecoder.decodeBitmap(src)
+                }
+            with(requestViewModel) {
+                setImage(imageFromBitmap(requireContext(), bitmap, "requestUpload"))
+                setPhotoName(data.data!!.lastPathSegment ?: "")
             }
         }
     }
