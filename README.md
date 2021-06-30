@@ -1,1 +1,1 @@
-Info (Polish) on htts://taniechlanie.ml/
+Info (Polish) on (htts://taniechlanie.ml/)
