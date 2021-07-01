@@ -288,10 +288,10 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/requestGuideline1"
-            app:layout_constraintTop_toTopOf="@+id/button5" />
+            app:layout_constraintTop_toTopOf="@+id/requestCancelBT" />
 
         <Button
-            android:id="@+id/button5"
+            android:id="@+id/requestCancelBT"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -307,7 +307,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/materialCardView"
+            android:id="@+id/catAdd1CV"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -322,7 +322,7 @@
             app:strokeWidth="1dp">
 
             <Button
-                android:id="@+id/button6"
+                android:id="@+id/catAdd1BT"
                 style="@style/Theme.Base.taniechlanie.TextBT"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -340,7 +340,147 @@
                 app:iconSize="14dp"
                 app:iconTint="@color/primaryLightColor" />
 
+            <Spinner
+                android:id="@+id/requestCat1SPINNER"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:spinnerMode="dialog"
+                android:visibility="gone"/>
+
         </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/catAdd2CV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/requestGuideline1"
+            app:layout_constraintTop_toTopOf="@+id/catAdd1CV"
+            app:strokeColor="@color/grey_outline"
+            app:strokeWidth="1dp">
+
+            <Button
+                android:id="@+id/catAdd2BT"
+                style="@style/Theme.Base.taniechlanie.TextBT"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:letterSpacing="0"
+                android:paddingEnd="2dp"
+                android:text="@string/category_req"
+                android:textColor="@color/primaryLightColor"
+                android:textSize="11dp"
+                app:icon="@drawable/ic_baseline_add_24"
+                app:iconGravity="textStart"
+                app:iconPadding="4dp"
+                app:iconSize="14dp"
+                app:iconTint="@color/primaryLightColor" />
+
+            <Spinner
+                android:id="@+id/requestCat2SPINNER"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:spinnerMode="dialog"
+                android:visibility="gone"/>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/catAdd3CV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toStartOf="@+id/requestGuideline1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/catAdd2CV"
+            app:strokeColor="@color/grey_outline"
+            app:strokeWidth="1dp">
+
+            <Button
+                android:id="@+id/catdd3BT"
+                style="@style/Theme.Base.taniechlanie.TextBT"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:letterSpacing="0"
+                android:paddingEnd="2dp"
+                android:text="@string/category_req"
+                android:textColor="@color/primaryLightColor"
+                android:textSize="11dp"
+                app:icon="@drawable/ic_baseline_add_24"
+                app:iconGravity="textStart"
+                app:iconPadding="4dp"
+                app:iconSize="14dp"
+                app:iconTint="@color/primaryLightColor" />
+
+            <Spinner
+                android:id="@+id/requestCat3SPINNER"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:spinnerMode="dialog"
+                android:visibility="gone"/>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/catAdd4CV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/requestGuideline1"
+            app:layout_constraintTop_toTopOf="@+id/catAdd3CV"
+            app:strokeColor="@color/grey_outline"
+            app:strokeWidth="1dp">
+
+            <Button
+                android:id="@+id/catAdd4BT"
+                style="@style/Theme.Base.taniechlanie.TextBT"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:letterSpacing="0"
+                android:paddingEnd="2dp"
+                android:text="@string/category_req"
+                android:textColor="@color/primaryLightColor"
+                android:textSize="11dp"
+                app:icon="@drawable/ic_baseline_add_24"
+                app:iconGravity="textStart"
+                app:iconPadding="4dp"
+                app:iconSize="14dp"
+                app:iconTint="@color/primaryLightColor" />
+
+            <Spinner
+                android:id="@+id/requestCat4SPINNER"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:spinnerMode="dialog"
+                android:visibility="gone"/>
+
+        </com.google.android.material.card.MaterialCardView>
+
 
         <View
             android:id="@+id/divider8"
@@ -362,7 +502,7 @@
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="8dp"
             android:background="@color/secondary50"
-            app:layout_constraintBottom_toTopOf="@+id/button5"
+            app:layout_constraintBottom_toTopOf="@+id/requestCancelBT"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
