@@ -10,13 +10,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.redc4ke.taniechlanie.R
+import com.redc4ke.taniechlanie.data.Category
 import com.redc4ke.taniechlanie.data.imageFromBitmap
+import com.redc4ke.taniechlanie.data.viewmodels.CategoryViewModel
 import com.redc4ke.taniechlanie.data.viewmodels.RequestViewModel
 import com.redc4ke.taniechlanie.data.viewmodels.ShopViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentRequestBinding
@@ -35,10 +41,13 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
     override fun onStart() {
         super.onStart()
 
+        val act = requireActivity() as MainActivity
         val shopViewModel =
-            ViewModelProvider(requireActivity() as MainActivity)[ShopViewModel::class.java]
+            ViewModelProvider(act)[ShopViewModel::class.java]
+        val categoryViewModel =
+            ViewModelProvider(act)[CategoryViewModel::class.java]
         requestViewModel =
-            ViewModelProvider(requireActivity() as MainActivity)[RequestViewModel::class.java]
+            ViewModelProvider(act)[RequestViewModel::class.java]
 
         with(binding) {
             requestNameET.addTextChangedListener {
@@ -106,6 +115,8 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
                 it.visibility = View.GONE
                 requestPhotoBT.text = getString(R.string.image_req)
             }
+            val cards = listOf(catAdd1CV, catAdd2CV, catAdd3CV, catAdd4CV)
+
 
             with(requestViewModel) {
                 getShop().observe(viewLifecycleOwner, {
@@ -115,8 +126,28 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
                     requestPhotoBT.text = "${getString(R.string.photo)} $it"
                     requestDeletephotoBT.visibility = View.VISIBLE
                 })
+                getSelectedCategories().observe(viewLifecycleOwner, {
+                    var i = 1
+                    it.forEach { (_, _) ->
+                        if (i < cards.size) {
+                            cards[i].visibility = View.VISIBLE
+                        }
+                        i++
+                    }
+                })
+            }
+            with(categoryViewModel) {
+                getAllMajor().observe(viewLifecycleOwner, {
+                    setMajorSpinner(it)
+                })
+                getAll().observe(viewLifecycleOwner, { it ->
+                    val minorCatList = it.filter { !it.value.major }
+                })
             }
 
+            requestCancelBT.setOnClickListener {
+                findNavController().navigate(R.id.alcoList_dest)
+            }
             requestSendBT.setOnClickListener {
                 listOf(
                     requestNameTIL,
@@ -196,6 +227,49 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
             Intent.createChooser(intent, getString(R.string.chose_photo)),
             PICK_IMAGE
         )
+    }
+
+    private fun setMajorSpinner(majorMap: Map<Int, Category>) {
+        val catNames = majorMap.values.map { it.name }
+        binding.requestTypeSPINNER.adapter =
+            ArrayAdapter(requireContext(), R.layout.spinner1, catNames)
+        binding.requestTypeSPINNER.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                requestViewModel.setMajorCat(majorMap.values.toList()[position])
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+        }
+    }
+    
+    private fun setMinorSpinner(minorMap: Map<Int, Category>, spinnerList: List<Spinner>) {
+        val catNames = minorMap.values.map { it.name }
+        var i = 0
+        spinnerList.forEach {
+            it.adapter = ArrayAdapter(requireContext(), R.layout.spinner1, catNames)
+            it.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    requestViewModel.addCategory(i, minorMap.values.toList()[position])
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                }
+
+            }
+            i++
+        }
     }
 
 }

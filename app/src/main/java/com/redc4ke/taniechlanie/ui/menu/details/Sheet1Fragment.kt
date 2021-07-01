@@ -59,8 +59,8 @@ class Sheet1Fragment : BaseFragment<FragmentSheet1Binding>() {
             descriptionTV.text = alcoObject.description
             categoryRV.layoutManager =
                 LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-            categoryViewModel.get().observe(viewLifecycleOwner, {
-                val categories = categoryViewModel.getWithMajor(alcoObject)
+            categoryViewModel.getAll().observe(viewLifecycleOwner, {
+                val categories = categoryViewModel.getWithMajorFirst(alcoObject)
                 categoryRV.adapter = DetailsCategoryAdapter(categories)
             })
 
