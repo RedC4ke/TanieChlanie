@@ -344,8 +344,10 @@
                 android:id="@+id/requestCat1SPINNER"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:prompt="@string/request_additionalcat"
                 android:spinnerMode="dialog"
-                android:visibility="gone"/>
+                android:textAlignment="viewStart"
+                android:visibility="gone" />
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -387,8 +389,9 @@
                 android:id="@+id/requestCat2SPINNER"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:prompt="@string/request_additionalcat"
                 android:spinnerMode="dialog"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -432,8 +435,9 @@
                 android:id="@+id/requestCat3SPINNER"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:prompt="@string/request_additionalcat"
                 android:spinnerMode="dialog"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -476,8 +480,9 @@
                 android:id="@+id/requestCat4SPINNER"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:prompt="@string/request_additionalcat"
                 android:spinnerMode="dialog"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
         </com.google.android.material.card.MaterialCardView>
 

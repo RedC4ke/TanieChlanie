@@ -3,8 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="start|center"
+    android:ellipsize="end"
     android:fontFamily="@font/open_sans_light"
+    android:gravity="center|start"
     android:padding="10dp"
     android:paddingStart="24dp"
+    android:paddingEnd="-2dp"
+    android:singleLine="true"
+    android:textAlignment="gravity"
     android:textSize="16sp" />
 

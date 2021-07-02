@@ -105,6 +105,7 @@
         na jej potrzeby.
     </string>
     <string name="request_basecategory">Kategoria podstawowa</string>
+    <string name="request_additionalcat">Kategoria dodatkowa</string>
     <string name="request_missingcategory">Brakuje kategorii?</string>
     <string name="request_namehelper">Wprowadź nazwę alkoholu</string>
     <string name="request_addshop">Wybierz sklep</string>
