@@ -1,5 +1,6 @@
 package com.redc4ke.taniechlanie.data.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -55,14 +56,20 @@ class RequestViewModel : ViewModel() {
     }
 
     fun addCategory(index: Int, category: Category) {
-        val catList = Request.categories.value as MutableMap<Int, Category>
+        val catList = (Request.categories.value ?: mutableMapOf()) as MutableMap<Int, Category>
         catList[index] = category
+        Request.categories.value = catList
+        Log.d("huj", "adding $category \n selected $catList")
+    }
+
+    fun deleteCategory(index: Int) {
+        val catList = (Request.categories.value ?: mutableMapOf()) as MutableMap<Int, Category>
+        catList.remove(index)
         Request.categories.value = catList
     }
 
     fun getSelectedCategories() : LiveData<Map<Int, Category>> {
         return Request.categories
     }
-
 
 }

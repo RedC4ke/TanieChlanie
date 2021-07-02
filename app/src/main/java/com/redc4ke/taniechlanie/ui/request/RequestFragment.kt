@@ -10,11 +10,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.Toast
-import androidx.core.content.res.ResourcesCompat
+import android.widget.*
+import androidx.cardview.widget.CardView
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -37,6 +34,7 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentRequestBinding
         get() = FragmentRequestBinding::inflate
     private lateinit var requestViewModel: RequestViewModel
+    private var selectedMinorMap = mapOf<Int, Category>()
 
     override fun onStart() {
         super.onStart()
@@ -48,6 +46,8 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
             ViewModelProvider(act)[CategoryViewModel::class.java]
         requestViewModel =
             ViewModelProvider(act)[RequestViewModel::class.java]
+
+        var minorMap = mapOf<Int, Category>()
 
         with(binding) {
             requestNameET.addTextChangedListener {
@@ -116,6 +116,12 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
                 requestPhotoBT.text = getString(R.string.image_req)
             }
             val cards = listOf(catAdd1CV, catAdd2CV, catAdd3CV, catAdd4CV)
+            cards.forEach { card ->
+                (card.getChildAt(0)).setOnClickListener { it ->
+                    it.visibility = View.GONE
+                    card.getChildAt(1).visibility = View.VISIBLE
+                }
+            }
 
 
             with(requestViewModel) {
@@ -127,13 +133,7 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
                     requestDeletephotoBT.visibility = View.VISIBLE
                 })
                 getSelectedCategories().observe(viewLifecycleOwner, {
-                    var i = 1
-                    it.forEach { (_, _) ->
-                        if (i < cards.size) {
-                            cards[i].visibility = View.VISIBLE
-                        }
-                        i++
-                    }
+                    selectedMinorMap = it
                 })
             }
             with(categoryViewModel) {
@@ -141,7 +141,8 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
                     setMajorSpinner(it)
                 })
                 getAll().observe(viewLifecycleOwner, { it ->
-                    val minorCatList = it.filter { !it.value.major }
+                    minorMap = it.filter { !it.value.major }
+                    setMinorSpinner(selectedMinorMap, minorMap, cards)
                 })
             }
 
@@ -233,43 +234,88 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
         val catNames = majorMap.values.map { it.name }
         binding.requestTypeSPINNER.adapter =
             ArrayAdapter(requireContext(), R.layout.spinner1, catNames)
-        binding.requestTypeSPINNER.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                requestViewModel.setMajorCat(majorMap.values.toList()[position])
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-
-        }
-    }
-    
-    private fun setMinorSpinner(minorMap: Map<Int, Category>, spinnerList: List<Spinner>) {
-        val catNames = minorMap.values.map { it.name }
-        var i = 0
-        spinnerList.forEach {
-            it.adapter = ArrayAdapter(requireContext(), R.layout.spinner1, catNames)
-            it.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.requestTypeSPINNER.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
                     view: View?,
                     position: Int,
                     id: Long
                 ) {
-                    requestViewModel.addCategory(i, minorMap.values.toList()[position])
+                    requestViewModel.setMajorCat(majorMap.values.toList()[position])
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                 }
 
             }
-            i++
+    }
+
+    internal fun setMinorSpinner(
+        selected: Map<Int, Category>,
+        minor: Map<Int, Category>,
+        cardList: List<CardView>
+    ) {
+        Log.d("huj", selected.toString())
+        val catNames: List<String> =
+            listOf(getString(R.string.delete)) + minor.values.map { it.name }
+        val spinners = cardList.map { it.getChildAt(1) as Spinner }
+        cardList.forEach {
+            it.visibility = View.GONE
+            it.getChildAt(0).visibility = View.VISIBLE
+            it.getChildAt(1).visibility = View.GONE
         }
+
+        for (i: Int in (0) until selected.size) {
+            cardList[i].visibility = View.VISIBLE
+            (cardList[i].getChildAt(0) as Button).callOnClick()
+        }
+        if (selected.size < 4) cardList[selected.size].visibility = View.VISIBLE
+
+        spinners.forEach { spinner ->
+            spinner.adapter =
+                ArrayAdapter(requireContext(), R.layout.spinner1, catNames)
+            val index = spinners.indexOf(spinner)
+
+            if (selected.size > index) {
+                spinner.visibility = View.VISIBLE
+                spinner.setSelection(catNames.indexOf(selected[index]?.name))
+            } else {
+                spinner.setSelection(spinners.indexOf(spinner) + 1)
+            }
+
+            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    if (spinner.visibility == View.VISIBLE) {
+                        if (position == 0) {
+                            Log.d("huj", "deleting ${spinners.indexOf(spinner)}")
+                            requestViewModel
+                                .deleteCategory(spinners.indexOf(spinner))
+                            setMinorSpinner(selectedMinorMap, minor, cardList)
+                        } else {
+                            requestViewModel
+                                .addCategory(
+                                    spinners.indexOf(spinner),
+                                    minor.values.filter { it.name == catNames[position] }[0]
+                                )
+                            if (index < 3) {
+                                cardList[index + 1].visibility = View.VISIBLE
+                            }
+                        }
+                    }
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                }
+
+            }
+        }
+
     }
 
 }
