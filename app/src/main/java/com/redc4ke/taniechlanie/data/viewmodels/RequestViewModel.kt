@@ -18,8 +18,11 @@ class RequestViewModel : ViewModel() {
         var price: BigDecimal? = null
         var image: File? = null
         var majorCategory: Category? = null
-        var categories = MutableLiveData<Map<Int, Category>>()
+        var categories = MutableLiveData<MutableMap<Int, Category>>().apply {
+            this.value = mutableMapOf()
+        }
     }
+
     private val photoName = MutableLiveData<String>()
 
     fun setShop(name: String) {
@@ -56,20 +59,27 @@ class RequestViewModel : ViewModel() {
     }
 
     fun addCategory(index: Int, category: Category) {
-        val catList = (Request.categories.value ?: mutableMapOf()) as MutableMap<Int, Category>
-        catList[index] = category
+        val catList = (Request.categories.value ?: mutableMapOf())
+        if (catList[index] != category) {
+            catList[index] = category
+        }
         Request.categories.value = catList
-        Log.d("huj", "adding $category \n selected $catList")
     }
 
     fun deleteCategory(index: Int) {
-        val catList = (Request.categories.value ?: mutableMapOf()) as MutableMap<Int, Category>
+        val catList = (Request.categories.value ?: mutableMapOf())
         catList.remove(index)
-        Request.categories.value = catList
+        val newList = catList.values.toList()
+        Request.categories.value =
+            newList.mapIndexed { ind, category -> ind to category }.toMap().toMutableMap()
     }
 
-    fun getSelectedCategories() : LiveData<Map<Int, Category>> {
+    fun getSelectedCategories(): LiveData<MutableMap<Int, Category>> {
         return Request.categories
+    }
+
+    fun upload() {
+        
     }
 
 }

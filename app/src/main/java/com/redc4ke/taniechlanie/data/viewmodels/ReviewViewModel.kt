@@ -80,7 +80,7 @@ class ReviewViewModel: ViewModel() {
             .addOnSuccessListener {
                 val list = mutableListOf<Review>()
                 it.forEach {doc ->
-                    Log.d("huj", "guwno")
+                    Log.d("templog", "guwno")
                     list.add(retrieve(doc))
                 }
                 add(id, list)

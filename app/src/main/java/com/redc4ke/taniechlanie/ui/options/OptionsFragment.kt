@@ -43,7 +43,7 @@ class OptionsFragment : BaseFragment<FragmentOptionsBinding>() {
             ) {
                 val selected = position == 0
                 prefs.edit().putBoolean("rounded_mR", selected).apply()
-                Log.d("huj", selected.toString())
+                Log.d("templog", selected.toString())
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
