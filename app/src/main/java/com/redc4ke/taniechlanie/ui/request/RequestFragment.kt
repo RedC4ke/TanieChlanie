@@ -256,7 +256,7 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
         minor: Map<Int, Category>,
         cardList: List<CardView>
     ) {
-        Log.d("huj", selected.toString())
+        Log.d("templog", selected.toString())
         val catNames: List<String> =
             listOf(getString(R.string.delete)) + minor.values.map { it.name }
         val spinners = cardList.map { it.getChildAt(1) as Spinner }
@@ -293,7 +293,6 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
                 ) {
                     if (spinner.visibility == View.VISIBLE) {
                         if (position == 0) {
-                            Log.d("huj", "deleting ${spinners.indexOf(spinner)}")
                             requestViewModel
                                 .deleteCategory(spinners.indexOf(spinner))
                             setMinorSpinner(selectedMinorMap, minor, cardList)
