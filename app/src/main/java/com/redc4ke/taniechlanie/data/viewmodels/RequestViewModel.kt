@@ -1,12 +1,18 @@
 package com.redc4ke.taniechlanie.data.viewmodels
 
-import android.util.Log
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.redc4ke.taniechlanie.data.Category
 import java.io.File
 import java.math.BigDecimal
+import java.util.*
 
 class RequestViewModel : ViewModel() {
 
@@ -78,8 +84,73 @@ class RequestViewModel : ViewModel() {
         return Request.categories
     }
 
-    fun upload() {
-        
+    fun upload(listener: RequestUploadListener) {
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user == null) {
+            listener.onComplete(2)
+            return
+        }
+        if (Request.image != null) {
+            val storageRef =
+                FirebaseStorage.getInstance().reference.child("pendingPhotos/${UUID.randomUUID()}.jpg")
+            storageRef.putFile(Uri.fromFile(Request.image))
+                .addOnFailureListener {
+                    listener.onComplete(4)
+                }
+                .addOnSuccessListener {
+                    uploadData(listener, user, "gs://jabot-5ce1f.appspot.com" + storageRef.path)
+                }
+        } else {
+            uploadData(listener, user, null)
+        }
+
     }
 
+    private fun uploadData(
+        listener: RequestUploadListener,
+        user: FirebaseUser,
+        photoURL: String?
+    ) {
+        val firestoreRef = FirebaseFirestore.getInstance().collection("pending")
+            .document("pending").collection("newBooze")
+
+        val categories = Request.categories.value!!.values.map { it.id }.toMutableList()
+        if (Request.majorCategory != null) {
+            categories.add(Request.majorCategory!!.id)
+        } else {
+            listener.onComplete(RequestUploadListener.OTHER)
+            return
+        }
+
+        firestoreRef.add(
+            hashMapOf(
+                "author" to user.uid,
+                "categories" to categories,
+                "description" to null,
+                "name" to Request.alcoholName,
+                "voltage" to Request.voltage!!.toDouble(),
+                "volume" to Request.volume,
+                "photo" to photoURL,
+                "price" to mapOf(Request.shopName.value to Request.price!!.toDouble())
+            )
+        )
+            .addOnFailureListener {
+                listener.onComplete(RequestUploadListener.OTHER)
+            }
+            .addOnSuccessListener {
+                listener.onComplete(RequestUploadListener.SUCCESS)
+            }
+    }
+
+}
+
+interface RequestUploadListener {
+    companion object {
+        const val SUCCESS = 1
+        const val NOT_LOGGED_IN = 2
+        const val REPEATING_CATEGORIES = 3
+        const val OTHER = 4
+    }
+
+    fun onComplete(resultCode: Int)
 }

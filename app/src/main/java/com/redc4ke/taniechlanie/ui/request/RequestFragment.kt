@@ -20,6 +20,7 @@ import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.Category
 import com.redc4ke.taniechlanie.data.imageFromBitmap
 import com.redc4ke.taniechlanie.data.viewmodels.CategoryViewModel
+import com.redc4ke.taniechlanie.data.viewmodels.RequestUploadListener
 import com.redc4ke.taniechlanie.data.viewmodels.RequestViewModel
 import com.redc4ke.taniechlanie.data.viewmodels.ShopViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentRequestBinding
@@ -186,6 +187,25 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
                     input[2].toBigDecimal(),
                     input[3].toBigDecimal()
                 )
+
+                requestViewModel.upload(object : RequestUploadListener {
+                    override fun onComplete(resultCode: Int) {
+                        val toastText = when (resultCode) {
+                            RequestUploadListener.SUCCESS -> getString(R.string.request_success).also {
+                                this@RequestFragment.findNavController()
+                                    .navigate(R.id.alcoList_dest)
+                            }
+                            RequestUploadListener.REPEATING_CATEGORIES -> getString(R.string.request_repeatingcats)
+                            RequestUploadListener.NOT_LOGGED_IN -> getString(R.string.err_notloggedin)
+                            else -> getString(R.string.toast_error)
+                        }
+                        Toast.makeText(
+                            requireContext(),
+                            toastText,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                })
             }
         }
     }
@@ -256,7 +276,6 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
         minor: Map<Int, Category>,
         cardList: List<CardView>
     ) {
-        Log.d("templog", selected.toString())
         val catNames: List<String> =
             listOf(getString(R.string.delete)) + minor.values.map { it.name }
         val spinners = cardList.map { it.getChildAt(1) as Spinner }
