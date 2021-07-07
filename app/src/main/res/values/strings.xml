@@ -113,6 +113,8 @@
     <string name="request_shopmissingbt">Dodaj nowy</string>
     <string name="request_returntospinner">Wróć do listy sklepów</string>
     <string name="request_shopbt">Sklep: </string>
+    <string name="request_repeatingcats">Kategorie nie mogą się powtarzać!</string>
+    <string name="request_success">Twoje zgłoszenie zostało przesłane i oczekuje na zatwardzenie moderatora!</string>
 
     <!-- request page - summary fragment -->
     <string name="name_summary">Nazwa:</string>
