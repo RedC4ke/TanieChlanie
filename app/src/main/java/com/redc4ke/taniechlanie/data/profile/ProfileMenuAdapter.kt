@@ -54,7 +54,10 @@ class ProfileMenuAdapter(private val context: ProfileMenuFragment) :
             }
 
             else -> {
-
+                holder.vb.root.setOnClickListener {
+                    context.requireParentFragment().requireParentFragment().findNavController()
+                        .navigate(R.id.action_profile_dest_to_modpanel_dest)
+                }
             }
         }
 

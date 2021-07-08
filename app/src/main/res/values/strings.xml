@@ -13,6 +13,7 @@
     <string name="request_summary">Podsumowanie</string>
     <string name="profile_page">Profil</string>
     <string name="favourite_page">Ulubione</string>
+    <string name="modpanel">Panel moderatora</string>
 
     <!-- welcome -->
     <string name="start">Zaczynamy!</string>
@@ -173,6 +174,13 @@
     <string name="profile_hint_currentpwd">Podaj obecne hasło</string>
     <string name="profile_your_reviews">Twoje recenzje</string>
 
+    <!-- mod panel -->
+    <string-array name="mod_actionlist">
+        <item>Nowe alkohole</item>
+        <item>Zmiany w alkoholach</item>
+        <item>Nowe kategorie</item>
+        <item>Zgłoszone recenzje</item>
+    </string-array>
 
     <!-- options page -->
     <string name="romper_unit">Jednostka opłacalności</string>

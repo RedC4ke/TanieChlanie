@@ -40,10 +40,17 @@
         <action
             android:id="@+id/action_profile_dest_to_list_dest"
             app:destination="@id/list_dest" />
+        <action
+            android:id="@+id/action_profile_dest_to_modpanel_dest"
+            app:destination="@id/modpanel_dest" />
     </fragment>
     <fragment
         android:id="@+id/favourite_dest"
         android:name="com.redc4ke.taniechlanie.ui.favourite.FavouriteFragment"
         android:label="@string/favourite_page" />
+    <fragment
+        android:id="@+id/modpanel_dest"
+        android:name="com.redc4ke.taniechlanie.ui.profile.modpanel.ModPanelFragment"
+        android:label="@string/modpanel" />
 
 </navigation>
