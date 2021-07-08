@@ -6,13 +6,13 @@ import android.content.Intent
 import android.graphics.ImageDecoder
 import android.os.Build
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
@@ -34,7 +34,7 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentRequestBinding
         get() = FragmentRequestBinding::inflate
-    private lateinit var requestViewModel: RequestViewModel
+    private val requestViewModel: RequestViewModel by viewModels()
     private var selectedMinorMap = mapOf<Int, Category>()
 
     override fun onStart() {
@@ -45,8 +45,6 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
             ViewModelProvider(act)[ShopViewModel::class.java]
         val categoryViewModel =
             ViewModelProvider(act)[CategoryViewModel::class.java]
-        requestViewModel =
-            ViewModelProvider(act)[RequestViewModel::class.java]
 
         var minorMap = mapOf<Int, Category>()
 
@@ -149,6 +147,7 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
 
             requestCancelBT.setOnClickListener {
                 findNavController().navigate(R.id.alcoList_dest)
+                this@RequestFragment.onDestroy()
             }
             requestSendBT.setOnClickListener {
                 listOf(
@@ -180,6 +179,16 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
                 listOf(requestNameET, requestVolumeET, requestVoltageET, requestPriceET).forEach {
                     input.add(it.text.toString())
                 }
+                input.forEach {
+                    if (it.isEmpty()) {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.err_emptyField),
+                            Toast.LENGTH_LONG
+                        ).show()
+                        return@setOnClickListener
+                    }
+                }
 
                 requestViewModel.fillRequest(
                     input[0],
@@ -188,12 +197,15 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
                     input[3].toBigDecimal()
                 )
 
+                requestPB.visibility = View.VISIBLE
+                requestSendBT.text = ""
                 requestViewModel.upload(object : RequestUploadListener {
                     override fun onComplete(resultCode: Int) {
                         val toastText = when (resultCode) {
                             RequestUploadListener.SUCCESS -> getString(R.string.request_success).also {
                                 this@RequestFragment.findNavController()
                                     .navigate(R.id.alcoList_dest)
+                                this@RequestFragment.onDestroy()
                             }
                             RequestUploadListener.REPEATING_CATEGORIES -> getString(R.string.request_repeatingcats)
                             RequestUploadListener.NOT_LOGGED_IN -> getString(R.string.err_notloggedin)
@@ -204,6 +216,9 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
                             toastText,
                             Toast.LENGTH_LONG
                         ).show()
+
+                        requestPB.visibility = View.GONE
+                        requestSendBT.text = getString(R.string.send)
                     }
                 })
             }

@@ -306,6 +306,21 @@
             app:layout_constraintEnd_toStartOf="@+id/requestGuideline1"
             app:layout_constraintStart_toStartOf="parent" />
 
+        <ProgressBar
+            android:id="@+id/requestPB"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:elevation="4dp"
+            android:progressTint="@color/white"
+            android:secondaryProgressTint="@color/white"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/requestSendBT"
+            app:layout_constraintEnd_toEndOf="@+id/requestSendBT"
+            app:layout_constraintStart_toStartOf="@+id/requestSendBT"
+            app:layout_constraintTop_toTopOf="@+id/requestSendBT"
+            tools:visibility="visible" />
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/catAdd1CV"
             android:layout_width="0dp"
