@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FieldValue
@@ -31,6 +32,7 @@ class UserViewModel : ViewModel() {
     private val update = MutableLiveData<Boolean>()
     private var updateValue = false
     private var favourites = MutableLiveData<ArrayList<Long>>()
+    private var groups = MutableLiveData<ArrayList<String>>()
 
     init {
         downloadTitles()
@@ -81,6 +83,10 @@ class UserViewModel : ViewModel() {
         }
     }
 
+    fun isModerator(): Boolean {
+        return staticUser != null && groups.value?.contains("moderator") == true
+    }
+
     fun getUser(): MutableLiveData<FirebaseUser?> {
         return currentUser
     }
@@ -121,6 +127,7 @@ class UserViewModel : ViewModel() {
                         userTitle.value =
                             titles[(data["title"] as Long).toInt()] ?: mapOf("name" to "n/a")
                         favourites.value = userData.favourites
+                        groups.value = userData.groups ?: arrayListOf()
 
                         if (staticUser != null) userData.integrityCheck(firestore, staticUser!!)
                     }
