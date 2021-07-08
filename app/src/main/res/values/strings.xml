@@ -164,6 +164,7 @@
         <item>Zmień hasło</item>
         <item>Usuń konto</item>
     </string-array>
+    <string name="profile_modpanel">Panel moderatora</string>
     <string name="profile_editDisplayName">Zmień nazwę konta</string>
     <string name="profile_editEmail">Zmień adres e-mail</string>
     <string name="profile_editPassword">Zmień hasło</string>
