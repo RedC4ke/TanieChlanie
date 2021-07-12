@@ -68,11 +68,15 @@ class RequestShopFragment(
             }
             requestShopSaveBT.setOnClickListener {
                 if (requestShopTIL.isVisible && requestShopTIL.error == null
-                    && !requestShopET.text.isNullOrEmpty()) {
-                    requestViewModel.setShop(requestShopET.text.toString())
+                    && !requestShopET.text.isNullOrEmpty()
+                ) {
+                    val shop = Shop(null, requestShopET.text.toString())
+                    requestViewModel.setShop(shop, true)
                     dismiss()
                 } else if (requestShopSpinnerCV.isVisible && selectedShop != null) {
-                    requestViewModel.setShop(selectedShop!!)
+                    val shop =
+                        shopViewModel.getData().value?.entries?.find { it.value.name == selectedShop }?.value!!
+                    requestViewModel.setShop(shop)
                     dismiss()
                 }
             }

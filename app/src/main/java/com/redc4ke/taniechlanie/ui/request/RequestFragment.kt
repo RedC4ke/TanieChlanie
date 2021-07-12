@@ -125,7 +125,7 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
 
             with(requestViewModel) {
                 getShop().observe(viewLifecycleOwner, {
-                    requestShopBT.text = "${getString(R.string.request_shopbt)} $it"
+                    requestShopBT.text = "${getString(R.string.request_shopbt)} ${it.name}"
                 })
                 getPhotoName().observe(viewLifecycleOwner, {
                     requestPhotoBT.text = "${getString(R.string.photo)} $it"
