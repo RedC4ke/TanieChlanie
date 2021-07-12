@@ -6,10 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.redc4ke.taniechlanie.data.Category
+import com.redc4ke.taniechlanie.data.Shop
 import java.io.File
 import java.math.BigDecimal
 import java.util.*
@@ -17,7 +17,8 @@ import java.util.*
 class RequestViewModel : ViewModel() {
 
     private object Request {
-        val shopName = MutableLiveData<String>()
+        val shop = MutableLiveData<Shop>()
+        var shopIsNew = false
         var alcoholName: String? = null
         var volume: Int? = null
         var voltage: BigDecimal? = null
@@ -31,12 +32,13 @@ class RequestViewModel : ViewModel() {
 
     private val photoName = MutableLiveData<String>()
 
-    fun setShop(name: String) {
-        Request.shopName.value = name
+    fun setShop(shop: Shop, isNew: Boolean = false) {
+        Request.shop.value = shop
+        Request.shopIsNew = isNew
     }
 
-    fun getShop(): MutableLiveData<String> {
-        return Request.shopName
+    fun getShop(): MutableLiveData<Shop> {
+        return Request.shop
     }
 
     fun fillRequest(name: String, vm: Int, volt: BigDecimal, pc: BigDecimal) {
@@ -111,7 +113,7 @@ class RequestViewModel : ViewModel() {
         user: FirebaseUser,
         photoURL: String?
     ) {
-        val firestoreRef = FirebaseFirestore.getInstance().collection("pending")
+        val firestoreRef = FirebaseFirestore.getInstance().collection("itemPhotos")
             .document("pending").collection("newBooze")
 
         val categories = Request.categories.value!!.values.map { it.id }.toMutableList()
@@ -131,7 +133,11 @@ class RequestViewModel : ViewModel() {
                 "voltage" to Request.voltage!!.toDouble(),
                 "volume" to Request.volume,
                 "photo" to photoURL,
-                "price" to mapOf(Request.shopName.value to Request.price!!.toDouble())
+                "shop" to hashMapOf(
+                    (Request.shop.value?.id?.toString() ?: "null") to Request.shop.value?.name
+                ),
+                "shopIsNew" to Request.shopIsNew,
+                "price" to Request.price!!.toDouble()
             )
         )
             .addOnFailureListener {
