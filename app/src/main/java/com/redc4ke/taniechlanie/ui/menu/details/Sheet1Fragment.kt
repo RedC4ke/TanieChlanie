@@ -54,13 +54,13 @@ class Sheet1Fragment : BaseFragment<FragmentSheet1Binding>() {
         with(binding) {
             detailsPriceTV.text = lowestPriceString(alcoObject, requireContext())
             detailsValueTV.text = valueString(alcoObject, (requireActivity() as MainActivity))
-            detailsVolumeTV.text = volumeString(alcoObject, requireContext())
-            detailsVoltageTV.text = voltageString(alcoObject, requireContext())
+            detailsVolumeTV.text = volumeString(alcoObject.volume.toLong(), requireContext())
+            detailsVoltageTV.text = voltageString(alcoObject.voltage, requireContext())
             descriptionTV.text = alcoObject.description
             categoryRV.layoutManager =
                 LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
             categoryViewModel.getAll().observe(viewLifecycleOwner, {
-                val categories = categoryViewModel.getWithMajorFirst(alcoObject)
+                val categories = categoryViewModel.getWithMajorFirst(alcoObject.categories)
                 categoryRV.adapter = DetailsCategoryAdapter(categories)
             })
 

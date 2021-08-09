@@ -52,8 +52,7 @@ class CategoryViewModel : ViewModel() {
         return majorCategories
     }
 
-    fun getMajor(alcoObject: AlcoObject): Category? {
-        val catList = alcoObject.categories
+    fun getMajor(catList: List<Int>): Category? {
         catList.forEach {
             val cat = categoryLiveData.value?.get(it)
             if (cat?.major == true) {
@@ -63,9 +62,9 @@ class CategoryViewModel : ViewModel() {
         return null
     }
 
-    fun getWithMajorFirst(alcoObject: AlcoObject): List<Category?> {
-        val list = mutableListOf(getMajor(alcoObject))
-        alcoObject.categories.forEach {
+    fun getWithMajorFirst(catList: List<Int>): List<Category?> {
+        val list = mutableListOf(getMajor(catList))
+        catList.forEach {
             val category = categoryLiveData.value?.get(it)
             if (category != null && category != list[0]) {
                 list.add(category)

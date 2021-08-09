@@ -17,6 +17,7 @@ import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.imageFromIntent
 import com.redc4ke.taniechlanie.data.profile.ProfileMenuAdapter
 import com.redc4ke.taniechlanie.data.setImage
+import com.redc4ke.taniechlanie.data.viewmodels.ModpanelViewModel
 import com.redc4ke.taniechlanie.data.viewmodels.UserViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentProfileBinding
 import com.redc4ke.taniechlanie.ui.MainActivity
@@ -43,6 +44,13 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //start fetching data for mod panel
+        if (userViewModel.isModerator()) {
+            val modpanelViewModel =
+                ViewModelProvider(requireActivity() as MainActivity)[ModpanelViewModel::class.java]
+            modpanelViewModel.fetch()
+        }
 
         setFragmentResultListener("confirmation") {_, bundle ->
             val result = bundle.getBoolean("value")
