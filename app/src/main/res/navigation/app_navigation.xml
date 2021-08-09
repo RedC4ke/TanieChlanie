@@ -51,6 +51,26 @@
     <fragment
         android:id="@+id/modpanel_dest"
         android:name="com.redc4ke.taniechlanie.ui.profile.modpanel.ModPanelFragment"
-        android:label="@string/modpanel" />
+        android:label="@string/modpanel" >
+        <action
+            android:id="@+id/action_modpanel_dest_to_newBoozeListFragment"
+            app:destination="@id/newBooze_dest" />
+    </fragment>
+    <fragment
+        android:id="@+id/newBooze_dest"
+        android:name="com.redc4ke.taniechlanie.ui.profile.modpanel.NewBoozeListFragment"
+        android:label="@string/modpanel_newbooze" >
+        <action
+            android:id="@+id/openRequestDetails"
+            app:destination="@id/requestDetails_dest" />
+    </fragment>
+    <fragment
+        android:id="@+id/requestDetails_dest"
+        android:name="com.redc4ke.taniechlanie.ui.profile.modpanel.RequestDetailsFragment"
+        android:label="@string/modpanel_details">
+        <argument
+            android:name="request"
+            app:argType="com.redc4ke.taniechlanie.data.viewmodels.Request" />
+    </fragment>
 
 </navigation>

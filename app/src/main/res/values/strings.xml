@@ -14,6 +14,8 @@
     <string name="profile_page">Profil</string>
     <string name="favourite_page">Ulubione</string>
     <string name="modpanel">Panel moderatora</string>
+    <string name="modpanel_newbooze">Nowe alkohole</string>
+    <string name="modpanel_details">Szczegóły</string>
 
     <!-- welcome -->
     <string name="start">Zaczynamy!</string>
