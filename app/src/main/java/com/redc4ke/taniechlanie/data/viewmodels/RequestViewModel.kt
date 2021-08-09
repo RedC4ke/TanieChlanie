@@ -113,7 +113,7 @@ class RequestViewModel : ViewModel() {
         user: FirebaseUser,
         photoURL: String?
     ) {
-        val firestoreRef = FirebaseFirestore.getInstance().collection("itemPhotos")
+        val firestoreRef = FirebaseFirestore.getInstance().collection("pending")
             .document("pending").collection("newBooze")
 
         val categories = Request.categories.value!!.values.map { it.id }.toMutableList()

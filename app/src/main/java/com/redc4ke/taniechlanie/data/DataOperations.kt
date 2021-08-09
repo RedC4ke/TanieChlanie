@@ -17,7 +17,7 @@ import java.math.RoundingMode
 
 fun valueString(alcoObject: AlcoObject, context: MainActivity): String {
     val volume = alcoObject.volume.toBigDecimal()
-    val voltage = alcoObject.voltage.times(100.toBigDecimal())
+    val voltage = alcoObject.voltage
     val price = alcoObject.shopToPrice.entries
         .minByOrNull {
             if (it.value == null) {
@@ -67,17 +67,17 @@ fun priceString(price: BigDecimal, context: Context): String {
     )
 }
 
-fun volumeString(alcoObject: AlcoObject, context: Context): String {
+fun volumeString(volume: Long, context: Context): String {
     return context.getString(
         R.string.suff_volume,
-        alcoObject.volume.toString()
+        volume.toString()
     )
 }
 
-fun voltageString(alcoObject: AlcoObject, context: Context): String {
+fun voltageString(voltage: BigDecimal, context: Context): String {
     return context.getString(
         R.string.suff_voltage,
-        (alcoObject.voltage.times(100.toBigDecimal()).round(MathContext(2)))
+        (voltage.round(MathContext(2)))
             .stripTrailingZeros().toPlainString()
     )
 }

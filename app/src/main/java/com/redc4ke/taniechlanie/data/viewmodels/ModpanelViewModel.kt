@@ -1,24 +1,20 @@
 package com.redc4ke.taniechlanie.data.viewmodels
 
-import android.annotation.SuppressLint
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
+import java.io.Serializable
 import java.math.BigDecimal
 
 class ModpanelViewModel : ViewModel() {
 
-    private companion object {
-        val newBooze = MutableLiveData<MutableList<Request>>().also {
-            it.value = mutableListOf()
-        }
-        val changedBooze = MutableLiveData<MutableList<Request>>().also {
-            it.value = mutableListOf()
-        }
-    }
+    private val newBooze = MutableLiveData<MutableList<Request>>()
+    private val changedBooze = MutableLiveData<MutableList<Request>>()
+
 
     fun getNewBooze(): LiveData<MutableList<Request>> {
         return newBooze
@@ -36,8 +32,9 @@ class ModpanelViewModel : ViewModel() {
         firestoreRef.collection("newBooze").get()
             .addOnSuccessListener {
                 newBooze.value = mutableListOf()
+                val tempList = mutableListOf<Request>()
                 it.documents.forEach { document ->
-                    newBooze.value!!.add(
+                    val request =
                         Request(
                             document.getString("author"),
                             document.getString("name"),
@@ -50,9 +47,15 @@ class ModpanelViewModel : ViewModel() {
                             document.getString("photo"),
                             null
                         )
-                    )
+                    tempList.add(request)
+                    newBooze.value = tempList
+                    Log.d("huj", request.toString())
                 }
             }
+            .addOnFailureListener {
+
+            }
+
         firestoreRef.collection("changedBooze").get()
             .addOnSuccessListener {
                 changedBooze.value = mutableListOf()
@@ -81,6 +84,18 @@ class ModpanelViewModel : ViewModel() {
                 firebaseRef.setValue(id + 1).addOnSuccessListener {
                     request.id = id
                     firestoreRef.runTransaction { transaction ->
+                        //Increment author upload count
+                        val user = transaction.get(usersRef.document(request.author!!))
+                        val stats = (user.get("stats") as? HashMap<String, Long>)!!.toMutableMap()
+                        val submits = stats["submits"] ?: 0
+                        stats["submits"] = submits + 1
+                        transaction.set(
+                            usersRef.document(request.author), hashMapOf(
+                                "stats" to stats
+                            )
+                        )
+
+                        //Add shop if new
                         if (request.shopIsNew == true) {
                             val shopId = shopViewModel.getLastId()
                             request.shop = Pair(shopId.toString(), request.shop!!.second)
@@ -91,28 +106,37 @@ class ModpanelViewModel : ViewModel() {
                                 )
                             )
                         }
-                        transaction.set(winesRef.document(), hashMapOf(
-                            "id" to request.id,
-                            "name" to request.name,
-                            "author" to request.author,
-                            "approvedBy" to FirebaseAuth.getInstance().uid,
-                            "volume" to request.volume,
-                            "voltage" to request.voltage,
-                            "categories" to request.categories,
-                            "photo" to request.photo
-                        ))
-                        transaction.set(pricesRef.document(request.id.toString()), hashMapOf(
-                            "shop" to hashMapOf(request.shop!!.first to hashMapOf(
-                                "is_promo" to false,
-                                "price" to request.price
-                            ))
-                        ))
-                        var userStat = transaction.get(usersRef.document(request.author!!))
-                            .get("stats") as? HashMap<String, HashMap<String, Long>>
 
+                        //Set the main document
+                        transaction.set(
+                            winesRef.document(), hashMapOf(
+                                "id" to request.id,
+                                "name" to request.name,
+                                "author" to request.author,
+                                "approvedBy" to FirebaseAuth.getInstance().uid,
+                                "volume" to request.volume,
+                                "voltage" to request.voltage,
+                                "categories" to request.categories,
+                                "photo" to request.photo
+                            )
+                        )
+
+                        //Set price
+                        transaction.set(
+                            pricesRef.document(request.id.toString()), hashMapOf(
+                                "shop" to hashMapOf(
+                                    request.shop!!.first to hashMapOf(
+                                        "is_promo" to false,
+                                        "price" to request.price
+                                    )
+                                )
+                            )
+                        )
+                    }.addOnFailureListener {
+                        listener.onComplete(RequestUploadListener.OTHER)
+                    }.addOnSuccessListener {
+                        listener.onComplete(RequestUploadListener.SUCCESS)
                     }
-
-
                 }
             }
     }
@@ -131,4 +155,4 @@ data class Request(
     val price: Double?,
     val photo: String?,
     var id: Long?
-)
+) : Serializable
