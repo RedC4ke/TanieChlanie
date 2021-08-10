@@ -49,7 +49,6 @@ class ModpanelViewModel : ViewModel() {
                         )
                     tempList.add(request)
                     newBooze.value = tempList
-                    Log.d("huj", request.toString())
                 }
             }
             .addOnFailureListener {
