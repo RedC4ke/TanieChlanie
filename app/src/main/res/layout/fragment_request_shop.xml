@@ -137,7 +137,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/requestShop1TV"
                 app:strokeColor="@color/primaryLightColor"
-                app:strokeWidth="0dp" />
+                app:strokeWidth="0dp"
+                tools:ignore="TouchTargetSizeCheck" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
