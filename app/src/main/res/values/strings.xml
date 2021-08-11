@@ -183,6 +183,17 @@
         <item>Nowe kategorie</item>
         <item>Zgłoszone recenzje</item>
     </string-array>
+    <string name="declination_header">Wybierz powód\nodrzucenia wniosku</string>
+    <string-array name="decliantion_reasons">
+        <item>Spam</item>
+        <item>Niewłaściwe zdjęcie</item>
+        <item>Niewłaściwe informacje</item>
+        <item>Pozycja została już dodana przez kogoś innego</item>
+        <item>Błąd w nazwie</item>
+    </string-array>
+    <string name="pending">Oczekuje na zatwierdzenie</string>
+    <string name="approved">Zaakceptowano</string>
+    <string name="declined">Odrzucono</string>
 
     <!-- options page -->
     <string name="romper_unit">Jednostka opłacalności</string>

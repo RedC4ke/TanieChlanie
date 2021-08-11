@@ -84,10 +84,8 @@ class ReviewViewModel: ViewModel() {
                     list.add(retrieve(doc))
                 }
                 add(id, list)
-                Log.d("ReviewViewModel", "Added ${list.size} reviews for $id")
             }
             .addOnFailureListener {
-                Log.d("ReviewViewModel", "Review download failed: $it")
             }
     }
 
@@ -97,9 +95,7 @@ class ReviewViewModel: ViewModel() {
             .addOnSuccessListener {
                 val list = mutableListOf<Review>()
                 it.forEach {document ->
-                    Log.d("ReviewViewModel", "Retrieved $document")
                     list.add(retrieve(document))
-                    Log.d("ReviewViewModel", "Retrieved $list")
                 }
                 userReview.value!![uid] = list
             }
