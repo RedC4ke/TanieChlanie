@@ -9,8 +9,10 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.redc4ke.taniechlanie.data.Category
+import com.redc4ke.taniechlanie.data.FirebaseListener
 import com.redc4ke.taniechlanie.data.Shop
 import java.io.File
+import java.lang.reflect.Array
 import java.math.BigDecimal
 import java.util.*
 
@@ -86,18 +88,23 @@ class RequestViewModel : ViewModel() {
         return Request.categories
     }
 
-    fun upload(listener: RequestUploadListener) {
+    fun upload(listener: FirebaseListener) {
         val user = FirebaseAuth.getInstance().currentUser
         if (user == null) {
-            listener.onComplete(2)
+            listener.onComplete(FirebaseListener.NOT_LOGGED_IN)
+            return
+        }
+        if (Request.categories.value?.values?.toTypedArray()?.distinct()?.size
+            != Request.categories.value?.size) {
+            listener.onComplete(FirebaseListener.REPEATING_CATEGORIES)
             return
         }
         if (Request.image != null) {
             val storageRef =
-                FirebaseStorage.getInstance().reference.child("pendingPhotos/${UUID.randomUUID()}.jpg")
+                FirebaseStorage.getInstance().reference.child("itemPhotos/${UUID.randomUUID()}.jpg")
             storageRef.putFile(Uri.fromFile(Request.image))
                 .addOnFailureListener {
-                    listener.onComplete(4)
+                    listener.onComplete(FirebaseListener.OTHER)
                 }
                 .addOnSuccessListener {
                     uploadData(listener, user, "gs://jabot-5ce1f.appspot.com" + storageRef.path)
@@ -109,18 +116,18 @@ class RequestViewModel : ViewModel() {
     }
 
     private fun uploadData(
-        listener: RequestUploadListener,
+        listener: FirebaseListener,
         user: FirebaseUser,
         photoURL: String?
     ) {
-        val firestoreRef = FirebaseFirestore.getInstance().collection("pending")
-            .document("pending").collection("newBooze")
+        val firestoreRef = FirebaseFirestore.getInstance().collection("requests")
+            .document("requests").collection("newBooze")
 
         val categories = Request.categories.value!!.values.map { it.id }.toMutableList()
         if (Request.majorCategory != null) {
             categories.add(Request.majorCategory!!.id)
         } else {
-            listener.onComplete(RequestUploadListener.OTHER)
+            listener.onComplete(FirebaseListener.OTHER)
             return
         }
 
@@ -137,26 +144,22 @@ class RequestViewModel : ViewModel() {
                     (Request.shop.value?.id?.toString() ?: "null") to Request.shop.value?.name
                 ),
                 "shopIsNew" to Request.shopIsNew,
-                "price" to Request.price!!.toDouble()
+                "price" to Request.price!!.toDouble(),
+                "status" to RequestStatus.PENDING
             )
         )
             .addOnFailureListener {
-                listener.onComplete(RequestUploadListener.OTHER)
+                listener.onComplete(FirebaseListener.OTHER)
             }
             .addOnSuccessListener {
-                listener.onComplete(RequestUploadListener.SUCCESS)
+                listener.onComplete(FirebaseListener.SUCCESS)
             }
     }
 
 }
 
-interface RequestUploadListener {
-    companion object {
-        const val SUCCESS = 1
-        const val NOT_LOGGED_IN = 2
-        const val REPEATING_CATEGORIES = 3
-        const val OTHER = 4
-    }
-
-    fun onComplete(resultCode: Int)
+object RequestStatus {
+    const val PENDING = 1
+    const val APPROVED = 2
+    const val DECLINED = 3
 }
