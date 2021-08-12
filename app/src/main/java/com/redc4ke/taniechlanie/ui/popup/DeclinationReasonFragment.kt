@@ -56,7 +56,6 @@ class DeclinationReasonFragment(
                     modpanelViewModel.declineNewBooze(request.requestId!!, selectedReason!!)
                 dismiss()
                 requireActivity().onBackPressed()
-                modpanelViewModel.fetch()
             }
         }
     }

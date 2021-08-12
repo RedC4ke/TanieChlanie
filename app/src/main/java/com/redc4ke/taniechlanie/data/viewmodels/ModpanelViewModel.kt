@@ -1,5 +1,6 @@
 package com.redc4ke.taniechlanie.data.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,6 +8,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.redc4ke.taniechlanie.data.FirebaseListener
+import com.redc4ke.taniechlanie.data.Shop
 import java.io.Serializable
 import java.math.BigDecimal
 
@@ -69,10 +71,12 @@ class ModpanelViewModel : ViewModel() {
     @Suppress("UNCHECKED_CAST")
     fun acceptNewBooze(
         request: Request,
-        listener: FirebaseListener,
-        shopViewModel: ShopViewModel
+        shopViewModel: ShopViewModel,
+        listener: FirebaseListener
     ) {
         val firestoreRef = FirebaseFirestore.getInstance()
+        val requestsRef = firestoreRef.collection("requests")
+            .document("requests").collection("newBooze")
         val winesRef = firestoreRef.collection("wines")
         val pricesRef = firestoreRef.collection("prices")
         val shopsRef = firestoreRef.collection("shops")
@@ -92,8 +96,8 @@ class ModpanelViewModel : ViewModel() {
                         val stats = (user.get("stats") as? HashMap<String, Long>)!!.toMutableMap()
                         val submits = stats["submits"] ?: 0
                         stats["submits"] = submits + 1
-                        transaction.set(
-                            usersRef.document(request.author), hashMapOf(
+                        transaction.update(
+                            usersRef.document(request.author), mapOf(
                                 "stats" to stats
                             )
                         )
@@ -108,6 +112,7 @@ class ModpanelViewModel : ViewModel() {
                                     "name" to shopName
                                 )
                             )
+                            shopViewModel.add(Shop(shopId, shopName))
                         }
 
                         //Set the main document
@@ -118,7 +123,7 @@ class ModpanelViewModel : ViewModel() {
                                 "author" to request.author,
                                 "approvedBy" to FirebaseAuth.getInstance().uid,
                                 "volume" to request.volume,
-                                "voltage" to request.voltage,
+                                "voltage" to request.voltage!!.toDouble(),
                                 "categories" to request.categories,
                                 "photo" to request.photo
                             )
@@ -128,16 +133,23 @@ class ModpanelViewModel : ViewModel() {
                         transaction.set(
                             pricesRef.document(request.id.toString()), hashMapOf(
                                 "shop" to hashMapOf(
-                                    shopName to hashMapOf(
+                                    request.shop!!.keys.toList()[0] to hashMapOf(
                                         "is_promo" to false,
-                                        "price" to request.price
+                                        "price" to request.price!!.toDouble()
                                     )
                                 )
                             )
                         )
+
+                        //Change request status to approved
+                        requestsRef.document(request.requestId ?: "").update(
+                            "status", RequestStatus.APPROVED
+                        )
+
                     }.addOnFailureListener {
                         listener.onComplete(FirebaseListener.OTHER)
                     }.addOnSuccessListener {
+                        fetch()
                         listener.onComplete(FirebaseListener.SUCCESS)
                     }
                 }
@@ -150,6 +162,8 @@ class ModpanelViewModel : ViewModel() {
 
         firestoreRef.document(id)
             .update("status", RequestStatus.DECLINED, "reason", reason)
+
+        fetch()
     }
 
 }

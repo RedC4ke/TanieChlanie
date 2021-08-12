@@ -194,6 +194,7 @@
     <string name="pending">Oczekuje na zatwierdzenie</string>
     <string name="approved">Zaakceptowano</string>
     <string name="declined">Odrzucono</string>
+    <string name="request_accepted">Zgłoszenie zatwierdzone</string>
 
     <!-- options page -->
     <string name="romper_unit">Jednostka opłacalności</string>
