@@ -17,8 +17,8 @@ import com.redc4ke.taniechlanie.data.viewmodels.CategoryViewModel
 import com.redc4ke.taniechlanie.data.viewmodels.Review
 import com.redc4ke.taniechlanie.data.viewmodels.ReviewViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentSheet1Binding
-import com.redc4ke.taniechlanie.ui.base.BaseFragment
 import com.redc4ke.taniechlanie.ui.MainActivity
+import com.redc4ke.taniechlanie.ui.base.BaseFragment
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -46,8 +46,10 @@ class Sheet1Fragment : BaseFragment<FragmentSheet1Binding>() {
 
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
         val root = super.onCreateView(inflater, container, savedInstanceState)
 
@@ -78,13 +80,17 @@ class Sheet1Fragment : BaseFragment<FragmentSheet1Binding>() {
                     ratings.add(review.rating)
                 }
 
-                userReview = reviews.find {review ->  review.author ==
-                        user?.uid}
+                userReview = reviews.find { review ->
+                    review.author ==
+                            user?.uid
+                }
 
                 reviewCountTV.text = getString(R.string.details_count, reviews.size.toString())
                 if (ratings.isNotEmpty()) {
-                    ratingTV.text = String.format(BigDecimal(ratings.average())
-                        .setScale(2, RoundingMode.HALF_EVEN).toString())
+                    ratingTV.text = String.format(
+                        BigDecimal(ratings.average())
+                            .setScale(2, RoundingMode.HALF_EVEN).toString()
+                    )
                 } else {
                     ratingTV.text = "N/A"
                 }
@@ -103,12 +109,20 @@ class Sheet1Fragment : BaseFragment<FragmentSheet1Binding>() {
                     reviewAddTV.text = getString(R.string.details_rate)
                 }
 
-                reviewRV.adapter = ReviewAdapter(this@Sheet1Fragment,
-                    reviews.take(size), reviewViewModel, userReview, alcoObject.id)
+                reviewRV.adapter = ReviewAdapter(
+                    this@Sheet1Fragment,
+                    reviews.take(size), reviewViewModel, userReview, alcoObject.id
+                )
             })
             reviewAddTV.setOnClickListener {
-                AddReviewFragment(alcoObject.id, userReview).show(parentFragmentManager,
-                    "addReview")
+                if (FirebaseAuth.getInstance().currentUser == null) {
+                    (requireActivity() as MainActivity).login()
+                }
+                AddReviewFragment(alcoObject.id, userReview).show(
+                    parentFragmentManager,
+                    "addReview"
+                )
+
             }
         }
 

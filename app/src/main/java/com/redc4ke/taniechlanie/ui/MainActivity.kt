@@ -233,6 +233,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getAlcoObject() {
+        alcoObjectViewModel.flush()
         getTask("wines")
             .addOnCompleteListener {
                 getShopList()
@@ -387,7 +388,7 @@ class MainActivity : AppCompatActivity() {
         WelcomeFragment().show(supportFragmentManager, "welcome")
     }
 
-    private fun login() {
+    fun login() {
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(),
             AuthUI.IdpConfig.FacebookBuilder().build()

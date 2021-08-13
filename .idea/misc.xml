@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/fragment_alco_list.xml" value="0.49144634525660963" />
+        <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/fragment_availability_submit.xml" value="0.34479166666666666" />
         <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/fragment_confirmation.xml" value="0.2630208333333333" />
         <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/fragment_declination_reason.xml" value="0.2630208333333333" />
         <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/fragment_new_booze_list.xml" value="0.34479166666666666" />
@@ -14,6 +15,7 @@
         <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/row_alcohol.xml" value="0.5" />
         <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/row_details_catlist.xml" value="0.34479166666666666" />
         <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/row_profile.xml" value="0.34479166666666666" />
+        <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/spinner1.xml" value="0.34479166666666666" />
       </map>
     </option>
   </component>

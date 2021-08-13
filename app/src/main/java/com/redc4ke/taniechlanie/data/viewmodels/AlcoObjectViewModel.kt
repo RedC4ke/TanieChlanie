@@ -21,6 +21,11 @@ class AlcoObjectViewModel: ViewModel() {
     fun get(id: Int): AlcoObject? {
         return tempList.find { it.id == id }
     }
+
+    fun flush() {
+        alcoList.value = listOf()
+        tempList.clear()
+    }
 }
 
 
