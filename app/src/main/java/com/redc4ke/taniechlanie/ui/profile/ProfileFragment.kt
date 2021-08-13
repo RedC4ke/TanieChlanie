@@ -59,10 +59,10 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
                 AuthUI.getInstance()
                     .signOut(requireContext())
                     .addOnSuccessListener {
-                        requireActivity().onBackPressed()
                         Toast.makeText(
                             requireContext(), getString(R.string.toast_logout), Toast.LENGTH_SHORT)
                             .show()
+                        requireActivity().onBackPressed()
                     }
             }
         }
