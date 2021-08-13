@@ -72,7 +72,7 @@ class UserViewModel : ViewModel() {
                 "user"
             ),
             "stats" to stats,
-            "title" to 1,
+            "title" to 2,
             "avatar" to avatar
         )
         firestore.collection("users").document(user.uid).set(data)
