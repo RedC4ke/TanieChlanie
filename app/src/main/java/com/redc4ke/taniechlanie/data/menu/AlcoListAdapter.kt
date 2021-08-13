@@ -38,8 +38,8 @@ class AlcoListAdapter(
             nameTV.text = autoBreak(data[position].name)
             priceTV.text = lowestPriceString(data[position], context)
             valueTV.text = valueString(data[position], context)
-            categoryViewModel.get().observe((context), {
-                val image = categoryViewModel.getMajor(data[position])?.image
+            categoryViewModel.getAll().observe((context), {
+                val image = categoryViewModel.getMajor(data[position].categories)?.image
                 Glide.with(context).load(image).into(categoryIV)
             })
 

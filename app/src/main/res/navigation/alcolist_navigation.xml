@@ -15,6 +15,9 @@
             app:destination="@id/details_dest"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_enter_anim" />
+        <action
+            android:id="@+id/openRequest"
+            app:destination="@id/request_dest" />
     </fragment>
 
     <fragment
@@ -29,5 +32,15 @@
         <argument
             android:name="alcoObject"
             app:argType="com.redc4ke.taniechlanie.data.AlcoObject" />
+    </fragment>
+    <fragment
+        android:id="@+id/request_dest"
+        android:name="com.redc4ke.taniechlanie.ui.request.RequestFragment"
+        android:label="RequestFragment" >
+        <action
+            android:id="@+id/request_dets_pop"
+            app:destination="@id/alcoList_dest"
+            app:popUpTo="@id/alcoList_dest"
+            app:popUpToInclusive="false" />
     </fragment>
 </navigation>

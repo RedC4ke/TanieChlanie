@@ -72,11 +72,14 @@ class AlcoListFragment() : BaseFragment<FragmentAlcoListBinding>() {
 
         mainActivity.supportActionBar!!.show()
         setSearch(alAdapter)
+
+        binding.alcolistRequestFAB.setOnClickListener {
+            findNavController().navigate(R.id.request_dest)
+        }
     }
 
     fun onItemClick(cardView: View, alcoObject: AlcoObject) {
         setTransitions(null, null)
-        mainActivity.currentFragment = 99
         val rowAlcoholDetailsTransitionName =
             getString(R.string.row_alcohol_details_transition_name)
         val extras = FragmentNavigatorExtras(

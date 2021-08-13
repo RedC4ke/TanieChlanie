@@ -25,15 +25,17 @@ fun setImage(context: Context, name: String, iv: ImageView,
              url: Uri?) {
 
     val imageFile = File(context.filesDir, "$name.jpg")
-    if (File(context.filesDir, "$name.jpg").exists()) {
+    if (imageFile.exists()) {
         Glide.with(context).load(imageFile.absolutePath).into(iv)
     }
-    if ("jabot" in url.toString()) {
+    if ("gs://" in url.toString()) {
+        Log.d("setImage", "url: $url")
         val imageRef = FirebaseStorage.getInstance().getReferenceFromUrl(url.toString())
+        Log.d("setImage", "imageRef: $imageRef")
         imageRef.getFile(imageFile).addOnSuccessListener {
             Glide.with(context).load(imageFile).into(iv)
         }.addOnFailureListener {
-            Log.d("setImage","$it")
+            Log.d("setImage","guwnozdupy")
         }
     } else {
         try {

@@ -58,7 +58,6 @@ class ReviewViewModel: ViewModel() {
 
     fun parse(context: Context, review: Review, iv: ImageView,
               username: TextView, timestamp: TextView, ratingBar: MaterialRatingBar) {
-        var user: UserData
         ref.collection("users").document(review.author).get()
             .addOnSuccessListener {
                 val data = it.data!!
@@ -80,14 +79,12 @@ class ReviewViewModel: ViewModel() {
             .addOnSuccessListener {
                 val list = mutableListOf<Review>()
                 it.forEach {doc ->
-                    Log.d("huj", "guwno")
+                    Log.d("templog", "guwno")
                     list.add(retrieve(doc))
                 }
                 add(id, list)
-                Log.d("ReviewViewModel", "Added ${list.size} reviews for $id")
             }
             .addOnFailureListener {
-                Log.d("ReviewViewModel", "Review download failed: $it")
             }
     }
 
@@ -97,9 +94,7 @@ class ReviewViewModel: ViewModel() {
             .addOnSuccessListener {
                 val list = mutableListOf<Review>()
                 it.forEach {document ->
-                    Log.d("ReviewViewModel", "Retrieved $document")
                     list.add(retrieve(document))
-                    Log.d("ReviewViewModel", "Retrieved $list")
                 }
                 userReview.value!![uid] = list
             }

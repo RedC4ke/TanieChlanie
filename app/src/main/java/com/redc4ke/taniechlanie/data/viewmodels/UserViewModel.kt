@@ -8,16 +8,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.storage.FirebaseStorage
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.ui.MainActivity
 import java.io.File
 import kotlin.collections.set
+import kotlin.math.log
 
 class UserViewModel : ViewModel() {
     private val firestore = FirebaseFirestore.getInstance()
@@ -31,6 +34,7 @@ class UserViewModel : ViewModel() {
     private val update = MutableLiveData<Boolean>()
     private var updateValue = false
     private var favourites = MutableLiveData<ArrayList<Long>>()
+    private var groups = MutableLiveData<ArrayList<String>>()
 
     init {
         downloadTitles()
@@ -40,45 +44,53 @@ class UserViewModel : ViewModel() {
         currentUser.value = user
 
         if (new) {
-            var avatar = defaultAvatar.toString()
-            val stats = mapOf(
-                "submits" to 0,
-                "reviews" to 0
-            )
-            userStats.value = stats
-
-            if (user!!.photoUrl == null) {
-                setAvatarUrl(defaultAvatar)
-            } else {
-                avatar = user.photoUrl.toString()
-            }
-
-            val data = mapOf(
-                "uid" to user.uid,
-                "name" to user.displayName,
-                "created" to Timestamp.now(),
-                "groups" to arrayListOf(
-                    "user"
-                ),
-                "stats" to stats,
-                "title" to 1,
-                "avatar" to avatar
-            )
-            firestore.collection("users").document(user.uid).set(data)
-                .addOnSuccessListener {
-                    downloadData()
-                }
-                .addOnFailureListener {
-                    user.delete()
-                    Toast.makeText(
-                        context,
-                        it.toString(),
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
+            createUser(user!!, context)
         } else if (user != null) {
             downloadData()
         }
+    }
+
+    private fun createUser(user: FirebaseUser, context: Context?) {
+        var avatar = defaultAvatar.toString()
+        val stats = mapOf(
+            "submits" to 0,
+            "reviews" to 0
+        )
+        userStats.value = stats
+
+        if (user.photoUrl == null) {
+            setAvatarUrl(defaultAvatar)
+        } else {
+            avatar = user.photoUrl.toString()
+        }
+
+        val data = mapOf(
+            "uid" to user.uid,
+            "name" to user.displayName,
+            "created" to Timestamp.now(),
+            "groups" to arrayListOf(
+                "user"
+            ),
+            "stats" to stats,
+            "title" to 1,
+            "avatar" to avatar
+        )
+        firestore.collection("users").document(user.uid).set(data)
+            .addOnSuccessListener {
+                downloadData()
+            }
+            .addOnFailureListener {
+                user.delete()
+                Toast.makeText(
+                    context,
+                    it.toString(),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+    }
+
+    fun isModerator(): Boolean {
+        return staticUser != null && groups.value?.contains("moderator") == true
     }
 
     fun getUser(): MutableLiveData<FirebaseUser?> {
@@ -105,26 +117,39 @@ class UserViewModel : ViewModel() {
         if (staticUser != null) {
             firestore.collection("users").document(staticUser!!.uid).get()
                 .addOnSuccessListener {
-                    val data = it.data
-                    if (data != null) {
-                        val userData = UserData(
-                            data["uid"] as String,
-                            data["name"] as String?,
-                            data["created"] as Timestamp?,
-                            data["groups"] as ArrayList<String>?,
-                            data["stats"] as Map<String, Int>,
-                            data["title"] as Long,
-                            data["avatar"] as String?,
-                            data["favourites"] as ArrayList<Long>? ?: arrayListOf()
-                        )
-                        userStats.value = userData.stats
-                        userTitle.value =
-                            titles[(data["title"] as Long).toInt()] ?: mapOf("name" to "n/a")
-                        favourites.value = userData.favourites
+                    if (!it.exists()) {
+                        createUser(staticUser!!, null)
+                        downloadData()
+                    } else {
+                        val data = it.data
+                        if (data != null) {
+                            val userData = UserData(
+                                data["uid"] as String,
+                                data["name"] as String?,
+                                data["created"] as Timestamp?,
+                                data["groups"] as ArrayList<String>?,
+                                data["stats"] as Map<String, Int>,
+                                data["title"] as Long,
+                                data["avatar"] as String?,
+                                data["favourites"] as ArrayList<Long>? ?: arrayListOf()
+                            )
+                            userStats.value = userData.stats
+                            userTitle.value =
+                                titles[(data["title"] as Long).toInt()] ?: mapOf("name" to "n/a")
+                            favourites.value = userData.favourites
+                            groups.value = userData.groups ?: arrayListOf()
 
-                        if (staticUser != null) userData.integrityCheck(firestore, staticUser!!)
+                            if (staticUser != null) userData.integrityCheck(firestore, staticUser!!)
+                        }
+                        update.value = !updateValue
                     }
-                    update.value = !updateValue
+                }
+                .addOnFailureListener {
+                    if ((it as FirebaseFirestoreException).code ==
+                        FirebaseFirestoreException.Code.NOT_FOUND) {
+                        createUser(staticUser!!, null)
+                        downloadData()
+                    }
                 }
         }
     }
@@ -216,7 +241,7 @@ class UserViewModel : ViewModel() {
         )
             ?.addOnSuccessListener {
                 firestore.collection("users").document(staticUser?.uid.toString())
-                    .update("avatar", uri)
+                    .update("avatar", uri.toString())
                     .addOnSuccessListener {
                         update.value = !updateValue
                         Log.d("userVM", "Avatar uri set to: $uri")
@@ -321,12 +346,10 @@ data class UserData(
         if (uid == user.uid) {
             if (name != user.displayName || avatar != user.photoUrl.toString()) {
 
-                firestore.collection("users").document(uid).update(
-                    mapOf(
+                firestore.collection("users").document(uid)
+                    .update(mapOf(
                         "name" to user.displayName,
-                        "avatar" to user.photoUrl.toString()
-                    )
-                )
+                        "avatar" to user.photoUrl.toString()))
                     .addOnSuccessListener {
                         Log.d("UserData", "Updated!")
                     }

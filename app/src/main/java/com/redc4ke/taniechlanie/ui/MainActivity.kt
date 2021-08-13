@@ -62,12 +62,14 @@ class MainActivity : AppCompatActivity() {
     private val auth = FirebaseAuth.getInstance()
     val database: FirebaseFirestore = FirebaseFirestore.getInstance()
     val storage = FirebaseStorage.getInstance()
-    var currentFragment = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        //Crete cache directory
+        if (!cacheDir.exists()) cacheDir.mkdirs()
 
         //Disable night theme (temporary)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)

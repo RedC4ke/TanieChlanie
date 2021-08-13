@@ -40,10 +40,37 @@
         <action
             android:id="@+id/action_profile_dest_to_list_dest"
             app:destination="@id/list_dest" />
+        <action
+            android:id="@+id/action_profile_dest_to_modpanel_dest"
+            app:destination="@id/modpanel_dest" />
     </fragment>
     <fragment
         android:id="@+id/favourite_dest"
         android:name="com.redc4ke.taniechlanie.ui.favourite.FavouriteFragment"
         android:label="@string/favourite_page" />
+    <fragment
+        android:id="@+id/modpanel_dest"
+        android:name="com.redc4ke.taniechlanie.ui.profile.modpanel.ModPanelFragment"
+        android:label="@string/modpanel" >
+        <action
+            android:id="@+id/action_modpanel_dest_to_newBoozeListFragment"
+            app:destination="@id/newBooze_dest" />
+    </fragment>
+    <fragment
+        android:id="@+id/newBooze_dest"
+        android:name="com.redc4ke.taniechlanie.ui.profile.modpanel.NewBoozeListFragment"
+        android:label="@string/modpanel_newbooze" >
+        <action
+            android:id="@+id/openRequestDetails"
+            app:destination="@id/requestDetails_dest" />
+    </fragment>
+    <fragment
+        android:id="@+id/requestDetails_dest"
+        android:name="com.redc4ke.taniechlanie.ui.profile.modpanel.RequestDetailsFragment"
+        android:label="@string/modpanel_details">
+        <argument
+            android:name="request"
+            app:argType="com.redc4ke.taniechlanie.data.viewmodels.Request" />
+    </fragment>
 
 </navigation>
