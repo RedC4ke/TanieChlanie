@@ -58,7 +58,6 @@ class ReviewViewModel: ViewModel() {
 
     fun parse(context: Context, review: Review, iv: ImageView,
               username: TextView, timestamp: TextView, ratingBar: MaterialRatingBar) {
-        var user: UserData
         ref.collection("users").document(review.author).get()
             .addOnSuccessListener {
                 val data = it.data!!
