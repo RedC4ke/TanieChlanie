@@ -68,6 +68,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //Crete cache directory
+        if (!cacheDir.exists()) cacheDir.mkdirs()
+
         //Disable night theme (temporary)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
