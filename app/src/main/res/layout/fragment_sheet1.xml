@@ -82,7 +82,7 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="12dp"
                 android:layout_marginEnd="4dp"
                 android:layout_weight="1"
@@ -344,8 +344,9 @@
                 <me.zhanghai.android.materialratingbar.MaterialRatingBar
                     android:id="@+id/ratingBar"
                     style=""
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="46dp"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
                     android:isIndicator="true"
@@ -355,6 +356,7 @@
                     android:secondaryProgressTint="@color/secondary200"
                     android:stepSize="0.1"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ratingTV"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView

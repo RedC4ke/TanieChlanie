@@ -1,16 +1,14 @@
 package com.redc4ke.taniechlanie.data.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.redc4ke.taniechlanie.data.FirebaseListener
 import com.redc4ke.taniechlanie.data.Shop
-import java.io.Serializable
-import java.math.BigDecimal
 
 class ModpanelViewModel : ViewModel() {
 
@@ -32,7 +30,7 @@ class ModpanelViewModel : ViewModel() {
             .collection("requests").document("requests")
 
         firestoreRef.collection("newBooze")
-            .whereEqualTo("status", RequestStatus.PENDING).get()
+            .whereEqualTo("status", Request.RequestState.PENDING).get()
             .addOnSuccessListener {
                 newBooze.value = mutableListOf()
                 val tempList = mutableListOf<Request>()
@@ -44,12 +42,16 @@ class ModpanelViewModel : ViewModel() {
                             document.getLong("volume"),
                             document.getDouble("voltage")?.toBigDecimal(),
                             document.get("categories") as? List<Int>,
-                            document.get("shop") as? Map<String, String>,
+                            document.get("shop") as? Pair<String?, String>,
                             document.getBoolean("shopIsNew"),
                             document.getDouble("price"),
                             document.getString("photo"),
                             null,
-                            document.id
+                            document.id,
+                            document.getTimestamp("created"),
+                            document.getLong("state")?.toInt(),
+                            null,
+                            null
                         )
                     tempList.add(request)
                     newBooze.value = tempList
@@ -89,7 +91,7 @@ class ModpanelViewModel : ViewModel() {
                 firebaseRef.setValue(id + 1).addOnSuccessListener {
                     request.id = id
                     firestoreRef.runTransaction { transaction ->
-                        val shopName = request.shop!!.values.toList()[0]
+                        val shopName = request.shop!!.second
 
                         //Increment author upload count
                         val user = transaction.get(usersRef.document(request.author!!))
@@ -105,7 +107,7 @@ class ModpanelViewModel : ViewModel() {
                         //Add shop if new
                         if (request.shopIsNew == true) {
                             val shopId = shopViewModel.getLastId()
-                            request.shop = mapOf(shopId.toString() to shopName)
+                            request.shop = Pair(shopId.toString(), shopName)
                             transaction.set(
                                 shopsRef.document(shopName), hashMapOf(
                                     "id" to shopId,
@@ -133,7 +135,7 @@ class ModpanelViewModel : ViewModel() {
                         transaction.set(
                             pricesRef.document(request.id.toString()), hashMapOf(
                                 "shop" to hashMapOf(
-                                    request.shop!!.keys.toList()[0] to hashMapOf(
+                                    request.shop!!.first to hashMapOf(
                                         "is_promo" to false,
                                         "price" to request.price!!.toDouble()
                                     )
@@ -143,7 +145,8 @@ class ModpanelViewModel : ViewModel() {
 
                         //Change request status to approved
                         requestsRef.document(request.requestId ?: "").update(
-                            "status", RequestStatus.APPROVED
+                            "status", Request.RequestState.APPROVED,
+                            "reviewed", Timestamp.now()
                         )
 
                     }.addOnFailureListener {
@@ -161,23 +164,18 @@ class ModpanelViewModel : ViewModel() {
             .document("requests").collection("newBooze")
 
         firestoreRef.document(id)
-            .update("status", RequestStatus.DECLINED, "reason", reason)
+            .update(
+                "status",
+                Request.RequestState.DECLINED,
+                "reason",
+                reason,
+                "reviewed",
+                Timestamp.now()
+            )
 
         fetch()
     }
 
 }
 
-data class Request(
-    val author: String?,
-    val name: String?,
-    val volume: Long?,
-    val voltage: BigDecimal?,
-    val categories: List<Int>?,
-    var shop: Map<String, String>?,
-    val shopIsNew: Boolean?,
-    val price: Double?,
-    val photo: String?,
-    var id: Long?,
-    var requestId: String?
-) : Serializable
+

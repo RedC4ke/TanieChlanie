@@ -10,5 +10,5 @@
     android:paddingStart="24dp"
     android:singleLine="true"
     android:textAlignment="gravity"
-    android:textSize="16sp" />
+    android:textSize="16dp" />
 

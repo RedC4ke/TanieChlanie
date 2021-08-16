@@ -176,6 +176,15 @@
     <string name="profile_hint_currentpwd">Podaj obecne hasło</string>
     <string name="profile_your_reviews">Twoje recenzje</string>
 
+    <!-- profile page - requests -->
+    <string name="newBooze">Nowy alkohol</string>
+    <string name="your_requests">Twoje zgłoszenia</string>
+    <string name="state">Status</string>
+    <string name="state_pending">Oczekuje</string>
+    <string name="state_accepted">Zaakceptowano</string>
+    <string name="state_declined">Odrzucono</string>
+    <string name="verification_date">Data weryfikacji</string>
+
     <!-- mod panel -->
     <string-array name="mod_actionlist">
         <item>Nowe alkohole</item>
@@ -231,6 +240,8 @@
          administratora.</string>
 
     <!-- other -->
+    <string name="reason">Powód</string>
+    <string name="upload_date">Data dodania</string>
     <string name="polishalphabet"> abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
         ĄąĆćĘęŁłŃńÓóŚśŹźŻż</string>
     <string name="hint_shopname">Nazwa sklepu</string>

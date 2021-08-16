@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_profileMenu_dest_to_profileReviews_dest"
             app:destination="@id/profileReviews_dest" />
+        <action
+            android:id="@+id/action_profileMenu_dest_to_profileRequests_dest"
+            app:destination="@id/profileRequests_dest" />
     </fragment>
     <fragment
         android:id="@+id/profileManage_dest"
@@ -28,6 +31,14 @@
         android:label="ProfileReviewsFragment" >
         <action
             android:id="@+id/action_profileReviews_dest_to_profileMenu_dest"
+            app:destination="@id/profileMenu_dest" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileRequests_dest"
+        android:name="com.redc4ke.taniechlanie.ui.profile.ProfileRequestFragment"
+        android:label="ProfileRequestFragment" >
+        <action
+            android:id="@+id/action_profileRequests_dest_to_profileMenu_dest"
             app:destination="@id/profileMenu_dest" />
     </fragment>
 

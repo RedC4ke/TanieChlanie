@@ -52,6 +52,10 @@ class ProfileMenuAdapter(private val context: ProfileMenuFragment) :
             }
 
             2 -> {
+                holder.vb.root.setOnClickListener {
+                    context.findNavController()
+                        .navigate(R.id.profileRequests_dest)
+                }
             }
 
             else -> {

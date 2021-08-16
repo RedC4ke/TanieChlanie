@@ -1,9 +1,11 @@
 package com.redc4ke.taniechlanie.data.viewmodels
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -12,13 +14,13 @@ import com.redc4ke.taniechlanie.data.Category
 import com.redc4ke.taniechlanie.data.FirebaseListener
 import com.redc4ke.taniechlanie.data.Shop
 import java.io.File
-import java.lang.reflect.Array
+import java.io.Serializable
 import java.math.BigDecimal
 import java.util.*
 
 class RequestViewModel : ViewModel() {
 
-    private object Request {
+    private object CurrentRequest {
         val shop = MutableLiveData<Shop>()
         var shopIsNew = false
         var alcoholName: String? = null
@@ -33,18 +35,19 @@ class RequestViewModel : ViewModel() {
     }
 
     private val photoName = MutableLiveData<String>()
+    private val requestList = MutableLiveData<List<Pair<Int, Request>>>()
 
     fun setShop(shop: Shop, isNew: Boolean = false) {
-        Request.shop.value = shop
-        Request.shopIsNew = isNew
+        CurrentRequest.shop.value = shop
+        CurrentRequest.shopIsNew = isNew
     }
 
     fun getShop(): MutableLiveData<Shop> {
-        return Request.shop
+        return CurrentRequest.shop
     }
 
     fun fillRequest(name: String, vm: Int, volt: BigDecimal, pc: BigDecimal) {
-        with(Request) {
+        with(CurrentRequest) {
             alcoholName = name
             volume = vm
             voltage = volt
@@ -53,7 +56,7 @@ class RequestViewModel : ViewModel() {
     }
 
     fun setImage(file: File?) {
-        Request.image = file
+        CurrentRequest.image = file
     }
 
     fun setPhotoName(name: String) {
@@ -65,27 +68,27 @@ class RequestViewModel : ViewModel() {
     }
 
     fun setMajorCat(category: Category) {
-        Request.majorCategory = category
+        CurrentRequest.majorCategory = category
     }
 
     fun addCategory(index: Int, category: Category) {
-        val catList = (Request.categories.value ?: mutableMapOf())
+        val catList = (CurrentRequest.categories.value ?: mutableMapOf())
         if (catList[index] != category) {
             catList[index] = category
         }
-        Request.categories.value = catList
+        CurrentRequest.categories.value = catList
     }
 
     fun deleteCategory(index: Int) {
-        val catList = (Request.categories.value ?: mutableMapOf())
+        val catList = (CurrentRequest.categories.value ?: mutableMapOf())
         catList.remove(index)
         val newList = catList.values.toList()
-        Request.categories.value =
+        CurrentRequest.categories.value =
             newList.mapIndexed { ind, category -> ind to category }.toMap().toMutableMap()
     }
 
     fun getSelectedCategories(): LiveData<MutableMap<Int, Category>> {
-        return Request.categories
+        return CurrentRequest.categories
     }
 
     fun upload(listener: FirebaseListener) {
@@ -94,15 +97,16 @@ class RequestViewModel : ViewModel() {
             listener.onComplete(FirebaseListener.NOT_LOGGED_IN)
             return
         }
-        if (Request.categories.value?.values?.toTypedArray()?.distinct()?.size
-            != Request.categories.value?.size) {
+        if (CurrentRequest.categories.value?.values?.toTypedArray()?.distinct()?.size
+            != CurrentRequest.categories.value?.size
+        ) {
             listener.onComplete(FirebaseListener.REPEATING_CATEGORIES)
             return
         }
-        if (Request.image != null) {
+        if (CurrentRequest.image != null) {
             val storageRef =
                 FirebaseStorage.getInstance().reference.child("itemPhotos/${UUID.randomUUID()}.jpg")
-            storageRef.putFile(Uri.fromFile(Request.image))
+            storageRef.putFile(Uri.fromFile(CurrentRequest.image))
                 .addOnFailureListener {
                     listener.onComplete(FirebaseListener.OTHER)
                 }
@@ -123,9 +127,9 @@ class RequestViewModel : ViewModel() {
         val firestoreRef = FirebaseFirestore.getInstance().collection("requests")
             .document("requests").collection("newBooze")
 
-        val categories = Request.categories.value!!.values.map { it.id }.toMutableList()
-        if (Request.majorCategory != null) {
-            categories.add(Request.majorCategory!!.id)
+        val categories = CurrentRequest.categories.value!!.values.map { it.id }.toMutableList()
+        if (CurrentRequest.majorCategory != null) {
+            categories.add(CurrentRequest.majorCategory!!.id)
         } else {
             listener.onComplete(FirebaseListener.OTHER)
             return
@@ -136,16 +140,18 @@ class RequestViewModel : ViewModel() {
                 "author" to user.uid,
                 "categories" to categories,
                 "description" to null,
-                "name" to Request.alcoholName,
-                "voltage" to Request.voltage!!.toDouble(),
-                "volume" to Request.volume,
+                "name" to CurrentRequest.alcoholName,
+                "voltage" to CurrentRequest.voltage!!.toDouble(),
+                "volume" to CurrentRequest.volume,
                 "photo" to photoURL,
-                "shop" to hashMapOf(
-                    (Request.shop.value?.id?.toString() ?: "null") to Request.shop.value?.name
+                "shop" to mapOf(
+                    (CurrentRequest.shop.value?.id?.toString()
+                        ?: "null") to CurrentRequest.shop.value?.name
                 ),
-                "shopIsNew" to Request.shopIsNew,
-                "price" to Request.price!!.toDouble(),
-                "status" to RequestStatus.PENDING
+                "shopIsNew" to CurrentRequest.shopIsNew,
+                "price" to CurrentRequest.price!!.toDouble(),
+                "status" to Request.RequestState.PENDING,
+                "created" to Timestamp.now()
             )
         )
             .addOnFailureListener {
@@ -156,10 +162,77 @@ class RequestViewModel : ViewModel() {
             }
     }
 
+    @Suppress("UNCHECKED_CAST")
+    fun fetch(uid: String, firebaseListener: FirebaseListener) {
+        val tempList = mutableListOf<Pair<Int, Request>>()
+        val firestoreRef = FirebaseFirestore.getInstance().collection("requests")
+            .document("requests")
+
+        firestoreRef.collection("newBooze").whereEqualTo("author", uid)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                snapshot.forEach {
+                    tempList.add(
+                        Pair(
+                            Request.RequestType.NEW_BOOZE,
+                            Request(
+                                uid,
+                                it.getString("name"),
+                                it.getLong("volume"),
+                                it.getDouble("voltage")?.toBigDecimal(),
+                                it.get("categories") as? List<Int>,
+                                (it.get("shop") as? Map<String?, String>)?.toList()?.get(0),
+                                it.getBoolean("shopIsNew"),
+                                it.getDouble("price"),
+                                it.getString("photo"),
+                                null,
+                                it.id,
+                                it.getTimestamp("created"),
+                                it.getLong("state")?.toInt(),
+                                it.getString("reason"),
+                                it.getTimestamp("reviewed"),
+                                it.getData()
+                            )
+                        )
+                    )
+                    requestList.value = tempList
+                    firebaseListener.onComplete(FirebaseListener.SUCCESS)
+                }
+            }
+            .addOnFailureListener {
+            firebaseListener.onComplete(FirebaseListener.OTHER)
+        }
+    }
+
+    fun getRequestList(): MutableLiveData<List<Pair<Int, Request>>> {
+        return requestList
+    }
 }
 
-object RequestStatus {
-    const val PENDING = 1
-    const val APPROVED = 2
-    const val DECLINED = 3
+data class Request(
+    val author: String?,
+    val name: String?,
+    val volume: Long?,
+    val voltage: BigDecimal?,
+    val categories: List<Int>?,
+    var shop: Pair<String?, String>?,
+    val shopIsNew: Boolean?,
+    val price: Double?,
+    val photo: String?,
+    var id: Long?,
+    var requestId: String?,
+    var created: Timestamp?,
+    var state: Int?,
+    var reason: String?,
+    var reviewed: Timestamp?
+) : Serializable {
+    object RequestState {
+        const val PENDING = 1
+        const val APPROVED = 2
+        const val DECLINED = 3
+    }
+
+    object RequestType {
+        const val NEW_BOOZE = 1
+    }
 }

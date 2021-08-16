@@ -64,7 +64,7 @@ class RequestDetailsFragment() :
             reqDetailsVolumeTV.text = volumeString(request.volume ?: 0, requireContext())
             reqDetailsVoltageTV.text =
                 voltageString(request.voltage ?: BigDecimal.ZERO, requireContext())
-            reqDetailsShopTV.text = request.shop?.values?.toList()?.get(0) ?: ""
+            reqDetailsShopTV.text = request.shop?.second ?: ""
             if (request.shopIsNew == true)
                 reqDetailsShopTV.setTextColor(Color.GREEN)
             reqDetailsPriceTV.text =
