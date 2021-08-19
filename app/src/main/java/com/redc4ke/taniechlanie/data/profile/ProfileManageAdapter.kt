@@ -57,19 +57,26 @@ class ProfileManageAdapter(private val context: ProfileManageFragment, private v
     }
 
     private fun rowSetup(vb: RowProfileManageBinding, action: Int) {
-        userViewModel.getUserUpdates().observe(viewLifecycleOwner, {
-            val user = userViewModel.getUser().value
-            vb.rowPMValueTV.text = when (action) {
-                0 -> user?.displayName
-                1 -> user?.email
-                else -> ""
+        when (action) {
+            0 -> {
+                userViewModel.getUserName().observe(viewLifecycleOwner, {
+                    vb.rowPMValueTV.text = it
+                })
             }
-            vb.PMClickableLL.setOnClickListener {
-                ProfileInputFragment(userViewModel, action).show(
-                    context.parentFragmentManager, "ProfileInputFragment"
-                )
+            1 -> {
+                userViewModel.getEmail().observe(viewLifecycleOwner, {
+                    vb.rowPMValueTV.text = it
+                })
             }
-        })
+            else -> {
+                vb.rowPMValueTV.text = ""
+            }
+        }
+        vb.PMClickableLL.setOnClickListener {
+            ProfileInputFragment(userViewModel, action).show(
+                context.parentFragmentManager, "ProfileInputFragment"
+            )
+        }
     }
 }
 

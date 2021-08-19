@@ -156,8 +156,13 @@ class MainActivity : AppCompatActivity() {
                         .navigate(R.id.profile_dest)
                     mDrawerLayout.closeDrawer(GravityCompat.START)
                 }
-                userViewModel.getUserUpdates().observe(this, {
-                    setImage(this, "avatar", avatarIV, user.photoUrl)
+                userViewModel.getAvatarUrl().observe(this, {
+                    setImage(
+                        this,
+                        "avatar",
+                        avatarIV,
+                        it
+                    )
                 })
             } else {
                 avatarIV.setImageResource(R.drawable.ic_baseline_account_circle_24)
@@ -174,7 +179,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return item.onNavDestinationSelected(findNavController(R.id.alcoListNH))
-                    || super.onOptionsItemSelected(item)
+                || super.onOptionsItemSelected(item)
     }
 
     private fun setupNavigationMenu(navController: NavController) {
@@ -341,7 +346,7 @@ class MainActivity : AppCompatActivity() {
                 it.forEach { document ->
                     val id = document["id"].toString().toInt()
                     val name = document["name"] as String
-                    val url = document["image"] as String
+                    val url = document["image"] as String?
                     val major = document["major"] as Boolean
 
                     categoryViewModel.add(id, name, url, major, this)

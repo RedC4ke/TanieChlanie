@@ -35,9 +35,6 @@ class ProfileMenuAdapter(private val context: ProfileMenuFragment) :
     override fun onBindViewHolder(holder: ProfileMenuViewHolder, position: Int) {
         when (position) {
             0 -> {
-                holder.vb.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                    this.topMargin = 30
-                }
                 holder.vb.root.setOnClickListener {
                     context.findNavController()
                         .navigate(R.id.to_profileManage_dest)

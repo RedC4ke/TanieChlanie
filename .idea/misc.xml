@@ -8,6 +8,10 @@
         <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/fragment_declination_reason.xml" value="0.2630208333333333" />
         <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/fragment_details.xml" value="0.33" />
         <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/fragment_new_booze_list.xml" value="0.34479166666666666" />
+        <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/fragment_profile.xml" value="0.33" />
+        <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/fragment_profile_input.xml" value="0.26614583333333336" />
+        <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/fragment_profile_manage.xml" value="0.26614583333333336" />
+        <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/fragment_profile_menu.xml" value="0.2869791666666667" />
         <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/fragment_profile_request.xml" value="0.34479166666666666" />
         <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/fragment_profile_review.xml" value="0.34479166666666666" />
         <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/fragment_request.xml" value="0.34479166666666666" />
@@ -16,6 +20,7 @@
         <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/fragment_sheet1.xml" value="0.5" />
         <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/row_alcohol.xml" value="0.33" />
         <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/row_profile.xml" value="0.34479166666666666" />
+        <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/row_profile_manage.xml" value="0.34479166666666666" />
         <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/row_profile_request.xml" value="0.5" />
         <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/row_profile_review.xml" value="0.34479166666666666" />
         <entry key="..\:/Users/mwycz/AndroidStudioProjects/TanieChlanie/app/src/main/res/layout/row_request.xml" value="0.34479166666666666" />

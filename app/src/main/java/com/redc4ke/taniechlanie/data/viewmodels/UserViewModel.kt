@@ -8,7 +8,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FieldValue
@@ -17,10 +16,10 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.storage.FirebaseStorage
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
+import com.redc4ke.taniechlanie.data.FirebaseListener
 import com.redc4ke.taniechlanie.ui.MainActivity
 import java.io.File
 import kotlin.collections.set
-import kotlin.math.log
 
 class UserViewModel : ViewModel() {
     private val firestore = FirebaseFirestore.getInstance()
@@ -29,10 +28,11 @@ class UserViewModel : ViewModel() {
         Uri.parse("gs://jabot-5ce1f.appspot.com/users/default/avatar.png")
     private var currentUser = MutableLiveData<FirebaseUser?>()
     private val staticUser get() = currentUser.value
+    private val userName = MutableLiveData<String>()
+    private val userAvatar = MutableLiveData<Uri>()
+    private val userEmail = MutableLiveData<String>()
     private val userStats = MutableLiveData<Map<String, Any>?>()
     private val userTitle = MutableLiveData<Map<String, Any?>>()
-    private val update = MutableLiveData<Boolean>()
-    private var updateValue = false
     private var favourites = MutableLiveData<ArrayList<Long>>()
     private var groups = MutableLiveData<ArrayList<String>>()
 
@@ -56,10 +56,17 @@ class UserViewModel : ViewModel() {
             "submits" to 0,
             "reviews" to 0
         )
+
         userStats.value = stats
+        userName.value = user.displayName
+        userEmail.value = user.email
 
         if (user.photoUrl == null) {
-            setAvatarUrl(defaultAvatar)
+            setAvatarUrl(defaultAvatar, object: FirebaseListener {
+                override fun onComplete(resultCode: Int) {
+                    userAvatar.value = defaultAvatar
+                }
+            })
         } else {
             avatar = user.photoUrl.toString()
         }
@@ -105,16 +112,28 @@ class UserViewModel : ViewModel() {
         return userTitle
     }
 
-    fun getUserUpdates(): MutableLiveData<Boolean> {
-        return update
+    fun getAvatarUrl(): MutableLiveData<Uri> {
+        return userAvatar
+    }
+
+    fun getUserName(): MutableLiveData<String> {
+        return userName
     }
 
     fun getFavourites(): MutableLiveData<ArrayList<Long>> {
         return favourites
     }
 
-    fun downloadData() {
+    fun getEmail(): MutableLiveData<String> {
+        return userEmail
+    }
+
+    private fun downloadData() {
         if (staticUser != null) {
+            userName.value = staticUser?.displayName
+            userAvatar.value = staticUser?.photoUrl
+            userEmail.value = staticUser?.email
+
             firestore.collection("users").document(staticUser!!.uid).get()
                 .addOnSuccessListener {
                     if (!it.exists()) {
@@ -141,12 +160,12 @@ class UserViewModel : ViewModel() {
 
                             if (staticUser != null) userData.integrityCheck(firestore, staticUser!!)
                         }
-                        update.value = !updateValue
                     }
                 }
                 .addOnFailureListener {
                     if ((it as FirebaseFirestoreException).code ==
-                        FirebaseFirestoreException.Code.NOT_FOUND) {
+                        FirebaseFirestoreException.Code.NOT_FOUND
+                    ) {
                         createUser(staticUser!!, null)
                         downloadData()
                     }
@@ -210,7 +229,7 @@ class UserViewModel : ViewModel() {
         }
     }
 
-    fun setAvatar(context: Context, file: File) {
+    fun setAvatar(context: Context, file: File, firebaseListener: FirebaseListener) {
         try {
             val imageUri = Uri.fromFile(file)
             val storageRef = FirebaseStorage.getInstance().reference
@@ -222,7 +241,7 @@ class UserViewModel : ViewModel() {
                 .addOnSuccessListener { imageUpload ->
                     imageUpload.metadata!!.reference!!.downloadUrl
                         .addOnSuccessListener {
-                            setAvatarUrl(it)
+                            setAvatarUrl(it, firebaseListener)
                         }
                 }
 
@@ -235,7 +254,7 @@ class UserViewModel : ViewModel() {
         }
     }
 
-    private fun setAvatarUrl(uri: Uri) {
+    private fun setAvatarUrl(uri: Uri, firebaseListener: FirebaseListener) {
         staticUser?.updateProfile(
             UserProfileChangeRequest.Builder().setPhotoUri(uri).build()
         )
@@ -243,8 +262,8 @@ class UserViewModel : ViewModel() {
                 firestore.collection("users").document(staticUser?.uid.toString())
                     .update("avatar", uri.toString())
                     .addOnSuccessListener {
-                        update.value = !updateValue
-                        Log.d("userVM", "Avatar uri set to: $uri")
+                        userAvatar.value = uri
+                        firebaseListener.onComplete(FirebaseListener.SUCCESS)
                     }
                     .addOnFailureListener {
                         Log.d("userVM", "Avatar uri sync failed: $it")
@@ -263,7 +282,7 @@ class UserViewModel : ViewModel() {
                 firestore.collection("users").document(staticUser?.uid.toString())
                     .update("name", name)
                     .addOnSuccessListener {
-                        update.value = !updateValue
+                        userName.value = name
                         Log.d("userVM", "DisplayName set to: $name")
                     }
                     .addOnFailureListener {
@@ -278,7 +297,7 @@ class UserViewModel : ViewModel() {
     fun setEmail(address: String, context: Context) {
         staticUser?.updateEmail(address)
             ?.addOnSuccessListener {
-                update.value = !updateValue
+                userEmail.value = address
                 Toast.makeText(
                     context, "Adres e-mail został zaktualizowany",
                     Toast.LENGTH_LONG
@@ -295,7 +314,6 @@ class UserViewModel : ViewModel() {
     fun setPassword(password: String, context: Context) {
         staticUser?.updatePassword(password)
             ?.addOnSuccessListener {
-                update.value = !updateValue
                 Toast.makeText(
                     context, "Hasło zostało zaktualizowane",
                     Toast.LENGTH_LONG
@@ -314,7 +332,6 @@ class UserViewModel : ViewModel() {
         staticUser?.delete()
             ?.addOnSuccessListener {
                 firestore.collection("users").document(uid!!).delete()
-                update.value = !updateValue
                 activity.findNavController(R.id.alcoListNH)
                     .navigate(R.id.action_profile_dest_to_list_dest)
                 Toast.makeText(
@@ -347,9 +364,12 @@ data class UserData(
             if (name != user.displayName || avatar != user.photoUrl.toString()) {
 
                 firestore.collection("users").document(uid)
-                    .update(mapOf(
-                        "name" to user.displayName,
-                        "avatar" to user.photoUrl.toString()))
+                    .update(
+                        mapOf(
+                            "name" to user.displayName,
+                            "avatar" to user.photoUrl.toString()
+                        )
+                    )
                     .addOnSuccessListener {
                         Log.d("UserData", "Updated!")
                     }

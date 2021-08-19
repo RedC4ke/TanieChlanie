@@ -3,6 +3,7 @@ package com.redc4ke.taniechlanie.data.profile
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
+import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.recyclerview.widget.RecyclerView
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.priceString
+import com.redc4ke.taniechlanie.data.setImage
 import com.redc4ke.taniechlanie.data.viewmodels.Request
 import com.redc4ke.taniechlanie.data.voltageString
 import com.redc4ke.taniechlanie.data.volumeString
@@ -65,7 +67,7 @@ class ProfileRequestAdapter(private val context: Context) :
                 }
             }
 
-            Log.d("huj", request.shop?.second ?: "")
+            setImage(context, request.requestId.toString(), profileRqIV, Uri.parse(request.photo))
 
             //A hack to avoid weird and unfound problem (params were reset to wrap content on startup)
             root.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)

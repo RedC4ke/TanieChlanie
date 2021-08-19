@@ -150,7 +150,7 @@ class RequestViewModel : ViewModel() {
                 ),
                 "shopIsNew" to CurrentRequest.shopIsNew,
                 "price" to CurrentRequest.price!!.toDouble(),
-                "status" to Request.RequestState.PENDING,
+                "state" to Request.RequestState.PENDING,
                 "created" to Timestamp.now()
             )
         )
@@ -190,8 +190,7 @@ class RequestViewModel : ViewModel() {
                                 it.getTimestamp("created"),
                                 it.getLong("state")?.toInt(),
                                 it.getString("reason"),
-                                it.getTimestamp("reviewed"),
-                                it.getData()
+                                it.getTimestamp("reviewed")
                             )
                         )
                     )

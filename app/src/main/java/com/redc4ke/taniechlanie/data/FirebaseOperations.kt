@@ -35,7 +35,6 @@ fun setImage(context: Context, name: String, iv: ImageView,
         imageRef.getFile(imageFile).addOnSuccessListener {
             Glide.with(context).load(imageFile).into(iv)
         }.addOnFailureListener {
-            Log.d("setImage","guwnozdupy")
         }
     } else {
         try {

@@ -14,7 +14,7 @@ class CategoryViewModel : ViewModel() {
     private val majorCategories = MutableLiveData<Map<Int, Category>>()
     private val tempMajorMap = mutableMapOf<Int, Category>()
 
-    fun add(id: Int, name: String, imageUrl: String, major: Boolean, activity: MainActivity) {
+    fun add(id: Int, name: String, imageUrl: String?, major: Boolean, activity: MainActivity) {
         //What did I ever do here lmao
 
         val dir = File(activity.applicationContext.filesDir, "/categories")
@@ -23,25 +23,27 @@ class CategoryViewModel : ViewModel() {
         }
         val imageFile = File(dir, "$name.jpg")
 
-        activity.storage.getReferenceFromUrl(imageUrl).getFile(imageFile)
-            .addOnSuccessListener {
-                val cat = Category(id, name, imageFile, major)
-                tempMap[id] = cat
-                categoryLiveData.value = tempMap
-                if (major) {
-                    tempMajorMap[id] = cat
+        if (imageUrl != null) {
+            activity.storage.getReferenceFromUrl(imageUrl).getFile(imageFile)
+                .addOnSuccessListener {
+                    val cat = Category(id, name, imageFile, major)
+                    tempMap[id] = cat
+                    categoryLiveData.value = tempMap
+                    if (major) {
+                        tempMajorMap[id] = cat
+                    }
+                    majorCategories.value = tempMajorMap
                 }
-                majorCategories.value = tempMajorMap
-            }
-            .addOnFailureListener {
-                val cat = Category(id, name, null, major)
-                tempMap[id] = cat
-                categoryLiveData.value = tempMap
-                if (major) {
-                    tempMajorMap[id] = cat
+                .addOnFailureListener {
+                    val cat = Category(id, name, null, major)
+                    tempMap[id] = cat
+                    categoryLiveData.value = tempMap
+                    if (major) {
+                        tempMajorMap[id] = cat
+                    }
+                    majorCategories.value = tempMajorMap
                 }
-                majorCategories.value = tempMajorMap
-            }
+        }
     }
 
     fun getAll(): LiveData<Map<Int, Category>> {

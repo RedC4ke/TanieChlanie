@@ -66,6 +66,7 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
                     if (!it.isNullOrEmpty()) {
                         when (true) {
                             it.length > 6 -> getString(R.string.err_tooLongShortened, "6")
+                            it.toString().toInt() == 0 -> getString(R.string.err_zeroValue)
                             else -> null
                         }
                     } else {

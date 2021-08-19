@@ -1,5 +1,6 @@
 package com.redc4ke.taniechlanie.data.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -30,7 +31,7 @@ class ModpanelViewModel : ViewModel() {
             .collection("requests").document("requests")
 
         firestoreRef.collection("newBooze")
-            .whereEqualTo("status", Request.RequestState.PENDING).get()
+            .whereEqualTo("state", Request.RequestState.PENDING).get()
             .addOnSuccessListener {
                 newBooze.value = mutableListOf()
                 val tempList = mutableListOf<Request>()
@@ -145,11 +146,12 @@ class ModpanelViewModel : ViewModel() {
 
                         //Change request status to approved
                         requestsRef.document(request.requestId ?: "").update(
-                            "status", Request.RequestState.APPROVED,
+                            "state", Request.RequestState.APPROVED,
                             "reviewed", Timestamp.now()
                         )
 
                     }.addOnFailureListener {
+                        Log.d("huj", it.toString())
                         listener.onComplete(FirebaseListener.OTHER)
                     }.addOnSuccessListener {
                         fetch()
@@ -165,7 +167,7 @@ class ModpanelViewModel : ViewModel() {
 
         firestoreRef.document(id)
             .update(
-                "status",
+                "state",
                 Request.RequestState.DECLINED,
                 "reason",
                 reason,

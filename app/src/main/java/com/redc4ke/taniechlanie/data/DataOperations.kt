@@ -5,9 +5,11 @@ import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
 import android.widget.TextView
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.ui.MainActivity
+import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -84,10 +86,15 @@ fun voltageString(voltage: BigDecimal, context: Context): String {
 
 fun imageFromBitmap(context: Context, bitmap: Bitmap, filename: String): File {
     val f = File(context.cacheDir, "$filename.jpg")
-    f.createNewFile()
+
+    if (context.cacheDir.exists())
+        f.createNewFile()
+    else
+        context.cacheDir.mkdirs()
+        f.createNewFile()
 
     val bos = ByteArrayOutputStream()
-    bitmap.compress(Bitmap.CompressFormat.JPEG, 75, bos)
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 25, bos)
     val bitmapData = bos.toByteArray()
 
     val fos = FileOutputStream(f)
@@ -100,9 +107,15 @@ fun imageFromBitmap(context: Context, bitmap: Bitmap, filename: String): File {
 
 fun imageFromIntent(context: Context, intent: Intent, filename: String): File {
     val inputStream = context.contentResolver?.openInputStream(intent.data!!)
-    val bitmap = BitmapFactory.decodeStream(inputStream)
+    val bos = ByteArrayOutputStream()
+    val original = BitmapFactory.decodeStream(inputStream)
+    original.compress(Bitmap.CompressFormat.JPEG, 25, bos)
+    val decoded = BitmapFactory.decodeStream(ByteArrayInputStream(bos.toByteArray()))
 
-    return imageFromBitmap(context, bitmap, filename)
+    bos.flush()
+    bos.close()
+
+    return imageFromBitmap(context, decoded, filename)
 }
 
 fun autoBreak(s: String): String {

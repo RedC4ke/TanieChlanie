@@ -1,5 +1,6 @@
 package com.redc4ke.taniechlanie.ui.profile
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,12 @@ class ProfileRequestFragment : BaseFragment<FragmentProfileRequestBinding>() {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentProfileRequestBinding
         get() = FragmentProfileRequestBinding::inflate
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        setTransitions(R.transition.slide_from_right, R.transition.slide_to_right)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
