@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.transition.MaterialContainerTransform
@@ -15,8 +16,6 @@ import com.redc4ke.taniechlanie.data.viewmodels.UserViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentDetailsBinding
 import com.redc4ke.taniechlanie.ui.base.BaseFragment
 import com.redc4ke.taniechlanie.ui.MainActivity
-import com.redc4ke.taniechlanie.ui.menu.AlcoListFragment
-import com.redc4ke.taniechlanie.ui.menu.MenuFragment
 
 class DetailsFragment : BaseFragment<FragmentDetailsBinding>() {
 
@@ -51,8 +50,10 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>() {
         (requireActivity() as MainActivity).supportActionBar!!.hide()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
         val root = super.onCreateView(inflater, container, savedInstanceState)
         binding.nameDetails.text = alcoObject.name
@@ -67,17 +68,27 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>() {
         val list = userViewModel.getFavourites().value.orEmpty()
         binding.favouriteCHB.isChecked = list.contains(alcoObject.id.toLong())
 
-        binding.favouriteCHB.setOnCheckedChangeListener {_, isChecked ->
-            if (isChecked) {
-                userViewModel.addFavourite(requireContext(), alcoObject)
-            } else {
-                userViewModel.removeFavourite(requireContext(), alcoObject)
+        binding.favouriteCHB.setOnCheckedChangeListener { _, isChecked ->
+            when {
+                (userViewModel.getUser().value == null) -> {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.err_notloggedin),
+                        Toast.LENGTH_LONG
+                    ).show()
+                    binding.favouriteCHB.isChecked = false
+                    (requireActivity() as MainActivity).login()
+                }
+                (isChecked) -> userViewModel.addFavourite(requireContext(), alcoObject)
+                else -> userViewModel.removeFavourite(requireContext(), alcoObject)
             }
         }
 
-        if (alcoObject.photo != null){
-            setImage(requireContext(), alcoObject.name,
-                binding.imageDetails, Uri.parse(alcoObject.photo!!))
+        if (alcoObject.photo != null) {
+            setImage(
+                requireContext(), alcoObject.name,
+                binding.imageDetails, Uri.parse(alcoObject.photo!!)
+            )
         }
 
         binding.detailsBackBT.setOnClickListener {

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.priceString
 import com.redc4ke.taniechlanie.data.setImage
+import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectRequest
 import com.redc4ke.taniechlanie.data.viewmodels.Request
 import com.redc4ke.taniechlanie.data.voltageString
 import com.redc4ke.taniechlanie.data.volumeString
@@ -24,7 +24,7 @@ import java.text.DateFormat
 class ProfileRequestAdapter(private val context: Context) :
     RecyclerView.Adapter<ProfileRequestViewHolder>() {
 
-    var requestList: List<Pair<Int, Request>> = listOf()
+    var requestList: List<Pair<Int, AlcoObjectRequest>> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileRequestViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -80,7 +80,7 @@ class ProfileRequestAdapter(private val context: Context) :
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun update(list: List<Pair<Int, Request>>) {
+    fun update(list: List<Pair<Int, AlcoObjectRequest>>) {
         requestList = list
         notifyDataSetChanged()
     }

@@ -85,8 +85,8 @@ class Sheet2Fragment : BaseFragment<FragmentSheet2Binding>() {
 
                 if (s.toString() != "") {
                     for (item in available) {
-                        if (item.value.name.toLowerCase(Locale.ROOT)
-                                        .contains(s.toString().toLowerCase(Locale.ROOT))) {
+                        if (item.value.name.lowercase(Locale.ROOT)
+                                        .contains(s.toString().lowercase(Locale.ROOT))) {
                             filtered.add(item.key)
                         }
                     }

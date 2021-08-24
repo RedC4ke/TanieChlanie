@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.redc4ke.taniechlanie.data.viewmodels.CategoryViewModel
-import com.redc4ke.taniechlanie.data.viewmodels.Request
+import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectRequest
 import com.redc4ke.taniechlanie.databinding.RowAlcoholBinding
 import com.redc4ke.taniechlanie.ui.profile.modpanel.NewBoozeListFragment
 
@@ -15,7 +15,7 @@ class NewBoozeListAdapter(
 ) :
     RecyclerView.Adapter<NewBoozeListViewHolder>() {
 
-    private var requestList = listOf<Request>()
+    private var requestList = listOf<AlcoObjectRequest>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewBoozeListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -46,7 +46,7 @@ class NewBoozeListAdapter(
         return requestList.size
     }
 
-    fun update(data: List<Request>) {
+    fun update(data: List<AlcoObjectRequest>) {
         requestList = data
         notifyDataSetChanged()
     }

@@ -129,14 +129,14 @@ fun autoBreak(s: String): String {
     return r
 }
 
-fun textWrap(context: Context, s: String, tv: TextView, maxLines: Int = 6) {
-    tv.text = s
-
-    if (tv.lineCount > maxLines) {
-        val lastCharShown = tv.layout.getLineVisibleEnd(maxLines - 1)
-        tv.maxLines = maxLines
-
-        val showMore = "  ${context.getString(R.string.show_more)}"
-
-    }
-}
+//fun textWrap(context: Context, s: String, tv: TextView, maxLines: Int = 6) {
+//    tv.text = s
+//
+//    if (tv.lineCount > maxLines) {
+//        val lastCharShown = tv.layout.getLineVisibleEnd(maxLines - 1)
+//        tv.maxLines = maxLines
+//
+//        val showMore = "  ${context.getString(R.string.show_more)}"
+//
+//    }
+//}

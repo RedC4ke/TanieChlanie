@@ -8,14 +8,13 @@ import android.widget.ArrayAdapter
 import androidx.lifecycle.ViewModelProvider
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.viewmodels.ModpanelViewModel
-import com.redc4ke.taniechlanie.data.viewmodels.Request
+import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectRequest
 import com.redc4ke.taniechlanie.databinding.FragmentDeclinationReasonBinding
 import com.redc4ke.taniechlanie.ui.MainActivity
 import com.redc4ke.taniechlanie.ui.base.BaseDialogFragment
-import com.redc4ke.taniechlanie.ui.profile.modpanel.RequestDetailsFragment
 
 class DeclinationReasonFragment(
-    private val request: Request
+    private val request: AlcoObjectRequest
 ) : BaseDialogFragment<FragmentDeclinationReasonBinding>() {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentDeclinationReasonBinding

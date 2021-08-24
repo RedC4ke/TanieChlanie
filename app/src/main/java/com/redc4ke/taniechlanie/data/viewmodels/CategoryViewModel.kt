@@ -3,9 +3,10 @@ package com.redc4ke.taniechlanie.data.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.redc4ke.taniechlanie.data.AlcoObject
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.redc4ke.taniechlanie.data.Category
-import com.redc4ke.taniechlanie.ui.MainActivity
+import com.redc4ke.taniechlanie.data.FirebaseListener
 import java.io.File
 
 class CategoryViewModel : ViewModel() {
@@ -14,17 +15,16 @@ class CategoryViewModel : ViewModel() {
     private val majorCategories = MutableLiveData<Map<Int, Category>>()
     private val tempMajorMap = mutableMapOf<Int, Category>()
 
-    fun add(id: Int, name: String, imageUrl: String?, major: Boolean, activity: MainActivity) {
-        //What did I ever do here lmao
+    fun add(id: Int, name: String, imageUrl: String?, major: Boolean, path: File) {
 
-        val dir = File(activity.applicationContext.filesDir, "/categories")
+        val dir = File(path, "/categories")
         if (!dir.exists()) {
             dir.mkdirs()
         }
         val imageFile = File(dir, "$name.jpg")
 
         if (imageUrl != null) {
-            activity.storage.getReferenceFromUrl(imageUrl).getFile(imageFile)
+            FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl).getFile(imageFile)
                 .addOnSuccessListener {
                     val cat = Category(id, name, imageFile, major)
                     tempMap[id] = cat
@@ -74,5 +74,25 @@ class CategoryViewModel : ViewModel() {
         }
 
         return list
+    }
+
+    fun fetch(firestoreRef: FirebaseFirestore, path: File, firebaseListener: FirebaseListener) {
+        firestoreRef.collection("categories").orderBy("id").get()
+            .addOnSuccessListener {
+                tempMajorMap.clear()
+                tempMap.clear()
+                it.forEach { document ->
+                    val id = document.getLong("id")!!.toInt()
+                    val name = document.getString("name")!!
+                    val url = document.getString("image")
+                    val major = document.getBoolean("major")!!
+
+                    add(id, name, url, major, path)
+                }
+                firebaseListener.onComplete(FirebaseListener.SUCCESS)
+            }
+            .addOnFailureListener {
+                firebaseListener.onComplete(FirebaseListener.OTHER)
+            }
     }
 }

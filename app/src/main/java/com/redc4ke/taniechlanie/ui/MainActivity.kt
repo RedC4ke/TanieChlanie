@@ -23,28 +23,21 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
-import com.google.android.gms.tasks.Task
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.*
-import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectViewModel
-import com.redc4ke.taniechlanie.data.viewmodels.CategoryViewModel
-import com.redc4ke.taniechlanie.data.viewmodels.ShopViewModel
-import com.redc4ke.taniechlanie.data.viewmodels.UserViewModel
+import com.redc4ke.taniechlanie.data.viewmodels.*
 import com.redc4ke.taniechlanie.databinding.ActivityMainBinding
-import com.redc4ke.taniechlanie.ui.menu.MenuFragment
 import com.redc4ke.taniechlanie.ui.popup.WelcomeFragment
 import io.grpc.android.BuildConfig
-import java.math.BigDecimal
 
 
 class MainActivity : AppCompatActivity() {
@@ -54,14 +47,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var shopViewModel: ShopViewModel
     private lateinit var categoryViewModel: CategoryViewModel
     private lateinit var userViewModel: UserViewModel
+    private lateinit var faqViewModel: FaqViewModel
     private lateinit var binding: ActivityMainBinding
     private lateinit var prefs: SharedPreferences
     lateinit var alcoObjectViewModel: AlcoObjectViewModel
-    lateinit var faq: ArrayList<Map<String, String>>
     private val loginRC = 1
     private val auth = FirebaseAuth.getInstance()
-    val database: FirebaseFirestore = FirebaseFirestore.getInstance()
-    val storage = FirebaseStorage.getInstance()
+    private val firestoreRef = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,7 +89,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.list_dest,
                 R.id.favourite_dest,
                 R.id.about_dest,
-                //R.id.request_dest,
                 R.id.options_dest
             ),
             mDrawerLayout
@@ -112,26 +103,15 @@ class MainActivity : AppCompatActivity() {
         shopViewModel = ViewModelProvider(this).get(ShopViewModel::class.java)
         categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        faqViewModel = ViewModelProvider(this)[FaqViewModel::class.java]
 
-        //Firebase request (first from cache, then online)
+        //Firebase request
         getFirebaseData()
 
         //Chceck current user
         auth.addAuthStateListener {
             userViewModel.login(this, it.currentUser)
         }
-
-        //Temporary
-        //binding.navigation.setNavigationItemSelectedListener {
-        //    if (it.itemId == R.id.request_dest_) {
-        //        Toast.makeText(applicationContext, "Funkcja w przebudowie!",
-        //            Toast.LENGTH_LONG).show()
-        //        true
-        //    } else {
-        //        false
-        //    }
-        //}
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -237,140 +217,44 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    private fun getAlcoObject() {
-        getTask("wines")
-            .addOnCompleteListener {
-                getShopList()
-            }
-            .addOnSuccessListener {
-                it.forEach { document ->
-                    val data = document.data
-                    val output = mapOf<String, Any?>(
-                        "id" to data["id"].toString().toInt(),
-                        "name" to data["name"].toString(),
-                        "volume" to data["volume"].toString().toInt(),
-                        "voltage" to data["voltage"].toString().toBigDecimal(),
-                        "categories" to data["categories"] as ArrayList<Int>,
-                        "photo" to data["photo"] as String?
-                    )
-                    getPrices(output as MutableMap<String, Any?>)
+    fun getFirebaseData() {
+        alcoObjectViewModel.fetch(firestoreRef, object : FirebaseListener {
+            override fun onComplete(resultCode: Int) {
+                if (resultCode != FirebaseListener.SUCCESS) {
+                    Toast.makeText(
+                        baseContext,
+                        getString(R.string.connection_error),
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
-            .addOnFailureListener {
-                Toast.makeText(
-                    applicationContext,
-                    "Połączenie z bazą nieudane. " +
-                            "Sprawdź czy posiadasz dostęp do Internetu " +
-                            "i spróbuj ponownie.", Toast.LENGTH_LONG
-                ).show()
-            }
-    }
-
-    private fun getPrices(input: MutableMap<String, Any?>) {
-        val result: MutableMap<String, Any?> = input
-        database.collection("prices").document(input["id"].toString()).get()
-            .addOnSuccessListener { it ->
-                val data = it.data
-                val shopList = (data?.get("shop") as Map<String, Map<String, Any>>)
-                val shopIds = mutableListOf<Int>()
-                shopList.forEach {
-                    shopIds.add(it.key.toInt())
+        })
+        categoryViewModel.fetch(
+            firestoreRef,
+            applicationContext.filesDir,
+            object : FirebaseListener {
+                override fun onComplete(resultCode: Int) {
+                    if (resultCode != FirebaseListener.SUCCESS) {
+                        Toast.makeText(
+                            baseContext,
+                            getString(R.string.connection_error),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
-                result["shop"] = shopIds
-
-                val shopToPrice = mutableMapOf<Int, BigDecimal?>()
-                shopList.forEach {
-                    val price = it.value["price"]?.toString()?.toBigDecimal()
-                    shopToPrice[it.key.toInt()] = price
-                }
-
-                val alcoObject = AlcoObject(
-                    result["id"] as Int,
-                    result["name"] as String,
-                    shopToPrice,
-                    result["volume"] as Int,
-                    result["voltage"] as BigDecimal,
-                    result["categories"] as ArrayList<Int>,
-                    result["photo"] as String?,
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
-                            "Sed bibendum rutrum accumsan. Curabitur vel felis ullamcorper, " +
-                            "tincidunt dolor vel, ultricies ligula. Sed posuere elit sit amet" +
-                            " tincidunt quis."
-                )
-
-                alcoObjectViewModel.addObject(alcoObject)
-            }
-    }
-
-    private fun getShopList() {
-        getTask("shops")
-            .addOnCompleteListener {
-                getFaq()
-            }
-            .addOnSuccessListener {
-                it.forEach { document ->
-                    val data = document.data
-                    shopViewModel.add(Shop(data["id"].toString().toInt(), data["name"] as String))
+            })
+        shopViewModel.fetch(firestoreRef, object : FirebaseListener {
+            override fun onComplete(resultCode: Int) {
+                if (resultCode != FirebaseListener.SUCCESS) {
+                    Toast.makeText(
+                        baseContext,
+                        getString(R.string.connection_error),
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
-            .addOnFailureListener {
-                Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
-            }
-    }
-
-    private fun getFaq() {
-        getTask("faq")
-            .addOnCompleteListener {
-                getCategories()
-            }
-            .addOnSuccessListener {
-                val tempList: ArrayList<Map<String, String>> = arrayListOf()
-                it.forEach { document ->
-                    tempList.add(
-                        mapOf(
-                            "question" to document["question"] as String,
-                            "answer" to document["answer"] as String
-                        )
-                    )
-                }
-                faq = tempList
-            }
-            .addOnFailureListener {
-                Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
-            }
-    }
-
-    private fun getCategories() {
-        getTask("categories")
-            .addOnSuccessListener {
-                it.forEach { document ->
-                    val id = document["id"].toString().toInt()
-                    val name = document["name"] as String
-                    val url = document["image"] as String?
-                    val major = document["major"] as Boolean
-
-                    categoryViewModel.add(id, name, url, major, this)
-                }
-            }
-            .addOnFailureListener {
-                Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
-            }
-    }
-
-    private fun getTask(colName: String): Task<QuerySnapshot> {
-        val collection: CollectionReference = database.collection(colName)
-
-        val orderByColum = when (colName) {
-            "shops" -> "id"
-            "faq" -> "question"
-            else -> "name"
-        }
-
-        return collection.orderBy(orderByColum).get()
-    }
-
-    private fun getFirebaseData() {
-        getAlcoObject()
+        })
+        faqViewModel.fetch(firestoreRef)
     }
 
     private fun checkPrefs() {
@@ -392,7 +276,7 @@ class MainActivity : AppCompatActivity() {
         WelcomeFragment().show(supportFragmentManager, "welcome")
     }
 
-    private fun login() {
+    fun login() {
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(),
             AuthUI.IdpConfig.FacebookBuilder().build()

@@ -12,12 +12,18 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.redc4ke.taniechlanie.R
+import com.redc4ke.taniechlanie.data.FirebaseListener
 import com.redc4ke.taniechlanie.data.Shop
+import com.redc4ke.taniechlanie.data.viewmodels.AvailabilityRequest
+import com.redc4ke.taniechlanie.data.viewmodels.Request
+import com.redc4ke.taniechlanie.data.viewmodels.RequestViewModel
 import com.redc4ke.taniechlanie.data.viewmodels.ShopViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentAvailabilitySubmitBinding
+import com.redc4ke.taniechlanie.ui.MainActivity
 import com.redc4ke.taniechlanie.ui.base.BaseDialogFragment
 import com.redc4ke.taniechlanie.ui.menu.details.DetailsFragment
 
@@ -52,12 +58,9 @@ class AvailabilitySubmitFragment(detailsFragment: DetailsFragment, private val s
             setSpinner(mutableMap)
         })
 
-    }
-
-    override fun onStart() {
-        super.onStart()
-
         var pickFromList = true
+        val requestViewModel =
+            ViewModelProvider(requireActivity() as MainActivity)[RequestViewModel::class.java]
 
         with(binding) {
             if (shopId != null) {
@@ -124,6 +127,8 @@ class AvailabilitySubmitFragment(detailsFragment: DetailsFragment, private val s
             }
             avSubmitApplyBT.setOnClickListener {
                 val inputToCheck = mutableListOf(avSubmitPriceETL)
+                val user = FirebaseAuth.getInstance().currentUser
+
                 if (!pickFromList) inputToCheck.add(avSubmitShopETL)
                 var correctInput = true
                 inputToCheck.forEach { til ->
@@ -133,7 +138,7 @@ class AvailabilitySubmitFragment(detailsFragment: DetailsFragment, private val s
                     }
                 }
 
-                if (FirebaseAuth.getInstance().currentUser == null) {
+                if (user == null) {
                     Toast.makeText(
                         requireContext(),
                         R.string.err_notloggedin, Toast.LENGTH_LONG
@@ -144,34 +149,52 @@ class AvailabilitySubmitFragment(detailsFragment: DetailsFragment, private val s
                         R.string.err_shopnameWrongInput, Toast.LENGTH_LONG
                     ).show()
                 } else {
-                    FirebaseFirestore.getInstance().collection("pending")
-                        .document("pending").collection("changes")
-                        .add(
-                            hashMapOf(
-                                "type" to "price",
-                                "shop_name" to
-                                        if (pickFromList) selectedShop.name
-                                        else avSubmitShopET.text.toString(),
-                                "value" to avSubmitPriceET.text.toString().toDouble(),
-                                "author" to FirebaseAuth.getInstance().uid.toString(),
-                                "id" to alcoObject.id
-                            )
-                        )
-                        .addOnSuccessListener {
-                            Toast.makeText(
-                                requireContext(),
-                                R.string.toast_changesuccess,
-                                Toast.LENGTH_LONG
-                            ).show()
-                            dismiss()
+                    avSubmitApplyBT.text = ""
+                    avSubmitPB.visibility = View.VISIBLE
+
+                    val id = if (pickFromList) {
+                        selectedShop.id
+                    } else shopId
+                    val name = if (pickFromList) {
+                        selectedShop.name
+                    } else {
+                        avSubmitShopET.text.toString()
+                    }
+
+                    val request = AvailabilityRequest(
+                        user.uid,
+                        alcoObject.id,
+                        Pair(id, name),
+                        id == null,
+                        shopId != null,
+                        avSubmitPriceET.text.toString().toDouble(),
+                        Timestamp.now(),
+                        Request.RequestState.PENDING,
+                        null,
+                        null,
+                        null
+                    )
+
+                    requestViewModel.uploadAvailability(request, object : FirebaseListener {
+                        override fun onComplete(resultCode: Int) {
+                            avSubmitApplyBT.text = getString(R.string.submit)
+                            avSubmitPB.visibility = View.GONE
+                            if (resultCode == FirebaseListener.SUCCESS) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    getString(R.string.request_success),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                dismiss()
+                            } else {
+                                Toast.makeText(
+                                    requireContext(),
+                                    getString(R.string.toast_error),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
                         }
-                        .addOnFailureListener {
-                            Toast.makeText(
-                                requireContext(),
-                                R.string.toast_error,
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
+                    })
                 }
             }
             avSubmitCancelBT.setOnClickListener {

@@ -8,12 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.*
 import com.redc4ke.taniechlanie.data.viewmodels.CategoryViewModel
 import com.redc4ke.taniechlanie.data.viewmodels.ModpanelViewModel
-import com.redc4ke.taniechlanie.data.viewmodels.Request
+import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectRequest
 import com.redc4ke.taniechlanie.data.viewmodels.ShopViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentRequestDetailsBinding
 import com.redc4ke.taniechlanie.ui.MainActivity
@@ -21,17 +20,17 @@ import com.redc4ke.taniechlanie.ui.base.BaseFragment
 import com.redc4ke.taniechlanie.ui.popup.DeclinationReasonFragment
 import java.math.BigDecimal
 
-class RequestDetailsFragment() :
+class RequestDetailsFragment :
     BaseFragment<FragmentRequestDetailsBinding>() {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentRequestDetailsBinding
         get() = FragmentRequestDetailsBinding::inflate
-    private lateinit var request: Request
+    private lateinit var request: AlcoObjectRequest
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        request = arguments?.getSerializable("request") as Request
+        request = arguments?.getSerializable("request") as AlcoObjectRequest
     }
 
     override fun onStart() {

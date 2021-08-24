@@ -34,6 +34,7 @@
     <string name="avatar">Awatar użytkownika</string>
 
     <!-- details page -->
+    <string name="details_descriptionDisclaimer">Produkt nie posiada opisu.\nFunkcja dodawania opisów już wkrótce!</string>
     <string name="pricetag">Cena:</string>
     <string name="mR">mR:</string>
     <string name="volume">Objętość:</string>
@@ -54,7 +55,6 @@
     <string name="details_addprice">Dodaj cenę</string>
     <string name="details_editprice">Zgłoś nową cenę</string>
 
-
     <!-- details page - shop submit popup -->
     <string name="details_availabilitydisclaimer">UWAGA: Ceny będące wynikiem czasowej promocji
         należy dodawać za pomocą zakładki zgłoś promocję!</string>
@@ -64,6 +64,8 @@
     <string name="avsubmit_edit">Zgłoś cenę!</string>
 
     <!-- favourite page -->
+    <string name="favourite_notloggedin">Zaloguj się i zacznij dodawać pozycje do ulubionych!</string>
+    <string name="favourite_empty">Nie dodałeś jeszcze nic do ulubionych.\nMoże twój idealny smak dopiero czeka na odkrycie?</string>
 
     <!-- about page -->
     <string name="about_author">by Redc4ke</string>
@@ -236,6 +238,7 @@
     <!-- toasts -->
     <string name="toast_logout">Wylogowano</string>
     <string name="toast_error">Błąd</string>
+    <string name="connection_error">Błą∂! Sprawdź swoje połączenie z internetem.</string>
     <string name="toast_changesuccess">Twoja zmiana została zgłoszona i oczekuje na zatwardzenie
          administratora.</string>
 
@@ -248,6 +251,7 @@
     <string name="queryHint">Wyszukaj…</string>
     <string name="forward">Dalej</string>
     <string name="submit">Prześlij</string>
+    <string name="refresh">Odśwież</string>
     <string name="accept">Zatwierdź</string>
     <string name="login">Zaloguj</string>
     <string name="logout">Wyloguj</string>

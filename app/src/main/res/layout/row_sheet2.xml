@@ -11,10 +11,12 @@
     app:cardCornerRadius="18dp"
     app:cardElevation="2dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="5dp">
 
         <TextView
             android:id="@+id/sheet2shopTV"
@@ -22,12 +24,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="6dp"
-            android:layout_weight="1"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="1dp"
             android:fontFamily="@font/open_sans_light"
             android:textColor="@color/black"
             android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/sheet2priceTV"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="Biedronka" />
 
         <TextView
@@ -35,10 +40,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="1dp"
             android:fontFamily="@font/open_sans_light"
             android:textColor="@color/black"
             android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/sheet2editBT"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text=" 5,99 zł" />
 
         <ImageView
@@ -46,11 +54,12 @@
             android:layout_width="30dp"
             android:layout_height="25dp"
             android:layout_gravity="center"
-            android:layout_marginStart="-12dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginEnd="6dp"
+            android:layout_marginEnd="-8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_baseline_more_vert_24"
             app:tint="@color/grey_outline" />
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

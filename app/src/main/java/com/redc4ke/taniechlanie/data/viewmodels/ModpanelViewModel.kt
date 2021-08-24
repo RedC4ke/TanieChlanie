@@ -1,6 +1,5 @@
 package com.redc4ke.taniechlanie.data.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,15 +12,15 @@ import com.redc4ke.taniechlanie.data.Shop
 
 class ModpanelViewModel : ViewModel() {
 
-    private val newBooze = MutableLiveData<MutableList<Request>>()
-    private val changedBooze = MutableLiveData<MutableList<Request>>()
+    private val newBooze = MutableLiveData<MutableList<AlcoObjectRequest>>()
+    private val changedBooze = MutableLiveData<MutableList<AlcoObjectRequest>>()
 
 
-    fun getNewBooze(): LiveData<MutableList<Request>> {
+    fun getNewBooze(): LiveData<MutableList<AlcoObjectRequest>> {
         return newBooze
     }
 
-    fun getChangedBooze(): LiveData<MutableList<Request>> {
+    fun getChangedBooze(): LiveData<MutableList<AlcoObjectRequest>> {
         return changedBooze
     }
 
@@ -34,10 +33,10 @@ class ModpanelViewModel : ViewModel() {
             .whereEqualTo("state", Request.RequestState.PENDING).get()
             .addOnSuccessListener {
                 newBooze.value = mutableListOf()
-                val tempList = mutableListOf<Request>()
+                val tempList = mutableListOf<AlcoObjectRequest>()
                 it.documents.forEach { document ->
                     val request =
-                        Request(
+                        AlcoObjectRequest(
                             document.getString("author"),
                             document.getString("name"),
                             document.getLong("volume"),
@@ -73,7 +72,7 @@ class ModpanelViewModel : ViewModel() {
 
     @Suppress("UNCHECKED_CAST")
     fun acceptNewBooze(
-        request: Request,
+        request: AlcoObjectRequest,
         shopViewModel: ShopViewModel,
         listener: FirebaseListener
     ) {
@@ -151,7 +150,6 @@ class ModpanelViewModel : ViewModel() {
                         )
 
                     }.addOnFailureListener {
-                        Log.d("huj", it.toString())
                         listener.onComplete(FirebaseListener.OTHER)
                     }.addOnSuccessListener {
                         fetch()

@@ -200,7 +200,7 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
 
                 requestPB.visibility = View.VISIBLE
                 requestSendBT.text = ""
-                requestViewModel.upload(object : FirebaseListener {
+                requestViewModel.uploadNewBooze(object : FirebaseListener {
                     override fun onComplete(resultCode: Int) {
                         val toastText = when (resultCode) {
                             FirebaseListener.SUCCESS -> getString(R.string.request_success).also {

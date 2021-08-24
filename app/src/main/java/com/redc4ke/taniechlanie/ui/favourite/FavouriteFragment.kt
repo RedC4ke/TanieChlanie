@@ -1,8 +1,11 @@
 package com.redc4ke.taniechlanie.ui.favourite
 
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.get
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,6 +14,7 @@ import com.redc4ke.taniechlanie.data.menu.AlcoListAdapter
 import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectViewModel
 import com.redc4ke.taniechlanie.data.viewmodels.UserViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentFavouriteBinding
+import com.redc4ke.taniechlanie.ui.AlcoListFragment
 import com.redc4ke.taniechlanie.ui.MainActivity
 import com.redc4ke.taniechlanie.ui.base.BaseFragment
 import com.redc4ke.taniechlanie.ui.base.BaseListFragment
@@ -30,8 +34,8 @@ class FavouriteFragment: BaseListFragment<FragmentFavouriteBinding>() {
         alcoObjectViewModel = ViewModelProvider(requireActivity())[AlcoObjectViewModel::class.java]
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         userViewModel.getFavourites().observe(viewLifecycleOwner, {
             val tempList = mutableListOf<AlcoObject>()

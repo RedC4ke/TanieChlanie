@@ -2,12 +2,10 @@ package com.redc4ke.taniechlanie.data.profile
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.redc4ke.taniechlanie.R
-import com.redc4ke.taniechlanie.data.viewmodels.Request
 import com.redc4ke.taniechlanie.data.viewmodels.UserViewModel
 import com.redc4ke.taniechlanie.databinding.RowProfileBinding
 import com.redc4ke.taniechlanie.ui.MainActivity

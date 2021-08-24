@@ -21,6 +21,21 @@
         android:paddingEnd="8dp"
         android:paddingBottom="12dp">
 
+        <ProgressBar
+            android:id="@+id/avSubmitPB"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:elevation="4dp"
+            android:foregroundTint="@color/white"
+            android:indeterminateTint="@color/white"
+            android:progressTint="@color/white"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/av_submit_apply_BT"
+            app:layout_constraintEnd_toEndOf="@+id/av_submit_apply_BT"
+            app:layout_constraintStart_toStartOf="@+id/av_submit_apply_BT"
+            app:layout_constraintTop_toTopOf="@+id/av_submit_apply_BT" />
+
         <TextView
             android:id="@+id/avSubmitHeaderTV"
             android:layout_width="wrap_content"
@@ -42,13 +57,15 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/avSubmitHeaderTV">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/av_submit_price_ETL"
                 style="@style/Theme.taniechlanie.TextInputLayout_Filled"
-                android:layout_width="100dp"
+                android:layout_width="105dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:layout_marginLeft="4dp"
@@ -84,7 +101,8 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="24dp"
             android:backgroundTint="@color/white"
-            app:cardCornerRadius="2dp"
+            app:cardCornerRadius="9dp"
+            app:cardElevation="2dp"
             app:layout_constraintBottom_toBottomOf="@id/avSubmitPriceCV"
             app:layout_constraintEnd_toStartOf="@+id/avSubmitPriceCV"
             app:layout_constraintStart_toStartOf="parent"
@@ -101,6 +119,7 @@
                 android:dropDownWidth="wrap_content"
                 android:prompt="@string/hint_shopname"
                 android:spinnerMode="dialog" />
+
         </androidx.cardview.widget.CardView>
 
         <Button
@@ -200,7 +219,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
         <androidx.cardview.widget.CardView
             android:id="@+id/avSubmitShopCV"
             android:layout_width="0dp"
@@ -208,6 +226,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="24dp"
             android:visibility="gone"
+            app:cardCornerRadius="9dp"
             app:layout_constraintBottom_toBottomOf="@+id/avSubmitPriceCV"
             app:layout_constraintEnd_toStartOf="@+id/avSubmitPriceCV"
             app:layout_constraintStart_toStartOf="parent"
@@ -218,9 +237,9 @@
                 style="@style/Theme.taniechlanie.TextInputLayout_Filled"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="6dp"
                 android:layout_marginTop="-12dp"
-                android:layout_marginEnd="4dp"
+                android:layout_marginEnd="6dp"
                 android:layout_marginBottom="4dp"
                 app:errorTextAppearance="@style/dummyText"
                 app:hintEnabled="false">

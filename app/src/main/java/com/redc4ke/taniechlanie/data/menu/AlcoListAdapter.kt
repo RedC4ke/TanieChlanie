@@ -11,8 +11,8 @@ import com.redc4ke.taniechlanie.data.lowestPriceString
 import com.redc4ke.taniechlanie.data.valueString
 import com.redc4ke.taniechlanie.data.viewmodels.CategoryViewModel
 import com.redc4ke.taniechlanie.databinding.RowAlcoholBinding
+import com.redc4ke.taniechlanie.ui.AlcoListFragment
 import com.redc4ke.taniechlanie.ui.MainActivity
-import com.redc4ke.taniechlanie.ui.menu.AlcoListFragment
 
 
 class AlcoListAdapter(
@@ -34,14 +34,11 @@ class AlcoListAdapter(
     override fun onBindViewHolder(holder: AlcoViewHolder, position: Int) {
 
         with(holder.vb) {
+
             //Set views for this row
             nameTV.text = autoBreak(data[position].name)
             priceTV.text = lowestPriceString(data[position], context)
             valueTV.text = valueString(data[position], context)
-            categoryViewModel.getAll().observe((context), {
-                val image = categoryViewModel.getMajor(data[position].categories)?.image
-                Glide.with(context).load(image).into(categoryIV)
-            })
 
             val id = data[position].id
             root.transitionName = "rowAlcoholTransitionName_$id"
@@ -49,6 +46,14 @@ class AlcoListAdapter(
             root.setOnClickListener {
                 parentFrag.onItemClick(root, data[position])
             }
+
+            categoryViewModel.getAll().observe((context), {
+                //Temp solution, why is sometimes data.size larger than position?
+                if (position < data.size) {
+                    val image = categoryViewModel.getMajor(data[position].categories)?.image
+                    Glide.with(context).load(image).into(categoryIV)
+                }
+            })
         }
     }
 

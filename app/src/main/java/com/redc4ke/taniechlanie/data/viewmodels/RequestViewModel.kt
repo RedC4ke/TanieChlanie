@@ -1,7 +1,6 @@
 package com.redc4ke.taniechlanie.data.viewmodels
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -35,7 +34,7 @@ class RequestViewModel : ViewModel() {
     }
 
     private val photoName = MutableLiveData<String>()
-    private val requestList = MutableLiveData<List<Pair<Int, Request>>>()
+    private val requestList = MutableLiveData<List<Pair<Int, AlcoObjectRequest>>>()
 
     fun setShop(shop: Shop, isNew: Boolean = false) {
         CurrentRequest.shop.value = shop
@@ -91,7 +90,7 @@ class RequestViewModel : ViewModel() {
         return CurrentRequest.categories
     }
 
-    fun upload(listener: FirebaseListener) {
+    fun uploadNewBooze(listener: FirebaseListener) {
         val user = FirebaseAuth.getInstance().currentUser
         if (user == null) {
             listener.onComplete(FirebaseListener.NOT_LOGGED_IN)
@@ -111,15 +110,15 @@ class RequestViewModel : ViewModel() {
                     listener.onComplete(FirebaseListener.OTHER)
                 }
                 .addOnSuccessListener {
-                    uploadData(listener, user, "gs://jabot-5ce1f.appspot.com" + storageRef.path)
+                    uploadNBData(listener, user, "gs://jabot-5ce1f.appspot.com" + storageRef.path)
                 }
         } else {
-            uploadData(listener, user, null)
+            uploadNBData(listener, user, null)
         }
 
     }
 
-    private fun uploadData(
+    private fun uploadNBData(
         listener: FirebaseListener,
         user: FirebaseUser,
         photoURL: String?
@@ -135,25 +134,26 @@ class RequestViewModel : ViewModel() {
             return
         }
 
-        firestoreRef.add(
-            hashMapOf(
-                "author" to user.uid,
-                "categories" to categories,
-                "description" to null,
-                "name" to CurrentRequest.alcoholName,
-                "voltage" to CurrentRequest.voltage!!.toDouble(),
-                "volume" to CurrentRequest.volume,
-                "photo" to photoURL,
-                "shop" to mapOf(
-                    (CurrentRequest.shop.value?.id?.toString()
-                        ?: "null") to CurrentRequest.shop.value?.name
-                ),
-                "shopIsNew" to CurrentRequest.shopIsNew,
-                "price" to CurrentRequest.price!!.toDouble(),
-                "state" to Request.RequestState.PENDING,
-                "created" to Timestamp.now()
+        firestoreRef
+            .add(
+                hashMapOf(
+                    "author" to user.uid,
+                    "categories" to categories,
+                    "description" to null,
+                    "name" to CurrentRequest.alcoholName,
+                    "voltage" to CurrentRequest.voltage!!.toDouble(),
+                    "volume" to CurrentRequest.volume,
+                    "photo" to photoURL,
+                    "shop" to mapOf(
+                        (CurrentRequest.shop.value?.id?.toString()
+                            ?: "null") to CurrentRequest.shop.value?.name
+                    ),
+                    "shopIsNew" to CurrentRequest.shopIsNew,
+                    "price" to CurrentRequest.price!!.toDouble(),
+                    "state" to Request.RequestState.PENDING,
+                    "created" to Timestamp.now()
+                )
             )
-        )
             .addOnFailureListener {
                 listener.onComplete(FirebaseListener.OTHER)
             }
@@ -162,9 +162,25 @@ class RequestViewModel : ViewModel() {
             }
     }
 
+    fun uploadAvailability(
+        availabilityRequest: AvailabilityRequest,
+        firebaseListener: FirebaseListener
+    ) {
+        val firestoreRef =
+            FirebaseFirestore.getInstance().collection("requests").document("requests")
+                .collection("availability")
+        firestoreRef.add(availabilityRequest)
+            .addOnFailureListener {
+                firebaseListener.onComplete(FirebaseListener.OTHER)
+            }
+            .addOnSuccessListener {
+                firebaseListener.onComplete(FirebaseListener.SUCCESS)
+            }
+    }
+
     @Suppress("UNCHECKED_CAST")
     fun fetch(uid: String, firebaseListener: FirebaseListener) {
-        val tempList = mutableListOf<Pair<Int, Request>>()
+        val tempList = mutableListOf<Pair<Int, AlcoObjectRequest>>()
         val firestoreRef = FirebaseFirestore.getInstance().collection("requests")
             .document("requests")
 
@@ -175,7 +191,7 @@ class RequestViewModel : ViewModel() {
                     tempList.add(
                         Pair(
                             Request.RequestType.NEW_BOOZE,
-                            Request(
+                            AlcoObjectRequest(
                                 uid,
                                 it.getString("name"),
                                 it.getLong("volume"),
@@ -199,16 +215,29 @@ class RequestViewModel : ViewModel() {
                 }
             }
             .addOnFailureListener {
-            firebaseListener.onComplete(FirebaseListener.OTHER)
-        }
+                firebaseListener.onComplete(FirebaseListener.OTHER)
+            }
     }
 
-    fun getRequestList(): MutableLiveData<List<Pair<Int, Request>>> {
+    fun getRequestList(): MutableLiveData<List<Pair<Int, AlcoObjectRequest>>> {
         return requestList
     }
 }
 
-data class Request(
+interface Request : Serializable {
+    object RequestState {
+        const val PENDING = 1
+        const val APPROVED = 2
+        const val DECLINED = 3
+    }
+
+    object RequestType {
+        const val NEW_BOOZE = 1
+        const val AVAILABILITY = 2
+    }
+}
+
+data class AlcoObjectRequest(
     val author: String?,
     val name: String?,
     val volume: Long?,
@@ -224,14 +253,18 @@ data class Request(
     var state: Int?,
     var reason: String?,
     var reviewed: Timestamp?
-) : Serializable {
-    object RequestState {
-        const val PENDING = 1
-        const val APPROVED = 2
-        const val DECLINED = 3
-    }
+) : Request
 
-    object RequestType {
-        const val NEW_BOOZE = 1
-    }
-}
+data class AvailabilityRequest(
+    val author: String,
+    val alcoObjectId: Int,
+    val shop: Pair<Int?, String>,
+    val shopIsNew: Boolean,
+    val isEdited: Boolean,
+    val price: Double,
+    val created: Timestamp?,
+    val state: Int?,
+    val requestId: String?,
+    val reason: String?,
+    val reviewed: Timestamp?
+) : Request

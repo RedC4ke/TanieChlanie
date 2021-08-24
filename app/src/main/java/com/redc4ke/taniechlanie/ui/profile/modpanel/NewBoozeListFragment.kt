@@ -1,22 +1,17 @@
 package com.redc4ke.taniechlanie.ui.profile.modpanel
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.redc4ke.taniechlanie.R
-import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.data.profile.modpanel.NewBoozeListAdapter
 import com.redc4ke.taniechlanie.data.viewmodels.CategoryViewModel
 import com.redc4ke.taniechlanie.data.viewmodels.ModpanelViewModel
-import com.redc4ke.taniechlanie.data.viewmodels.Request
+import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectRequest
 import com.redc4ke.taniechlanie.databinding.FragmentNewBoozeListBinding
 import com.redc4ke.taniechlanie.ui.MainActivity
 import com.redc4ke.taniechlanie.ui.base.BaseFragment
-import com.redc4ke.taniechlanie.ui.menu.AlcoListFragmentDirections
 
 class NewBoozeListFragment : BaseFragment<FragmentNewBoozeListBinding>() {
 
@@ -42,7 +37,7 @@ class NewBoozeListFragment : BaseFragment<FragmentNewBoozeListBinding>() {
         })
     }
 
-    fun onItemClick(request: Request) {
+    fun onItemClick(request: AlcoObjectRequest) {
         val directions = NewBoozeListFragmentDirections.openRequestDetails(request)
         findNavController().navigate(directions)
     }

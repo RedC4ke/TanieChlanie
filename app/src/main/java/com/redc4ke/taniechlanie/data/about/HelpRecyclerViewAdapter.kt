@@ -9,17 +9,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.redc4ke.taniechlanie.databinding.RowAboutHelpBinding
 import com.redc4ke.taniechlanie.ui.MainActivity
 
-class HelpRecyclerViewAdapter(frag: Fragment) :
+class HelpRecyclerViewAdapter() :
         RecyclerView.Adapter<HelpViewHolder>() {
 
-    private val faq = (frag.activity as MainActivity).faq
+    private var faqList = listOf<Map<String, String>>()
     private val expanded = arrayListOf<Boolean>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HelpViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = RowAboutHelpBinding.inflate(inflater, parent, false)
 
-        faq.forEach{ _ ->
+        faqList.forEach{ _ ->
             expanded.add(false)
         }
 
@@ -29,8 +29,8 @@ class HelpRecyclerViewAdapter(frag: Fragment) :
     override fun onBindViewHolder(holder: HelpViewHolder, position: Int) {
         with(holder.vb) {
 
-            helpRowHeaderTV.text = faq[position]["question"]
-            helpRowTextTV.text = faq[position]["answer"]
+            helpRowHeaderTV.text = faqList[position]["question"]
+            helpRowTextTV.text = faqList[position]["answer"]
 
             helpRowMainCL.setOnClickListener {
                 expanded[position] = !expanded[position]
@@ -49,7 +49,12 @@ class HelpRecyclerViewAdapter(frag: Fragment) :
     }
 
     override fun getItemCount(): Int {
-        return faq.size
+        return faqList.size
+    }
+
+    fun update(list: List<Map<String, String>>) {
+        faqList = list
+        notifyDataSetChanged()
     }
 
 }
