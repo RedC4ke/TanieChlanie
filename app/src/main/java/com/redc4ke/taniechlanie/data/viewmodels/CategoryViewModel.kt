@@ -1,5 +1,6 @@
 package com.redc4ke.taniechlanie.data.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,35 +16,14 @@ class CategoryViewModel : ViewModel() {
     private val majorCategories = MutableLiveData<Map<Int, Category>>()
     private val tempMajorMap = mutableMapOf<Int, Category>()
 
-    fun add(id: Int, name: String, imageUrl: String?, major: Boolean, path: File) {
-
-        val dir = File(path, "/categories")
-        if (!dir.exists()) {
-            dir.mkdirs()
+    fun add(id: Int, name: String, imageUrl: String?, major: Boolean) {
+        val cat = Category(id, name, imageUrl, major)
+        tempMap[id] = cat
+        categoryLiveData.value = tempMap
+        if (major) {
+            tempMajorMap[id] = cat
         }
-        val imageFile = File(dir, "$name.jpg")
-
-        if (imageUrl != null) {
-            FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl).getFile(imageFile)
-                .addOnSuccessListener {
-                    val cat = Category(id, name, imageFile, major)
-                    tempMap[id] = cat
-                    categoryLiveData.value = tempMap
-                    if (major) {
-                        tempMajorMap[id] = cat
-                    }
-                    majorCategories.value = tempMajorMap
-                }
-                .addOnFailureListener {
-                    val cat = Category(id, name, null, major)
-                    tempMap[id] = cat
-                    categoryLiveData.value = tempMap
-                    if (major) {
-                        tempMajorMap[id] = cat
-                    }
-                    majorCategories.value = tempMajorMap
-                }
-        }
+        majorCategories.value = tempMajorMap
     }
 
     fun getAll(): LiveData<Map<Int, Category>> {
@@ -76,7 +56,7 @@ class CategoryViewModel : ViewModel() {
         return list
     }
 
-    fun fetch(firestoreRef: FirebaseFirestore, path: File, firebaseListener: FirebaseListener) {
+    fun fetch(firestoreRef: FirebaseFirestore, firebaseListener: FirebaseListener) {
         firestoreRef.collection("categories").orderBy("id").get()
             .addOnSuccessListener {
                 tempMajorMap.clear()
@@ -87,7 +67,7 @@ class CategoryViewModel : ViewModel() {
                     val url = document.getString("image")
                     val major = document.getBoolean("major")!!
 
-                    add(id, name, url, major, path)
+                    add(id, name, url, major)
                 }
                 firebaseListener.onComplete(FirebaseListener.SUCCESS)
             }

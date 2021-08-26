@@ -19,13 +19,15 @@ import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.data.FirebaseListener
 import com.redc4ke.taniechlanie.ui.MainActivity
 import java.io.File
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.set
 
 class UserViewModel : ViewModel() {
     private val firestore = FirebaseFirestore.getInstance()
     private var titles: MutableMap<Int, Map<String, Any>> = mutableMapOf()
     private val defaultAvatar =
-        Uri.parse("gs://jabot-5ce1f.appspot.com/users/default/avatar.png")
+        Uri.parse("https://firebasestorage.googleapis.com/v0/b/jabot-5ce1f.appspot.com/o/users%2Fdefault%2Favatar.png?alt=media&token=66bdbd65-2fd2-4688-b130-0c2ae045eb78")
     private var currentUser = MutableLiveData<FirebaseUser?>()
     private val staticUser get() = currentUser.value
     private val userName = MutableLiveData<String>()
@@ -54,7 +56,8 @@ class UserViewModel : ViewModel() {
         var avatar = defaultAvatar.toString()
         val stats = mapOf(
             "submits" to 0,
-            "reviews" to 0
+            "reviews" to 0,
+            "commitment" to 0
         )
 
         userStats.value = stats
@@ -62,7 +65,7 @@ class UserViewModel : ViewModel() {
         userEmail.value = user.email
 
         if (user.photoUrl == null) {
-            setAvatarUrl(defaultAvatar, object: FirebaseListener {
+            setAvatarUrl(defaultAvatar, object : FirebaseListener {
                 override fun onComplete(resultCode: Int) {
                     userAvatar.value = defaultAvatar
                 }
@@ -96,6 +99,7 @@ class UserViewModel : ViewModel() {
             }
     }
 
+    //TODO: change to protected request
     fun isModerator(): Boolean {
         return staticUser != null && groups.value?.contains("moderator") == true
     }
@@ -229,28 +233,24 @@ class UserViewModel : ViewModel() {
         }
     }
 
-    fun setAvatar(context: Context, file: File, firebaseListener: FirebaseListener) {
+    fun setAvatar(file: File, firebaseListener: FirebaseListener) {
         try {
             val imageUri = Uri.fromFile(file)
             val storageRef = FirebaseStorage.getInstance().reference
                 .child("users")
                 .child(staticUser!!.uid)
-                .child(file.name)
+                .child(UUID.randomUUID().toString() + ".jpg")
 
             storageRef.putFile(imageUri)
-                .addOnSuccessListener { imageUpload ->
-                    imageUpload.metadata!!.reference!!.downloadUrl
+                .addOnSuccessListener { _ ->
+                    storageRef.downloadUrl
                         .addOnSuccessListener {
                             setAvatarUrl(it, firebaseListener)
                         }
                 }
 
         } catch (e: Exception) {
-            Toast.makeText(
-                context,
-                "Błąd: $e",
-                Toast.LENGTH_SHORT
-            ).show()
+            firebaseListener.onComplete(FirebaseListener.OTHER)
         }
     }
 
@@ -266,11 +266,11 @@ class UserViewModel : ViewModel() {
                         firebaseListener.onComplete(FirebaseListener.SUCCESS)
                     }
                     .addOnFailureListener {
-                        Log.d("userVM", "Avatar uri sync failed: $it")
+                        firebaseListener.onComplete(FirebaseListener.OTHER)
                     }
             }
             ?.addOnFailureListener {
-                Log.d("userVM", "Avatar uri not set: $it")
+                firebaseListener.onComplete(FirebaseListener.OTHER)
             }
     }
 

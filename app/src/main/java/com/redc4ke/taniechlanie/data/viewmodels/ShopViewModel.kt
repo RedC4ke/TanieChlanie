@@ -26,7 +26,7 @@ class ShopViewModel : ViewModel() {
         return shopLiveData
     }
 
-    fun fetch(firestoreRef: FirebaseFirestore, firebaseListener: FirebaseListener) {
+    fun fetch(firestoreRef: FirebaseFirestore, firebaseListener: FirebaseListener?) {
         firestoreRef.collection("shops").orderBy("id").get()
             .addOnSuccessListener {
                 tempMap.clear()
@@ -36,10 +36,10 @@ class ShopViewModel : ViewModel() {
                         document.getLong("id")?.toInt(),
                         document.getString("name") ?: ""))
                 }
-                firebaseListener.onComplete(FirebaseListener.SUCCESS)
+                firebaseListener?.onComplete(FirebaseListener.SUCCESS)
             }
             .addOnFailureListener {
-                firebaseListener.onComplete(FirebaseListener.OTHER)
+                firebaseListener?.onComplete(FirebaseListener.OTHER)
             }
     }
 }

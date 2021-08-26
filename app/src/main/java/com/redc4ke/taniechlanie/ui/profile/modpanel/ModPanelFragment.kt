@@ -40,6 +40,9 @@ class ModPanelFragment : BaseFragment<FragmentModPanelBinding>() {
         modpanelViewModel.getChangedBooze().observe(viewLifecycleOwner, {
             adapter.updateSources(it, 1)
         })
+        modpanelViewModel.getAvailability().observe(viewLifecycleOwner, {
+            adapter.updateSources(it, 2)
+        })
     }
 
 }

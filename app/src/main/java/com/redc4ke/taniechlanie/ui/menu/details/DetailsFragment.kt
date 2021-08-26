@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.google.android.material.transition.MaterialContainerTransform
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.*
@@ -85,10 +86,7 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>() {
         }
 
         if (alcoObject.photo != null) {
-            setImage(
-                requireContext(), alcoObject.name,
-                binding.imageDetails, Uri.parse(alcoObject.photo!!)
-            )
+            Glide.with(requireContext()).load(alcoObject.photo).into(binding.imageDetails)
         }
 
         binding.detailsBackBT.setOnClickListener {

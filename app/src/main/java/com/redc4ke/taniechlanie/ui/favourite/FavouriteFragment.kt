@@ -40,7 +40,7 @@ class FavouriteFragment: BaseListFragment<FragmentFavouriteBinding>() {
         userViewModel.getFavourites().observe(viewLifecycleOwner, {
             val tempList = mutableListOf<AlcoObject>()
             it.forEach { id ->
-                val obj = alcoObjectViewModel.get(id.toInt())
+                val obj = alcoObjectViewModel.get(id)
                 if (obj != null) {
                     tempList.add(obj)
                 }

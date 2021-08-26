@@ -1,14 +1,13 @@
 package com.redc4ke.taniechlanie.data.profile
 
 import android.content.Context
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
-import com.redc4ke.taniechlanie.data.setImage
 import com.redc4ke.taniechlanie.data.viewmodels.Review
 import com.redc4ke.taniechlanie.databinding.RowProfileReviewBinding
 import java.text.DateFormat
@@ -42,7 +41,7 @@ class ProfileReviewAdapter(
 
     private fun photo(alc: AlcoObject, iv: ImageView) {
         if (alc.photo != null) {
-            setImage(context, alc.name, iv, Uri.parse(alc.photo!!))
+            Glide.with(context).load(alc.photo).into(iv)
         } else {
             iv.setImageResource(R.drawable.liquor)
         }

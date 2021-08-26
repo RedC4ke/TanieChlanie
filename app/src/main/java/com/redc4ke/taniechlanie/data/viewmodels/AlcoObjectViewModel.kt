@@ -22,7 +22,7 @@ class AlcoObjectViewModel: ViewModel() {
         return alcoList
     }
 
-    fun get(id: Int): AlcoObject? {
+    fun get(id: Long): AlcoObject? {
         return tempList.find { it.id == id }
     }
 
@@ -35,7 +35,7 @@ class AlcoObjectViewModel: ViewModel() {
                 it.forEach { document ->
                     val data = document.data
                     val output = mapOf<String, Any?>(
-                        "id" to document.getLong("id")?.toInt(),
+                        "id" to document.getLong("id"),
                         "name" to document.getString("name"),
                         "volume" to document.getLong("volume")?.toInt(),
                         "voltage" to document.getLong("voltage")?.toBigDecimal(),
@@ -76,7 +76,7 @@ class AlcoObjectViewModel: ViewModel() {
                 }
 
                 val alcoObject = AlcoObject(
-                    result["id"] as Int,
+                    result["id"] as Long,
                     result["name"] as String,
                     shopToPrice,
                     result["volume"] as Int,

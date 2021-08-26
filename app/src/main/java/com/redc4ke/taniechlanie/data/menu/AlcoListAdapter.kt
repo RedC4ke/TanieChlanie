@@ -1,10 +1,12 @@
 package com.redc4ke.taniechlanie.data.menu
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.data.autoBreak
 import com.redc4ke.taniechlanie.data.lowestPriceString
@@ -51,7 +53,9 @@ class AlcoListAdapter(
                 //Temp solution, why is sometimes data.size larger than position?
                 if (position < data.size) {
                     val image = categoryViewModel.getMajor(data[position].categories)?.image
-                    Glide.with(context).load(image).into(categoryIV)
+
+                    Glide.with(context).load(image).diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(categoryIV)
                 }
             })
         }

@@ -163,8 +163,9 @@ class AvailabilitySubmitFragment(detailsFragment: DetailsFragment, private val s
 
                     val request = AvailabilityRequest(
                         user.uid,
-                        alcoObject.id,
-                        Pair(id, name),
+                        alcoObject.id.toLong(),
+                        id,
+                        name,
                         id == null,
                         shopId != null,
                         avSubmitPriceET.text.toString().toDouble(),

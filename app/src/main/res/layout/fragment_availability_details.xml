@@ -7,7 +7,7 @@
     android:background="@color/white">
 
     <ProgressBar
-        android:id="@+id/reqDetailsPB"
+        android:id="@+id/avDetailsPB"
         style="?android:attr/progressBarStyle"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -15,10 +15,10 @@
         android:progressTint="@color/white"
         android:secondaryProgressTint="@color/white"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/reqDetailsAcceptBT"
-        app:layout_constraintEnd_toEndOf="@+id/reqDetailsAcceptBT"
-        app:layout_constraintStart_toStartOf="@+id/reqDetailsAcceptBT"
-        app:layout_constraintTop_toTopOf="@+id/reqDetailsAcceptBT"
+        app:layout_constraintBottom_toBottomOf="@+id/avDetailsAcceptBT"
+        app:layout_constraintEnd_toEndOf="@+id/avDetailsAcceptBT"
+        app:layout_constraintStart_toStartOf="@+id/avDetailsAcceptBT"
+        app:layout_constraintTop_toTopOf="@+id/avDetailsAcceptBT"
         tools:visibility="visible" />
 
     <TextView
@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/open_sans_regular"
         android:text="@string/name_req"
         android:textSize="20sp"
@@ -34,67 +34,43 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:fontFamily="@font/open_sans_regular"
-        android:text="@string/categories"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reqDetailsNameTV" />
-
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:fontFamily="@font/open_sans_regular"
-        android:text="@string/volume_req"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reqDetailsCategoryTV" />
-
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:fontFamily="@font/open_sans_regular"
-        android:text="@string/voltage_req"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reqDetailsVolumeTV" />
-
-    <TextView
         android:id="@+id/textView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/open_sans_regular"
         android:text="@string/hint_shopname"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reqDetailsVoltageTV" />
+        app:layout_constraintTop_toBottomOf="@+id/avDetailsNameTV" />
 
     <TextView
-        android:id="@+id/textView13"
+        android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/open_sans_regular"
-        android:text="@string/price_req"
+        android:text="@string/price_old"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reqDetailsShopTV" />
+        app:layout_constraintTop_toBottomOf="@+id/avDetailsShopTV" />
 
     <TextView
-        android:id="@+id/reqDetailsNameTV"
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/open_sans_regular"
+        android:text="@string/price_new"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/avDetailsOldpriceTV" />
+
+    <TextView
+        android:id="@+id/avDetailsNameTV"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -109,55 +85,7 @@
         tools:text="Kuflowe Mocne W Chuj Serio" />
 
     <TextView
-        android:id="@+id/reqDetailsCategoryTV"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/open_sans_light"
-        android:textAlignment="textEnd"
-        android:textColor="@color/primaryDarkColor"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textView9"
-        app:layout_constraintTop_toTopOf="@+id/textView9"
-        tools:text="Piwo, Piwo, Piwo, Piwo, Piwo, Piwo" />
-
-    <TextView
-        android:id="@+id/reqDetailsVolumeTV"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/open_sans_light"
-        android:textAlignment="textEnd"
-        android:textColor="@color/primaryDarkColor"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textView10"
-        app:layout_constraintTop_toTopOf="@+id/textView10"
-        tools:text="2137ml" />
-
-    <TextView
-        android:id="@+id/reqDetailsVoltageTV"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/open_sans_light"
-        android:textAlignment="textEnd"
-        android:textColor="@color/primaryDarkColor"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textView11"
-        app:layout_constraintTop_toTopOf="@+id/textView11"
-        tools:text="99%" />
-
-    <TextView
-        android:id="@+id/reqDetailsShopTV"
+        android:id="@+id/avDetailsShopTV"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -173,7 +101,7 @@
         tools:text="Oszą" />
 
     <TextView
-        android:id="@+id/reqDetailsPriceTV"
+        android:id="@+id/avDetailsOldpriceTV"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -183,13 +111,29 @@
         android:textColor="@color/primaryDarkColor"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textView13"
-        app:layout_constraintTop_toTopOf="@+id/textView13"
-        tools:text="4.20zł" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/textView7"
+        app:layout_constraintTop_toTopOf="@+id/textView7"
+        tools:text="Oszą" />
+
+    <TextView
+        android:id="@+id/avDetailsNewpriceTV"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/open_sans_light"
+        android:textAlignment="textEnd"
+        android:textColor="@color/primaryDarkColor"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/textView14"
+        app:layout_constraintTop_toTopOf="@+id/textView14"
+        tools:text="Oszą" />
 
     <Button
-        android:id="@+id/reqDetailsDeleteBT"
+        android:id="@+id/avDetailsDeleteBT"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -204,7 +148,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/reqDetailsAcceptBT"
+        android:id="@+id/avDetailsAcceptBT"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -228,14 +172,14 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/reqDetailsPhotoIV"
+        android:id="@+id/avDetailsPhotoIV"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="32dp"
-        app:layout_constraintBottom_toTopOf="@+id/reqDetailsAcceptBT"
+        app:layout_constraintBottom_toTopOf="@+id/avDetailsAcceptBT"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reqDetailsPriceTV"
+        app:layout_constraintTop_toBottomOf="@+id/textView14"
         app:srcCompat="@drawable/image_placeholder" />
 </androidx.constraintlayout.widget.ConstraintLayout>

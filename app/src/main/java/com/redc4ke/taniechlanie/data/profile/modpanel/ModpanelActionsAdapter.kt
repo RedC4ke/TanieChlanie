@@ -13,7 +13,7 @@ class ModpanelActionsAdapter(private val modPanelFragment: ModPanelFragment) :
     RecyclerView.Adapter<ModpanelActionsViewHolder>() {
 
     private val menu = modPanelFragment.resources.getStringArray(R.array.mod_actionlist)
-    val sources = mutableListOf<List<Any>>(listOf(), listOf(), listOf(), listOf())
+    val sources = mutableListOf<List<Any>>(listOf(), listOf(), listOf())
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ModpanelActionsViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -37,6 +37,9 @@ class ModpanelActionsAdapter(private val modPanelFragment: ModPanelFragment) :
                 when (position) {
                     0 -> {
                         modPanelFragment.findNavController().navigate(R.id.newBooze_dest)
+                    }
+                    2 -> {
+                        modPanelFragment.findNavController().navigate(R.id.availability_dest)
                     }
                 }
             }

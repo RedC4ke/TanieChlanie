@@ -7,14 +7,16 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.lifecycle.ViewModelProvider
 import com.redc4ke.taniechlanie.R
+import com.redc4ke.taniechlanie.data.viewmodels.AvailabilityRequest
 import com.redc4ke.taniechlanie.data.viewmodels.ModpanelViewModel
-import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectRequest
+import com.redc4ke.taniechlanie.data.viewmodels.NewBoozeRequest
+import com.redc4ke.taniechlanie.data.viewmodels.Request
 import com.redc4ke.taniechlanie.databinding.FragmentDeclinationReasonBinding
 import com.redc4ke.taniechlanie.ui.MainActivity
 import com.redc4ke.taniechlanie.ui.base.BaseDialogFragment
 
 class DeclinationReasonFragment(
-    private val request: AlcoObjectRequest
+    private val request: Request
 ) : BaseDialogFragment<FragmentDeclinationReasonBinding>() {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentDeclinationReasonBinding
@@ -52,7 +54,7 @@ class DeclinationReasonFragment(
             }
             declinationSaveBT.setOnClickListener {
                 if (selectedReason != null && request.requestId != null)
-                    modpanelViewModel.declineNewBooze(request.requestId!!, selectedReason!!)
+                    modpanelViewModel.declineRequest(request, selectedReason!!)
                 dismiss()
                 requireActivity().onBackPressed()
             }

@@ -55,6 +55,9 @@
         <action
             android:id="@+id/action_modpanel_dest_to_newBoozeListFragment"
             app:destination="@id/newBooze_dest" />
+        <action
+            android:id="@+id/action_modpanel_dest_to_availabilityListFragment"
+            app:destination="@id/availability_dest" />
     </fragment>
     <fragment
         android:id="@+id/newBooze_dest"
@@ -70,7 +73,23 @@
         android:label="@string/modpanel_details">
         <argument
             android:name="request"
-            app:argType="com.redc4ke.taniechlanie.data.viewmodels.Request" />
+            app:argType="com.redc4ke.taniechlanie.data.viewmodels.NewBoozeRequest" />
+    </fragment>
+    <fragment
+        android:id="@+id/availability_dest"
+        android:name="com.redc4ke.taniechlanie.ui.profile.modpanel.AvailabilityListFragment"
+        android:label="@string/modpanel_pricechanges" >
+        <action
+            android:id="@+id/openAvailabilityDetails"
+            app:destination="@id/availabilityDetails_dest" />
+    </fragment>
+    <fragment
+        android:id="@+id/availabilityDetails_dest"
+        android:name="com.redc4ke.taniechlanie.ui.profile.modpanel.AvailabilityDetailsFragment"
+        android:label="@string/modpanel_details">
+        <argument
+            android:name="request"
+            app:argType="com.redc4ke.taniechlanie.data.viewmodels.AvailabilityRequest" />
     </fragment>
 
 </navigation>

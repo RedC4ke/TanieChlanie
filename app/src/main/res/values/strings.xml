@@ -16,6 +16,7 @@
     <string name="modpanel">Panel moderatora</string>
     <string name="modpanel_newbooze">Nowe alkohole</string>
     <string name="modpanel_details">Szczegóły</string>
+    <string name="modpanel_pricechanges">Zmiany cen</string>
 
     <!-- welcome -->
     <string name="start">Zaczynamy!</string>
@@ -191,8 +192,7 @@
     <string-array name="mod_actionlist">
         <item>Nowe alkohole</item>
         <item>Zmiany w alkoholach</item>
-        <item>Nowe kategorie</item>
-        <item>Zgłoszone recenzje</item>
+        <item>Zmiany w cenach</item>
     </string-array>
     <string name="declination_header">Wybierz powód\nodrzucenia wniosku</string>
     <string-array name="decliantion_reasons">
@@ -206,6 +206,8 @@
     <string name="approved">Zaakceptowano</string>
     <string name="declined">Odrzucono</string>
     <string name="request_accepted">Zgłoszenie zatwierdzone</string>
+    <string name="price_old">Stara cena</string>
+    <string name="price_new">Nowa cena</string>
 
     <!-- options page -->
     <string name="romper_unit">Jednostka opłacalności</string>

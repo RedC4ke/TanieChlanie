@@ -1,18 +1,18 @@
 package com.redc4ke.taniechlanie.ui.profile.modpanel
 
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.*
 import com.redc4ke.taniechlanie.data.viewmodels.CategoryViewModel
 import com.redc4ke.taniechlanie.data.viewmodels.ModpanelViewModel
-import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectRequest
+import com.redc4ke.taniechlanie.data.viewmodels.NewBoozeRequest
 import com.redc4ke.taniechlanie.data.viewmodels.ShopViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentRequestDetailsBinding
 import com.redc4ke.taniechlanie.ui.MainActivity
@@ -25,16 +25,16 @@ class RequestDetailsFragment :
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentRequestDetailsBinding
         get() = FragmentRequestDetailsBinding::inflate
-    private lateinit var request: AlcoObjectRequest
+    private lateinit var request: NewBoozeRequest
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        request = arguments?.getSerializable("request") as AlcoObjectRequest
+        request = arguments?.getSerializable("request") as NewBoozeRequest
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val viewModelProvider = ViewModelProvider(requireActivity() as MainActivity)
         val categoryViewModel = viewModelProvider[CategoryViewModel::class.java]
@@ -44,12 +44,7 @@ class RequestDetailsFragment :
             categoryViewModel.getWithMajorFirst(request.categories ?: listOf()).map { it?.name }
 
         if (request.photo != null)
-            setImage(
-                requireContext(),
-                request.id.toString(),
-                binding.reqDetailsPhotoIV,
-                Uri.parse(request.photo)
-            )
+            Glide.with(requireContext()).load(request.photo).into(binding.reqDetailsPhotoIV)
 
         with(binding) {
             reqDetailsNameTV.text = request.name
@@ -63,7 +58,7 @@ class RequestDetailsFragment :
             reqDetailsVolumeTV.text = volumeString(request.volume ?: 0, requireContext())
             reqDetailsVoltageTV.text =
                 voltageString(request.voltage ?: BigDecimal.ZERO, requireContext())
-            reqDetailsShopTV.text = request.shop?.second ?: ""
+            reqDetailsShopTV.text = request.shopName ?: ""
             if (request.shopIsNew == true)
                 reqDetailsShopTV.setTextColor(Color.GREEN)
             reqDetailsPriceTV.text =

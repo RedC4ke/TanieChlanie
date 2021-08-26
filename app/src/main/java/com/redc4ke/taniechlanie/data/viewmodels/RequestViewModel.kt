@@ -34,7 +34,7 @@ class RequestViewModel : ViewModel() {
     }
 
     private val photoName = MutableLiveData<String>()
-    private val requestList = MutableLiveData<List<Pair<Int, AlcoObjectRequest>>>()
+    private val requestList = MutableLiveData<List<Pair<Int, NewBoozeRequest>>>()
 
     fun setShop(shop: Shop, isNew: Boolean = false) {
         CurrentRequest.shop.value = shop
@@ -110,7 +110,13 @@ class RequestViewModel : ViewModel() {
                     listener.onComplete(FirebaseListener.OTHER)
                 }
                 .addOnSuccessListener {
-                    uploadNBData(listener, user, "gs://jabot-5ce1f.appspot.com" + storageRef.path)
+                    storageRef.downloadUrl
+                        .addOnSuccessListener {
+                            uploadNBData(listener, user, it.toString())
+                        }
+                        .addOnFailureListener {
+                            listener.onComplete(FirebaseListener.OTHER)
+                        }
                 }
         } else {
             uploadNBData(listener, user, null)
@@ -144,10 +150,8 @@ class RequestViewModel : ViewModel() {
                     "voltage" to CurrentRequest.voltage!!.toDouble(),
                     "volume" to CurrentRequest.volume,
                     "photo" to photoURL,
-                    "shop" to mapOf(
-                        (CurrentRequest.shop.value?.id?.toString()
-                            ?: "null") to CurrentRequest.shop.value?.name
-                    ),
+                    "shopId" to CurrentRequest.shop.value?.id,
+                    "shopName" to CurrentRequest.shop.value?.name,
                     "shopIsNew" to CurrentRequest.shopIsNew,
                     "price" to CurrentRequest.price!!.toDouble(),
                     "state" to Request.RequestState.PENDING,
@@ -180,7 +184,7 @@ class RequestViewModel : ViewModel() {
 
     @Suppress("UNCHECKED_CAST")
     fun fetch(uid: String, firebaseListener: FirebaseListener) {
-        val tempList = mutableListOf<Pair<Int, AlcoObjectRequest>>()
+        val tempList = mutableListOf<Pair<Int, NewBoozeRequest>>()
         val firestoreRef = FirebaseFirestore.getInstance().collection("requests")
             .document("requests")
 
@@ -191,13 +195,14 @@ class RequestViewModel : ViewModel() {
                     tempList.add(
                         Pair(
                             Request.RequestType.NEW_BOOZE,
-                            AlcoObjectRequest(
+                            NewBoozeRequest(
                                 uid,
                                 it.getString("name"),
                                 it.getLong("volume"),
                                 it.getDouble("voltage")?.toBigDecimal(),
                                 it.get("categories") as? List<Int>,
-                                (it.get("shop") as? Map<String?, String>)?.toList()?.get(0),
+                                it.getLong("shopId")?.toInt(),
+                                it.getString("shopName")!!,
                                 it.getBoolean("shopIsNew"),
                                 it.getDouble("price"),
                                 it.getString("photo"),
@@ -219,36 +224,39 @@ class RequestViewModel : ViewModel() {
             }
     }
 
-    fun getRequestList(): MutableLiveData<List<Pair<Int, AlcoObjectRequest>>> {
+    fun getRequestList(): MutableLiveData<List<Pair<Int, NewBoozeRequest>>> {
         return requestList
     }
 }
 
 interface Request : Serializable {
+
+    val requestId: String?
+
     object RequestState {
         const val PENDING = 1
         const val APPROVED = 2
         const val DECLINED = 3
     }
-
     object RequestType {
         const val NEW_BOOZE = 1
         const val AVAILABILITY = 2
     }
 }
 
-data class AlcoObjectRequest(
+data class NewBoozeRequest(
     val author: String?,
     val name: String?,
     val volume: Long?,
     val voltage: BigDecimal?,
     val categories: List<Int>?,
-    var shop: Pair<String?, String>?,
+    var shopId: Int?,
+    val shopName: String?,
     val shopIsNew: Boolean?,
     val price: Double?,
     val photo: String?,
     var id: Long?,
-    var requestId: String?,
+    override var requestId: String?,
     var created: Timestamp?,
     var state: Int?,
     var reason: String?,
@@ -257,14 +265,15 @@ data class AlcoObjectRequest(
 
 data class AvailabilityRequest(
     val author: String,
-    val alcoObjectId: Int,
-    val shop: Pair<Int?, String>,
+    val alcoObjectId: Long,
+    var shopId: Int?,
+    val shopName: String,
     val shopIsNew: Boolean,
-    val isEdited: Boolean,
+    val edited: Boolean,
     val price: Double,
     val created: Timestamp?,
     val state: Int?,
-    val requestId: String?,
+    override val requestId: String?,
     val reason: String?,
     val reviewed: Timestamp?
 ) : Request

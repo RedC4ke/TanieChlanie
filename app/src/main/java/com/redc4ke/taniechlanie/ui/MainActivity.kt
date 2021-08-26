@@ -24,6 +24,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.bumptech.glide.Glide
 import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
@@ -137,12 +138,7 @@ class MainActivity : AppCompatActivity() {
                     mDrawerLayout.closeDrawer(GravityCompat.START)
                 }
                 userViewModel.getAvatarUrl().observe(this, {
-                    setImage(
-                        this,
-                        "avatar",
-                        avatarIV,
-                        it
-                    )
+                    Glide.with(this).load(it).into(avatarIV)
                 })
             } else {
                 avatarIV.setImageResource(R.drawable.ic_baseline_account_circle_24)
@@ -231,7 +227,6 @@ class MainActivity : AppCompatActivity() {
         })
         categoryViewModel.fetch(
             firestoreRef,
-            applicationContext.filesDir,
             object : FirebaseListener {
                 override fun onComplete(resultCode: Int) {
                     if (resultCode != FirebaseListener.SUCCESS) {

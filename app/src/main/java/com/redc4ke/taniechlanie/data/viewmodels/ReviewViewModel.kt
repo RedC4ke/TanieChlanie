@@ -1,44 +1,40 @@
 package com.redc4ke.taniechlanie.data.viewmodels
 
 import android.content.Context
-import android.net.Uri
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.*
 import com.redc4ke.taniechlanie.data.AlcoObject
-import com.redc4ke.taniechlanie.data.setImage
-import kotlinx.coroutines.flow.merge
 import me.zhanghai.android.materialratingbar.MaterialRatingBar
-import java.math.BigDecimal
 import java.text.DateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 class ReviewViewModel: ViewModel() {
-    private val reviews = MutableLiveData<Map<Int, List<Review>>>()
+    private val reviews = MutableLiveData<Map<Long, List<Review>>>()
     private val userReview = MutableLiveData<MutableMap<String, List<Review>>>(mutableMapOf())
-    private val tempList = mutableMapOf<Int, MutableList<Review>>()
+    private val tempMap = mutableMapOf<Long, MutableList<Review>>()
     private val ref = FirebaseFirestore.getInstance()
 
 
-    fun add(id: Int, r: MutableList<Review>) {
-        tempList[id] = r
-        reviews.value = tempList
+    fun add(id: Long, r: MutableList<Review>) {
+        tempMap[id] = r
+        reviews.value = tempMap
     }
 
-    fun getAll(): MutableLiveData<Map<Int, List<Review>>> {
+    fun getAll(): MutableLiveData<Map<Long, List<Review>>> {
         return reviews
     }
 
-    fun get(id: Int): List<Review> {
+    fun get(id: Long): List<Review> {
         return reviews.value!![id]!!.sortedByDescending { it.usefulness }
     }
 
@@ -48,7 +44,7 @@ class ReviewViewModel: ViewModel() {
         val list = userReview.value?.get(uid) ?: listOf()
         val result = mutableListOf<Pair<AlcoObject, Review>>()
         list.sortedBy { it.timestamp }.forEach {
-            val alcoObject = alcoObjectViewModel.get(it.objectID.toInt())
+            val alcoObject = alcoObjectViewModel.get(it.objectID)
             if (alcoObject != null) {
                 result.add(Pair(alcoObject, it))
             }
@@ -64,14 +60,14 @@ class ReviewViewModel: ViewModel() {
                 val name = data["name"] as String
                 val avatar = data["avatar"] as String
 
-                setImage(context, review.author, iv, Uri.parse(avatar))
+                Glide.with(context).load(avatar).into(iv)
                 username.text = name
                 timestamp.text = DateFormat.getDateInstance().format(review.timestamp.toDate())
                 ratingBar.rating = review.rating.toFloat()
             }
     }
 
-    fun download(id: Int): Task<QuerySnapshot> {
+    fun download(id: Long): Task<QuerySnapshot> {
         val col = ref.collection("reviews")
             .whereEqualTo("object_id", id)
 
@@ -100,7 +96,7 @@ class ReviewViewModel: ViewModel() {
             }
     }
 
-    fun addReview(context: Context, id: Int, user: FirebaseUser,
+    fun addReview(context: Context, id: Long, user: FirebaseUser,
                   rating: Double, content: String, update: Boolean = false): Task<Void> {
         val data = mapOf(
             "id" to UUID.randomUUID(),
@@ -132,7 +128,7 @@ class ReviewViewModel: ViewModel() {
                 it.forEach { document ->
                     document.reference.delete()
                         .addOnSuccessListener {
-                            download(review.objectID.toInt())
+                            download(review.objectID)
                             reviewsUpdate(user, -1)
                         }
                 }

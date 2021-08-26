@@ -8,13 +8,12 @@ import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseUser
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.FirebaseListener
 import com.redc4ke.taniechlanie.data.imageFromIntent
-import com.redc4ke.taniechlanie.data.setImage
 import com.redc4ke.taniechlanie.data.viewmodels.ModpanelViewModel
 import com.redc4ke.taniechlanie.data.viewmodels.UserViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentProfileBinding
@@ -102,7 +101,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
                     profileNameTV.text = it
                 })
                 userViewModel.getAvatarUrl().observe(viewLifecycleOwner, {
-                    setImage(requireContext(), "avatar", profilePictureIV, it)
+                    Glide.with(requireContext()).load(it).into(profilePictureIV)
                 })
             } else {
                 profilePictureIV.setImageResource(R.drawable.ic_baseline_account_circle_24)
@@ -120,14 +119,9 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
         if (requestCode == pickAvatar) {
             if (data != null) {
                 userViewModel.setAvatar(
-                    requireContext(),
                     getImage(data),
                     object : FirebaseListener {
                         override fun onComplete(resultCode: Int) {
-                            if (resultCode == FirebaseListener.SUCCESS) {
-                                val uri = userViewModel.getAvatarUrl().value
-                                setImage(requireContext(), "avatar", binding.profilePictureIV, uri)
-                            }
                         }
                     })
             }

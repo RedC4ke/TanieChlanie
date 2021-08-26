@@ -4,7 +4,7 @@ import java.io.Serializable
 import java.math.BigDecimal
 
 data class AlcoObject(
-        var id: Int,
+        var id: Long,
         var name: String,
         var shopToPrice: Map<Int, BigDecimal?>,
         var volume: Int,

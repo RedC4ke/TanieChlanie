@@ -3,17 +3,16 @@ package com.redc4ke.taniechlanie.data.profile
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.priceString
-import com.redc4ke.taniechlanie.data.setImage
-import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectRequest
+import com.redc4ke.taniechlanie.data.viewmodels.NewBoozeRequest
 import com.redc4ke.taniechlanie.data.viewmodels.Request
 import com.redc4ke.taniechlanie.data.voltageString
 import com.redc4ke.taniechlanie.data.volumeString
@@ -24,7 +23,7 @@ import java.text.DateFormat
 class ProfileRequestAdapter(private val context: Context) :
     RecyclerView.Adapter<ProfileRequestViewHolder>() {
 
-    var requestList: List<Pair<Int, AlcoObjectRequest>> = listOf()
+    var requestList: List<Pair<Int, NewBoozeRequest>> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileRequestViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -45,7 +44,7 @@ class ProfileRequestAdapter(private val context: Context) :
                 profileRqVerDateTV.text = DateFormat.getDateInstance().format(request.reviewed!!.toDate())
             }
 
-            profileRqShopTV.text = request.shop?.second
+            profileRqShopTV.text = request.shopName
             profileRqPriceTV.text =
                 priceString(request.price?.toBigDecimal() ?: BigDecimal.ZERO, context)
             profileRqVolumeTV.text = volumeString(request.volume ?: 0, context)
@@ -67,7 +66,7 @@ class ProfileRequestAdapter(private val context: Context) :
                 }
             }
 
-            setImage(context, request.requestId.toString(), profileRqIV, Uri.parse(request.photo))
+            Glide.with(context).load(request.photo).into(profileRqIV)
 
             //A hack to avoid weird and unfound problem (params were reset to wrap content on startup)
             root.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
@@ -80,7 +79,7 @@ class ProfileRequestAdapter(private val context: Context) :
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun update(list: List<Pair<Int, AlcoObjectRequest>>) {
+    fun update(list: List<Pair<Int, NewBoozeRequest>>) {
         requestList = list
         notifyDataSetChanged()
     }

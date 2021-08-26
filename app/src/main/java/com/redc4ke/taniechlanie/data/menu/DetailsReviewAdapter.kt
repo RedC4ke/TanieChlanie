@@ -23,7 +23,7 @@ class ReviewAdapter(
     private val list: List<Review>,
     private val reviewViewModel: ReviewViewModel,
     private val userReview: Review?,
-    private val id: Int):
+    private val id: Long):
     RecyclerView.Adapter<ReviewViewHolder>() {
 
     private val finalList = mutableListOf<Review>()

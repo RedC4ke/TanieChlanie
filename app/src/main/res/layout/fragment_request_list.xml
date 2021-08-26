@@ -5,7 +5,7 @@
     android:background="@color/secondary50">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/newBoozeRV"
+        android:id="@+id/requestListRV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"

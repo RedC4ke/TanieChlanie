@@ -16,7 +16,7 @@ import com.redc4ke.taniechlanie.databinding.FragmentReviewAddBinding
 import com.redc4ke.taniechlanie.ui.base.BaseDialogFragment
 
 class AddReviewFragment(
-    private val alcoobject_id: Int,
+    private val alcoobject_id: Long,
     private val review: Review?):
     BaseDialogFragment<FragmentReviewAddBinding>() {
 

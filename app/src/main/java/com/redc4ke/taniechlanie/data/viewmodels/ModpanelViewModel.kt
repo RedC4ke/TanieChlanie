@@ -6,21 +6,27 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.redc4ke.taniechlanie.data.FirebaseListener
 import com.redc4ke.taniechlanie.data.Shop
 
 class ModpanelViewModel : ViewModel() {
 
-    private val newBooze = MutableLiveData<MutableList<AlcoObjectRequest>>()
-    private val changedBooze = MutableLiveData<MutableList<AlcoObjectRequest>>()
+    private val newBooze = MutableLiveData<MutableList<NewBoozeRequest>>()
+    private val availability = MutableLiveData<MutableList<AvailabilityRequest>>()
+    private val changedBooze = MutableLiveData<MutableList<NewBoozeRequest>>()
 
 
-    fun getNewBooze(): LiveData<MutableList<AlcoObjectRequest>> {
+    fun getNewBooze(): LiveData<MutableList<NewBoozeRequest>> {
         return newBooze
     }
 
-    fun getChangedBooze(): LiveData<MutableList<AlcoObjectRequest>> {
+    fun getAvailability(): LiveData<MutableList<AvailabilityRequest>> {
+        return availability
+    }
+
+    fun getChangedBooze(): LiveData<MutableList<NewBoozeRequest>> {
         return changedBooze
     }
 
@@ -30,19 +36,20 @@ class ModpanelViewModel : ViewModel() {
             .collection("requests").document("requests")
 
         firestoreRef.collection("newBooze")
-            .whereEqualTo("state", Request.RequestState.PENDING).get()
+            .whereEqualTo("state", Request.RequestState.PENDING).orderBy("created").get()
             .addOnSuccessListener {
                 newBooze.value = mutableListOf()
-                val tempList = mutableListOf<AlcoObjectRequest>()
+                val tempList = mutableListOf<NewBoozeRequest>()
                 it.documents.forEach { document ->
                     val request =
-                        AlcoObjectRequest(
+                        NewBoozeRequest(
                             document.getString("author"),
                             document.getString("name"),
                             document.getLong("volume"),
                             document.getDouble("voltage")?.toBigDecimal(),
                             document.get("categories") as? List<Int>,
-                            document.get("shop") as? Pair<String?, String>,
+                            document.getLong("shopId")?.toInt(),
+                            document.getString("shopName"),
                             document.getBoolean("shopIsNew"),
                             document.getDouble("price"),
                             document.getString("photo"),
@@ -56,6 +63,33 @@ class ModpanelViewModel : ViewModel() {
                     tempList.add(request)
                     newBooze.value = tempList
                 }
+            }
+            .addOnFailureListener {
+            }
+
+        firestoreRef.collection("availability")
+            .whereEqualTo("state", Request.RequestState.PENDING).orderBy("created").get()
+            .addOnSuccessListener {
+                availability.value = mutableListOf()
+                val tempList = mutableListOf<AvailabilityRequest>()
+                it.documents.forEach { document ->
+                    val request = AvailabilityRequest(
+                        document.getString("author") ?: "",
+                        document.getLong("alcoObjectId")!!,
+                        document.getLong("shopId")?.toInt(),
+                        document.getString("shopName")!!,
+                        document.getBoolean("shopIsNew")!!,
+                        document.getBoolean("edited")!!,
+                        document.getDouble("price")!!,
+                        document.getTimestamp("created"),
+                        document.getLong("state")!!.toInt(),
+                        document.id,
+                        null,
+                        null
+                    )
+                    tempList.add(request)
+                }
+                availability.value = tempList
             }
             .addOnFailureListener {
 
@@ -72,7 +106,7 @@ class ModpanelViewModel : ViewModel() {
 
     @Suppress("UNCHECKED_CAST")
     fun acceptNewBooze(
-        request: AlcoObjectRequest,
+        request: NewBoozeRequest,
         shopViewModel: ShopViewModel,
         listener: FirebaseListener
     ) {
@@ -91,8 +125,6 @@ class ModpanelViewModel : ViewModel() {
                 firebaseRef.setValue(id + 1).addOnSuccessListener {
                     request.id = id
                     firestoreRef.runTransaction { transaction ->
-                        val shopName = request.shop!!.second
-
                         //Increment author upload count
                         val user = transaction.get(usersRef.document(request.author!!))
                         val stats = (user.get("stats") as? HashMap<String, Long>)!!.toMutableMap()
@@ -106,15 +138,14 @@ class ModpanelViewModel : ViewModel() {
 
                         //Add shop if new
                         if (request.shopIsNew == true) {
-                            val shopId = shopViewModel.getLastId()
-                            request.shop = Pair(shopId.toString(), shopName)
+                            request.shopId = shopViewModel.getLastId() + 1
                             transaction.set(
-                                shopsRef.document(shopName), hashMapOf(
-                                    "id" to shopId,
-                                    "name" to shopName
+                                shopsRef.document(request.shopName!!), hashMapOf(
+                                    "id" to request.shopId,
+                                    "name" to request.shopName
                                 )
                             )
-                            shopViewModel.add(Shop(shopId, shopName))
+                            shopViewModel.add(Shop(request.shopId, request.shopName))
                         }
 
                         //Set the main document
@@ -135,8 +166,7 @@ class ModpanelViewModel : ViewModel() {
                         transaction.set(
                             pricesRef.document(request.id.toString()), hashMapOf(
                                 "shop" to hashMapOf(
-                                    request.shop!!.first to hashMapOf(
-                                        "is_promo" to false,
+                                    request.shopId to hashMapOf(
                                         "price" to request.price!!.toDouble()
                                     )
                                 )
@@ -152,18 +182,75 @@ class ModpanelViewModel : ViewModel() {
                     }.addOnFailureListener {
                         listener.onComplete(FirebaseListener.OTHER)
                     }.addOnSuccessListener {
-                        fetch()
+                        newBooze.value?.remove(request)
                         listener.onComplete(FirebaseListener.SUCCESS)
                     }
                 }
             }
     }
 
-    fun declineNewBooze(id: String, reason: String) {
-        val firestoreRef = FirebaseFirestore.getInstance().collection("requests")
-            .document("requests").collection("newBooze")
+    fun acceptAvailability(
+        request: AvailabilityRequest,
+        shopViewModel: ShopViewModel,
+        firebaseListener: FirebaseListener
+    ) {
+        val firestoreRef = FirebaseFirestore.getInstance()
 
-        firestoreRef.document(id)
+        firestoreRef
+            .runTransaction {
+                if (request.shopIsNew) {
+                    val shopId = shopViewModel.getLastId() + 1
+                    it.set(
+                        firestoreRef.collection("shops").document(request.shopName), hashMapOf(
+                            "id" to shopId,
+                            "name" to request.shopName
+                        )
+                    )
+                    request.shopId = shopId
+                    shopViewModel.fetch(firestoreRef, null)
+                }
+
+                it.update(
+                    firestoreRef.collection("prices").document(request.alcoObjectId.toString()),
+                    hashMapOf(
+                        "shop.${request.shopId}" to hashMapOf("price" to request.price)
+                    ) as Map<String, Any>
+                )
+
+                it.update(
+                    firestoreRef.collection("requests").document("requests")
+                        .collection("availability")
+                        .document(request.requestId!!), hashMapOf(
+                        "state" to Request.RequestState.APPROVED,
+                        "reviewed" to Timestamp.now()
+                    ) as Map<String, Any>
+                )
+
+                it.update(
+                    firestoreRef.collection("users").document(request.author),
+                    "stats.commitment",
+                    FieldValue.increment(1)
+                )
+            }
+            .addOnFailureListener {
+                firebaseListener.onComplete(FirebaseListener.OTHER)
+            }
+            .addOnSuccessListener {
+                availability.value?.remove(request)
+                firebaseListener.onComplete(FirebaseListener.SUCCESS)
+            }
+    }
+
+    fun declineRequest(request: Request, reason: String) {
+        val firestoreRef = FirebaseFirestore.getInstance().collection("requests")
+            .document("requests")
+        val collection = when (request) {
+            is NewBoozeRequest -> firestoreRef.collection("newBooze")
+            is AvailabilityRequest -> firestoreRef.collection("availability")
+            else -> return
+        }
+
+        collection.document(request.requestId!!)
             .update(
                 "state",
                 Request.RequestState.DECLINED,
