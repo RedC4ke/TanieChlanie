@@ -12,16 +12,19 @@ import android.widget.Toast
 import com.google.android.material.internal.TextWatcherAdapter
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.EmailAuthProvider
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseUser
 import com.redc4ke.taniechlanie.R
+import com.redc4ke.taniechlanie.data.ConnectionCheck
+import com.redc4ke.taniechlanie.data.RequestListener
 import com.redc4ke.taniechlanie.data.viewmodels.UserViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentProfileInputBinding
 import com.redc4ke.taniechlanie.ui.MainActivity
 import com.redc4ke.taniechlanie.ui.base.BaseDialogFragment
 import java.lang.Exception
 
-class ProfileInputFragment(private val userViewModel: UserViewModel, private val action: Int):
+class ProfileInputFragment(private val userViewModel: UserViewModel, private val action: Int) :
     BaseDialogFragment<FragmentProfileInputBinding>() {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) ->
@@ -31,10 +34,10 @@ class ProfileInputFragment(private val userViewModel: UserViewModel, private val
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        try {
-            val user = userViewModel.getUser().value!!
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
             step1(user)
-        } catch (e: Exception) {
+        } else {
             this.dismiss()
         }
 
@@ -42,7 +45,7 @@ class ProfileInputFragment(private val userViewModel: UserViewModel, private val
 
     private fun step1(user: FirebaseUser) {
 
-        with (binding) {
+        with(binding) {
             cancelBT.setOnClickListener {
                 this@ProfileInputFragment.dismiss()
             }
@@ -63,7 +66,7 @@ class ProfileInputFragment(private val userViewModel: UserViewModel, private val
                     headerTV.text = getString(R.string.profile_editPassword)
                     passwordTIL.visibility = View.VISIBLE
                     passwordET.hint = getString(R.string.profile_hint_newpwd)
-                    addWatcher(passwordET, 2, 6,128)
+                    addWatcher(passwordET, 2, 6, 128)
                 }
                 3 -> {
                     step2("")
@@ -72,9 +75,11 @@ class ProfileInputFragment(private val userViewModel: UserViewModel, private val
         }
     }
 
-    private fun addWatcher(editText: TextInputEditText, action: Int, minLength: Int,
-                           maxLength: Int) {
-        editText.addTextChangedListener(object: TextWatcher {
+    private fun addWatcher(
+        editText: TextInputEditText, action: Int, minLength: Int,
+        maxLength: Int
+    ) {
+        editText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
@@ -118,7 +123,7 @@ class ProfileInputFragment(private val userViewModel: UserViewModel, private val
 
     internal fun step2(value: String) {
         val user = userViewModel.getUser().value!!
-        with (binding) {
+        with(binding) {
             when (action) {
                 0 -> {
                     userViewModel.setDisplayName(value)
@@ -130,33 +135,60 @@ class ProfileInputFragment(private val userViewModel: UserViewModel, private val
                     forwardBT.visibility = View.GONE
                     saveBT.visibility = View.VISIBLE
                     confirmET.hint = getString(R.string.profile_hint_currentpwd)
-                    saveBT.setOnClickListener {
-                        val credentials = EmailAuthProvider.getCredential(
-                            user.email!!, confirmET.text.toString())
-                        user.reauthenticate(credentials)
-                            .addOnSuccessListener {
-                                when (action) {
-                                    1 -> {
-                                        userViewModel.setEmail(value, requireContext())
-                                    }
-                                    2 -> {
-                                        userViewModel.setPassword(value, requireContext())
-                                    }
-                                    3 -> {
-                                        userViewModel
-                                            .deleteAccount(requireActivity() as MainActivity)
-                                    }
-                                }
-                                this@ProfileInputFragment.dismiss()
+                    saveBT.setOnClickListener { button ->
+                        button.isEnabled = false
+                        profileInputPB.visibility = View.VISIBLE
+                        saveBT.text = ""
 
-                            }
-                            .addOnFailureListener {
-                                confirmET.error = when (it) {
-                                    is FirebaseAuthInvalidCredentialsException ->
-                                        getString(R.string.err_invalidPassword)
-                                    else -> it.toString()
+                        ConnectionCheck.perform(object : RequestListener {
+                            override fun onComplete(resultCode: Int) {
+                                if (resultCode != RequestListener.SUCCESS) {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        getString(R.string.err_no_connection),
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    profileInputPB.visibility = View.GONE
+                                    saveBT.text = getString(R.string.fui_button_text_save)
+                                    button.isEnabled = true
+                                } else {
+                                    val credentials = EmailAuthProvider.getCredential(
+                                        user.email!!, confirmET.text.toString()
+                                    )
+                                    user.reauthenticate(credentials)
+                                        .addOnSuccessListener {
+                                            when (action) {
+                                                1 -> {
+                                                    userViewModel.setEmail(value, requireContext())
+                                                }
+                                                2 -> {
+                                                    userViewModel.setPassword(
+                                                        value,
+                                                        requireContext()
+                                                    )
+                                                }
+                                                3 -> {
+                                                    userViewModel
+                                                        .deleteAccount(requireActivity() as MainActivity)
+                                                }
+                                            }
+                                            this@ProfileInputFragment.dismiss()
+                                        }
+                                        .addOnFailureListener {
+                                            confirmET.error = when (it) {
+                                                is FirebaseAuthInvalidCredentialsException ->
+                                                    getString(R.string.err_invalidPassword)
+                                                else -> it.toString()
+                                            }
+                                        }
+                                        .addOnCompleteListener {
+                                            profileInputPB.visibility = View.GONE
+                                            saveBT.text = getString(R.string.fui_button_text_save)
+                                            button.isEnabled = true
+                                        }
                                 }
                             }
+                        })
                     }
                 }
             }

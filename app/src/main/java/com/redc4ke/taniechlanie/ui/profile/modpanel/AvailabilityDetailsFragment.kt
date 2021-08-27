@@ -9,7 +9,8 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.redc4ke.taniechlanie.R
-import com.redc4ke.taniechlanie.data.FirebaseListener
+import com.redc4ke.taniechlanie.data.ConnectionCheck
+import com.redc4ke.taniechlanie.data.RequestListener
 import com.redc4ke.taniechlanie.data.priceString
 import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectViewModel
 import com.redc4ke.taniechlanie.data.viewmodels.AvailabilityRequest
@@ -69,25 +70,48 @@ class AvailabilityDetailsFragment : BaseFragment<FragmentAvailabilityDetailsBind
                 )
             }
 
-            avDetailsAcceptBT.setOnClickListener {
+            avDetailsAcceptBT.setOnClickListener { button ->
+                button.isEnabled = false
                 avDetailsPB.visibility = View.VISIBLE
                 avDetailsAcceptBT.text = ""
-                modpanelViewModel.acceptAvailability(
-                    request, shopViewModel, object: FirebaseListener {
-                        override fun onComplete(resultCode: Int) {
-                            val toastText = when (resultCode) {
-                                FirebaseListener.SUCCESS -> getString(R.string.request_accepted).also {
-                                    requireActivity().onBackPressed()
-                                }
-                                FirebaseListener.NOT_LOGGED_IN -> getString(R.string.err_notloggedin)
-                                else -> getString(R.string.toast_error)
-                            }
-                            Toast.makeText(requireContext(), toastText, Toast.LENGTH_LONG).show()
+
+                ConnectionCheck.perform(object : RequestListener {
+                    override fun onComplete(resultCode: Int) {
+                        if (resultCode != RequestListener.SUCCESS) {
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.err_no_connection),
+                                Toast.LENGTH_LONG
+                            ).show()
                             avDetailsAcceptBT.text = getString(R.string.submit)
                             avDetailsAcceptBT.visibility = View.GONE
+                            button.isEnabled = true
+                        } else {
+                            modpanelViewModel.acceptAvailability(
+                                request, shopViewModel, object : RequestListener {
+                                    override fun onComplete(resultCode: Int) {
+                                        val toastText = when (resultCode) {
+                                            RequestListener.SUCCESS -> getString(R.string.request_accepted).also {
+                                                requireActivity().onBackPressed()
+                                            }
+                                            RequestListener.NOT_LOGGED_IN -> getString(R.string.err_notloggedin)
+                                            else -> getString(R.string.toast_error)
+                                        }
+                                        Toast.makeText(
+                                            requireContext(),
+                                            toastText,
+                                            Toast.LENGTH_LONG
+                                        ).show()
+
+                                        avDetailsAcceptBT.text = getString(R.string.submit)
+                                        avDetailsAcceptBT.visibility = View.GONE
+                                        button.isEnabled = true
+                                    }
+                                }
+                            )
                         }
                     }
-                )
+                })
             }
         }
     }

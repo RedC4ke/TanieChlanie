@@ -18,7 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
-import com.redc4ke.taniechlanie.data.FirebaseListener
+import com.redc4ke.taniechlanie.data.RequestListener
 import com.redc4ke.taniechlanie.data.menu.AlcoListAdapter
 import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentAlcoListBinding
@@ -113,10 +113,10 @@ class AlcoListFragment : BaseFragment<FragmentAlcoListBinding>() {
         refreshLayout.setOnRefreshListener {
             searchBar.visibility = View.GONE
             searchBar.y = -300f
-            alcoObjectViewModel.fetch(firestoreRef, object : FirebaseListener {
+            alcoObjectViewModel.fetch(firestoreRef, object : RequestListener {
                 override fun onComplete(resultCode: Int) {
                     refreshLayout.isRefreshing = false
-                    if (resultCode != FirebaseListener.SUCCESS) {
+                    if (resultCode != RequestListener.SUCCESS) {
                         Toast.makeText(
                             requireContext(),
                             getString(R.string.err_no_connection),
@@ -192,9 +192,9 @@ class AlcoListFragment : BaseFragment<FragmentAlcoListBinding>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.refreshbt) {
-            alcoObjectViewModel.fetch(firestoreRef, object : FirebaseListener {
+            alcoObjectViewModel.fetch(firestoreRef, object : RequestListener {
                 override fun onComplete(resultCode: Int) {
-                    if (resultCode != FirebaseListener.SUCCESS) {
+                    if (resultCode != RequestListener.SUCCESS) {
                         Toast.makeText(
                             requireContext(),
                             getString(R.string.err_no_connection),

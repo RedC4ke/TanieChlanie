@@ -18,7 +18,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.Category
-import com.redc4ke.taniechlanie.data.FirebaseListener
+import com.redc4ke.taniechlanie.data.RequestListener
 import com.redc4ke.taniechlanie.data.imageFromBitmap
 import com.redc4ke.taniechlanie.data.viewmodels.CategoryViewModel
 import com.redc4ke.taniechlanie.data.viewmodels.RequestViewModel
@@ -200,16 +200,16 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
 
                 requestPB.visibility = View.VISIBLE
                 requestSendBT.text = ""
-                requestViewModel.uploadNewBooze(object : FirebaseListener {
+                requestViewModel.uploadNewBooze(object : RequestListener {
                     override fun onComplete(resultCode: Int) {
                         val toastText = when (resultCode) {
-                            FirebaseListener.SUCCESS -> getString(R.string.request_success).also {
+                            RequestListener.SUCCESS -> getString(R.string.request_success).also {
                                 this@RequestFragment.findNavController()
                                     .navigate(R.id.alcoList_dest)
                                 this@RequestFragment.onDestroy()
                             }
-                            FirebaseListener.REPEATING_CATEGORIES -> getString(R.string.request_repeatingcats)
-                            FirebaseListener.NOT_LOGGED_IN -> getString(R.string.err_notloggedin)
+                            RequestListener.REPEATING_CATEGORIES -> getString(R.string.request_repeatingcats)
+                            RequestListener.NOT_LOGGED_IN -> getString(R.string.err_notloggedin)
                             else -> getString(R.string.toast_error)
                         }
                         Toast.makeText(

@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -23,7 +22,6 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
@@ -32,7 +30,6 @@ import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.*
 import com.redc4ke.taniechlanie.data.viewmodels.*
@@ -214,9 +211,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getFirebaseData() {
-        alcoObjectViewModel.fetch(firestoreRef, object : FirebaseListener {
+        alcoObjectViewModel.fetch(firestoreRef, object : RequestListener {
             override fun onComplete(resultCode: Int) {
-                if (resultCode != FirebaseListener.SUCCESS) {
+                if (resultCode != RequestListener.SUCCESS) {
                     Toast.makeText(
                         baseContext,
                         getString(R.string.connection_error),
@@ -227,9 +224,9 @@ class MainActivity : AppCompatActivity() {
         })
         categoryViewModel.fetch(
             firestoreRef,
-            object : FirebaseListener {
+            object : RequestListener {
                 override fun onComplete(resultCode: Int) {
-                    if (resultCode != FirebaseListener.SUCCESS) {
+                    if (resultCode != RequestListener.SUCCESS) {
                         Toast.makeText(
                             baseContext,
                             getString(R.string.connection_error),
@@ -238,9 +235,9 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             })
-        shopViewModel.fetch(firestoreRef, object : FirebaseListener {
+        shopViewModel.fetch(firestoreRef, object : RequestListener {
             override fun onComplete(resultCode: Int) {
-                if (resultCode != FirebaseListener.SUCCESS) {
+                if (resultCode != RequestListener.SUCCESS) {
                     Toast.makeText(
                         baseContext,
                         getString(R.string.connection_error),

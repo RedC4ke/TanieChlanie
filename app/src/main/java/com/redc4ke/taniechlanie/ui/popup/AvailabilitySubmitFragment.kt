@@ -14,9 +14,9 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.redc4ke.taniechlanie.R
-import com.redc4ke.taniechlanie.data.FirebaseListener
+import com.redc4ke.taniechlanie.data.ConnectionCheck
+import com.redc4ke.taniechlanie.data.RequestListener
 import com.redc4ke.taniechlanie.data.Shop
 import com.redc4ke.taniechlanie.data.viewmodels.AvailabilityRequest
 import com.redc4ke.taniechlanie.data.viewmodels.Request
@@ -125,7 +125,7 @@ class AvailabilitySubmitFragment(detailsFragment: DetailsFragment, private val s
                     }
                 }
             }
-            avSubmitApplyBT.setOnClickListener {
+            avSubmitApplyBT.setOnClickListener { button ->
                 val inputToCheck = mutableListOf(avSubmitPriceETL)
                 val user = FirebaseAuth.getInstance().currentUser
 
@@ -151,48 +151,68 @@ class AvailabilitySubmitFragment(detailsFragment: DetailsFragment, private val s
                 } else {
                     avSubmitApplyBT.text = ""
                     avSubmitPB.visibility = View.VISIBLE
+                    button.isEnabled = false
 
-                    val id = if (pickFromList) {
-                        selectedShop.id
-                    } else shopId
-                    val name = if (pickFromList) {
-                        selectedShop.name
-                    } else {
-                        avSubmitShopET.text.toString()
-                    }
-
-                    val request = AvailabilityRequest(
-                        user.uid,
-                        alcoObject.id.toLong(),
-                        id,
-                        name,
-                        id == null,
-                        shopId != null,
-                        avSubmitPriceET.text.toString().toDouble(),
-                        Timestamp.now(),
-                        Request.RequestState.PENDING,
-                        null,
-                        null,
-                        null
-                    )
-
-                    requestViewModel.uploadAvailability(request, object : FirebaseListener {
+                    //Perform connection check and upload if connected
+                    ConnectionCheck.perform(object : RequestListener {
                         override fun onComplete(resultCode: Int) {
-                            avSubmitApplyBT.text = getString(R.string.submit)
-                            avSubmitPB.visibility = View.GONE
-                            if (resultCode == FirebaseListener.SUCCESS) {
+                            if (resultCode == RequestListener.NETWORK_ERR) {
                                 Toast.makeText(
                                     requireContext(),
-                                    getString(R.string.request_success),
+                                    getString(R.string.err_no_connection),
                                     Toast.LENGTH_LONG
                                 ).show()
-                                dismiss()
+                                avSubmitApplyBT.text = getString(R.string.submit)
+                                avSubmitPB.visibility = View.GONE
+                                button.isEnabled = true
                             } else {
-                                Toast.makeText(
-                                    requireContext(),
-                                    getString(R.string.toast_error),
-                                    Toast.LENGTH_LONG
-                                ).show()
+                                val id = if (pickFromList) {
+                                    selectedShop.id
+                                } else shopId
+                                val name = if (pickFromList) {
+                                    selectedShop.name
+                                } else {
+                                    avSubmitShopET.text.toString()
+                                }
+
+                                val request = AvailabilityRequest(
+                                    user.uid,
+                                    alcoObject.id.toLong(),
+                                    id,
+                                    name,
+                                    id == null,
+                                    shopId != null,
+                                    avSubmitPriceET.text.toString().toDouble(),
+                                    Timestamp.now(),
+                                    Request.RequestState.PENDING,
+                                    null,
+                                    null,
+                                    null
+                                )
+
+                                requestViewModel.uploadAvailability(
+                                    request,
+                                    object : RequestListener {
+                                        override fun onComplete(resultCode: Int) {
+                                            avSubmitApplyBT.text = getString(R.string.submit)
+                                            avSubmitPB.visibility = View.GONE
+                                            if (resultCode == RequestListener.SUCCESS) {
+                                                Toast.makeText(
+                                                    requireContext(),
+                                                    getString(R.string.request_success),
+                                                    Toast.LENGTH_LONG
+                                                ).show()
+                                                dismiss()
+                                            } else {
+                                                Toast.makeText(
+                                                    requireContext(),
+                                                    getString(R.string.toast_error),
+                                                    Toast.LENGTH_LONG
+                                                ).show()
+                                                button.isEnabled = true
+                                            }
+                                        }
+                                    })
                             }
                         }
                     })

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
-import com.redc4ke.taniechlanie.data.FirebaseListener
+import com.redc4ke.taniechlanie.data.RequestListener
 import com.redc4ke.taniechlanie.data.Shop
 
 class ShopViewModel : ViewModel() {
@@ -26,7 +26,7 @@ class ShopViewModel : ViewModel() {
         return shopLiveData
     }
 
-    fun fetch(firestoreRef: FirebaseFirestore, firebaseListener: FirebaseListener?) {
+    fun fetch(firestoreRef: FirebaseFirestore, requestListener: RequestListener?) {
         firestoreRef.collection("shops").orderBy("id").get()
             .addOnSuccessListener {
                 tempMap.clear()
@@ -36,10 +36,10 @@ class ShopViewModel : ViewModel() {
                         document.getLong("id")?.toInt(),
                         document.getString("name") ?: ""))
                 }
-                firebaseListener?.onComplete(FirebaseListener.SUCCESS)
+                requestListener?.onComplete(RequestListener.SUCCESS)
             }
             .addOnFailureListener {
-                firebaseListener?.onComplete(FirebaseListener.OTHER)
+                requestListener?.onComplete(RequestListener.OTHER)
             }
     }
 }

@@ -10,7 +10,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.redc4ke.taniechlanie.data.Category
-import com.redc4ke.taniechlanie.data.FirebaseListener
+import com.redc4ke.taniechlanie.data.RequestListener
 import com.redc4ke.taniechlanie.data.Shop
 import java.io.File
 import java.io.Serializable
@@ -90,16 +90,16 @@ class RequestViewModel : ViewModel() {
         return CurrentRequest.categories
     }
 
-    fun uploadNewBooze(listener: FirebaseListener) {
+    fun uploadNewBooze(listener: RequestListener) {
         val user = FirebaseAuth.getInstance().currentUser
         if (user == null) {
-            listener.onComplete(FirebaseListener.NOT_LOGGED_IN)
+            listener.onComplete(RequestListener.NOT_LOGGED_IN)
             return
         }
         if (CurrentRequest.categories.value?.values?.toTypedArray()?.distinct()?.size
             != CurrentRequest.categories.value?.size
         ) {
-            listener.onComplete(FirebaseListener.REPEATING_CATEGORIES)
+            listener.onComplete(RequestListener.REPEATING_CATEGORIES)
             return
         }
         if (CurrentRequest.image != null) {
@@ -107,7 +107,7 @@ class RequestViewModel : ViewModel() {
                 FirebaseStorage.getInstance().reference.child("itemPhotos/${UUID.randomUUID()}.jpg")
             storageRef.putFile(Uri.fromFile(CurrentRequest.image))
                 .addOnFailureListener {
-                    listener.onComplete(FirebaseListener.OTHER)
+                    listener.onComplete(RequestListener.OTHER)
                 }
                 .addOnSuccessListener {
                     storageRef.downloadUrl
@@ -115,7 +115,7 @@ class RequestViewModel : ViewModel() {
                             uploadNBData(listener, user, it.toString())
                         }
                         .addOnFailureListener {
-                            listener.onComplete(FirebaseListener.OTHER)
+                            listener.onComplete(RequestListener.OTHER)
                         }
                 }
         } else {
@@ -125,7 +125,7 @@ class RequestViewModel : ViewModel() {
     }
 
     private fun uploadNBData(
-        listener: FirebaseListener,
+        listener: RequestListener,
         user: FirebaseUser,
         photoURL: String?
     ) {
@@ -136,7 +136,7 @@ class RequestViewModel : ViewModel() {
         if (CurrentRequest.majorCategory != null) {
             categories.add(CurrentRequest.majorCategory!!.id)
         } else {
-            listener.onComplete(FirebaseListener.OTHER)
+            listener.onComplete(RequestListener.OTHER)
             return
         }
 
@@ -159,31 +159,31 @@ class RequestViewModel : ViewModel() {
                 )
             )
             .addOnFailureListener {
-                listener.onComplete(FirebaseListener.OTHER)
+                listener.onComplete(RequestListener.OTHER)
             }
             .addOnSuccessListener {
-                listener.onComplete(FirebaseListener.SUCCESS)
+                listener.onComplete(RequestListener.SUCCESS)
             }
     }
 
     fun uploadAvailability(
         availabilityRequest: AvailabilityRequest,
-        firebaseListener: FirebaseListener
+        requestListener: RequestListener
     ) {
         val firestoreRef =
             FirebaseFirestore.getInstance().collection("requests").document("requests")
                 .collection("availability")
         firestoreRef.add(availabilityRequest)
             .addOnFailureListener {
-                firebaseListener.onComplete(FirebaseListener.OTHER)
+                requestListener.onComplete(RequestListener.OTHER)
             }
             .addOnSuccessListener {
-                firebaseListener.onComplete(FirebaseListener.SUCCESS)
+                requestListener.onComplete(RequestListener.SUCCESS)
             }
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun fetch(uid: String, firebaseListener: FirebaseListener) {
+    fun fetch(uid: String, requestListener: RequestListener) {
         val tempList = mutableListOf<Pair<Int, NewBoozeRequest>>()
         val firestoreRef = FirebaseFirestore.getInstance().collection("requests")
             .document("requests")
@@ -216,11 +216,11 @@ class RequestViewModel : ViewModel() {
                         )
                     )
                     requestList.value = tempList
-                    firebaseListener.onComplete(FirebaseListener.SUCCESS)
+                    requestListener.onComplete(RequestListener.SUCCESS)
                 }
             }
             .addOnFailureListener {
-                firebaseListener.onComplete(FirebaseListener.OTHER)
+                requestListener.onComplete(RequestListener.OTHER)
             }
     }
 
@@ -240,7 +240,7 @@ interface Request : Serializable {
     }
     object RequestType {
         const val NEW_BOOZE = 1
-        const val AVAILABILITY = 2
+        const val AVAILABILITY = 3
     }
 }
 

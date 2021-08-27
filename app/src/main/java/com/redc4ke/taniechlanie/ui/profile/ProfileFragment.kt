@@ -2,6 +2,7 @@ package com.redc4ke.taniechlanie.ui.profile
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -9,10 +10,13 @@ import android.widget.Toast
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.target.Target
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseUser
 import com.redc4ke.taniechlanie.R
-import com.redc4ke.taniechlanie.data.FirebaseListener
+import com.redc4ke.taniechlanie.data.RequestListener
 import com.redc4ke.taniechlanie.data.imageFromIntent
 import com.redc4ke.taniechlanie.data.viewmodels.ModpanelViewModel
 import com.redc4ke.taniechlanie.data.viewmodels.UserViewModel
@@ -101,7 +105,40 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
                     profileNameTV.text = it
                 })
                 userViewModel.getAvatarUrl().observe(viewLifecycleOwner, {
-                    Glide.with(requireContext()).load(it).into(profilePictureIV)
+                    Glide
+                        .with(requireContext())
+                        .load(it)
+                        .listener(object : com.bumptech.glide.request.RequestListener<Drawable> {
+                            override fun onLoadFailed(
+                                e: GlideException?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                Toast.makeText(
+                                    requireContext(),
+                                    getString(R.string.toast_error),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                binding.profileLoadingFL.visibility = View.GONE
+
+                                return false
+                            }
+
+                            override fun onResourceReady(
+                                resource: Drawable?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                dataSource: DataSource?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                binding.profileLoadingFL.visibility = View.GONE
+
+                                return false
+                            }
+
+                        })
+                        .into(profilePictureIV)
                 })
             } else {
                 profilePictureIV.setImageResource(R.drawable.ic_baseline_account_circle_24)
@@ -117,11 +154,20 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == pickAvatar) {
+            binding.profileLoadingFL.visibility = View.VISIBLE
             if (data != null) {
                 userViewModel.setAvatar(
                     getImage(data),
-                    object : FirebaseListener {
+                    object : RequestListener {
                         override fun onComplete(resultCode: Int) {
+                            if (resultCode != RequestListener.SUCCESS) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    getString(R.string.toast_error),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                binding.profileLoadingFL.visibility = View.GONE
+                            }
                         }
                     })
             }

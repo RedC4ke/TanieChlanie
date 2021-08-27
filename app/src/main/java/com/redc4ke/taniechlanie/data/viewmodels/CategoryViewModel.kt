@@ -1,14 +1,11 @@
 package com.redc4ke.taniechlanie.data.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import com.redc4ke.taniechlanie.data.Category
-import com.redc4ke.taniechlanie.data.FirebaseListener
-import java.io.File
+import com.redc4ke.taniechlanie.data.RequestListener
 
 class CategoryViewModel : ViewModel() {
     private val categoryLiveData = MutableLiveData<Map<Int, Category>>()
@@ -56,7 +53,7 @@ class CategoryViewModel : ViewModel() {
         return list
     }
 
-    fun fetch(firestoreRef: FirebaseFirestore, firebaseListener: FirebaseListener) {
+    fun fetch(firestoreRef: FirebaseFirestore, requestListener: RequestListener) {
         firestoreRef.collection("categories").orderBy("id").get()
             .addOnSuccessListener {
                 tempMajorMap.clear()
@@ -69,10 +66,10 @@ class CategoryViewModel : ViewModel() {
 
                     add(id, name, url, major)
                 }
-                firebaseListener.onComplete(FirebaseListener.SUCCESS)
+                requestListener.onComplete(RequestListener.SUCCESS)
             }
             .addOnFailureListener {
-                firebaseListener.onComplete(FirebaseListener.OTHER)
+                requestListener.onComplete(RequestListener.OTHER)
             }
     }
 }

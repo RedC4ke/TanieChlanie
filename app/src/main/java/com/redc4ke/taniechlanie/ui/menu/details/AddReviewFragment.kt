@@ -7,9 +7,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.redc4ke.taniechlanie.R
+import com.redc4ke.taniechlanie.data.ConnectionCheck
+import com.redc4ke.taniechlanie.data.RequestListener
 import com.redc4ke.taniechlanie.data.viewmodels.Review
 import com.redc4ke.taniechlanie.data.viewmodels.ReviewViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentReviewAddBinding
@@ -17,7 +20,8 @@ import com.redc4ke.taniechlanie.ui.base.BaseDialogFragment
 
 class AddReviewFragment(
     private val alcoobject_id: Long,
-    private val review: Review?):
+    private val review: Review?
+) :
     BaseDialogFragment<FragmentReviewAddBinding>() {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentReviewAddBinding
@@ -39,13 +43,13 @@ class AddReviewFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        with (binding) {
+        with(binding) {
             if (review != null) {
                 reviewAddET.setText(review.content)
                 reviewAddRB.rating = review.rating.toFloat()
                 update = true
             }
-            reviewAddET.addTextChangedListener(object: TextWatcher {
+            reviewAddET.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
                     s: CharSequence?,
                     start: Int,
@@ -60,27 +64,31 @@ class AddReviewFragment(
                 override fun afterTextChanged(s: Editable?) {
                     when (s?.trim()?.length!!) {
                         0 -> {
-                            revievAddL.error = getString(R.string.err_emptyField)
-                            revievAddL.isErrorEnabled = true
+                            reviewAddL.error = getString(R.string.err_emptyField)
+                            reviewAddL.isErrorEnabled = true
                             correct2 = false
                         }
                         in 1..1000 -> {
-                            revievAddL.isErrorEnabled = false
+                            reviewAddL.isErrorEnabled = false
                             correct2 = true
                         }
                         else -> {
-                            revievAddL.error = getString(R.string.err_tooLong, "1000")
-                            revievAddL.isErrorEnabled = true
+                            reviewAddL.error = getString(R.string.err_tooLong, "1000")
+                            reviewAddL.isErrorEnabled = true
                             correct2 = false
                         }
                     }
                 }
 
             })
-            revievAddCancelBT.setOnClickListener {
+            reviewAddCancelBT.setOnClickListener {
                 this@AddReviewFragment.dismiss()
             }
-            reviewAddSendBT.setOnClickListener {
+            reviewAddSendBT.setOnClickListener { button ->
+                reviewAddSendBT.text = ""
+                reviewAddPB.visibility = View.VISIBLE
+                button.isEnabled = false
+
                 val rating = binding.reviewAddRB.rating
                 if (rating == 0F) {
                     reviewAddRatingErrorTV.visibility = View.VISIBLE
@@ -90,11 +98,42 @@ class AddReviewFragment(
                     correct1 = true
                 }
                 if (correct1 && correct2 && user != null) {
-                    reviewViewModel.addReview(requireContext(), alcoobject_id, user,
-                        reviewAddRB.rating.toDouble(), reviewAddET.text.toString(), update)
-                        .addOnSuccessListener {
-                            this@AddReviewFragment.dismiss()
+                    ConnectionCheck.perform(object : RequestListener {
+                        override fun onComplete(resultCode: Int) {
+                            if (resultCode == RequestListener.NETWORK_ERR) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    getString(R.string.err_no_connection),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                reviewAddSendBT.text = getString(R.string.send)
+                                reviewAddPB.visibility = View.GONE
+                                button.isEnabled = true
+                            } else {
+                                reviewViewModel.addReview(
+                                    requireContext(),
+                                    alcoobject_id,
+                                    user,
+                                    reviewAddRB.rating.toDouble(),
+                                    reviewAddET.text.toString(),
+                                    update
+                                )
+                                    .addOnSuccessListener {
+                                        this@AddReviewFragment.dismiss()
+                                    }
+                                    .addOnFailureListener {
+                                        Toast.makeText(
+                                            requireContext(),
+                                            getString(R.string.toast_error),
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                        reviewAddSendBT.text = getString(R.string.send)
+                                        reviewAddPB.visibility = View.GONE
+                                        button.isEnabled = true
+                                    }
+                            }
                         }
+                    })
                 }
             }
         }
@@ -103,6 +142,7 @@ class AddReviewFragment(
     override fun onResume() {
         super.onResume()
         dialog?.window?.setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+        )
     }
 }

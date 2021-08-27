@@ -16,7 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.storage.FirebaseStorage
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
-import com.redc4ke.taniechlanie.data.FirebaseListener
+import com.redc4ke.taniechlanie.data.RequestListener
 import com.redc4ke.taniechlanie.ui.MainActivity
 import java.io.File
 import java.util.*
@@ -65,7 +65,7 @@ class UserViewModel : ViewModel() {
         userEmail.value = user.email
 
         if (user.photoUrl == null) {
-            setAvatarUrl(defaultAvatar, object : FirebaseListener {
+            setAvatarUrl(defaultAvatar, object : RequestListener {
                 override fun onComplete(resultCode: Int) {
                     userAvatar.value = defaultAvatar
                 }
@@ -233,7 +233,7 @@ class UserViewModel : ViewModel() {
         }
     }
 
-    fun setAvatar(file: File, firebaseListener: FirebaseListener) {
+    fun setAvatar(file: File, requestListener: RequestListener) {
         try {
             val imageUri = Uri.fromFile(file)
             val storageRef = FirebaseStorage.getInstance().reference
@@ -245,16 +245,16 @@ class UserViewModel : ViewModel() {
                 .addOnSuccessListener { _ ->
                     storageRef.downloadUrl
                         .addOnSuccessListener {
-                            setAvatarUrl(it, firebaseListener)
+                            setAvatarUrl(it, requestListener)
                         }
                 }
 
         } catch (e: Exception) {
-            firebaseListener.onComplete(FirebaseListener.OTHER)
+            requestListener.onComplete(RequestListener.OTHER)
         }
     }
 
-    private fun setAvatarUrl(uri: Uri, firebaseListener: FirebaseListener) {
+    private fun setAvatarUrl(uri: Uri, requestListener: RequestListener) {
         staticUser?.updateProfile(
             UserProfileChangeRequest.Builder().setPhotoUri(uri).build()
         )
@@ -263,14 +263,14 @@ class UserViewModel : ViewModel() {
                     .update("avatar", uri.toString())
                     .addOnSuccessListener {
                         userAvatar.value = uri
-                        firebaseListener.onComplete(FirebaseListener.SUCCESS)
+                        requestListener.onComplete(RequestListener.SUCCESS)
                     }
                     .addOnFailureListener {
-                        firebaseListener.onComplete(FirebaseListener.OTHER)
+                        requestListener.onComplete(RequestListener.OTHER)
                     }
             }
             ?.addOnFailureListener {
-                firebaseListener.onComplete(FirebaseListener.OTHER)
+                requestListener.onComplete(RequestListener.OTHER)
             }
     }
 

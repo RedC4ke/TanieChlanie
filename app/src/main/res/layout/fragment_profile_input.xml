@@ -189,10 +189,12 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="8dp"
                         android:text="@string/forward"
+                        android:visibility="visible"
                         app:cornerRadius="18dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/cancelBT" />
+                        app:layout_constraintTop_toTopOf="@+id/cancelBT"
+                        tools:visibility="gone" />
 
                     <Button
                         android:id="@+id/cancelBT"
@@ -212,9 +214,26 @@
                         android:layout_marginBottom="8dp"
                         android:text="@string/fui_button_text_save"
                         android:visibility="gone"
+                        app:cornerRadius="18dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/cancelBT" />
+                        app:layout_constraintTop_toTopOf="@+id/cancelBT"
+                        tools:visibility="visible" />
+
+                    <ProgressBar
+                        android:id="@+id/profileInputPB"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:elevation="4dp"
+                        android:indeterminateTint="@color/white"
+                        android:progressTint="@color/white"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@+id/saveBT"
+                        app:layout_constraintEnd_toEndOf="@+id/saveBT"
+                        app:layout_constraintStart_toStartOf="@+id/saveBT"
+                        app:layout_constraintTop_toTopOf="@+id/saveBT"
+                        tools:visibility="visible" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </FrameLayout>
 

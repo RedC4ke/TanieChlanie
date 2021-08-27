@@ -71,25 +71,48 @@ class RequestDetailsFragment :
                 )
             }
 
-            reqDetailsAcceptBT.setOnClickListener {
+            reqDetailsAcceptBT.setOnClickListener { button ->
+                button.isEnabled = false
                 reqDetailsPB.visibility = View.VISIBLE
                 reqDetailsAcceptBT.text = ""
-                modpanelViewModel.acceptNewBooze(
-                    request, shopViewModel, object: FirebaseListener {
-                        override fun onComplete(resultCode: Int) {
-                            val toastText = when (resultCode) {
-                                FirebaseListener.SUCCESS -> getString(R.string.request_accepted).also {
-                                    requireActivity().onBackPressed()
-                                }
-                                FirebaseListener.NOT_LOGGED_IN -> getString(R.string.err_notloggedin)
-                                else -> getString(R.string.toast_error)
-                            }
-                            Toast.makeText(requireContext(), toastText, Toast.LENGTH_LONG).show()
+
+                ConnectionCheck.perform(object : RequestListener {
+                    override fun onComplete(resultCode: Int) {
+                        if (resultCode != RequestListener.SUCCESS) {
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.err_no_connection),
+                                Toast.LENGTH_LONG
+                            ).show()
+                            button.isEnabled = true
                             reqDetailsAcceptBT.text = getString(R.string.submit)
                             reqDetailsPB.visibility = View.GONE
+                        } else {
+                            modpanelViewModel.acceptNewBooze(
+                                request, shopViewModel, object : RequestListener {
+                                    override fun onComplete(resultCode: Int) {
+                                        val toastText = when (resultCode) {
+                                            RequestListener.SUCCESS -> getString(R.string.request_accepted).also {
+                                                requireActivity().onBackPressed()
+                                            }
+                                            RequestListener.NOT_LOGGED_IN -> getString(R.string.err_notloggedin)
+                                            else -> getString(R.string.toast_error)
+                                        }
+                                        Toast.makeText(
+                                            requireContext(),
+                                            toastText,
+                                            Toast.LENGTH_LONG
+                                        ).show()
+
+                                        button.isEnabled = true
+                                        reqDetailsAcceptBT.text = getString(R.string.submit)
+                                        reqDetailsPB.visibility = View.GONE
+                                    }
+                                }
+                            )
                         }
                     }
-                )
+                })
             }
         }
     }

@@ -1,18 +1,17 @@
 package com.redc4ke.taniechlanie.data.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.redc4ke.taniechlanie.data.AlcoObject
-import com.redc4ke.taniechlanie.data.FirebaseListener
+import com.redc4ke.taniechlanie.data.RequestListener
 import java.math.BigDecimal
 
 class AlcoObjectViewModel: ViewModel() {
     private val tempList = mutableListOf<AlcoObject>()
     private val alcoList = MutableLiveData(listOf<AlcoObject>())
 
-    fun addObject(o: AlcoObject) {
+    private fun addObject(o: AlcoObject) {
         tempList.add(o)
         alcoList.value = tempList
     }
@@ -26,7 +25,7 @@ class AlcoObjectViewModel: ViewModel() {
         return tempList.find { it.id == id }
     }
 
-    fun fetch(firestoreRef: FirebaseFirestore, firebaseListener: FirebaseListener) {
+    fun fetch(firestoreRef: FirebaseFirestore, requestListener: RequestListener) {
         firestoreRef.collection("wines").orderBy("name").get()
             .addOnSuccessListener {
                 tempList.clear()
@@ -42,20 +41,20 @@ class AlcoObjectViewModel: ViewModel() {
                         "categories" to data["categories"] as? ArrayList<Int>,
                         "photo" to document.getString("photo")
                     )
-                    getPrices(output as MutableMap<String, Any?>, firestoreRef, firebaseListener)
+                    getPrices(output as MutableMap<String, Any?>, firestoreRef, requestListener)
                 }
 
-                firebaseListener.onComplete(FirebaseListener.SUCCESS)
+                requestListener.onComplete(RequestListener.SUCCESS)
             }
             .addOnFailureListener {
-                firebaseListener.onComplete(FirebaseListener.OTHER)
+                requestListener.onComplete(RequestListener.OTHER)
             }
     }
 
     private fun getPrices(
         input: MutableMap<String, Any?>,
         firestoreRef: FirebaseFirestore,
-        firebaseListener: FirebaseListener)
+        requestListener: RequestListener)
     {
         val result: MutableMap<String, Any?> = input
 
@@ -90,7 +89,7 @@ class AlcoObjectViewModel: ViewModel() {
                     addObject(alcoObject)
             }
             .addOnFailureListener {
-                firebaseListener.onComplete(FirebaseListener.OTHER)
+                requestListener.onComplete(RequestListener.OTHER)
             }
     }
 }

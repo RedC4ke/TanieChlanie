@@ -8,7 +8,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.redc4ke.taniechlanie.data.FirebaseListener
+import com.redc4ke.taniechlanie.data.RequestListener
 import com.redc4ke.taniechlanie.data.Shop
 
 class ModpanelViewModel : ViewModel() {
@@ -108,7 +108,7 @@ class ModpanelViewModel : ViewModel() {
     fun acceptNewBooze(
         request: NewBoozeRequest,
         shopViewModel: ShopViewModel,
-        listener: FirebaseListener
+        listener: RequestListener
     ) {
         val firestoreRef = FirebaseFirestore.getInstance()
         val requestsRef = firestoreRef.collection("requests")
@@ -180,10 +180,10 @@ class ModpanelViewModel : ViewModel() {
                         )
 
                     }.addOnFailureListener {
-                        listener.onComplete(FirebaseListener.OTHER)
+                        listener.onComplete(RequestListener.OTHER)
                     }.addOnSuccessListener {
                         newBooze.value?.remove(request)
-                        listener.onComplete(FirebaseListener.SUCCESS)
+                        listener.onComplete(RequestListener.SUCCESS)
                     }
                 }
             }
@@ -192,7 +192,7 @@ class ModpanelViewModel : ViewModel() {
     fun acceptAvailability(
         request: AvailabilityRequest,
         shopViewModel: ShopViewModel,
-        firebaseListener: FirebaseListener
+        requestListener: RequestListener
     ) {
         val firestoreRef = FirebaseFirestore.getInstance()
 
@@ -233,15 +233,15 @@ class ModpanelViewModel : ViewModel() {
                 )
             }
             .addOnFailureListener {
-                firebaseListener.onComplete(FirebaseListener.OTHER)
+                requestListener.onComplete(RequestListener.OTHER)
             }
             .addOnSuccessListener {
                 availability.value?.remove(request)
-                firebaseListener.onComplete(FirebaseListener.SUCCESS)
+                requestListener.onComplete(RequestListener.SUCCESS)
             }
     }
 
-    fun declineRequest(request: Request, reason: String) {
+    fun declineRequest(request: Request, reason: String, requestListener: RequestListener) {
         val firestoreRef = FirebaseFirestore.getInstance().collection("requests")
             .document("requests")
         val collection = when (request) {
@@ -259,6 +259,12 @@ class ModpanelViewModel : ViewModel() {
                 "reviewed",
                 Timestamp.now()
             )
+            .addOnSuccessListener {
+                requestListener.onComplete(RequestListener.SUCCESS)
+            }
+            .addOnFailureListener {
+                requestListener.onComplete(RequestListener.OTHER)
+            }
 
         fetch()
     }

@@ -5,11 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.redc4ke.taniechlanie.R
-import com.redc4ke.taniechlanie.data.viewmodels.AvailabilityRequest
+import com.redc4ke.taniechlanie.data.ConnectionCheck
+import com.redc4ke.taniechlanie.data.RequestListener
 import com.redc4ke.taniechlanie.data.viewmodels.ModpanelViewModel
-import com.redc4ke.taniechlanie.data.viewmodels.NewBoozeRequest
 import com.redc4ke.taniechlanie.data.viewmodels.Request
 import com.redc4ke.taniechlanie.databinding.FragmentDeclinationReasonBinding
 import com.redc4ke.taniechlanie.ui.MainActivity
@@ -52,11 +53,39 @@ class DeclinationReasonFragment(
             declinationCancelBT.setOnClickListener {
                 dismiss()
             }
-            declinationSaveBT.setOnClickListener {
+            declinationSaveBT.setOnClickListener { button ->
+                button.isEnabled = false
+
                 if (selectedReason != null && request.requestId != null)
-                    modpanelViewModel.declineRequest(request, selectedReason!!)
-                dismiss()
-                requireActivity().onBackPressed()
+                    ConnectionCheck.perform(object : RequestListener {
+                        override fun onComplete(resultCode: Int) {
+                            if (resultCode == RequestListener.NETWORK_ERR) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    getString(R.string.err_no_connection),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                button.isEnabled = true
+                            } else {
+                                modpanelViewModel.declineRequest(
+                                    request,
+                                    selectedReason!!,
+                                    object : RequestListener {
+                                        override fun onComplete(resultCode: Int) {
+                                            if (resultCode != RequestListener.SUCCESS) {
+                                                Toast.makeText(
+                                                    requireContext(),
+                                                    getString(R.string.toast_error),
+                                                    Toast.LENGTH_LONG
+                                                ).show()
+                                            }
+                                        }
+                                    })
+                                dismiss()
+                                requireActivity().onBackPressed()
+                            }
+                        }
+                    })
             }
         }
     }

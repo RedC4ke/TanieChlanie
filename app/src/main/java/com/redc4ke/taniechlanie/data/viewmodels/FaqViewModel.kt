@@ -3,7 +3,6 @@ package com.redc4ke.taniechlanie.data.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
-import com.redc4ke.taniechlanie.data.FirebaseListener
 
 class FaqViewModel : ViewModel() {
 

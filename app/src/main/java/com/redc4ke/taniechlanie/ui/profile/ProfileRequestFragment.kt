@@ -8,10 +8,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.redc4ke.taniechlanie.R
-import com.redc4ke.taniechlanie.data.FirebaseListener
+import com.redc4ke.taniechlanie.data.RequestListener
 import com.redc4ke.taniechlanie.data.profile.ProfileRequestAdapter
 import com.redc4ke.taniechlanie.data.viewmodels.RequestViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentProfileRequestBinding
@@ -36,9 +35,9 @@ class ProfileRequestFragment : BaseFragment<FragmentProfileRequestBinding>() {
             ViewModelProvider(requireActivity() as MainActivity)[RequestViewModel::class.java]
         val adapter = ProfileRequestAdapter(requireContext())
 
-        requestViewModel.fetch(FirebaseAuth.getInstance().uid.toString(), object: FirebaseListener {
+        requestViewModel.fetch(FirebaseAuth.getInstance().uid.toString(), object: RequestListener {
             override fun onComplete(resultCode: Int) {
-                if (resultCode == FirebaseListener.OTHER) {
+                if (resultCode == RequestListener.OTHER) {
                     Toast.makeText(requireContext(), R.string.toast_error, Toast.LENGTH_LONG).show()
                 }
             }

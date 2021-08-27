@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:background="@color/secondary50"
-        tools:context=".ui.profile.ProfileFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/secondary50"
+    android:orientation="vertical"
+    tools:context=".ui.profile.ProfileFragment">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView6"
@@ -40,6 +39,27 @@
                     android:contentDescription="@string/avatar"
                     android:scaleType="centerCrop"
                     app:srcCompat="@drawable/avatar" />
+
+                <FrameLayout
+                    android:id="@+id/profileLoadingFL"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:background="#971D201F"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <ProgressBar
+                        android:id="@+id/profilePB"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:indeterminateTint="@color/primaryLightColor"
+                        android:visibility="visible"
+                        tools:visibility="visible" />
+
+                </FrameLayout>
+
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/profileEditAvatarBT"
@@ -129,4 +149,4 @@
         app:layout_constraintTop_toBottomOf="@+id/cardView6"
         app:navGraph="@navigation/profile_navigation" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

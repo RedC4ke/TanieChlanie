@@ -86,6 +86,7 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>() {
         }
 
         if (alcoObject.photo != null) {
+            binding.imageDetails.adjustViewBounds = true
             Glide.with(requireContext()).load(alcoObject.photo).into(binding.imageDetails)
         }
 
