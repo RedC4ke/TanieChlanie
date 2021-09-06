@@ -1,5 +1,6 @@
 package com.redc4ke.taniechlanie.data.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -140,12 +141,11 @@ class ModpanelViewModel : ViewModel() {
                         if (request.shopIsNew == true) {
                             request.shopId = shopViewModel.getLastId() + 1
                             transaction.set(
-                                shopsRef.document(request.shopName!!), hashMapOf(
+                                shopsRef.document(request.shopName ?: ""), hashMapOf(
                                     "id" to request.shopId,
                                     "name" to request.shopName
                                 )
                             )
-                            shopViewModel.add(Shop(request.shopId, request.shopName))
                         }
 
                         //Set the main document
@@ -166,7 +166,7 @@ class ModpanelViewModel : ViewModel() {
                         transaction.set(
                             pricesRef.document(request.id.toString()), hashMapOf(
                                 "shop" to hashMapOf(
-                                    request.shopId to hashMapOf(
+                                    request.shopId.toString() to hashMapOf(
                                         "price" to request.price!!.toDouble()
                                     )
                                 )
@@ -182,6 +182,9 @@ class ModpanelViewModel : ViewModel() {
                     }.addOnFailureListener {
                         listener.onComplete(RequestListener.OTHER)
                     }.addOnSuccessListener {
+                        if (request.shopIsNew == true) {
+                            shopViewModel.add(Shop(request.shopId, request.shopName ?: ""))
+                        }
                         newBooze.value?.remove(request)
                         listener.onComplete(RequestListener.SUCCESS)
                     }
