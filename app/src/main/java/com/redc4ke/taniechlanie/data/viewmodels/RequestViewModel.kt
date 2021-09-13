@@ -240,6 +240,7 @@ interface Request : Serializable {
     }
     object RequestType {
         const val NEW_BOOZE = 1
+        const val REPORT = 2
         const val AVAILABILITY = 3
     }
 }
@@ -277,3 +278,21 @@ data class AvailabilityRequest(
     val reason: String?,
     val reviewed: Timestamp?
 ) : Request
+
+data class Report(
+    override val requestId: String?,
+    val reportType: Int,
+    val itemId: String,
+    val reason: Int,
+    val details: String?,
+    val author: String,
+    val raised: Timestamp,
+    val state: Int,
+    val reviewer: String?,
+    val reviewed: Timestamp?
+) : Request {
+    object ReportType {
+        const val BOOZE = 0
+        const val REVIEW = 1
+    }
+}

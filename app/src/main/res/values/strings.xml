@@ -64,6 +64,24 @@
     <string name="avsubmit_shoppresent">Wybierz sklep z listy</string>
     <string name="avsubmit_edit">Zgłoś cenę!</string>
 
+    <!-- report -->
+    <string name="report_booze_header">Zgłoś przedmiot</string>
+    <string name="report_review_header">Zgłoś recenzję</string>
+    <string name="report_reason">Powód zgłoszenia</string>
+    <string name="report_details">Dodatkowe informacje</string>
+    <string name="report_sent">Dziękujemy za zgłoszenie!</string>
+    <string-array name="report_booze">
+        <item>Spam</item>
+        <item>Zdjęcie przedstawia inny produkt</item>
+        <item>Błąd w parametrach</item>
+        <item>Inny powód</item>
+    </string-array>
+    <string-array name="report_review">
+        <item>Spam</item>
+        <item>Recenzja zawiera obraźliwą wypowiedź</item>
+        <item>Inny powód</item>
+    </string-array>
+
     <!-- favourite page -->
     <string name="favourite_notloggedin">Zaloguj się i zacznij dodawać pozycje do ulubionych!</string>
     <string name="favourite_empty">Nie dodałeś jeszcze nic do ulubionych.\nMoże twój idealny smak dopiero czeka na odkrycie?</string>

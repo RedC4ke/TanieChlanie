@@ -75,7 +75,6 @@ class ReviewViewModel: ViewModel() {
             .addOnSuccessListener {
                 val list = mutableListOf<Review>()
                 it.forEach {doc ->
-                    Log.d("templog", "guwno")
                     list.add(retrieve(doc))
                 }
                 add(id, list)
@@ -99,7 +98,7 @@ class ReviewViewModel: ViewModel() {
     fun addReview(context: Context, id: Long, user: FirebaseUser,
                   rating: Double, content: String, update: Boolean = false): Task<Void> {
         val data = mapOf(
-            "id" to UUID.randomUUID(),
+            "id" to UUID.randomUUID().toString(),
             "object_id" to id,
             "author" to user.uid,
             "rating" to rating,
@@ -143,8 +142,8 @@ class ReviewViewModel: ViewModel() {
     private fun retrieve(doc: DocumentSnapshot): Review {
         val data = doc.data
         return Review(
-            data?.get("id") as HashMap<*, *>,
-            data["object_id"] as Long,
+            doc.getString("id")!!,
+            data?.get("object_id") as Long,
             data["author"] as String,
             data["rating"] as Double,
             data["timestamp"] as Timestamp,
@@ -156,7 +155,7 @@ class ReviewViewModel: ViewModel() {
 }
 
 data class Review(
-    val reviewID: HashMap<*, *>,
+    val reviewID: String,
     val objectID: Long,
     val author: String,
     val rating: Double,

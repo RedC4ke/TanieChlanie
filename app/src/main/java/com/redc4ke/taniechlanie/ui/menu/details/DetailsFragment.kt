@@ -1,7 +1,6 @@
 package com.redc4ke.taniechlanie.ui.menu.details
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,10 +12,12 @@ import com.bumptech.glide.Glide
 import com.google.android.material.transition.MaterialContainerTransform
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.*
+import com.redc4ke.taniechlanie.data.viewmodels.Report
 import com.redc4ke.taniechlanie.data.viewmodels.UserViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentDetailsBinding
 import com.redc4ke.taniechlanie.ui.base.BaseFragment
 import com.redc4ke.taniechlanie.ui.MainActivity
+import com.redc4ke.taniechlanie.ui.popup.ReportSubmitFragment
 
 class DetailsFragment : BaseFragment<FragmentDetailsBinding>() {
 
@@ -88,6 +89,12 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>() {
         if (alcoObject.photo != null) {
             binding.imageDetails.adjustViewBounds = true
             Glide.with(requireContext()).load(alcoObject.photo).into(binding.imageDetails)
+        }
+
+        binding.detailsReportBT.setOnClickListener {
+            val reportDialog =
+                ReportSubmitFragment(Report.ReportType.BOOZE, alcoObject.id.toString())
+            reportDialog.show(parentFragmentManager, "reportSubmitFragment")
         }
 
         binding.detailsBackBT.setOnClickListener {
