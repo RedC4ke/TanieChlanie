@@ -33,6 +33,7 @@ class RequestViewModel : ViewModel() {
         }
     }
 
+    private val firestoreInstance = FirebaseFirestore.getInstance()
     private val photoName = MutableLiveData<String>()
     private val requestList = MutableLiveData<List<Pair<Int, NewBoozeRequest>>>()
 
@@ -129,7 +130,7 @@ class RequestViewModel : ViewModel() {
         user: FirebaseUser,
         photoURL: String?
     ) {
-        val firestoreRef = FirebaseFirestore.getInstance().collection("requests")
+        val firestoreRef = firestoreInstance.collection("requests")
             .document("requests").collection("newBooze")
 
         val categories = CurrentRequest.categories.value!!.values.map { it.id }.toMutableList()
@@ -171,9 +172,23 @@ class RequestViewModel : ViewModel() {
         requestListener: RequestListener
     ) {
         val firestoreRef =
-            FirebaseFirestore.getInstance().collection("requests").document("requests")
+            firestoreInstance.collection("requests").document("requests")
                 .collection("availability")
         firestoreRef.add(availabilityRequest)
+            .addOnFailureListener {
+                requestListener.onComplete(RequestListener.OTHER)
+            }
+            .addOnSuccessListener {
+                requestListener.onComplete(RequestListener.SUCCESS)
+            }
+    }
+
+    fun uploadReport(report: Report, requestListener: RequestListener) {
+        val firestoreRef =
+            firestoreInstance.collection("requests").document("requests")
+                .collection("reports")
+
+        firestoreRef.add(report)
             .addOnFailureListener {
                 requestListener.onComplete(RequestListener.OTHER)
             }
@@ -238,6 +253,7 @@ interface Request : Serializable {
         const val APPROVED = 2
         const val DECLINED = 3
     }
+
     object RequestType {
         const val NEW_BOOZE = 1
         const val REPORT = 2
