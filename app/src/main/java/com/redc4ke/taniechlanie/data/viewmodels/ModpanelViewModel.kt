@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.core.Repo
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.redc4ke.taniechlanie.data.RequestListener
@@ -17,6 +18,7 @@ class ModpanelViewModel : ViewModel() {
     private val newBooze = MutableLiveData<MutableList<NewBoozeRequest>>()
     private val availability = MutableLiveData<MutableList<AvailabilityRequest>>()
     private val changedBooze = MutableLiveData<MutableList<NewBoozeRequest>>()
+    private val reports = MutableLiveData<MutableList<Report>>()
 
 
     fun getNewBooze(): LiveData<MutableList<NewBoozeRequest>> {
@@ -29,6 +31,10 @@ class ModpanelViewModel : ViewModel() {
 
     fun getChangedBooze(): LiveData<MutableList<NewBoozeRequest>> {
         return changedBooze
+    }
+
+    fun getReports(): LiveData<MutableList<Report>> {
+        return reports
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -62,8 +68,8 @@ class ModpanelViewModel : ViewModel() {
                             null
                         )
                     tempList.add(request)
-                    newBooze.value = tempList
                 }
+                newBooze.value = tempList
             }
             .addOnFailureListener {
             }
@@ -102,6 +108,32 @@ class ModpanelViewModel : ViewModel() {
                 it.documents.forEach { document ->
                     TODO()
                 }
+            }
+
+        firestoreRef.collection("reports")
+            .whereEqualTo("state", Request.RequestState.PENDING).orderBy("created").get()
+            .addOnSuccessListener { snapshot ->
+                reports.value = mutableListOf()
+                val tempList = mutableListOf<Report>()
+
+                snapshot.forEach {
+                    val request = Report(
+                        it.id,
+                        it.getLong("reportType")?.toInt() ?: return@forEach,
+                        it.getString("itemId") ?: return@forEach,
+                        it.getLong("reason")?.toInt() ?: return@forEach,
+                        it.getString("details"),
+                        it.getString("author") ?: return@forEach,
+                        it.getTimestamp("created") ?: return@forEach,
+                        it.getLong("state")?.toInt() ?: return@forEach,
+                        null,
+                        null
+                    )
+                    tempList.add(request)
+                }
+                reports.value = tempList
+            }
+            .addOnFailureListener {
             }
     }
 

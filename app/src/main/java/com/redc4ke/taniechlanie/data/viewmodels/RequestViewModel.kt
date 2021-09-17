@@ -302,7 +302,7 @@ data class Report(
     val reason: Int,
     val details: String?,
     val author: String,
-    val raised: Timestamp,
+    val created: Timestamp,
     val state: Int,
     val reviewer: String?,
     val reviewed: Timestamp?

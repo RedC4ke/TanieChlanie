@@ -2,7 +2,6 @@ package com.redc4ke.taniechlanie.ui.profile
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,6 @@ import com.redc4ke.taniechlanie.data.profile.ProfileReviewAdapter
 import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectViewModel
 import com.redc4ke.taniechlanie.data.viewmodels.ReviewViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentProfileReviewBinding
-import com.redc4ke.taniechlanie.ui.MainActivity
 import com.redc4ke.taniechlanie.ui.base.BaseFragment
 
 class ProfileReviewsFragment: BaseFragment<FragmentProfileReviewBinding>() {
@@ -52,7 +50,7 @@ class ProfileReviewsFragment: BaseFragment<FragmentProfileReviewBinding>() {
         if (user != null) {
             reviewViewModel.downloadUser(user!!.uid)
                 .addOnSuccessListener {
-                    val list = reviewViewModel.getUser(user!!.uid, alcoObjectViewModel)
+                    val list = reviewViewModel.getForUser(user!!.uid, alcoObjectViewModel)
                     madapter.addData(list)
                 }
                 .addOnFailureListener {

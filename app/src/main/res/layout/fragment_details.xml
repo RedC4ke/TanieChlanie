@@ -75,8 +75,8 @@
 
                 <CheckBox
                     android:id="@+id/favouriteCHB"
-                    android:layout_width="33dp"
-                    android:layout_height="33dp"
+                    android:layout_width="31dp"
+                    android:layout_height="31dp"
                     android:layout_gravity="center"
                     android:layout_marginEnd="6dp"
                     android:background="@drawable/selector_favourite"
@@ -88,9 +88,10 @@
 
                 <ImageView
                     android:id="@+id/detailsReportBT"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_gravity="start|center_vertical"
+                    android:layout_marginTop="1dp"
                     android:layout_marginEnd="10dp"
                     android:src="@drawable/ic_outline_report_24"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -103,7 +104,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintGuide_end="37dp" />
+                    app:layout_constraintGuide_end="51dp" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="51dp" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

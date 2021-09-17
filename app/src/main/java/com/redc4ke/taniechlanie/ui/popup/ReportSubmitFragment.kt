@@ -34,9 +34,10 @@ class ReportSubmitFragment(private val reportType: Int, private val itemId: Stri
     override fun onStart() {
         super.onStart()
 
+        //This avoids the weird bug where parent layout params get removed
         dialog?.window?.setLayout(
             FrameLayout.LayoutParams.MATCH_PARENT,
-            FrameLayout.LayoutParams.MATCH_PARENT
+            FrameLayout.LayoutParams.WRAP_CONTENT
         )
     }
 

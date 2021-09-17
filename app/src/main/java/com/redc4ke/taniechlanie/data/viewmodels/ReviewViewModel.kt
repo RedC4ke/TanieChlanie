@@ -38,7 +38,7 @@ class ReviewViewModel: ViewModel() {
         return reviews.value!![id]!!.sortedByDescending { it.usefulness }
     }
 
-    fun getUser(uid: String, alcoObjectViewModel: AlcoObjectViewModel):
+    fun getForUser(uid: String, alcoObjectViewModel: AlcoObjectViewModel):
             List<Pair<AlcoObject, Review>> {
 
         val list = userReview.value?.get(uid) ?: listOf()

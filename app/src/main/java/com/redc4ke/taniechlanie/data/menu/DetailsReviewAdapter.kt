@@ -11,19 +11,22 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
+import com.redc4ke.taniechlanie.data.viewmodels.Report
 import com.redc4ke.taniechlanie.data.viewmodels.Review
 import com.redc4ke.taniechlanie.data.viewmodels.ReviewViewModel
 import com.redc4ke.taniechlanie.databinding.RowReviewBinding
 import com.redc4ke.taniechlanie.databinding.RowSheet2Binding
 import com.redc4ke.taniechlanie.ui.menu.details.AddReviewFragment
 import com.redc4ke.taniechlanie.ui.menu.details.Sheet1Fragment
+import com.redc4ke.taniechlanie.ui.popup.ReportSubmitFragment
 
 class ReviewAdapter(
     private val fragment: Sheet1Fragment,
     private val list: List<Review>,
     private val reviewViewModel: ReviewViewModel,
     private val userReview: Review?,
-    private val id: Long):
+    private val id: Long
+) :
     RecyclerView.Adapter<ReviewViewHolder>() {
 
     private val finalList = mutableListOf<Review>()
@@ -36,7 +39,7 @@ class ReviewAdapter(
             finalList.add(userReview)
         }
         list.forEach {
-            if (it != userReview){
+            if (it != userReview) {
                 finalList.add(it)
             }
         }
@@ -50,7 +53,7 @@ class ReviewAdapter(
     }
 
     override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
-        with (holder.vb) {
+        with(holder.vb) {
             val popup = PopupMenu(fragment.context, reviewMenuBT)
             if (position == 0 && userReview != null) {
                 popup.menuInflater.inflate(R.menu.myreview_menu, popup.menu)
@@ -60,15 +63,27 @@ class ReviewAdapter(
             popup.setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.review_report -> {
-                        Toast.makeText(fragment.context,
-                            "Ta funkcja jest czasowo niedostępna!", Toast.LENGTH_LONG).show()
-                        true}
+                        if (user != null) {
+                            ReportSubmitFragment(
+                                Report.ReportType.REVIEW,
+                                finalList[position].reviewID
+                            ).show(fragment.parentFragmentManager, "reportSubmitFragment")
+                        } else {
+                            Toast.makeText(
+                                fragment.requireContext(),
+                                fragment.getString(R.string.err_notloggedin),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                        true
+                    }
                     R.id.review_edit -> {
                         if (user?.uid == finalList[position].author) {
                             AddReviewFragment(id, finalList[position])
                                 .show(fragment.parentFragmentManager, "reviewEdit")
                         }
-                        true}
+                        true
+                    }
                     R.id.review_delete -> {
                         if (user?.uid == finalList[position].author) {
                             reviewViewModel.remove(finalList[position], user)
@@ -88,8 +103,10 @@ class ReviewAdapter(
             val review = finalList[position]
             contentTV.setTrimLength(180)
             contentTV.text = review.content
-            reviewViewModel.parse(fragment.requireContext(), review, avatarIV,
-                usernameTV, timestampTV, reviewRB)
+            reviewViewModel.parse(
+                fragment.requireContext(), review, avatarIV,
+                usernameTV, timestampTV, reviewRB
+            )
         }
     }
 
@@ -98,4 +115,4 @@ class ReviewAdapter(
     }
 }
 
-class ReviewViewHolder(val vb: RowReviewBinding): RecyclerView.ViewHolder(vb.root)
+class ReviewViewHolder(val vb: RowReviewBinding) : RecyclerView.ViewHolder(vb.root)

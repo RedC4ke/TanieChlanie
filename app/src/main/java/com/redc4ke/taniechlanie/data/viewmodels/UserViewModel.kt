@@ -4,12 +4,15 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
+import com.firebase.ui.auth.data.model.User
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.database.MutableData
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
@@ -130,6 +133,27 @@ class UserViewModel : ViewModel() {
 
     fun getEmail(): MutableLiveData<String> {
         return userEmail
+    }
+
+    fun getOtherUser(uid: String): LiveData<UserData?> {
+        val returnValue = MutableLiveData<UserData?>()
+        firestore.collection("users").document(uid).get()
+            .addOnSuccessListener {
+                val user = UserData(
+                    uid,
+                    it.getString("name"),
+                    it.getTimestamp("created"),
+                    it.get("groups") as? ArrayList<String>,
+                    it.get("stats") as? Map<String, Any> ?: mapOf(),
+                    it.getLong("title"),
+                    it.getString("avatar"),
+                    it.get("favourites") as? ArrayList<Long> ?: ArrayList()
+                )
+
+                returnValue.value = user
+            }
+
+        return returnValue
     }
 
     private fun downloadData() {

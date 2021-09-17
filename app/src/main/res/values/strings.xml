@@ -17,6 +17,7 @@
     <string name="modpanel_newbooze">Nowe alkohole</string>
     <string name="modpanel_details">Szczegóły</string>
     <string name="modpanel_pricechanges">Zmiany cen</string>
+    <string name="modpanel_reports">Zgłoszenia</string>
 
     <!-- welcome -->
     <string name="start">Zaczynamy!</string>
@@ -199,7 +200,7 @@
 
     <!-- profile page - requests -->
     <string name="newBooze">Nowy alkohol</string>
-    <string name="your_requests">Twoje zgłoszenia</string>
+    <string name="your_requests">Twoje alkohole</string>
     <string name="state">Status</string>
     <string name="state_pending">Oczekuje</string>
     <string name="state_accepted">Zaakceptowano</string>
@@ -211,6 +212,7 @@
         <item>Nowe alkohole</item>
         <item>Zmiany w alkoholach</item>
         <item>Zmiany w cenach</item>
+        <item>Zgłoszone</item>
     </string-array>
     <string name="declination_header">Wybierz powód\nodrzucenia wniosku</string>
     <string-array name="decliantion_reasons">
@@ -263,6 +265,7 @@
          administratora.</string>
 
     <!-- other -->
+    <string name="item">Przedmiot</string>
     <string name="reason">Powód</string>
     <string name="upload_date">Data dodania</string>
     <string name="polishalphabet"> abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
