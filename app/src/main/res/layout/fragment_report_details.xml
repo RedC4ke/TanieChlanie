@@ -70,14 +70,15 @@
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/open_sans_light"
             android:textAlignment="textEnd"
-            android:textColor="@color/primaryDarkColor"
+            android:textColor="@color/dark"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView5"
             app:layout_constraintTop_toTopOf="@+id/textView5"
             tools:text="zesralem sie" />
 
-        <TextView
+        <com.redc4ke.taniechlanie.data.misc.ExpandableTextView
+            app:trimLength="100"
             android:id="@+id/repDetailsTV"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -85,7 +86,7 @@
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/open_sans_light"
             android:textAlignment="textEnd"
-            android:textColor="@color/primaryDarkColor"
+            android:textColor="@color/dark"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -101,7 +102,7 @@
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/open_sans_light"
             android:textAlignment="textEnd"
-            android:textColor="@color/primaryDarkColor"
+            android:textColor="@color/dark"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -152,20 +153,25 @@
             android:id="@+id/repDetailsPhotoIV"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="32dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginBottom="32dp"
             app:layout_constraintBottom_toTopOf="@+id/repDetailsAcceptBT"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/repDetailsItemTV"
-            app:srcCompat="@drawable/image_placeholder" />
+            app:srcCompat="@drawable/image_placeholder"
+            app:layout_constraintHeight_min="250dp"/>
 
         <include
             android:id="@+id/repDetailsReviewINCL"
             layout="@layout/row_review"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="24dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginBottom="24dp"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/repDetailsPB"

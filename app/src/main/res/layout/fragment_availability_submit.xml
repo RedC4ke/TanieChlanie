@@ -146,25 +146,22 @@
 
         <Button
             android:id="@+id/av_submit_cancel_BT"
-            style="@style/Theme.Base.taniechlanie.ContainedBT"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="12dp"
-            android:drawableTint="#FFFFFF"
             android:fontFamily="@font/open_sans_regular"
             android:foregroundTint="@color/primaryDarkColor"
             android:text="@string/fui_cancel"
             android:textAlignment="center"
             android:textAllCaps="true"
-            android:textColor="@color/white"
             android:textSize="14sp"
             android:textStyle="bold"
             app:cornerRadius="18dp"
             app:iconTint="#00611A1A"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frameLayout"
-            app:strokeColor="@color/primaryDarkColor" />
+            app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
 
         <Button
             android:id="@+id/av_submit_missingShop_BT"

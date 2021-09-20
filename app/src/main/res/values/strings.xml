@@ -228,6 +228,19 @@
     <string name="request_accepted">Zgłoszenie zatwierdzone</string>
     <string name="price_old">Stara cena</string>
     <string name="price_new">Nowa cena</string>
+    <string name="chose_action">Wybierz akcję</string>
+    <string-array name="report_booze_actions">
+        <item>Usuń przedmiot</item>
+        <item>Usuń zdjęcie</item>
+        <item>Zmień dane</item>
+        <item>Prześlij do administratora</item>
+        <item>Zablokuj zgłaszającego za spam</item>
+    </string-array>
+    <string-array name="report_review_actions">
+        <item>Usuń recenzję</item>
+        <item>Usuń i zablokuj użytkownika</item>
+        <item>Zablokuj zgłaszającego za spam</item>
+    </string-array>
 
     <!-- options page -->
     <string name="romper_unit">Jednostka opłacalności</string>
@@ -265,6 +278,8 @@
          administratora.</string>
 
     <!-- other -->
+    <string name="actions">Akcje</string>
+    <string name="review">Recenzja</string>
     <string name="item">Przedmiot</string>
     <string name="reason">Powód</string>
     <string name="upload_date">Data dodania</string>

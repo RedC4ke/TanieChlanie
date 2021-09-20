@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -18,6 +19,7 @@ import com.redc4ke.taniechlanie.data.viewmodels.UserViewModel
 import com.redc4ke.taniechlanie.databinding.RowAlcoholBinding
 import com.redc4ke.taniechlanie.databinding.RowReportBinding
 import com.redc4ke.taniechlanie.ui.profile.modpanel.ReportListFragment
+import com.redc4ke.taniechlanie.ui.profile.modpanel.ReportListFragmentDirections
 import java.text.DateFormat
 
 class ReportListAdapter(
@@ -42,7 +44,6 @@ class ReportListAdapter(
                 .observe(parentFrag.viewLifecycleOwner, {
                     userData = it
                     if (userData != null) {
-                        Log.d("huj", userData.toString())
                         rowReportNameTV.text = userData?.name
                         if (userData?.created != null) {
                             rowReportTimestampTV.text =
@@ -55,6 +56,12 @@ class ReportListAdapter(
                         }
                     }
                 })
+
+            root.setOnClickListener {
+                val directions =
+                    ReportListFragmentDirections.actionReportDestToReportDetailsDest(reportList[position])
+                parentFrag.findNavController().navigate(directions)
+            }
         }
     }
 

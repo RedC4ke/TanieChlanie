@@ -20,6 +20,8 @@ class ModpanelViewModel : ViewModel() {
     private val changedBooze = MutableLiveData<MutableList<NewBoozeRequest>>()
     private val reports = MutableLiveData<MutableList<Report>>()
 
+    private val firestoreInstance = FirebaseFirestore.getInstance()
+
 
     fun getNewBooze(): LiveData<MutableList<NewBoozeRequest>> {
         return newBooze
@@ -39,7 +41,7 @@ class ModpanelViewModel : ViewModel() {
 
     @Suppress("UNCHECKED_CAST")
     fun fetch() {
-        val firestoreRef = FirebaseFirestore.getInstance()
+        val firestoreRef = firestoreInstance
             .collection("requests").document("requests")
 
         firestoreRef.collection("newBooze")
@@ -143,13 +145,12 @@ class ModpanelViewModel : ViewModel() {
         shopViewModel: ShopViewModel,
         listener: RequestListener
     ) {
-        val firestoreRef = FirebaseFirestore.getInstance()
-        val requestsRef = firestoreRef.collection("requests")
+        val requestsRef = firestoreInstance.collection("requests")
             .document("requests").collection("newBooze")
-        val winesRef = firestoreRef.collection("wines")
-        val pricesRef = firestoreRef.collection("prices")
-        val shopsRef = firestoreRef.collection("shops")
-        val usersRef = firestoreRef.collection("users")
+        val winesRef = firestoreInstance.collection("wines")
+        val pricesRef = firestoreInstance.collection("prices")
+        val shopsRef = firestoreInstance.collection("shops")
+        val usersRef = firestoreInstance.collection("users")
         val firebaseRef = FirebaseDatabase.getInstance().reference.child("idTrace")
         var id: Long
         firebaseRef.get()
@@ -157,7 +158,7 @@ class ModpanelViewModel : ViewModel() {
                 id = it.value.toString().toLong()
                 firebaseRef.setValue(id + 1).addOnSuccessListener {
                     request.id = id
-                    firestoreRef.runTransaction { transaction ->
+                    firestoreInstance.runTransaction { transaction ->
                         //Increment author upload count
                         val user = transaction.get(usersRef.document(request.author!!))
                         val stats = (user.get("stats") as? HashMap<String, Long>)!!.toMutableMap()
@@ -229,31 +230,29 @@ class ModpanelViewModel : ViewModel() {
         shopViewModel: ShopViewModel,
         requestListener: RequestListener
     ) {
-        val firestoreRef = FirebaseFirestore.getInstance()
-
-        firestoreRef
+        firestoreInstance
             .runTransaction {
                 if (request.shopIsNew) {
                     val shopId = shopViewModel.getLastId() + 1
                     it.set(
-                        firestoreRef.collection("shops").document(request.shopName), hashMapOf(
+                        firestoreInstance.collection("shops").document(request.shopName), hashMapOf(
                             "id" to shopId,
                             "name" to request.shopName
                         )
                     )
                     request.shopId = shopId
-                    shopViewModel.fetch(firestoreRef, null)
+                    shopViewModel.fetch(firestoreInstance, null)
                 }
 
                 it.update(
-                    firestoreRef.collection("prices").document(request.alcoObjectId.toString()),
+                    firestoreInstance.collection("prices").document(request.alcoObjectId.toString()),
                     hashMapOf(
                         "shop.${request.shopId}" to hashMapOf("price" to request.price)
                     ) as Map<String, Any>
                 )
 
                 it.update(
-                    firestoreRef.collection("requests").document("requests")
+                    firestoreInstance.collection("requests").document("requests")
                         .collection("availability")
                         .document(request.requestId!!), hashMapOf(
                         "state" to Request.RequestState.APPROVED,
@@ -262,7 +261,7 @@ class ModpanelViewModel : ViewModel() {
                 )
 
                 it.update(
-                    firestoreRef.collection("users").document(request.author),
+                    firestoreInstance.collection("users").document(request.author),
                     "stats.commitment",
                     FieldValue.increment(1)
                 )
@@ -277,7 +276,7 @@ class ModpanelViewModel : ViewModel() {
     }
 
     fun declineRequest(request: Request, reason: String, requestListener: RequestListener) {
-        val firestoreRef = FirebaseFirestore.getInstance().collection("requests")
+        val firestoreRef = firestoreInstance.collection("requests")
             .document("requests")
         val collection = when (request) {
             is NewBoozeRequest -> firestoreRef.collection("newBooze")
@@ -304,6 +303,12 @@ class ModpanelViewModel : ViewModel() {
         fetch()
     }
 
+    fun deleteBooze(id: Long, listener: RequestListener) {
+        firestoreInstance.collection("wines").whereEqualTo("id", id)
+            .get().result.documents[0].reference.update(
+                "isSuspended", true
+            )
+    }
 }
 
 

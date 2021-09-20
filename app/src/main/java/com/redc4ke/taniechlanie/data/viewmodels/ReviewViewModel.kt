@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bumptech.glide.Glide
@@ -34,7 +35,7 @@ class ReviewViewModel: ViewModel() {
         return reviews
     }
 
-    fun get(id: Long): List<Review> {
+    fun getForBooze(id: Long): List<Review> {
         return reviews.value!![id]!!.sortedByDescending { it.usefulness }
     }
 
@@ -65,6 +66,17 @@ class ReviewViewModel: ViewModel() {
                 timestamp.text = DateFormat.getDateInstance().format(review.timestamp.toDate())
                 ratingBar.rating = review.rating.toFloat()
             }
+    }
+
+    fun getReview(id: String) : LiveData<Review?> {
+        val review = MutableLiveData<Review?>()
+        ref.collection("reviews").whereEqualTo("id", id)
+            .get()
+            .addOnSuccessListener {
+                review.value = retrieve(it.documents[0])
+            }
+
+        return review
     }
 
     fun download(id: Long): Task<QuerySnapshot> {
