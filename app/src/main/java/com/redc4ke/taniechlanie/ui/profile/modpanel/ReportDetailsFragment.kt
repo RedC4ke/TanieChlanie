@@ -35,21 +35,42 @@ class ReportDetailsFragment : BaseFragment<FragmentReportDetailsBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val modpanelViewModel =
-            ViewModelProvider(requireActivity() as MainActivity)[ModpanelViewModel::class.java]
+        val provider = ViewModelProvider(requireActivity() as MainActivity)
+        val alcoObjectViewModel = provider[AlcoObjectViewModel::class.java]
+        val reviewViewModel = provider[ReviewViewModel::class.java]
+        val userViewModel = provider[UserViewModel::class.java]
+        val modpanelViewModel = provider[ModpanelViewModel::class.java]
 
         childFragmentManager.setFragmentResultListener(
             "spinnerResult", viewLifecycleOwner
         ) { _, bundle ->
             val actionPosition = bundle.getInt("spinnerPosition")
+            val listener = object : RequestListener {
+                override fun onComplete(resultCode: Int) {
+                    if (resultCode == RequestListener.SUCCESS) {
+
+                    } else {
+
+                    }
+                }
+            }
             if (report.reportType == Report.ReportType.BOOZE) {
                 // string array 'report_booze_actions'
                 when (actionPosition) {
-                    0 ->
+                    0 -> modpanelViewModel.deleteBooze(report.itemId.toLong(), listener)
+                    1 -> modpanelViewModel.deletePhoto(report.itemId.toLong(), listener)
+                    2 -> {
+                    }
+                    3 -> modpanelViewModel.sendReportForward(report, listener)
+                    4 -> modpanelViewModel.blockReporting(report.author, listener)
                 }
             } else {
                 when (actionPosition) {
-
+                    0 -> reviewViewModel.removeById(report.itemId, listener)
+                    1 -> {
+                        reviewViewModel.removeById(report.itemId, listener)
+                        //TODO function to get review author and block them
+                    }
                 }
             }
 
@@ -59,12 +80,6 @@ class ReportDetailsFragment : BaseFragment<FragmentReportDetailsBinding>() {
                 bundleOf("listenerResult" to RequestListener.SUCCESS)
             )
         }
-
-        val provider = ViewModelProvider(requireActivity() as MainActivity)
-        val alcoObjectViewModel = provider[AlcoObjectViewModel::class.java]
-        val reviewViewModel = provider[ReviewViewModel::class.java]
-        val userViewModel = provider[UserViewModel::class.java]
-
 
         with(binding) {
             repDetailsTV.text = report.details

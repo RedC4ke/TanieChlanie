@@ -252,6 +252,7 @@ interface Request : Serializable {
         const val PENDING = 1
         const val APPROVED = 2
         const val DECLINED = 3
+        const val FORWARDED = 4
     }
 
     object RequestType {

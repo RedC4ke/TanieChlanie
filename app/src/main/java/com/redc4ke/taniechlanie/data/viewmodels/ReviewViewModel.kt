@@ -14,9 +14,11 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.*
 import com.redc4ke.taniechlanie.data.AlcoObject
+import com.redc4ke.taniechlanie.data.RequestListener
 import me.zhanghai.android.materialratingbar.MaterialRatingBar
 import java.text.DateFormat
 import java.util.*
+import kotlin.collections.AbstractList
 import kotlin.collections.HashMap
 
 class ReviewViewModel: ViewModel() {
@@ -143,6 +145,17 @@ class ReviewViewModel: ViewModel() {
                             reviewsUpdate(user, -1)
                         }
                 }
+            }
+    }
+
+    fun removeById(id: String, listener: RequestListener) {
+        ref.collection("reviews").whereEqualTo("reviewID", id)
+            .get().result.documents[0].reference.delete()
+            .addOnSuccessListener {
+                listener.onComplete(RequestListener.SUCCESS)
+            }
+            .addOnFailureListener {
+                listener.onComplete(RequestListener.OTHER)
             }
     }
 

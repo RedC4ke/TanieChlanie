@@ -10,8 +10,10 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.core.Repo
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.redc4ke.taniechlanie.data.RequestListener
 import com.redc4ke.taniechlanie.data.Shop
+import com.redc4ke.taniechlanie.ui.profile.modpanel.RequestDetailsFragmentArgs
 
 class ModpanelViewModel : ViewModel() {
 
@@ -308,6 +310,59 @@ class ModpanelViewModel : ViewModel() {
             .get().result.documents[0].reference.update(
                 "isSuspended", true
             )
+            .addOnSuccessListener {
+                listener.onComplete(RequestListener.SUCCESS)
+            }
+            .addOnFailureListener {
+                listener.onComplete(RequestListener.OTHER)
+            }
+    }
+
+    fun deletePhoto(id: Long, listener: RequestListener) {
+        firestoreInstance.collection("wines").whereEqualTo("id", id)
+            .get().result.documents[0].reference.update(
+                "photo", null
+            )
+            .addOnSuccessListener {
+                listener.onComplete(RequestListener.SUCCESS)
+            }
+            .addOnFailureListener {
+                listener.onComplete(RequestListener.OTHER)
+            }
+    }
+
+    fun blockReporting(uid: String, listener: RequestListener) {
+        firestoreInstance.collection("users").document(uid)
+            .update("hasReportShadowban", true)
+            .addOnSuccessListener {
+                listener.onComplete(RequestListener.SUCCESS)
+            }
+            .addOnFailureListener {
+                listener.onComplete(RequestListener.OTHER)
+            }
+    }
+
+    fun blockReviewing(uid: String, listener: RequestListener) {
+        firestoreInstance.collection("users").document(uid)
+            .update("hasReviewBan", true)
+            .addOnSuccessListener {
+                listener.onComplete(RequestListener.SUCCESS)
+            }
+            .addOnFailureListener {
+                listener.onComplete(RequestListener.OTHER)
+            }
+    }
+
+    fun sendReportForward(report: Report, listener: RequestListener) {
+        firestoreInstance.collection("requests").document("requests")
+            .collection("reports").document(report.requestId!!)
+            .update("state", Request.RequestState.FORWARDED)
+            .addOnSuccessListener {
+                listener.onComplete(RequestListener.SUCCESS)
+            }
+            .addOnFailureListener {
+                listener.onComplete(RequestListener.OTHER)
+            }
     }
 }
 
