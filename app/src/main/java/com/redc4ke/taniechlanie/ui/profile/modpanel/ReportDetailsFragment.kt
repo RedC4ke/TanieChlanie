@@ -59,18 +59,22 @@ class ReportDetailsFragment : BaseFragment<FragmentReportDetailsBinding>() {
                 when (actionPosition) {
                     0 -> modpanelViewModel.deleteBooze(report.itemId.toLong(), listener)
                     1 -> modpanelViewModel.deletePhoto(report.itemId.toLong(), listener)
-                    2 -> {
-                    }
-                    3 -> modpanelViewModel.sendReportForward(report, listener)
-                    4 -> modpanelViewModel.blockReporting(report.author, listener)
+                    2 -> {}
+                    3 -> {}
+                    4 -> {}
+                    5 -> {}
+                    6 -> modpanelViewModel.sendReportForward(report, listener)
+                    7 -> modpanelViewModel.blockReporting(report.author, listener)
                 }
             } else {
+                // string array 'report_review_actions'
                 when (actionPosition) {
                     0 -> reviewViewModel.removeById(report.itemId, listener)
                     1 -> {
                         reviewViewModel.removeById(report.itemId, listener)
                         //TODO function to get review author and block them
                     }
+                    2 -> modpanelViewModel.blockReporting(report.author, listener)
                 }
             }
 
@@ -122,7 +126,6 @@ class ReportDetailsFragment : BaseFragment<FragmentReportDetailsBinding>() {
                 })
             }
 
-            //temp
             repDetailsAcceptBT.setOnClickListener {
                 SpinnerFragment(
                     resources.getStringArray(R.array.report_booze_actions).toList()

@@ -47,7 +47,7 @@ class ProfileRequestAdapter(private val context: Context) :
             profileRqShopTV.text = request.shopName
             profileRqPriceTV.text =
                 priceString(request.price?.toBigDecimal() ?: BigDecimal.ZERO, context)
-            profileRqVolumeTV.text = volumeString(request.volume ?: 0, context)
+            profileRqVolumeTV.text = volumeString(request.volume?.toInt() ?: 0, context)
             profileRqVoltageTV.text = voltageString(request.voltage ?: BigDecimal.ZERO, context)
 
             profileRqStateTV.text = when (request.state) {

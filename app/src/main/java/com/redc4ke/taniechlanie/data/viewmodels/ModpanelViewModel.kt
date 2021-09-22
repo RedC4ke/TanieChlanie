@@ -24,7 +24,6 @@ class ModpanelViewModel : ViewModel() {
 
     private val firestoreInstance = FirebaseFirestore.getInstance()
 
-
     fun getNewBooze(): LiveData<MutableList<NewBoozeRequest>> {
         return newBooze
     }
@@ -320,11 +319,18 @@ class ModpanelViewModel : ViewModel() {
 
     fun deletePhoto(id: Long, listener: RequestListener) {
         firestoreInstance.collection("wines").whereEqualTo("id", id)
-            .get().result.documents[0].reference.update(
-                "photo", null
-            )
+            .get()
             .addOnSuccessListener {
-                listener.onComplete(RequestListener.SUCCESS)
+                it.documents[0].reference
+                    .update(
+                    "photo", null
+                    )
+                    .addOnSuccessListener {
+                        listener.onComplete(RequestListener.SUCCESS)
+                    }
+                    .addOnFailureListener {
+                        listener.onComplete(RequestListener.OTHER)
+                    }
             }
             .addOnFailureListener {
                 listener.onComplete(RequestListener.OTHER)

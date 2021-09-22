@@ -232,7 +232,10 @@
     <string-array name="report_booze_actions">
         <item>Usuń przedmiot</item>
         <item>Usuń zdjęcie</item>
-        <item>Zmień dane</item>
+        <item>Zmień parametry</item>
+        <item>Dodaj kategorię</item>
+        <item>Usuń kategorię</item>
+        <item>Zmień główną kategorię</item>
         <item>Prześlij do administratora</item>
         <item>Zablokuj zgłaszającego za spam</item>
     </string-array>
@@ -241,6 +244,8 @@
         <item>Usuń i zablokuj użytkownika</item>
         <item>Zablokuj zgłaszającego za spam</item>
     </string-array>
+    <string name="add_category">Dodaj kategorię</string>
+    <string name="remove_category">Usuń kategorię</string>
 
     <!-- options page -->
     <string name="romper_unit">Jednostka opłacalności</string>

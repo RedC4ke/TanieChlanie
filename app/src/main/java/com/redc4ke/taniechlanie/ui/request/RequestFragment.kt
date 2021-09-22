@@ -5,6 +5,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.ImageDecoder
 import android.os.Build
+import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
@@ -17,9 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.redc4ke.taniechlanie.R
-import com.redc4ke.taniechlanie.data.Category
-import com.redc4ke.taniechlanie.data.RequestListener
-import com.redc4ke.taniechlanie.data.imageFromBitmap
+import com.redc4ke.taniechlanie.data.*
 import com.redc4ke.taniechlanie.data.viewmodels.CategoryViewModel
 import com.redc4ke.taniechlanie.data.viewmodels.RequestViewModel
 import com.redc4ke.taniechlanie.data.viewmodels.ShopViewModel
@@ -37,8 +36,8 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
     private val requestViewModel: RequestViewModel by viewModels()
     private var selectedMinorMap = mapOf<Int, Category>()
 
-    override fun onStart() {
-        super.onStart()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val act = requireActivity() as MainActivity
         val shopViewModel =
@@ -49,6 +48,7 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
         var minorMap = mapOf<Int, Category>()
 
         with(binding) {
+
             requestNameET.addTextChangedListener {
                 requestNameTIL.error =
                     if (!it.isNullOrEmpty()) {

@@ -57,7 +57,7 @@ class Sheet1Fragment : BaseFragment<FragmentSheet1Binding>() {
         with(binding) {
             detailsPriceTV.text = lowestPriceString(alcoObject, requireContext())
             detailsValueTV.text = valueString(alcoObject, (requireActivity() as MainActivity))
-            detailsVolumeTV.text = volumeString(alcoObject.volume.toLong(), requireContext())
+            detailsVolumeTV.text = volumeString(alcoObject.volume, requireContext())
             detailsVoltageTV.text = voltageString(alcoObject.voltage, requireContext())
             descriptionTV.text =
                 alcoObject.description ?: getString(R.string.details_descriptionDisclaimer)

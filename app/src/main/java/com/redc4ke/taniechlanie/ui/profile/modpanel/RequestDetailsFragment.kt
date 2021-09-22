@@ -55,7 +55,7 @@ class RequestDetailsFragment :
                     catNamesText += ", "
             }
             reqDetailsCategoryTV.text = catNamesText
-            reqDetailsVolumeTV.text = volumeString(request.volume ?: 0, requireContext())
+            reqDetailsVolumeTV.text = volumeString(request.volume?.toInt() ?: 0, requireContext())
             reqDetailsVoltageTV.text =
                 voltageString(request.voltage ?: BigDecimal.ZERO, requireContext())
             reqDetailsShopTV.text = request.shopName ?: ""

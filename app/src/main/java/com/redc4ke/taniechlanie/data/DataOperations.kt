@@ -69,7 +69,7 @@ fun priceString(price: BigDecimal, context: Context): String {
     )
 }
 
-fun volumeString(volume: Long, context: Context): String {
+fun volumeString(volume: Int, context: Context): String {
     return context.getString(
         R.string.suff_volume,
         volume.toString()
