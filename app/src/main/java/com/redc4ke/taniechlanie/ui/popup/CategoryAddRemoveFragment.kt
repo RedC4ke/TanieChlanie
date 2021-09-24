@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.FrameLayout
 import androidx.lifecycle.ViewModelProvider
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.Category
@@ -17,13 +18,21 @@ import com.redc4ke.taniechlanie.ui.MainActivity
 import com.redc4ke.taniechlanie.ui.base.BaseDialogFragment
 
 class CategoryAddRemoveFragment(
-    private val categoryAdd: Boolean,
+    private val actionType: Int,
+    private val itemId: Long,
     private val listener: RequestListener
 ) : BaseDialogFragment<FragmentSpinnerBinding>() {
 
+    companion object ActionType {
+        const val ADD = 0
+        const val REMOVE = 1
+        const val CHANGE_MAJOR = 2
+    }
+
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentSpinnerBinding
         get() = FragmentSpinnerBinding::inflate
-    private var minorMap = mapOf<Int, Category>()
+    private val existingCategories: MutableList<Int> = mutableListOf()
+    private var spinnerMap = mapOf<Int, Category>()
     private var selectedCategory: Category? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,20 +44,50 @@ class CategoryAddRemoveFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //This avoids the weird bug where parent layout params get removed
+        dialog?.window?.setLayout(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT
+        )
+
         val provider = ViewModelProvider(requireActivity() as MainActivity)
         val categoryViewModel = provider[CategoryViewModel::class.java]
         val alcoObjectViewModel = provider[AlcoObjectViewModel::class.java]
 
-        binding.spinnerHeaderTV.text = if (categoryAdd) {
-            getString(R.string.add_category)
-        } else {
-            getString(R.string.remove_category)
+        binding.spinnerHeaderTV.text = when (actionType) {
+            ADD -> getString(R.string.add_category)
+            REMOVE -> getString(R.string.remove_category)
+            else -> getString(R.string.change_major_category)
         }
+        binding.spinnerSPINNER.prompt = getString(R.string.chose_category)
+
+        alcoObjectViewModel.getAll().observe(viewLifecycleOwner, { _ ->
+            existingCategories.addAll(
+                alcoObjectViewModel.get(itemId)?.categories ?: mutableListOf()
+            )
+        })
 
         categoryViewModel.getAll().observe(viewLifecycleOwner, { catMap ->
-            minorMap = catMap.filter { !it.value.major }
+            val existingCategoriesFilter = mutableListOf<Category>()
+
+            existingCategories.forEach {
+                existingCategoriesFilter.add(catMap[it] ?: return@forEach)
+            }
+
+            spinnerMap = catMap.filter {
+                when (actionType) {
+                    ADD -> !(it.value.major) && (it.value !in existingCategoriesFilter)
+                    REMOVE -> !(it.value.major) && (it.value in existingCategoriesFilter)
+                    else -> (it.value.major) && (it.value !in existingCategoriesFilter)
+                }
+            }
+
             binding.spinnerSPINNER.adapter =
-                ArrayAdapter(requireContext(), R.layout.spinner1, minorMap.values.map { it.name })
+                ArrayAdapter(requireContext(), R.layout.spinner1, spinnerMap.values.map { it.name })
+
+            binding.spinnerCancelBT.setOnClickListener {
+                dismiss()
+            }
         })
 
         binding.spinnerSPINNER.onItemSelectedListener = object :
@@ -57,7 +96,7 @@ class CategoryAddRemoveFragment(
                 parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
                 selectedCategory =
-                    minorMap.values.filter { it.name == minorMap.values.toList()[position].name }[0]
+                    spinnerMap.values.filter { it.name == spinnerMap.values.toList()[position].name }[0]
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {

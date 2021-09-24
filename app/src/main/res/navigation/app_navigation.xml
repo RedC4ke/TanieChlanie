@@ -105,7 +105,7 @@
     <fragment
         android:id="@+id/reportDetails_dest"
         android:name="com.redc4ke.taniechlanie.ui.profile.modpanel.ReportDetailsFragment"
-        android:label="ReportDetailsFragment">
+        android:label="@string/modpanel_details">
         <argument
             android:name="request"
             app:argType="com.redc4ke.taniechlanie.data.viewmodels.Report"/>

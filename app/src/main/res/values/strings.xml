@@ -235,7 +235,7 @@
         <item>Zmień parametry</item>
         <item>Dodaj kategorię</item>
         <item>Usuń kategorię</item>
-        <item>Zmień główną kategorię</item>
+        <item>Zmień podstawową kategorię</item>
         <item>Prześlij do administratora</item>
         <item>Zablokuj zgłaszającego za spam</item>
     </string-array>
@@ -246,6 +246,9 @@
     </string-array>
     <string name="add_category">Dodaj kategorię</string>
     <string name="remove_category">Usuń kategorię</string>
+    <string name="change_major_category">Zmień kategorię podstawową</string>
+    <string name="chose_category">Wybierz kategorię</string>
+    <string name="change_data">Zmień parametry</string>
 
     <!-- options page -->
     <string name="romper_unit">Jednostka opłacalności</string>
@@ -288,7 +291,7 @@
     <string name="item">Przedmiot</string>
     <string name="reason">Powód</string>
     <string name="upload_date">Data dodania</string>
-    <string name="polishalphabet"> abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+    <string name="polishalphabet" translatable="false"> abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
         ĄąĆćĘęŁłŃńÓóŚśŹźŻż</string>
     <string name="hint_shopname">Nazwa sklepu</string>
     <string name="queryHint">Wyszukaj…</string>

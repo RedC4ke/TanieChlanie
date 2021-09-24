@@ -223,10 +223,10 @@ class RequestViewModel : ViewModel() {
                                 it.getString("photo"),
                                 null,
                                 it.id,
-                                it.getTimestamp("created"),
+                                it.getTimestamp("created")?.toDate(),
                                 it.getLong("state")?.toInt(),
                                 it.getString("reason"),
-                                it.getTimestamp("reviewed")
+                                it.getTimestamp("reviewed")?.toDate()
                             )
                         )
                     )
@@ -275,10 +275,10 @@ data class NewBoozeRequest(
     val photo: String?,
     var id: Long?,
     override var requestId: String?,
-    var created: Timestamp?,
+    var created: Date?,
     var state: Int?,
     var reason: String?,
-    var reviewed: Timestamp?
+    var reviewed: Date?
 ) : Request
 
 data class AvailabilityRequest(
@@ -289,11 +289,11 @@ data class AvailabilityRequest(
     val shopIsNew: Boolean,
     val edited: Boolean,
     val price: Double,
-    val created: Timestamp?,
+    val created: Date?,
     val state: Int?,
     override val requestId: String?,
     val reason: String?,
-    val reviewed: Timestamp?
+    val reviewed: Date?
 ) : Request
 
 data class Report(
@@ -303,10 +303,10 @@ data class Report(
     val reason: Int,
     val details: String?,
     val author: String,
-    val created: Timestamp,
+    val created: Date,
     val state: Int,
     val reviewer: String?,
-    val reviewed: Timestamp?
+    val reviewed: Date?
 ) : Request {
     object ReportType {
         const val BOOZE = 0

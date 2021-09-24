@@ -2,14 +2,16 @@ package com.redc4ke.taniechlanie.data.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.data.RequestListener
 import java.math.BigDecimal
 
-class AlcoObjectViewModel: ViewModel() {
+class AlcoObjectViewModel : ViewModel() {
     private val tempList = mutableListOf<AlcoObject>()
     private val alcoList = MutableLiveData(listOf<AlcoObject>())
+    private val firestoreInstance = FirebaseFirestore.getInstance()
 
     private fun addObject(o: AlcoObject) {
         tempList.add(o)
@@ -26,7 +28,9 @@ class AlcoObjectViewModel: ViewModel() {
     }
 
     fun fetch(firestoreRef: FirebaseFirestore, requestListener: RequestListener) {
-        firestoreRef.collection("wines").orderBy("name").get()
+        firestoreRef.collection("wines")
+            .orderBy("name")
+            .get()
             .addOnSuccessListener {
                 tempList.clear()
                 alcoList.value = listOf()
@@ -51,11 +55,134 @@ class AlcoObjectViewModel: ViewModel() {
             }
     }
 
+    fun deleteBooze(id: Long, listener: RequestListener) {
+        firestoreInstance.collection("wines").whereEqualTo("id", id)
+            .get()
+            .addOnSuccessListener {
+                it.documents[0].reference
+                    .delete()
+                    .addOnSuccessListener {
+                        listener.onComplete(RequestListener.SUCCESS)
+                    }
+                    .addOnFailureListener {
+                        listener.onComplete(RequestListener.OTHER)
+                    }
+            }
+            .addOnFailureListener {
+                listener.onComplete(RequestListener.OTHER)
+            }
+    }
+
+    fun deletePhoto(id: Long, listener: RequestListener) {
+        firestoreInstance.collection("wines").whereEqualTo("id", id)
+            .get()
+            .addOnSuccessListener {
+                it.documents[0].reference
+                    .update(
+                        "photo", null
+                    )
+                    .addOnSuccessListener {
+                        listener.onComplete(RequestListener.SUCCESS)
+                    }
+                    .addOnFailureListener {
+                        listener.onComplete(RequestListener.OTHER)
+                    }
+            }
+            .addOnFailureListener {
+                listener.onComplete(RequestListener.OTHER)
+            }
+    }
+
+    fun changeData(
+        boozeId: Long,
+        name: String,
+        volume: Int,
+        voltage: BigDecimal,
+        listener: RequestListener
+    ) {
+        firestoreInstance.collection("wines")
+            .whereNotEqualTo("id", boozeId).get()
+            .addOnSuccessListener {
+                it.documents[0].reference
+                    .update(
+                    "name", name,
+                    "volume", volume,
+                    "voltage", voltage)
+                    .addOnSuccessListener {
+                        listener.onComplete(RequestListener.SUCCESS)
+                    }
+                    .addOnFailureListener {
+                        listener.onComplete(RequestListener.OTHER)
+                    }
+            }
+            .addOnFailureListener {
+                listener.onComplete(RequestListener.OTHER)
+            }
+    }
+
+    fun addCategory(boozeId: Long, categoryId: Int, listener: RequestListener) {
+        firestoreInstance.collection("wines").whereEqualTo("id", boozeId).get()
+            .addOnSuccessListener {
+                it.documents[0].reference.update("categories", FieldValue.arrayUnion(categoryId))
+                    .addOnSuccessListener {
+                        listener.onComplete(RequestListener.SUCCESS)
+                    }
+                    .addOnFailureListener {
+                        listener.onComplete(RequestListener.OTHER)
+                    }
+            }
+            .addOnSuccessListener {
+                listener.onComplete(RequestListener.OTHER)
+            }
+    }
+
+    fun removeCategory(boozeId: Long, categoryId: Int, listener: RequestListener) {
+        firestoreInstance.collection("wines").whereEqualTo("id", boozeId).get()
+            .addOnSuccessListener {
+                it.documents[0].reference.update("categories", FieldValue.arrayRemove(categoryId))
+                    .addOnSuccessListener {
+                        listener.onComplete(RequestListener.SUCCESS)
+                    }
+                    .addOnFailureListener {
+                        listener.onComplete(RequestListener.OTHER)
+                    }
+            }
+            .addOnSuccessListener {
+                listener.onComplete(RequestListener.OTHER)
+            }
+    }
+
+    fun updateMajorCategory(
+        boozeId: Long,
+        oldCategory: Int,
+        newCategory: Int,
+        listener: RequestListener
+    ) {
+        firestoreInstance.collection("wines").whereEqualTo("id", boozeId).get()
+            .addOnSuccessListener {
+                it.documents[0].reference.update(
+                    "categories",
+                    FieldValue.arrayRemove(oldCategory),
+                    "categories",
+                    FieldValue.arrayUnion(newCategory)
+                )
+                    .addOnSuccessListener {
+                        listener.onComplete(RequestListener.SUCCESS)
+                    }
+                    .addOnFailureListener {
+                        listener.onComplete(RequestListener.OTHER)
+                    }
+            }
+            .addOnSuccessListener {
+                listener.onComplete(RequestListener.OTHER)
+            }
+    }
+
     private fun getPrices(
         input: MutableMap<String, Any?>,
         firestoreRef: FirebaseFirestore,
-        requestListener: RequestListener)
-    {
+        requestListener: RequestListener
+    ) {
         val result: MutableMap<String, Any?> = input
 
         firestoreRef.collection("prices").document(input["id"].toString()).get()

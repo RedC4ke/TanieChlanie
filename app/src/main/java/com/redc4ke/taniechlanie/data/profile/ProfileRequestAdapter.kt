@@ -38,10 +38,10 @@ class ProfileRequestAdapter(private val context: Context) :
             profileRqNameTV.text = request.name
 
             if (request.created != null) {
-                profileRqDateTV.text = DateFormat.getDateInstance().format(request.created!!.toDate())
+                profileRqDateTV.text = DateFormat.getDateInstance().format(request.created!!)
             }
             if (request.reviewed != null) {
-                profileRqVerDateTV.text = DateFormat.getDateInstance().format(request.reviewed!!.toDate())
+                profileRqVerDateTV.text = DateFormat.getDateInstance().format(request.reviewed!!)
             }
 
             profileRqShopTV.text = request.shopName

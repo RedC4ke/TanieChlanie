@@ -10,6 +10,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.RequestListener
@@ -17,6 +18,8 @@ import com.redc4ke.taniechlanie.data.viewmodels.*
 import com.redc4ke.taniechlanie.databinding.FragmentReportDetailsBinding
 import com.redc4ke.taniechlanie.ui.MainActivity
 import com.redc4ke.taniechlanie.ui.base.BaseFragment
+import com.redc4ke.taniechlanie.ui.popup.BoozeDataChangeFragment
+import com.redc4ke.taniechlanie.ui.popup.CategoryAddRemoveFragment
 import com.redc4ke.taniechlanie.ui.popup.SpinnerFragment
 import java.text.DateFormat
 
@@ -29,7 +32,12 @@ class ReportDetailsFragment : BaseFragment<FragmentReportDetailsBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        report = arguments?.getSerializable("request") as Report
+        val reportNullable = arguments?.getSerializable("request") as? Report
+        if (reportNullable != null) {
+            report = reportNullable
+        } else {
+            findNavController().navigateUp()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,12 +65,31 @@ class ReportDetailsFragment : BaseFragment<FragmentReportDetailsBinding>() {
             if (report.reportType == Report.ReportType.BOOZE) {
                 // string array 'report_booze_actions'
                 when (actionPosition) {
-                    0 -> modpanelViewModel.deleteBooze(report.itemId.toLong(), listener)
-                    1 -> modpanelViewModel.deletePhoto(report.itemId.toLong(), listener)
-                    2 -> {}
-                    3 -> {}
-                    4 -> {}
-                    5 -> {}
+                    0 -> alcoObjectViewModel.deleteBooze(report.itemId.toLong(), listener)
+                    1 -> alcoObjectViewModel.deletePhoto(report.itemId.toLong(), listener)
+                    2 -> BoozeDataChangeFragment(
+                        report.itemId.toLong(),
+                        listener
+                    )
+                        .show(childFragmentManager, "boozeDataChange")
+                    3 -> CategoryAddRemoveFragment(
+                        CategoryAddRemoveFragment.ADD,
+                        report.itemId.toLong(),
+                        listener
+                    )
+                        .show(childFragmentManager, "categoryAddRemove")
+                    4 -> CategoryAddRemoveFragment(
+                        CategoryAddRemoveFragment.REMOVE,
+                        report.itemId.toLong(),
+                        listener
+                    )
+                        .show(childFragmentManager, "categoryAddRemove")
+                    5 -> CategoryAddRemoveFragment(
+                        CategoryAddRemoveFragment.CHANGE_MAJOR,
+                        report.itemId.toLong(),
+                        listener
+                    )
+                        .show(childFragmentManager, "categoryAddRemove")
                     6 -> modpanelViewModel.sendReportForward(report, listener)
                     7 -> modpanelViewModel.blockReporting(report.author, listener)
                 }

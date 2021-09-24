@@ -139,7 +139,7 @@ class ReportSubmitFragment(private val reportType: Int, private val itemId: Stri
                                 selectedReason,
                                 details,
                                 user!!.uid,
-                                Timestamp.now(),
+                                Timestamp.now().toDate(),
                                 Request.RequestState.PENDING,
                                 null,
                                 null

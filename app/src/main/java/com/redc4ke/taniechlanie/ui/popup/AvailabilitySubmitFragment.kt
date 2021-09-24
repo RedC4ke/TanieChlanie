@@ -183,7 +183,7 @@ class AvailabilitySubmitFragment(detailsFragment: DetailsFragment, private val s
                                     id == null,
                                     shopId != null,
                                     avSubmitPriceET.text.toString().toDouble(),
-                                    Timestamp.now(),
+                                    Timestamp.now().toDate(),
                                     Request.RequestState.PENDING,
                                     null,
                                     null,

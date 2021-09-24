@@ -65,7 +65,7 @@ class ModpanelViewModel : ViewModel() {
                             document.getString("photo"),
                             null,
                             document.id,
-                            document.getTimestamp("created"),
+                            document.getTimestamp("created")?.toDate(),
                             document.getLong("state")?.toInt(),
                             null,
                             null
@@ -91,7 +91,7 @@ class ModpanelViewModel : ViewModel() {
                         document.getBoolean("shopIsNew")!!,
                         document.getBoolean("edited")!!,
                         document.getDouble("price")!!,
-                        document.getTimestamp("created"),
+                        document.getTimestamp("created")?.toDate(),
                         document.getLong("state")!!.toInt(),
                         document.id,
                         null,
@@ -127,7 +127,7 @@ class ModpanelViewModel : ViewModel() {
                         it.getLong("reason")?.toInt() ?: return@forEach,
                         it.getString("details"),
                         it.getString("author") ?: return@forEach,
-                        it.getTimestamp("created") ?: return@forEach,
+                        it.getTimestamp("created")?.toDate() ?: return@forEach,
                         it.getLong("state")?.toInt() ?: return@forEach,
                         null,
                         null
@@ -302,39 +302,6 @@ class ModpanelViewModel : ViewModel() {
             }
 
         fetch()
-    }
-
-    fun deleteBooze(id: Long, listener: RequestListener) {
-        firestoreInstance.collection("wines").whereEqualTo("id", id)
-            .get().result.documents[0].reference.update(
-                "isSuspended", true
-            )
-            .addOnSuccessListener {
-                listener.onComplete(RequestListener.SUCCESS)
-            }
-            .addOnFailureListener {
-                listener.onComplete(RequestListener.OTHER)
-            }
-    }
-
-    fun deletePhoto(id: Long, listener: RequestListener) {
-        firestoreInstance.collection("wines").whereEqualTo("id", id)
-            .get()
-            .addOnSuccessListener {
-                it.documents[0].reference
-                    .update(
-                    "photo", null
-                    )
-                    .addOnSuccessListener {
-                        listener.onComplete(RequestListener.SUCCESS)
-                    }
-                    .addOnFailureListener {
-                        listener.onComplete(RequestListener.OTHER)
-                    }
-            }
-            .addOnFailureListener {
-                listener.onComplete(RequestListener.OTHER)
-            }
     }
 
     fun blockReporting(uid: String, listener: RequestListener) {
