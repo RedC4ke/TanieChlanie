@@ -1,16 +1,20 @@
 package com.redc4ke.taniechlanie.ui.popup
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.Category
+import com.redc4ke.taniechlanie.data.ConnectionCheck
 import com.redc4ke.taniechlanie.data.RequestListener
+import com.redc4ke.taniechlanie.data.longToast
 import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectViewModel
 import com.redc4ke.taniechlanie.data.viewmodels.CategoryViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentSpinnerBinding
@@ -32,6 +36,7 @@ class CategoryAddRemoveFragment(
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentSpinnerBinding
         get() = FragmentSpinnerBinding::inflate
     private val existingCategories: MutableList<Int> = mutableListOf()
+    private var majorCategory: Category? = null
     private var spinnerMap = mapOf<Int, Category>()
     private var selectedCategory: Category? = null
 
@@ -47,7 +52,7 @@ class CategoryAddRemoveFragment(
         //This avoids the weird bug where parent layout params get removed
         dialog?.window?.setLayout(
             FrameLayout.LayoutParams.MATCH_PARENT,
-            FrameLayout.LayoutParams.WRAP_CONTENT
+            FrameLayout.LayoutParams.MATCH_PARENT
         )
 
         val provider = ViewModelProvider(requireActivity() as MainActivity)
@@ -65,6 +70,7 @@ class CategoryAddRemoveFragment(
             existingCategories.addAll(
                 alcoObjectViewModel.get(itemId)?.categories ?: mutableListOf()
             )
+            majorCategory = categoryViewModel.getMajor(existingCategories)
         })
 
         categoryViewModel.getAll().observe(viewLifecycleOwner, { catMap ->
@@ -87,6 +93,57 @@ class CategoryAddRemoveFragment(
 
             binding.spinnerCancelBT.setOnClickListener {
                 dismiss()
+            }
+
+            binding.spinnerSaveBT.setOnClickListener {
+                binding.spinnerSaveBT.text = ""
+                binding.spinnerPB.visibility = View.VISIBLE
+
+                val localListener = object : RequestListener {
+                    override fun onComplete(resultCode: Int) {
+                        if (resultCode != RequestListener.SUCCESS) {
+                            longToast(requireContext(), getString(R.string.toast_error))
+
+                            binding.spinnerSaveBT.text = getString(R.string.accept)
+                            binding.spinnerPB.visibility = View.GONE
+                        } else {
+                            listener.onComplete(RequestListener.SUCCESS)
+                            dismiss()
+                        }
+                    }
+                }
+
+                if (selectedCategory != null && majorCategory != null) {
+                    ConnectionCheck.perform(
+                        object : RequestListener {
+                            override fun onComplete(resultCode: Int) {
+                                if (resultCode != RequestListener.SUCCESS) {
+                                    longToast(
+                                        requireContext(),
+                                        getString(R.string.err_no_connection)
+                                    )
+                                } else when (actionType) {
+                                    ADD -> alcoObjectViewModel.addCategory(
+                                        itemId,
+                                        selectedCategory!!.id,
+                                        localListener
+                                    )
+                                    REMOVE -> alcoObjectViewModel.removeCategory(
+                                        itemId,
+                                        selectedCategory!!.id,
+                                        localListener
+                                    )
+                                    CHANGE_MAJOR -> alcoObjectViewModel.updateMajorCategory(
+                                        itemId,
+                                        majorCategory!!.id,
+                                        selectedCategory!!.id,
+                                        localListener
+                                    )
+                                }
+                            }
+                        }
+                    )
+                }
             }
         })
 

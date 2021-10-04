@@ -59,8 +59,12 @@ class AlcoObjectViewModel : ViewModel() {
         firestoreInstance.collection("wines").whereEqualTo("id", id)
             .get()
             .addOnSuccessListener {
-                it.documents[0].reference
-                    .delete()
+                val alcoObjectReference = it.documents[0].reference
+                firestoreInstance
+                    .runTransaction {
+                        it.delete(firestoreInstance.collection("prices").document(id.toString()))
+                        it.delete(alcoObjectReference)
+                    }
                     .addOnSuccessListener {
                         listener.onComplete(RequestListener.SUCCESS)
                     }
@@ -101,13 +105,13 @@ class AlcoObjectViewModel : ViewModel() {
         listener: RequestListener
     ) {
         firestoreInstance.collection("wines")
-            .whereNotEqualTo("id", boozeId).get()
+            .whereEqualTo("id", boozeId).get()
             .addOnSuccessListener {
                 it.documents[0].reference
                     .update(
                     "name", name,
                     "volume", volume,
-                    "voltage", voltage)
+                    "voltage", voltage.toDouble())
                     .addOnSuccessListener {
                         listener.onComplete(RequestListener.SUCCESS)
                     }
@@ -131,7 +135,7 @@ class AlcoObjectViewModel : ViewModel() {
                         listener.onComplete(RequestListener.OTHER)
                     }
             }
-            .addOnSuccessListener {
+            .addOnFailureListener {
                 listener.onComplete(RequestListener.OTHER)
             }
     }
@@ -139,7 +143,8 @@ class AlcoObjectViewModel : ViewModel() {
     fun removeCategory(boozeId: Long, categoryId: Int, listener: RequestListener) {
         firestoreInstance.collection("wines").whereEqualTo("id", boozeId).get()
             .addOnSuccessListener {
-                it.documents[0].reference.update("categories", FieldValue.arrayRemove(categoryId))
+                it.documents[0].reference
+                    .update("categories", FieldValue.arrayRemove(categoryId))
                     .addOnSuccessListener {
                         listener.onComplete(RequestListener.SUCCESS)
                     }
@@ -147,7 +152,7 @@ class AlcoObjectViewModel : ViewModel() {
                         listener.onComplete(RequestListener.OTHER)
                     }
             }
-            .addOnSuccessListener {
+            .addOnFailureListener {
                 listener.onComplete(RequestListener.OTHER)
             }
     }
@@ -173,7 +178,7 @@ class AlcoObjectViewModel : ViewModel() {
                         listener.onComplete(RequestListener.OTHER)
                     }
             }
-            .addOnSuccessListener {
+            .addOnFailureListener {
                 listener.onComplete(RequestListener.OTHER)
             }
     }

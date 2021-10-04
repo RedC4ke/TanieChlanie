@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
@@ -54,11 +55,49 @@ class ReportDetailsFragment : BaseFragment<FragmentReportDetailsBinding>() {
         ) { _, bundle ->
             val actionPosition = bundle.getInt("spinnerPosition")
             val listener = object : RequestListener {
+                // todo kinda clunky logic ngl
                 override fun onComplete(resultCode: Int) {
+                    // if result is success
                     if (resultCode == RequestListener.SUCCESS) {
+                        // if action is other than pass the report forward
+                        if (actionPosition != 6) {
+                            modpanelViewModel.completeReport(
+                                report,
+                                true,
+                                object : RequestListener {
+                                    override fun onComplete(resultCode: Int) {
+                                        if (resultCode == RequestListener.SUCCESS) {
+                                            Toast.makeText(
+                                                requireContext(),
+                                                getString(R.string.success),
+                                                Toast.LENGTH_LONG
+                                            ).show()
 
+                                            findNavController().navigateUp()
+                                        } else {
+                                            Toast.makeText(
+                                                requireContext(),
+                                                getString(R.string.toast_error),
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                        }
+                                    }
+                                }
+                            )
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.success),
+                                Toast.LENGTH_LONG
+                            ).show()
+                            findNavController().navigateUp()
+                        }
                     } else {
-
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.toast_error),
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
             }

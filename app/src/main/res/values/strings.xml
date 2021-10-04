@@ -286,6 +286,7 @@
          administratora.</string>
 
     <!-- other -->
+    <string name="success">Sukces!</string>
     <string name="actions">Akcje</string>
     <string name="review">Recenzja</string>
     <string name="item">Przedmiot</string>

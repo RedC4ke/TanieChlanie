@@ -337,6 +337,24 @@ class ModpanelViewModel : ViewModel() {
                 listener.onComplete(RequestListener.OTHER)
             }
     }
+
+    fun completeReport(report: Report, approved: Boolean, listener: RequestListener) {
+        firestoreInstance.collection("requests").document("requests")
+            .collection("reports").document(report.requestId!!)
+            .update(
+                "state", if (approved) {
+                    Request.RequestState.APPROVED
+                } else {
+                    Request.RequestState.DECLINED
+                })
+            .addOnSuccessListener {
+                listener.onComplete(RequestListener.SUCCESS)
+                reports.value?.remove(report)
+            }
+            .addOnFailureListener {
+                listener.onComplete(RequestListener.OTHER)
+            }
+    }
 }
 
 

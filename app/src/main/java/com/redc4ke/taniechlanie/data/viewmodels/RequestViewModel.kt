@@ -203,7 +203,9 @@ class RequestViewModel : ViewModel() {
         val firestoreRef = FirebaseFirestore.getInstance().collection("requests")
             .document("requests")
 
-        firestoreRef.collection("newBooze").whereEqualTo("author", uid)
+        firestoreRef.collection("newBooze")
+            .whereEqualTo("author", uid)
+            .orderBy("created")
             .get()
             .addOnSuccessListener { snapshot ->
                 snapshot.forEach {

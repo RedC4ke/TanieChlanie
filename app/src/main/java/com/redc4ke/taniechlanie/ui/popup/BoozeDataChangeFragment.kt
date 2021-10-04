@@ -1,21 +1,26 @@
 package com.redc4ke.taniechlanie.ui.popup
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import com.redc4ke.taniechlanie.R
+import com.redc4ke.taniechlanie.data.ConnectionCheck
 import com.redc4ke.taniechlanie.data.RequestListener
 import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentBoozeDataChangeBinding
 import com.redc4ke.taniechlanie.ui.MainActivity
 import com.redc4ke.taniechlanie.ui.base.BaseDialogFragment
 
-class BoozeDataChangeFragment(itemId: Long, listener: RequestListener) :
-    BaseDialogFragment<FragmentBoozeDataChangeBinding>() {
+class BoozeDataChangeFragment(
+    private val itemId: Long,
+    private val listener: RequestListener
+) : BaseDialogFragment<FragmentBoozeDataChangeBinding>() {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentBoozeDataChangeBinding
         get() = FragmentBoozeDataChangeBinding::inflate
@@ -39,6 +44,11 @@ class BoozeDataChangeFragment(itemId: Long, listener: RequestListener) :
             ViewModelProvider(requireActivity() as MainActivity)[AlcoObjectViewModel::class.java]
 
         with(binding) {
+            val alcoObject = alcoObjectViewModel.get(itemId)
+            bdcNameET.setText(alcoObject?.name)
+            bdcVolumeET.setText(alcoObject?.volume.toString())
+            bdcVoltageET.setText(alcoObject?.voltage.toString())
+
             bdcNameET.addTextChangedListener {
                 bdcNameTIL.error =
                     if (!it.isNullOrEmpty()) {
@@ -83,10 +93,52 @@ class BoozeDataChangeFragment(itemId: Long, listener: RequestListener) :
                 dismiss()
             }
             bdcSendBT.setOnClickListener {
-                alcoObjectViewModel
+                bdcSendBT.text = ""
+                bdcPB.visibility = View.VISIBLE
+
+                ConnectionCheck.perform(object : RequestListener {
+                    override fun onComplete(resultCode: Int) {
+                        if (resultCode != RequestListener.SUCCESS) {
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.err_no_connection),
+                                Toast.LENGTH_LONG
+                            ).show()
+
+                            bdcSendBT.text = getString(R.string.send)
+                            bdcPB.visibility = View.GONE
+
+                            return
+
+                        } else {
+                            val inputList = listOf(bdcNameTIL, bdcVolumeTIL, bdcVoltageTIL)
+                            inputList.forEach {
+                                if (it.error != null) {
+                                    bdcSendBT.text = getString(R.string.send)
+                                    bdcPB.visibility = View.GONE
+
+                                    return
+                                }
+                            }
+
+                            alcoObjectViewModel.changeData(
+                                itemId,
+                                bdcNameET.text.toString(),
+                                bdcVolumeET.text.toString().toInt(),
+                                bdcVoltageET.text.toString().toBigDecimal(),
+                                object : RequestListener {
+                                    override fun onComplete(resultCode: Int) {
+                                        Log.d("huj", "ffffff")
+
+                                        dismiss()
+                                        listener.onComplete(resultCode)
+                                    }
+                                }
+                            )
+                        }
+                    }
+                })
             }
         }
-
     }
-
 }
