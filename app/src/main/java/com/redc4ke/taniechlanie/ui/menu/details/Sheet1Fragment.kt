@@ -17,9 +17,11 @@ import com.redc4ke.taniechlanie.data.menu.ReviewAdapter
 import com.redc4ke.taniechlanie.data.viewmodels.CategoryViewModel
 import com.redc4ke.taniechlanie.data.viewmodels.Review
 import com.redc4ke.taniechlanie.data.viewmodels.ReviewViewModel
+import com.redc4ke.taniechlanie.data.viewmodels.UserViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentSheet1Binding
 import com.redc4ke.taniechlanie.ui.base.BaseFragment
 import com.redc4ke.taniechlanie.ui.MainActivity
+import com.redc4ke.taniechlanie.ui.popup.AddReviewFragment
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -31,6 +33,7 @@ class Sheet1Fragment : BaseFragment<FragmentSheet1Binding>() {
     private lateinit var mainActivity: MainActivity
     private lateinit var categoryViewModel: CategoryViewModel
     private lateinit var reviewViewModel: ReviewViewModel
+    private lateinit var userViewModel: UserViewModel
     private var userReview: Review? = null
     private val user = FirebaseAuth.getInstance().currentUser
 
@@ -43,6 +46,7 @@ class Sheet1Fragment : BaseFragment<FragmentSheet1Binding>() {
         mainActivity = requireActivity() as MainActivity
         categoryViewModel = ViewModelProvider(mainActivity).get(CategoryViewModel::class.java)
         reviewViewModel = ViewModelProvider(mainActivity).get(ReviewViewModel::class.java)
+        userViewModel = ViewModelProvider(mainActivity)[UserViewModel::class.java]
         reviewViewModel.download(alcoObject.id)
 
     }
@@ -117,18 +121,28 @@ class Sheet1Fragment : BaseFragment<FragmentSheet1Binding>() {
                 )
             })
             reviewAddTV.setOnClickListener {
-                if (FirebaseAuth.getInstance().currentUser == null) {
-                    (requireActivity() as MainActivity).login()
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.err_notloggedin),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    AddReviewFragment(alcoObject.id, userReview).show(
-                        parentFragmentManager,
-                        "addReview"
-                    )
+                when (true) {
+                    (FirebaseAuth.getInstance().currentUser == null) -> {
+                        (requireActivity() as MainActivity).login()
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.err_notloggedin),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    (userViewModel.hasReviewBan()) -> {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.err_noPermission),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    else -> {
+                        AddReviewFragment(alcoObject.id, userReview).show(
+                            parentFragmentManager,
+                            "addReview"
+                        )
+                    }
                 }
             }
         }

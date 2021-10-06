@@ -210,7 +210,6 @@
     <!-- mod panel -->
     <string-array name="mod_actionlist">
         <item>Nowe alkohole</item>
-        <item>Zmiany w alkoholach</item>
         <item>Zmiany w cenach</item>
         <item>Zgłoszone</item>
     </string-array>
@@ -272,6 +271,7 @@
     <string name="err_wrongInput">Dane nieprawidłowe!</string>
     <string name="err_overallcheck">Wypełnij poprawnie wszystkie pola!</string>
     <string name="err_notloggedin">Musisz być zalogowany aby wykonać tę akcję!</string>
+    <string name="err_noPermission">Nie możesz wykonać tej czynności</string>
 
     <!-- dialog strings -->
     <string name="dialog_bt1">Anuluj</string>
@@ -286,6 +286,7 @@
          administratora.</string>
 
     <!-- other -->
+    <string name="forwarded">Przekazane</string>
     <string name="success">Sukces!</string>
     <string name="actions">Akcje</string>
     <string name="review">Recenzja</string>

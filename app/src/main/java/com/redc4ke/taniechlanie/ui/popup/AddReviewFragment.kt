@@ -1,9 +1,8 @@
-package com.redc4ke.taniechlanie.ui.menu.details
+package com.redc4ke.taniechlanie.ui.popup
 
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,9 @@ import com.redc4ke.taniechlanie.data.ConnectionCheck
 import com.redc4ke.taniechlanie.data.RequestListener
 import com.redc4ke.taniechlanie.data.viewmodels.Review
 import com.redc4ke.taniechlanie.data.viewmodels.ReviewViewModel
+import com.redc4ke.taniechlanie.data.viewmodels.UserViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentReviewAddBinding
+import com.redc4ke.taniechlanie.ui.MainActivity.Utility.longToast
 import com.redc4ke.taniechlanie.ui.base.BaseDialogFragment
 
 class AddReviewFragment(
@@ -29,6 +30,7 @@ class AddReviewFragment(
     private var correct1 = false
     private var correct2 = false
     private lateinit var reviewViewModel: ReviewViewModel
+    private lateinit var userViewModel: UserViewModel
     private val user = FirebaseAuth.getInstance().currentUser
     private var update = false
 
@@ -38,6 +40,7 @@ class AddReviewFragment(
         this.isCancelable = false
         reviewViewModel = ViewModelProvider(requireActivity())
             .get(ReviewViewModel::class.java)
+        userViewModel = ViewModelProvider(requireActivity())[UserViewModel::class.java]
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -88,6 +91,11 @@ class AddReviewFragment(
                 reviewAddSendBT.text = ""
                 reviewAddPB.visibility = View.VISIBLE
                 button.isEnabled = false
+
+                if (userViewModel.hasReviewBan()) {
+                    longToast(requireContext(), getString(R.string.err_noPermission))
+                    return@setOnClickListener
+                }
 
                 val rating = binding.reviewAddRB.rating
                 if (rating == 0F) {

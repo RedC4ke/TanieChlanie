@@ -1,6 +1,7 @@
 package com.redc4ke.taniechlanie.ui
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
@@ -305,6 +306,11 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    companion object Utility {
+        fun longToast(context: Context, string: String) {
+            Toast.makeText(context, string, Toast.LENGTH_LONG).show()
+        }
+    }
 }
 
 

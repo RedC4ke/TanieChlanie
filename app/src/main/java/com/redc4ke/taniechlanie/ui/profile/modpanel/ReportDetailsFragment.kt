@@ -22,6 +22,7 @@ import com.redc4ke.taniechlanie.ui.base.BaseFragment
 import com.redc4ke.taniechlanie.ui.popup.BoozeDataChangeFragment
 import com.redc4ke.taniechlanie.ui.popup.CategoryAddRemoveFragment
 import com.redc4ke.taniechlanie.ui.popup.SpinnerFragment
+import java.lang.NullPointerException
 import java.text.DateFormat
 
 class ReportDetailsFragment : BaseFragment<FragmentReportDetailsBinding>() {
@@ -59,8 +60,11 @@ class ReportDetailsFragment : BaseFragment<FragmentReportDetailsBinding>() {
                 override fun onComplete(resultCode: Int) {
                     // if result is success
                     if (resultCode == RequestListener.SUCCESS) {
-                        // if action is other than pass the report forward
-                        if (actionPosition != 6) {
+                        // if action is other than pass the report forward or block user
+                        if (
+                            (actionPosition < 6 && report.reportType == Report.ReportType.BOOZE)
+                            || (actionPosition < 2 && report.reportType == Report.ReportType.REVIEW)
+                        ) {
                             modpanelViewModel.completeReport(
                                 report,
                                 true,
@@ -137,14 +141,21 @@ class ReportDetailsFragment : BaseFragment<FragmentReportDetailsBinding>() {
                 when (actionPosition) {
                     0 -> reviewViewModel.removeById(report.itemId, listener)
                     1 -> {
-                        reviewViewModel.removeById(report.itemId, listener)
-                        //TODO function to get review author and block them
+                        val reviewAuthorId = reviewViewModel.getReview(report.itemId).value?.author
+                        reviewViewModel.removeById(report.itemId, object : RequestListener {
+                            override fun onComplete(resultCode: Int) {
+                                if (resultCode != RequestListener.SUCCESS || reviewAuthorId == null) {
+                                    listener.onComplete(RequestListener.OTHER)
+                                } else {
+                                    modpanelViewModel.blockReviewing(reviewAuthorId, listener)
+                                }
+                            }
+                        })
                     }
                     2 -> modpanelViewModel.blockReporting(report.author, listener)
                 }
             }
 
-            //temp
             childFragmentManager.setFragmentResult(
                 "spinnerParent",
                 bundleOf("listenerResult" to RequestListener.SUCCESS)
@@ -153,8 +164,6 @@ class ReportDetailsFragment : BaseFragment<FragmentReportDetailsBinding>() {
 
         with(binding) {
             repDetailsTV.text = report.details
-
-            val spinnerFragment: SpinnerFragment
 
             if (report.reportType == Report.ReportType.BOOZE) {
                 val item = alcoObjectViewModel.get(report.itemId.toLong())
@@ -194,11 +203,13 @@ class ReportDetailsFragment : BaseFragment<FragmentReportDetailsBinding>() {
 
             repDetailsAcceptBT.setOnClickListener {
                 SpinnerFragment(
-                    resources.getStringArray(R.array.report_booze_actions).toList()
+                    if (report.reportType == Report.ReportType.BOOZE) {
+                        resources.getStringArray(R.array.report_booze_actions).toList()
+                    } else {
+                        resources.getStringArray(R.array.report_review_actions).toList()
+                    }
                 ).show(childFragmentManager, "spinnerFragment")
             }
         }
     }
 }
-
-fun stub(int: Int) {}

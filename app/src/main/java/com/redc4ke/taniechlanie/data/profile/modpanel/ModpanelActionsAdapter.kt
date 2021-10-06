@@ -6,11 +6,15 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.redc4ke.taniechlanie.R
+import com.redc4ke.taniechlanie.data.viewmodels.Report
+import com.redc4ke.taniechlanie.data.viewmodels.Request
 import com.redc4ke.taniechlanie.databinding.RowProfileBinding
 import com.redc4ke.taniechlanie.ui.profile.modpanel.ModPanelFragment
 
-class ModpanelActionsAdapter(private val modPanelFragment: ModPanelFragment) :
-    RecyclerView.Adapter<ModpanelActionsViewHolder>() {
+class ModpanelActionsAdapter(
+    private val modPanelFragment: ModPanelFragment,
+    private val permissionLevel: Int
+) : RecyclerView.Adapter<ModpanelActionsViewHolder>() {
 
     private val menu = modPanelFragment.resources.getStringArray(R.array.mod_actionlist)
     val sources = mutableListOf<List<Any>>(listOf(), listOf(), listOf(), listOf())
@@ -38,10 +42,10 @@ class ModpanelActionsAdapter(private val modPanelFragment: ModPanelFragment) :
                     0 -> {
                         modPanelFragment.findNavController().navigate(R.id.newBooze_dest)
                     }
-                    2 -> {
+                    1 -> {
                         modPanelFragment.findNavController().navigate(R.id.availability_dest)
                     }
-                    3 -> {
+                    2 -> {
                         modPanelFragment.findNavController().navigate(R.id.report_dest)
                     }
                 }
@@ -55,6 +59,10 @@ class ModpanelActionsAdapter(private val modPanelFragment: ModPanelFragment) :
 
     fun updateSources(data: List<Any>, position: Int) {
         sources[position] = data
+        if (position == 3 && permissionLevel < 2) {
+            sources[position] = sources[position]
+                .filter { (it as Report).state != Request.RequestState.FORWARDED }
+        }
         notifyItemChanged(position)
     }
 }

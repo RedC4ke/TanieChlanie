@@ -18,7 +18,7 @@ class ProfileMenuAdapter(private val context: ProfileMenuFragment) :
         ViewModelProvider(context.activity as MainActivity)[UserViewModel::class.java]
     private val menu: MutableList<String> =
         context.resources.getStringArray(R.array.profile_menu).toMutableList().also {
-            if (userViewModel.isModerator()) {
+            if (userViewModel.getPermissionLevel() > 0) {
                 it.add(context.getString(R.string.profile_modpanel))
             }
         }

@@ -7,6 +7,7 @@ interface RequestListener {
         const val REPEATING_CATEGORIES = 3
         const val OTHER = 4
         const val NETWORK_ERR = 5
+        const val PERMISSION_DENIED = 6
     }
 
     fun onComplete(resultCode: Int)

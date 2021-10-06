@@ -8,17 +8,16 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.Category
 import com.redc4ke.taniechlanie.data.ConnectionCheck
 import com.redc4ke.taniechlanie.data.RequestListener
-import com.redc4ke.taniechlanie.data.longToast
 import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectViewModel
 import com.redc4ke.taniechlanie.data.viewmodels.CategoryViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentSpinnerBinding
 import com.redc4ke.taniechlanie.ui.MainActivity
+import com.redc4ke.taniechlanie.ui.MainActivity.Utility.longToast
 import com.redc4ke.taniechlanie.ui.base.BaseDialogFragment
 
 class CategoryAddRemoveFragment(

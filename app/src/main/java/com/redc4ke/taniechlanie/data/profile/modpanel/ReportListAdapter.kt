@@ -14,6 +14,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.target.Target
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.viewmodels.Report
+import com.redc4ke.taniechlanie.data.viewmodels.Request
 import com.redc4ke.taniechlanie.data.viewmodels.UserData
 import com.redc4ke.taniechlanie.data.viewmodels.UserViewModel
 import com.redc4ke.taniechlanie.databinding.RowAlcoholBinding
@@ -40,6 +41,10 @@ class ReportListAdapter(
         var userData: UserData? = null
 
         with(holder.vb) {
+            if (reportList[position].state == Request.RequestState.FORWARDED) {
+                rowReportForwardedTV.visibility = View.VISIBLE
+            }
+
             userViewModel.getOtherUser(reportList[position].author)
                 .observe(parentFrag.viewLifecycleOwner, {
                     userData = it
@@ -70,7 +75,12 @@ class ReportListAdapter(
     }
 
     fun update(list: List<Report>) {
-        reportList = list
+        if (userViewModel.getPermissionLevel() < 2) {
+            reportList = list.filter { it.state != Request.RequestState.FORWARDED }
+        } else {
+            reportList = list.sortedBy { it.state }.reversed()
+        }
+
         notifyDataSetChanged()
     }
 }

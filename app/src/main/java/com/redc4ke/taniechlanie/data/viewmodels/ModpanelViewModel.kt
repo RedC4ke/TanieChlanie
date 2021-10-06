@@ -19,7 +19,6 @@ class ModpanelViewModel : ViewModel() {
 
     private val newBooze = MutableLiveData<MutableList<NewBoozeRequest>>()
     private val availability = MutableLiveData<MutableList<AvailabilityRequest>>()
-    private val changedBooze = MutableLiveData<MutableList<NewBoozeRequest>>()
     private val reports = MutableLiveData<MutableList<Report>>()
 
     private val firestoreInstance = FirebaseFirestore.getInstance()
@@ -30,10 +29,6 @@ class ModpanelViewModel : ViewModel() {
 
     fun getAvailability(): LiveData<MutableList<AvailabilityRequest>> {
         return availability
-    }
-
-    fun getChangedBooze(): LiveData<MutableList<NewBoozeRequest>> {
-        return changedBooze
     }
 
     fun getReports(): LiveData<MutableList<Report>> {
@@ -105,16 +100,10 @@ class ModpanelViewModel : ViewModel() {
 
             }
 
-        firestoreRef.collection("changedBooze").get()
-            .addOnSuccessListener {
-                changedBooze.value = mutableListOf()
-                it.documents.forEach { document ->
-                    TODO()
-                }
-            }
-
         firestoreRef.collection("reports")
-            .whereEqualTo("state", Request.RequestState.PENDING).orderBy("created").get()
+            .whereIn("state", listOf(Request.RequestState.PENDING, Request.RequestState.FORWARDED))
+            .orderBy("created")
+            .get()
             .addOnSuccessListener { snapshot ->
                 reports.value = mutableListOf()
                 val tempList = mutableListOf<Report>()
@@ -246,7 +235,8 @@ class ModpanelViewModel : ViewModel() {
                 }
 
                 it.update(
-                    firestoreInstance.collection("prices").document(request.alcoObjectId.toString()),
+                    firestoreInstance.collection("prices")
+                        .document(request.alcoObjectId.toString()),
                     hashMapOf(
                         "shop.${request.shopId}" to hashMapOf("price" to request.price)
                     ) as Map<String, Any>
@@ -305,10 +295,34 @@ class ModpanelViewModel : ViewModel() {
     }
 
     fun blockReporting(uid: String, listener: RequestListener) {
-        firestoreInstance.collection("users").document(uid)
-            .update("hasReportShadowban", true)
+        firestoreInstance
+            .collection("requests")
+            .document("requests")
+            .collection("reports")
+            .whereEqualTo("author", uid)
+            .get()
             .addOnSuccessListener {
-                listener.onComplete(RequestListener.SUCCESS)
+                val reportsToDelete = it.documents
+
+                firestoreInstance
+                    .runTransaction { transaction ->
+                        reportsToDelete.forEach { snapshot ->
+                            transaction.delete(snapshot.reference)
+                        }
+
+                        transaction
+                            .update(
+                                firestoreInstance.collection("security").document(uid),
+                                "hasReportBan", true
+                            )
+                    }
+                    .addOnSuccessListener {
+                        reports.value?.removeIf {report -> report.author == uid }
+                        listener.onComplete(RequestListener.SUCCESS)
+                    }
+                    .addOnFailureListener {
+                        listener.onComplete(RequestListener.OTHER)
+                    }
             }
             .addOnFailureListener {
                 listener.onComplete(RequestListener.OTHER)
@@ -316,7 +330,7 @@ class ModpanelViewModel : ViewModel() {
     }
 
     fun blockReviewing(uid: String, listener: RequestListener) {
-        firestoreInstance.collection("users").document(uid)
+        firestoreInstance.collection("security").document(uid)
             .update("hasReviewBan", true)
             .addOnSuccessListener {
                 listener.onComplete(RequestListener.SUCCESS)
@@ -346,7 +360,8 @@ class ModpanelViewModel : ViewModel() {
                     Request.RequestState.APPROVED
                 } else {
                     Request.RequestState.DECLINED
-                })
+                }
+            )
             .addOnSuccessListener {
                 listener.onComplete(RequestListener.SUCCESS)
                 reports.value?.remove(report)

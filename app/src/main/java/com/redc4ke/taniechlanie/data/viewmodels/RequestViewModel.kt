@@ -1,6 +1,7 @@
 package com.redc4ke.taniechlanie.data.viewmodels
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.storage.FirebaseStorage
 import com.redc4ke.taniechlanie.data.Category
 import com.redc4ke.taniechlanie.data.RequestListener
@@ -189,11 +191,17 @@ class RequestViewModel : ViewModel() {
                 .collection("reports")
 
         firestoreRef.add(report)
-            .addOnFailureListener {
-                requestListener.onComplete(RequestListener.OTHER)
-            }
             .addOnSuccessListener {
                 requestListener.onComplete(RequestListener.SUCCESS)
+            }
+            .addOnFailureListener {
+                if (
+                    it is FirebaseFirestoreException
+                    && it.code == FirebaseFirestoreException.Code.PERMISSION_DENIED) {
+                    requestListener.onComplete(RequestListener.PERMISSION_DENIED)
+                } else {
+                    requestListener.onComplete(RequestListener.OTHER)
+                }
             }
     }
 

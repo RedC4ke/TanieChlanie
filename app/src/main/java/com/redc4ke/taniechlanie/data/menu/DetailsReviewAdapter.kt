@@ -1,22 +1,17 @@
 package com.redc4ke.taniechlanie.data.menu
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.ViewBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.redc4ke.taniechlanie.R
-import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.data.viewmodels.Report
 import com.redc4ke.taniechlanie.data.viewmodels.Review
 import com.redc4ke.taniechlanie.data.viewmodels.ReviewViewModel
 import com.redc4ke.taniechlanie.databinding.RowReviewBinding
-import com.redc4ke.taniechlanie.databinding.RowSheet2Binding
-import com.redc4ke.taniechlanie.ui.menu.details.AddReviewFragment
+import com.redc4ke.taniechlanie.ui.popup.AddReviewFragment
 import com.redc4ke.taniechlanie.ui.menu.details.Sheet1Fragment
 import com.redc4ke.taniechlanie.ui.popup.ReportSubmitFragment
 

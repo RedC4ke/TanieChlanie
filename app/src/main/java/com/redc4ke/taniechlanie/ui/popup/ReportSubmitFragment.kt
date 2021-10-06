@@ -150,20 +150,30 @@ class ReportSubmitFragment(private val reportType: Int, private val itemId: Stri
                                     reportPB.visibility = View.GONE
                                     reportSendBT.text = getString(R.string.send)
 
-                                    if (resultCode != RequestListener.SUCCESS) {
-                                        Toast.makeText(
-                                            requireContext(),
-                                            R.string.toast_error,
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                    } else {
-                                        Toast.makeText(
-                                            requireContext(),
-                                            R.string.request_success,
-                                            Toast.LENGTH_LONG
-                                        ).show()
+                                    when (resultCode) {
+                                        RequestListener.SUCCESS -> {
+                                            Toast.makeText(
+                                                requireContext(),
+                                                R.string.request_success,
+                                                Toast.LENGTH_LONG
+                                            ).show()
 
-                                        dismiss()
+                                            dismiss()
+                                        }
+                                        RequestListener.PERMISSION_DENIED -> {
+                                            Toast.makeText(
+                                                requireContext(),
+                                                R.string.err_noPermission,
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                        }
+                                        else -> {
+                                            Toast.makeText(
+                                                requireContext(),
+                                                R.string.toast_error,
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                        }
                                     }
                                 }
                             })

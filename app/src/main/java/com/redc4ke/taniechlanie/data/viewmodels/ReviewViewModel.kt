@@ -37,10 +37,6 @@ class ReviewViewModel: ViewModel() {
         return reviews
     }
 
-    fun getForBooze(id: Long): List<Review> {
-        return reviews.value!![id]!!.sortedByDescending { it.usefulness }
-    }
-
     fun getForUser(uid: String, alcoObjectViewModel: AlcoObjectViewModel):
             List<Pair<AlcoObject, Review>> {
 
@@ -130,6 +126,7 @@ class ReviewViewModel: ViewModel() {
                 }
             }
             .addOnFailureListener {
+                Log.w("huj", it.toString())
                 Toast.makeText(context, "Nieznany błąd", Toast.LENGTH_LONG).show()
             }
     }
@@ -149,10 +146,17 @@ class ReviewViewModel: ViewModel() {
     }
 
     fun removeById(id: String, listener: RequestListener) {
-        ref.collection("reviews").whereEqualTo("reviewID", id)
-            .get().result.documents[0].reference.delete()
+        ref.collection("reviews").whereEqualTo("id", id)
+            .get()
             .addOnSuccessListener {
-                listener.onComplete(RequestListener.SUCCESS)
+                it.documents.last().reference
+                    .delete()
+                    .addOnSuccessListener {
+                        listener.onComplete(RequestListener.SUCCESS)
+                    }
+                    .addOnFailureListener {
+                        listener.onComplete(RequestListener.OTHER)
+                    }
             }
             .addOnFailureListener {
                 listener.onComplete(RequestListener.OTHER)

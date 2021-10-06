@@ -8,11 +8,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
-import com.firebase.ui.auth.data.model.User
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.database.MutableData
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
@@ -39,7 +37,8 @@ class UserViewModel : ViewModel() {
     private val userStats = MutableLiveData<Map<String, Any>?>()
     private val userTitle = MutableLiveData<Map<String, Any?>>()
     private var favourites = MutableLiveData<ArrayList<Long>>()
-    private var groups = MutableLiveData<ArrayList<String>>()
+    private val permissionLevel = MutableLiveData<Int>()
+    private val reviewBan = MutableLiveData<Boolean>()
 
     init {
         downloadTitles()
@@ -81,14 +80,19 @@ class UserViewModel : ViewModel() {
             "uid" to user.uid,
             "name" to user.displayName,
             "created" to Timestamp.now(),
-            "groups" to arrayListOf(
-                "user"
-            ),
             "stats" to stats,
             "title" to 1,
             "avatar" to avatar
         )
-        firestore.collection("users").document(user.uid).set(data)
+
+        firestore
+            .runTransaction {
+                it.set(firestore.collection("users").document(user.uid), data)
+                it.set(
+                    firestore.collection("security").document(user.uid),
+                    "permissionLevel" to 0
+                )
+            }
             .addOnSuccessListener {
                 downloadData()
             }
@@ -102,9 +106,16 @@ class UserViewModel : ViewModel() {
             }
     }
 
-    //TODO: change to protected request
-    fun isModerator(): Boolean {
-        return staticUser != null && groups.value?.contains("moderator") == true
+    fun getPermissionLevel(): Int {
+        return if (staticUser == null) {
+            -1
+        } else {
+            permissionLevel.value ?: 0
+        }
+    }
+
+    fun hasReviewBan(): Boolean {
+        return reviewBan.value ?: false
     }
 
     fun getUser(): MutableLiveData<FirebaseUser?> {
@@ -143,7 +154,6 @@ class UserViewModel : ViewModel() {
                     uid,
                     it.getString("name"),
                     it.getTimestamp("created"),
-                    it.get("groups") as? ArrayList<String>,
                     it.get("stats") as? Map<String, Any> ?: mapOf(),
                     it.getLong("title"),
                     it.getString("avatar"),
@@ -168,13 +178,14 @@ class UserViewModel : ViewModel() {
                         createUser(staticUser!!, null)
                         downloadData()
                     } else {
+                        downloadPermissions()
+
                         val data = it.data
                         if (data != null) {
                             val userData = UserData(
                                 data["uid"] as String,
                                 data["name"] as String?,
                                 data["created"] as Timestamp?,
-                                data["groups"] as ArrayList<String>?,
                                 data["stats"] as Map<String, Int>,
                                 data["title"] as Long,
                                 data["avatar"] as String?,
@@ -184,7 +195,6 @@ class UserViewModel : ViewModel() {
                             userTitle.value =
                                 titles[(data["title"] as Long).toInt()] ?: mapOf("name" to "n/a")
                             favourites.value = userData.favourites
-                            groups.value = userData.groups ?: arrayListOf()
 
                             if (staticUser != null) userData.integrityCheck(firestore, staticUser!!)
                         }
@@ -199,6 +209,19 @@ class UserViewModel : ViewModel() {
                     }
                 }
         }
+    }
+
+    private fun downloadPermissions() {
+        if (staticUser != null)
+            firestore.collection("security").document(staticUser!!.uid)
+                .get()
+                .addOnSuccessListener {
+                    permissionLevel.value = it.getLong("permissionLevel")?.toInt()
+                    reviewBan.value = it.getBoolean("hasReviewBan")
+                }
+                .addOnFailureListener {
+                    Log.w("UserViewModel", "downloadPermissions failed: $it")
+                }
     }
 
     private fun downloadTitles() {
@@ -377,7 +400,6 @@ data class UserData(
     val uid: String,
     var name: String?,
     val created: Timestamp?,
-    val groups: ArrayList<String>?,
     val stats: Map<String, Any>,
     val title: Long?,
     var avatar: String?,
@@ -394,12 +416,6 @@ data class UserData(
                             "avatar" to user.photoUrl.toString()
                         )
                     )
-                    .addOnSuccessListener {
-                        Log.d("UserData", "Updated!")
-                    }
-                    .addOnFailureListener {
-                        Log.d("UserData", "Error: $it")
-                    }
             }
         }
     }
