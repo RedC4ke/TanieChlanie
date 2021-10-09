@@ -133,7 +133,7 @@ class ReviewViewModel: ViewModel() {
 
     fun remove(review: Review, user: FirebaseUser): Task<QuerySnapshot> {
         return ref.collection("reviews")
-            .whereEqualTo("reviewID", review.reviewID).get()
+            .whereEqualTo("id", review.reviewID).get()
             .addOnSuccessListener {
                 it.forEach { document ->
                     document.reference.delete()
@@ -141,7 +141,12 @@ class ReviewViewModel: ViewModel() {
                             download(review.objectID)
                             reviewsUpdate(user, -1)
                         }
+                        .addOnFailureListener {
+                        }
                 }
+            }
+            .addOnFailureListener {
+
             }
     }
 
