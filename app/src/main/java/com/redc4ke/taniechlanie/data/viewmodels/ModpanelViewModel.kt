@@ -329,14 +329,11 @@ class ModpanelViewModel : ViewModel() {
             }
     }
 
-    fun blockReviewing(uid: String, listener: RequestListener) {
+    fun blockReviewing(uid: String) {
         firestoreInstance.collection("security").document(uid)
             .update("hasReviewBan", true)
-            .addOnSuccessListener {
-                listener.onComplete(RequestListener.SUCCESS)
-            }
             .addOnFailureListener {
-                listener.onComplete(RequestListener.OTHER)
+                Log.d("huj", it.toString())
             }
     }
 
@@ -365,9 +362,11 @@ class ModpanelViewModel : ViewModel() {
             .addOnSuccessListener {
                 listener.onComplete(RequestListener.SUCCESS)
                 reports.value?.remove(report)
+                Log.d("huj", "dddd")
             }
             .addOnFailureListener {
                 listener.onComplete(RequestListener.OTHER)
+                Log.d("huj", it.toString())
             }
     }
 }

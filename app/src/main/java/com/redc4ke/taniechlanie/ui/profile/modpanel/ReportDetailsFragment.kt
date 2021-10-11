@@ -18,6 +18,7 @@ import com.redc4ke.taniechlanie.data.RequestListener
 import com.redc4ke.taniechlanie.data.viewmodels.*
 import com.redc4ke.taniechlanie.databinding.FragmentReportDetailsBinding
 import com.redc4ke.taniechlanie.ui.MainActivity
+import com.redc4ke.taniechlanie.ui.MainActivity.Utility.longToast
 import com.redc4ke.taniechlanie.ui.base.BaseFragment
 import com.redc4ke.taniechlanie.ui.popup.BoozeDataChangeFragment
 import com.redc4ke.taniechlanie.ui.popup.CategoryAddRemoveFragment
@@ -60,6 +61,7 @@ class ReportDetailsFragment : BaseFragment<FragmentReportDetailsBinding>() {
                 override fun onComplete(resultCode: Int) {
                     // if result is success
                     if (resultCode == RequestListener.SUCCESS) {
+                        Log.d("huj", "fffffff")
                         // if action is other than pass the report forward or block user
                         if (
                             (actionPosition < 6 && report.reportType == Report.ReportType.BOOZE)
@@ -141,13 +143,14 @@ class ReportDetailsFragment : BaseFragment<FragmentReportDetailsBinding>() {
                 when (actionPosition) {
                     0 -> reviewViewModel.removeById(report.itemId, listener)
                     1 -> {
-                        val reviewAuthorId = reviewViewModel.getReview(report.itemId).value?.author
+                        val reviewAuthorId = reviewViewModel.getStaticReview(report.itemId)?.author
                         reviewViewModel.removeById(report.itemId, object : RequestListener {
                             override fun onComplete(resultCode: Int) {
                                 if (resultCode != RequestListener.SUCCESS || reviewAuthorId == null) {
                                     listener.onComplete(RequestListener.OTHER)
                                 } else {
-                                    modpanelViewModel.blockReviewing(reviewAuthorId, listener)
+                                    modpanelViewModel.blockReviewing(reviewAuthorId)
+                                    listener.onComplete(RequestListener.SUCCESS)
                                 }
                             }
                         })
@@ -199,6 +202,22 @@ class ReportDetailsFragment : BaseFragment<FragmentReportDetailsBinding>() {
                         repDetailsReviewINCL.contentTV.text = it.content
                     }
                 })
+            }
+
+            repDetailsDeleteBT.setOnClickListener {
+                modpanelViewModel.completeReport(
+                    report,
+                    false,
+                    object: RequestListener {
+                        override fun onComplete(resultCode: Int) {
+                            if (resultCode != RequestListener.SUCCESS) {
+                                longToast(requireContext(), getString(R.string.toast_error))
+                            } else {
+                                findNavController().navigateUp()
+                            }
+                         }
+                    }
+                )
             }
 
             repDetailsAcceptBT.setOnClickListener {

@@ -71,10 +71,21 @@ class ReviewViewModel: ViewModel() {
         ref.collection("reviews").whereEqualTo("id", id)
             .get()
             .addOnSuccessListener {
-                review.value = retrieve(it.documents[0])
+                if (!it.documents.isNullOrEmpty()) {
+                    review.value = retrieve(it.documents.last())
+                }
             }
 
         return review
+    }
+
+    fun getStaticReview(id: String): Review? {
+        reviews.value?.forEach {
+            val temp = it.value.filter { it.reviewID == id }
+            if (!temp.isNullOrEmpty()) return temp[0]
+        }
+
+        return null
     }
 
     fun download(id: Long): Task<QuerySnapshot> {
@@ -122,7 +133,7 @@ class ReviewViewModel: ViewModel() {
                 Toast.makeText(context, "Recenzja dodana!", Toast.LENGTH_SHORT).show()
                 download(id)
                 if (!update) {
-                    reviewsUpdate(user, 1)
+                    reviewsUpdate(user.uid, 1)
                 }
             }
             .addOnFailureListener {
@@ -139,7 +150,7 @@ class ReviewViewModel: ViewModel() {
                     document.reference.delete()
                         .addOnSuccessListener {
                             download(review.objectID)
-                            reviewsUpdate(user, -1)
+                            reviewsUpdate(user.uid, -1)
                         }
                         .addOnFailureListener {
                         }
@@ -153,11 +164,16 @@ class ReviewViewModel: ViewModel() {
     fun removeById(id: String, listener: RequestListener) {
         ref.collection("reviews").whereEqualTo("id", id)
             .get()
-            .addOnSuccessListener {
-                it.documents.last().reference
+            .addOnSuccessListener { snapshot ->
+                snapshot.documents.last().reference
                     .delete()
                     .addOnSuccessListener {
                         listener.onComplete(RequestListener.SUCCESS)
+                        reviewsUpdate(
+                            snapshot.documents.last()
+                                    .getString("author") ?: "0",
+                            -1
+                        )
                     }
                     .addOnFailureListener {
                         listener.onComplete(RequestListener.OTHER)
@@ -168,8 +184,8 @@ class ReviewViewModel: ViewModel() {
             }
     }
 
-    private fun reviewsUpdate(user: FirebaseUser, value: Long) {
-        ref.collection("users").document(user.uid).update(
+    private fun reviewsUpdate(uid: String, value: Long) {
+        ref.collection("users").document(uid).update(
             "stats.reviews", FieldValue.increment(value))
     }
 
