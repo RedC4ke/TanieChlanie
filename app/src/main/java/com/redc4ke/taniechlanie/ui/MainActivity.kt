@@ -109,7 +109,13 @@ class MainActivity : AppCompatActivity() {
 
         //Chceck current user
         auth.addAuthStateListener {
-            userViewModel.login(this, it.currentUser)
+            userViewModel.login(it.currentUser, false, object : RequestListener {
+                override fun onComplete(resultCode: Int) {
+                    if (resultCode != RequestListener.SUCCESS) {
+                        longToast(applicationContext, getString(R.string.toast_error))
+                    }
+                }
+            })
         }
     }
 
@@ -193,7 +199,13 @@ class MainActivity : AppCompatActivity() {
 
             if (resultCode == Activity.RESULT_OK) {
                 if (response!!.isNewUser) {
-                    userViewModel.login(this, auth.currentUser, true)
+                    userViewModel.login(auth.currentUser, true, object : RequestListener {
+                        override fun onComplete(resultCode: Int) {
+                            if (resultCode != RequestListener.SUCCESS) {
+                                longToast(applicationContext, getString(R.string.toast_error))
+                            }
+                        }
+                    })
                 }
             } else if (response != null) {
                 val message =

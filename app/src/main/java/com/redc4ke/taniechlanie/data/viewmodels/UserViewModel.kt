@@ -44,17 +44,18 @@ class UserViewModel : ViewModel() {
         downloadTitles()
     }
 
-    fun login(context: Context, user: FirebaseUser?, new: Boolean = false) {
+    fun login(user: FirebaseUser?, new: Boolean = false, listener: RequestListener) {
         currentUser.value = user
 
         if (new) {
-            createUser(user!!, context)
+            createUser(user!!, listener)
         } else if (user != null) {
             downloadData()
+            listener.onComplete(RequestListener.SUCCESS)
         }
     }
 
-    private fun createUser(user: FirebaseUser, context: Context?) {
+    private fun createUser(user: FirebaseUser, listener: RequestListener?) {
         var avatar = defaultAvatar.toString()
         val stats = mapOf(
             "submits" to 0,
@@ -95,14 +96,11 @@ class UserViewModel : ViewModel() {
             }
             .addOnSuccessListener {
                 downloadData()
+                listener?.onComplete(RequestListener.SUCCESS)
             }
             .addOnFailureListener {
                 user.delete()
-                Toast.makeText(
-                    context,
-                    it.toString(),
-                    Toast.LENGTH_LONG
-                ).show()
+                listener?.onComplete(RequestListener.OTHER)
             }
     }
 
