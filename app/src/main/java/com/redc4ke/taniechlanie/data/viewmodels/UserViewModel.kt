@@ -29,7 +29,9 @@ class UserViewModel : ViewModel() {
     private var titles: MutableMap<Int, Map<String, Any>> = mutableMapOf()
     private val defaultAvatar =
         Uri.parse("https://firebasestorage.googleapis.com/v0/b/jabot-5ce1f.appspot.com/o/users%2Fdefault%2Favatar.png?alt=media&token=66bdbd65-2fd2-4688-b130-0c2ae045eb78")
-    private var currentUser = MutableLiveData<FirebaseUser?>()
+    private var currentUser = MutableLiveData<FirebaseUser?>().also {
+        it.value = null
+    }
     private val staticUser get() = currentUser.value
     private val userName = MutableLiveData<String>()
     private val userAvatar = MutableLiveData<Uri>()
@@ -48,6 +50,7 @@ class UserViewModel : ViewModel() {
         currentUser.value = user
 
         if (new) {
+            Log.d("huj", user?.uid ?:"n")
             createUser(user!!, listener)
         } else if (user != null) {
             downloadData()
@@ -74,7 +77,7 @@ class UserViewModel : ViewModel() {
                 }
             })
         } else {
-            avatar = user.photoUrl.toString()
+            avatar = user.photoUrl?.toString() ?: defaultAvatar.toString()
         }
 
         val data = mapOf(
@@ -86,14 +89,10 @@ class UserViewModel : ViewModel() {
             "avatar" to avatar
         )
 
-        firestore
-            .runTransaction {
-                it.set(firestore.collection("users").document(user.uid), data)
-                it.set(
-                    firestore.collection("security").document(user.uid),
-                    "permissionLevel" to 0
-                )
-            }
+        val writeBatch = firestore.batch()
+        val usersRef = firestore.collection("users").document(user.uid)
+        writeBatch.set(usersRef, data)
+        writeBatch.commit()
             .addOnSuccessListener {
                 downloadData()
                 listener?.onComplete(RequestListener.SUCCESS)
@@ -405,13 +404,13 @@ data class UserData(
 ) {
     fun integrityCheck(firestore: FirebaseFirestore, user: FirebaseUser) {
         if (uid == user.uid) {
-            if (name != user.displayName || avatar != user.photoUrl.toString()) {
+            if (name != user.displayName || avatar != user.photoUrl?.toString()) {
 
                 firestore.collection("users").document(uid)
                     .update(
                         mapOf(
                             "name" to user.displayName,
-                            "avatar" to user.photoUrl.toString()
+                            "avatar" to user.photoUrl?.toString()
                         )
                     )
             }
