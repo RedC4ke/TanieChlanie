@@ -7,6 +7,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.*
+import android.widget.Filter
 import android.widget.Toast
 import androidx.core.view.doOnPreDraw
 import androidx.lifecycle.ViewModelProvider
@@ -21,14 +22,18 @@ import com.redc4ke.taniechlanie.data.AlcoObject
 import com.redc4ke.taniechlanie.data.RequestListener
 import com.redc4ke.taniechlanie.data.menu.AlcoListAdapter
 import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectViewModel
+import com.redc4ke.taniechlanie.data.viewmodels.FilterViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentAlcoListBinding
 import com.redc4ke.taniechlanie.ui.base.BaseFragment
 import com.redc4ke.taniechlanie.ui.base.BaseListFragment
 import com.redc4ke.taniechlanie.ui.favourite.FavouriteFragment
+import com.redc4ke.taniechlanie.ui.popup.FilterFragment
+import java.math.BigDecimal
 import java.text.Normalizer
 import java.util.*
+import kotlin.collections.ArrayList
 
-//This could be done better and without the need of two separate parent fragments.
+// This could be done better and without the need of two separate parent fragments.
 // TODO: 24/08/2021
 
 class AlcoListFragment : BaseFragment<FragmentAlcoListBinding>() {
@@ -38,7 +43,8 @@ class AlcoListFragment : BaseFragment<FragmentAlcoListBinding>() {
     private lateinit var mainActivity: MainActivity
     private lateinit var alAdapter: AlcoListAdapter
     private lateinit var alcoObjectViewModel: AlcoObjectViewModel
-    private var list = listOf<AlcoObject>()
+    private lateinit var filterViewModel: FilterViewModel
+    private var alcoObjectList = listOf<AlcoObject>()
     private val firestoreRef = FirebaseFirestore.getInstance()
 
     override fun onAttach(context: Context) {
@@ -68,19 +74,31 @@ class AlcoListFragment : BaseFragment<FragmentAlcoListBinding>() {
         view.doOnPreDraw { startPostponedEnterTransition() }
         super.onViewCreated(view, savedInstanceState)
 
+        filterViewModel =
+            ViewModelProvider(requireActivity())[FilterViewModel::class.java]
+        alcoObjectViewModel =
+            ViewModelProvider(requireActivity())[AlcoObjectViewModel::class.java]
+
+        alcoObjectViewModel.getAll().observe(viewLifecycleOwner, {
+            filterViewModel.setAlcoObjectList(it)
+        })
+        filterViewModel.getFilteredList().observe(viewLifecycleOwner, {
+            alAdapter.update(it)
+        })
+
         val parent = parentFragment?.parentFragment as BaseListFragment<*>
         parent.alcoObjectList.observe(viewLifecycleOwner, {
             binding.alcoListPB.visibility = View.GONE
             if (it.isNotEmpty()) {
                 binding.alcoListTV.visibility = View.GONE
-                list = it
+                alcoObjectList = it
                 alAdapter.update(it)
             } else {
                 binding.alcoListTV.visibility = View.VISIBLE
             }
         })
 
-        //Favourite fragment doesn't exactly work with the progressbar in its current form
+        // Favourite fragment doesn't exactly work with the progressbar in its current form
         if (parent is FavouriteFragment) {
             val auth = FirebaseAuth.getInstance()
             binding.alcoListPB.visibility = View.GONE
@@ -97,14 +115,12 @@ class AlcoListFragment : BaseFragment<FragmentAlcoListBinding>() {
         }
 
         mainActivity.supportActionBar!!.show()
-        setSearch(alAdapter)
+        setSearch()
 
         binding.alcolistRequestFAB.setOnClickListener {
             findNavController().navigate(R.id.request_dest)
         }
 
-        alcoObjectViewModel =
-            ViewModelProvider(requireActivity() as MainActivity)[AlcoObjectViewModel::class.java]
         val refreshLayout = binding.alcoListSRL
         val searchBar = binding.alcoListSearchBarCV
         val defY = searchBar.y
@@ -133,6 +149,11 @@ class AlcoListFragment : BaseFragment<FragmentAlcoListBinding>() {
                 }
             })
         }
+
+        //Filter
+        binding.alcoListFilterBT.setOnClickListener {
+            FilterFragment().show(parentFragmentManager, "filterFragment")
+        }
     }
 
     fun onItemClick(cardView: View, alcoObject: AlcoObject) {
@@ -146,7 +167,7 @@ class AlcoListFragment : BaseFragment<FragmentAlcoListBinding>() {
         findNavController().navigate(directions, extras)
     }
 
-    private fun setSearch(adapter: AlcoListAdapter) {
+    private fun setSearch() {
         val textChangedListener: TextWatcher =
             object : TextWatcher {
                 override fun beforeTextChanged(
@@ -154,22 +175,13 @@ class AlcoListFragment : BaseFragment<FragmentAlcoListBinding>() {
                     start: Int,
                     count: Int,
                     after: Int
-                ) {
-                }
+                ) {}
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     val text = Normalizer.normalize(
                         s?.toString()?.lowercase(Locale.ROOT), Normalizer.Form.NFD
                     )
-                    val filteredList: MutableList<AlcoObject> = mutableListOf()
-                    list.forEach {
-                        val name = Normalizer.normalize(
-                            it.name.lowercase(Locale.ROOT), Normalizer.Form.NFD
-                        )
-                        if (name.contains(text)) filteredList.add(it)
-                    }
-                    adapter.update(filteredList as List<AlcoObject>)
-                    Log.d("menuFilter", "$list")
+                    filterViewModel.setTextFilter(text)
                 }
 
                 override fun afterTextChanged(s: Editable?) {}
@@ -209,6 +221,8 @@ class AlcoListFragment : BaseFragment<FragmentAlcoListBinding>() {
         return super.onOptionsItemSelected(item)
     }
 }
+
+
 
 
 

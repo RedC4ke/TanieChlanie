@@ -50,7 +50,6 @@ class UserViewModel : ViewModel() {
         currentUser.value = user
 
         if (new) {
-            Log.d("huj", user?.uid ?:"n")
             createUser(user!!, listener)
         } else if (user != null) {
             downloadData()
@@ -58,7 +57,12 @@ class UserViewModel : ViewModel() {
         }
     }
 
-    private fun createUser(user: FirebaseUser, listener: RequestListener?) {
+    private fun createUser(user: FirebaseUser?, listener: RequestListener?) {
+
+        if (user == null) {
+            listener?.onComplete(RequestListener.OTHER)
+        }
+
         var avatar = defaultAvatar.toString()
         val stats = mapOf(
             "submits" to 0,
@@ -67,10 +71,10 @@ class UserViewModel : ViewModel() {
         )
 
         userStats.value = stats
-        userName.value = user.displayName
-        userEmail.value = user.email
+        userName.value = user?.displayName
+        userEmail.value = user?.email
 
-        if (user.photoUrl == null) {
+        if (user?.photoUrl == null) {
             setAvatarUrl(defaultAvatar, object : RequestListener {
                 override fun onComplete(resultCode: Int) {
                     userAvatar.value = defaultAvatar
@@ -81,8 +85,8 @@ class UserViewModel : ViewModel() {
         }
 
         val data = mapOf(
-            "uid" to user.uid,
-            "name" to user.displayName,
+            "uid" to user?.uid,
+            "name" to user?.displayName,
             "created" to Timestamp.now(),
             "stats" to stats,
             "title" to 1,
@@ -90,7 +94,7 @@ class UserViewModel : ViewModel() {
         )
 
         val writeBatch = firestore.batch()
-        val usersRef = firestore.collection("users").document(user.uid)
+        val usersRef = firestore.collection("users").document(user?.uid ?: return)
         writeBatch.set(usersRef, data)
         writeBatch.commit()
             .addOnSuccessListener {
@@ -172,7 +176,7 @@ class UserViewModel : ViewModel() {
             firestore.collection("users").document(staticUser!!.uid).get()
                 .addOnSuccessListener {
                     if (!it.exists()) {
-                        createUser(staticUser!!, null)
+                        createUser(staticUser, null)
                         downloadData()
                     } else {
                         downloadPermissions()
