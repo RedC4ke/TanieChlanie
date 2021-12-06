@@ -31,46 +31,45 @@ class FilterFragment() :
         )
 
         val provider = ViewModelProvider(requireActivity())
-        val alcoObjectViewModel = provider[AlcoObjectViewModel::class.java]
         val filterViewModel = provider[FilterViewModel::class.java]
 
-        alcoObjectViewModel.getAll().observe(viewLifecycleOwner, { list ->
-            list.forEach { alcoObject ->
-                if (alcoObject.volume > maxVolume) maxVolume = alcoObject.volume
-                val price = alcoObject.shopToPrice.values.sortedBy { it }[0] ?: BigDecimal.ZERO
-                if (price > maxPrice) maxPrice = price
-            }
-        })
-
         with(binding) {
-            filterPriceSLD.valueTo = maxPrice.toFloat()
-            filterVolumeSLD.valueTo = maxVolume.toFloat()
+            filterViewModel.getMaxPrice().observe(viewLifecycleOwner, {
+                filterPriceSLD.valueFrom = 0f
+                filterPriceSLD.valueTo = it.toFloat()
+            })
 
-            filterViewModel.getPriceFilter().observe(viewLifecycleOwner, {
-                filterPriceSLD.setValues(it?.first, it?.second)
+            filterViewModel.getMaxVolume().observe(viewLifecycleOwner, {
+                filterVolumeSLD.valueFrom = 0f
+                filterVolumeSLD.valueTo = it.toFloat()
             })
-            filterViewModel.getVolumeFilter().observe(viewLifecycleOwner, {
-                filterVolumeSLD.setValues(it?.first?.toFloat(), it?.second?.toFloat())
-            })
-            filterViewModel.getVoltageFilter().observe(viewLifecycleOwner, {
-                filterVoltageSLD.setValues(it?.first, it?.second)
-            })
+
+            filterVoltageSLD.valueFrom = 0f
+            filterVoltageSLD.valueTo = 100f
+
+            val priceFilter = filterViewModel.getPriceFilter().value
+            filterPriceSLD.setValues(priceFilter?.first, priceFilter?.second)
+
+            val volumeFilter = filterViewModel.getVolumeFilter().value
+            filterVolumeSLD.setValues(volumeFilter?.first?.toFloat(), volumeFilter?.second?.toFloat())
+
+            val voltageFilter = filterViewModel.getVoltageFilter().value
+            filterVoltageSLD.setValues(voltageFilter?.first, voltageFilter?.second)
 
             filterPriceSLD.addOnChangeListener { slider, _, _ ->
-                filterViewModel.setPriceFilter(Pair(slider.valueFrom, slider.valueTo))
+                filterViewModel.setPriceFilter(Pair(slider.values[0], slider.values[1]))
             }
 
             filterVolumeSLD.addOnChangeListener { slider, _, _ ->
                 filterViewModel.setVolumeFilter(
                     Pair(
-                        slider.valueFrom.toInt(),
-                        slider.valueTo.toInt()
+                        slider.values[0].toInt(), slider.values[1].toInt()
                     )
                 )
             }
 
             filterVoltageSLD.addOnChangeListener { slider, _, _ ->
-                filterViewModel.setVoltageFilter(Pair(slider.valueFrom, slider.valueTo))
+                filterViewModel.setVoltageFilter(Pair(slider.values[0], slider.values[1]))
             }
         }
     }

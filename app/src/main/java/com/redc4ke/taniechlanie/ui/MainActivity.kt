@@ -15,10 +15,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
@@ -54,6 +51,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var categoryViewModel: CategoryViewModel
     private lateinit var userViewModel: UserViewModel
     private lateinit var faqViewModel: FaqViewModel
+    private lateinit var filterViewModel: FilterViewModel
     private lateinit var binding: ActivityMainBinding
     private lateinit var prefs: SharedPreferences
     lateinit var alcoObjectViewModel: AlcoObjectViewModel
@@ -116,6 +114,7 @@ class MainActivity : AppCompatActivity() {
         categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         faqViewModel = ViewModelProvider(this)[FaqViewModel::class.java]
+        filterViewModel = ViewModelProvider(this)[FilterViewModel::class.java]
 
         //Firebase request
         getFirebaseData()
@@ -130,6 +129,11 @@ class MainActivity : AppCompatActivity() {
                 }
             })
         }
+
+        //Setup the filter
+        alcoObjectViewModel.getAll().observe(this, {
+            filterViewModel.setAlcoObjectList(it)
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
