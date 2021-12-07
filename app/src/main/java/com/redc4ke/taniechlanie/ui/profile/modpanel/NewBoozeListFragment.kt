@@ -26,9 +26,9 @@ class NewBoozeListFragment : BaseFragment<FragmentRequestListBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         categoryViewModel =
-            ViewModelProvider(requireActivity() as MainActivity)[CategoryViewModel::class.java]
+            ViewModelProvider(requireActivity())[CategoryViewModel::class.java]
         modpanelViewModel =
-            ViewModelProvider(requireActivity() as MainActivity)[ModpanelViewModel::class.java]
+            ViewModelProvider(requireActivity())[ModpanelViewModel::class.java]
 
         val adapter = NewBoozeListAdapter(this, categoryViewModel)
         binding.requestListRV.layoutManager = LinearLayoutManager(requireContext())

@@ -41,7 +41,7 @@ class BoozeDataChangeFragment(
         super.onViewCreated(view, savedInstanceState)
 
         val alcoObjectViewModel =
-            ViewModelProvider(requireActivity() as MainActivity)[AlcoObjectViewModel::class.java]
+            ViewModelProvider(requireActivity())[AlcoObjectViewModel::class.java]
 
         with(binding) {
             val alcoObject = alcoObjectViewModel.get(itemId)

@@ -60,7 +60,7 @@ class AvailabilitySubmitFragment(detailsFragment: DetailsFragment, private val s
 
         var pickFromList = true
         val requestViewModel =
-            ViewModelProvider(requireActivity() as MainActivity)[RequestViewModel::class.java]
+            ViewModelProvider(requireActivity())[RequestViewModel::class.java]
 
         with(binding) {
             if (shopId != null) {

@@ -32,7 +32,7 @@ class ProfileRequestFragment : BaseFragment<FragmentProfileRequestBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         val requestViewModel =
-            ViewModelProvider(requireActivity() as MainActivity)[RequestViewModel::class.java]
+            ViewModelProvider(requireActivity())[RequestViewModel::class.java]
         val adapter = ProfileRequestAdapter(requireContext())
 
         requestViewModel.fetch(FirebaseAuth.getInstance().uid.toString(), object: RequestListener {

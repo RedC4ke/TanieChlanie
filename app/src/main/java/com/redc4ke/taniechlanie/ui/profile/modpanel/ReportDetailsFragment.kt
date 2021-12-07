@@ -46,7 +46,7 @@ class ReportDetailsFragment : BaseFragment<FragmentReportDetailsBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val provider = ViewModelProvider(requireActivity() as MainActivity)
+        val provider = ViewModelProvider(requireActivity())
         val alcoObjectViewModel = provider[AlcoObjectViewModel::class.java]
         val reviewViewModel = provider[ReviewViewModel::class.java]
         val userViewModel = provider[UserViewModel::class.java]

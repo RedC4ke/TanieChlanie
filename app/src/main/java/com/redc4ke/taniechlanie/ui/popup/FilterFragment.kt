@@ -19,8 +19,6 @@ class FilterFragment() :
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentFilterBinding
         get() = FragmentFilterBinding::inflate
-    private var maxPrice = BigDecimal.ONE
-    private var maxVolume = 1
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

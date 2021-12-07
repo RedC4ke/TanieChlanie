@@ -375,6 +375,7 @@ class UserViewModel : ViewModel() {
             }
     }
 
+    // TODO: 07/12/2021 rewrite this to not use context
     fun deleteAccount(activity: MainActivity) {
         val uid = staticUser?.uid
         staticUser?.delete()

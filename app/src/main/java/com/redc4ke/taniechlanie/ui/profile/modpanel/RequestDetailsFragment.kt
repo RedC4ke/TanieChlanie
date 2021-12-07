@@ -36,7 +36,7 @@ class RequestDetailsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewModelProvider = ViewModelProvider(requireActivity() as MainActivity)
+        val viewModelProvider = ViewModelProvider(requireActivity())
         val categoryViewModel = viewModelProvider[CategoryViewModel::class.java]
         val modpanelViewModel = viewModelProvider[ModpanelViewModel::class.java]
         val shopViewModel = viewModelProvider[ShopViewModel::class.java]

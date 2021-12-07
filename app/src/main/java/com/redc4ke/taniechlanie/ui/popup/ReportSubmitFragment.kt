@@ -45,7 +45,7 @@ class ReportSubmitFragment(private val reportType: Int, private val itemId: Stri
         super.onViewCreated(view, savedInstanceState)
 
         val requestViewModel =
-            ViewModelProvider(requireActivity() as MainActivity)[RequestViewModel::class.java]
+            ViewModelProvider(requireActivity())[RequestViewModel::class.java]
 
         with(binding) {
             val reasonList: List<String>

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.redc4ke.taniechlanie.databinding.FragmentOptionsBinding
+import com.redc4ke.taniechlanie.ui.MainActivity
 import com.redc4ke.taniechlanie.ui.base.BaseFragment
 
 class OptionsFragment : BaseFragment<FragmentOptionsBinding>() {
@@ -43,7 +44,7 @@ class OptionsFragment : BaseFragment<FragmentOptionsBinding>() {
             ) {
                 val selected = position == 0
                 prefs.edit().putBoolean("rounded_mR", selected).apply()
-                Log.d("templog", selected.toString())
+                MainActivity.Preferences.roundedmr = selected
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {

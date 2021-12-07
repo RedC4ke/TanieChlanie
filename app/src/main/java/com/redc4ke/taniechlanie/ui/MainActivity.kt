@@ -38,6 +38,7 @@ import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.*
 import com.redc4ke.taniechlanie.data.viewmodels.*
 import com.redc4ke.taniechlanie.databinding.ActivityMainBinding
+import com.redc4ke.taniechlanie.ui.MainActivity.Utility.longToast
 import com.redc4ke.taniechlanie.ui.popup.WelcomeFragment
 import io.grpc.android.BuildConfig
 import kotlin.math.sign
@@ -63,6 +64,11 @@ class MainActivity : AppCompatActivity() {
         FirebaseAuthUIActivityResultContract()
     ) { res ->
         this.onSignInResult(res)
+    }
+
+    //Prefs
+    object Preferences {
+        var roundedmr = false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -306,8 +312,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkPrefs() {
-        val key = "VERSION_CODE"
-        val savedVersionCode = prefs.getInt(key, -1)
+        val savedVersionCode = prefs.getInt("VERSION_CODE", -1)
         val currentVersionCode = BuildConfig.VERSION_CODE
 
         when {
@@ -316,7 +321,9 @@ class MainActivity : AppCompatActivity() {
             savedVersionCode < currentVersionCode -> welcome()
         }
 
-        prefs.edit().putInt(key, currentVersionCode).apply()
+        prefs.edit().putInt("VERSION_CODE", currentVersionCode).apply()
+
+        Preferences.roundedmr = prefs.getBoolean("rounded_mR", false)
     }
 
     private fun welcome() {
@@ -361,7 +368,7 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    companion object Utility {
+    object Utility {
         fun longToast(context: Context, string: String) {
             Toast.makeText(context, string, Toast.LENGTH_LONG).show()
         }

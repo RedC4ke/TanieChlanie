@@ -38,7 +38,7 @@ class HelpFragment : BaseFragment<FragmentHelpBinding>() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         val faqViewModel =
-            ViewModelProvider(requireActivity() as MainActivity)[FaqViewModel::class.java]
+            ViewModelProvider(requireActivity())[FaqViewModel::class.java]
         faqViewModel.get().observe(viewLifecycleOwner, {
             adapter.update(it)
         })

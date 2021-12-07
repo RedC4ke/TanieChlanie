@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.redc4ke.taniechlanie.data.AlcoObject
+import com.redc4ke.taniechlanie.data.valueDecimal
 import java.math.BigDecimal
 import java.text.Normalizer
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.math.max
 
 class FilterViewModel : ViewModel() {
 
@@ -17,6 +17,7 @@ class FilterViewModel : ViewModel() {
     private val voltageFilter = MutableLiveData<Pair<Float, Float>?>()
     private val categoryFilter = MutableLiveData<ArrayList<Int>?>()
     private val priceFilter = MutableLiveData<Pair<Float, Float>?>()
+    private val valueFilter = MutableLiveData<Pair<Float, Float>?>()
     private var originalList: List<AlcoObject> = listOf()
     private val filteredList = MutableLiveData<List<AlcoObject>>()
 
@@ -29,6 +30,7 @@ class FilterViewModel : ViewModel() {
         voltageFilter.value = Pair(0f, 100f)
         categoryFilter.value = arrayListOf()
         priceFilter.value = Pair(0f, 1f)
+        valueFilter.value = Pair(0f,1f)
 
         maxPrice.value = BigDecimal.ONE
         maxVolume.value = 1
@@ -69,6 +71,16 @@ class FilterViewModel : ViewModel() {
         update()
     }
 
+    fun setPriceFilter(price: Pair<Float, Float>?) {
+        priceFilter.value = price
+        update()
+    }
+
+    fun setValueFilter(value: Pair<Float, Float>?) {
+        valueFilter.value = value
+        update()
+    }
+
     fun getPriceFilter(): LiveData<Pair<Float, Float>?> {
         return priceFilter
     }
@@ -79,11 +91,6 @@ class FilterViewModel : ViewModel() {
 
     fun getVoltageFilter(): LiveData<Pair<Float, Float>?> {
         return voltageFilter
-    }
-
-    fun setPriceFilter(price: Pair<Float, Float>?) {
-        priceFilter.value = price
-        update()
     }
 
     fun getFilteredList(): LiveData<List<AlcoObject>> {
@@ -106,9 +113,10 @@ class FilterViewModel : ViewModel() {
                 val name = Normalizer.normalize(
                     alcoObject.name.lowercase(Locale.ROOT), Normalizer.Form.NFD
                 )
-                if (!name.contains(textFilter.value ?: return@forEach)) temporalFilteredList.remove(
-                    alcoObject
-                )
+                if (!name.contains(textFilter.value ?: return@forEach)) {
+                    temporalFilteredList.remove(alcoObject)
+                    return@forEach
+                }
             }
 
             if (volumeFilter.value != null) {
@@ -116,6 +124,7 @@ class FilterViewModel : ViewModel() {
                     alcoObject.volume > volumeFilter.value?.second ?: return@forEach
                 ) {
                     temporalFilteredList.remove(alcoObject)
+                    return@forEach
                 }
             }
 
@@ -124,13 +133,15 @@ class FilterViewModel : ViewModel() {
                     alcoObject.voltage > voltageFilter.value?.second?.toBigDecimal() ?: return@forEach
                 ) {
                     temporalFilteredList.remove(alcoObject)
+                    return@forEach
                 }
             }
 
             if (!categoryFilter.value.isNullOrEmpty()) {
-                categoryFilter.value?.forEach { category ->
+                categoryFilter.value?.forEach cat@ { category ->
                     if (!alcoObject.categories.contains(category)) {
                         temporalFilteredList.remove(alcoObject)
+                        return@forEach
                     }
                 }
             }
@@ -143,8 +154,19 @@ class FilterViewModel : ViewModel() {
                 if (displayPrice < priceFilter.value?.first?.toBigDecimal() ||
                     displayPrice > priceFilter.value?.second?.toBigDecimal()) {
                         temporalFilteredList.remove(alcoObject)
+                        return@forEach
                 }
             }
+
+            //if (valueFilter.value != null) {
+            //    val value = valueDecimal(alcoObject)
+//
+            //    if (value < valueFilter.value?.first?.toBigDecimal() ||
+            //        value > valueFilter.value?.second?.toBigDecimal()) {
+            //            temporalFilteredList.remove(alcoObject)
+            //            return@forEach
+            //    }
+            //}
         }
         filteredList.value = temporalFilteredList.sortedBy { it.name }
     }

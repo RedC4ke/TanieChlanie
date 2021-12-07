@@ -29,7 +29,7 @@ class DeclinationReasonFragment(
         val reasonList = resources.getStringArray(R.array.decliantion_reasons)
         var selectedReason: String? = null
         val modpanelViewModel =
-            ViewModelProvider(requireActivity() as MainActivity)[ModpanelViewModel::class.java]
+            ViewModelProvider(requireActivity())[ModpanelViewModel::class.java]
 
         with(binding) {
             declinationSPINNER.adapter =
