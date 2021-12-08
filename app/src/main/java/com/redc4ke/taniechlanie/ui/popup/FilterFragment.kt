@@ -45,6 +45,11 @@ class FilterFragment() :
             filterVoltageSLD.valueFrom = 0f
             filterVoltageSLD.valueTo = 100f
 
+            filterViewModel.getMaxValue().observe(viewLifecycleOwner, {
+                filterValueSLD.valueFrom = 0f
+                filterValueSLD.valueTo = it.toFloat()
+            })
+
             val priceFilter = filterViewModel.getPriceFilter().value
             filterPriceSLD.setValues(priceFilter?.first, priceFilter?.second)
 
@@ -54,21 +59,9 @@ class FilterFragment() :
             val voltageFilter = filterViewModel.getVoltageFilter().value
             filterVoltageSLD.setValues(voltageFilter?.first, voltageFilter?.second)
 
-            filterPriceSLD.addOnChangeListener { slider, _, _ ->
-                filterViewModel.setPriceFilter(Pair(slider.values[0], slider.values[1]))
-            }
-
-            filterVolumeSLD.addOnChangeListener { slider, _, _ ->
-                filterViewModel.setVolumeFilter(
-                    Pair(
-                        slider.values[0].toInt(), slider.values[1].toInt()
-                    )
-                )
-            }
-
-            filterVoltageSLD.addOnChangeListener { slider, _, _ ->
-                filterViewModel.setVoltageFilter(Pair(slider.values[0], slider.values[1]))
-            }
+            val valueFilter = filterViewModel.getValueFilter().value
+            filterValueSLD.setValues(valueFilter?.first, valueFilter?.second)
+            
         }
     }
 }

@@ -17,13 +17,46 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="12dp"
-            android:paddingBottom="24dp">
+            android:paddingBottom="16dp">
+
+            <Button
+                android:id="@+id/filterCancelBT"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="@font/open_sans_regular"
+                android:text="@string/fui_cancel"
+                android:textSize="16dp"
+                app:cornerRadius="18dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guideline6"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/filterApplyBT" />
+
+            <Button
+                android:id="@+id/filterApplyBT"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="4dp"
+                android:fontFamily="@font/open_sans_regular"
+                android:text="@string/submit"
+                android:textSize="16dp"
+                app:cornerRadius="18dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline6"
+                app:layout_constraintTop_toBottomOf="@+id/filterCategoryEditBT" />
 
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
                 android:fontFamily="@font/open_sans_regular"
                 android:text="@string/pricerange"
                 android:textSize="16sp"
@@ -126,14 +159,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/filterVolumeSLD" />
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/materialCardView2"
+                android:id="@+id/filterTypeEditBT"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="6dp"
-                android:layout_marginTop="4dp"
                 app:cardCornerRadius="18dp"
-                app:layout_constraintStart_toEndOf="@+id/materialCardView"
-                app:layout_constraintTop_toBottomOf="@+id/textView33"
+                app:layout_constraintBottom_toBottomOf="@+id/filterTypeRemoveBT"
+                app:layout_constraintStart_toEndOf="@+id/filterTypeRemoveBT"
+                app:layout_constraintTop_toTopOf="@+id/filterTypeRemoveBT"
                 app:strokeColor="@color/primary200"
                 app:strokeWidth="2dp">
 
@@ -148,11 +181,11 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/materialCardView"
+                android:id="@+id/filterTypeRemoveBT"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="6dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="8dp"
                 android:visibility="visible"
                 app:cardCornerRadius="18dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -169,14 +202,98 @@
             </com.google.android.material.card.MaterialCardView>
 
             <TextView
-                android:id="@+id/textView35"
+                android:id="@+id/filterTypeTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/open_sans_light"
+                android:maxLines="2"
+                android:textColor="@color/grey_text"
+                app:layout_constraintBottom_toBottomOf="@+id/filterTypeEditBT"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/filterTypeEditBT"
+                app:layout_constraintTop_toTopOf="@+id/filterTypeEditBT"
+                tools:text="Piwo, Piwo, Piwooooo" />
+
+            <TextView
+                android:id="@+id/textView36"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="TextView"
-                app:layout_constraintBottom_toBottomOf="@+id/materialCardView2"
-                app:layout_constraintStart_toEndOf="@+id/materialCardView2"
-                app:layout_constraintTop_toTopOf="@+id/materialCardView2" />
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/open_sans_regular"
+                android:text="@string/categories"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/filterTypeEditBT" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/filterCategoryEditBT"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="6dp"
+                app:cardCornerRadius="18dp"
+                app:layout_constraintBottom_toBottomOf="@+id/filterCategoryRemoveBT"
+                app:layout_constraintStart_toEndOf="@+id/filterTypeRemoveBT"
+                app:layout_constraintTop_toTopOf="@+id/filterCategoryRemoveBT"
+                app:strokeColor="@color/primary200"
+                app:strokeWidth="2dp">
+
+                <ImageView
+                    android:id="@+id/imageView19"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_margin="6dp"
+                    app:srcCompat="@drawable/ic_baseline_edit_24"
+                    app:tint="@color/primary300" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/filterCategoryRemoveBT"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="8dp"
+                android:visibility="visible"
+                app:cardCornerRadius="18dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView36"
+                app:strokeColor="@color/grey_outline"
+                app:strokeWidth="2dp">
+
+                <ImageView
+                    android:id="@+id/imageView24"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/ic_baseline_close_24" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/filterCategoryTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/open_sans_light"
+                android:maxLines="2"
+                android:textColor="@color/grey_text"
+                app:layout_constraintBottom_toBottomOf="@+id/filterCategoryEditBT"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/filterTypeEditBT"
+                app:layout_constraintTop_toTopOf="@+id/filterCategoryEditBT"
+                tools:text="ĄĄĄąaąąąąą ąą ąąąąą" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

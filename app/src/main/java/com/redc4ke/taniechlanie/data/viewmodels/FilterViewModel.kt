@@ -23,6 +23,7 @@ class FilterViewModel : ViewModel() {
 
     private var maxPrice = MutableLiveData<BigDecimal>()
     private var maxVolume = MutableLiveData<Int>()
+    private var maxValue = MutableLiveData<BigDecimal>()
 
     init {
         textFilter.value = null
@@ -34,19 +35,23 @@ class FilterViewModel : ViewModel() {
 
         maxPrice.value = BigDecimal.ONE
         maxVolume.value = 1
+        maxValue.value = BigDecimal.ONE
     }
 
     fun setAlcoObjectList(alcoObjectList: List<AlcoObject>) {
         originalList = alcoObjectList
 
         alcoObjectList.forEach { alcoObject ->
-            if (alcoObject.volume > maxVolume.value!!) maxVolume.value = alcoObject.volume
+            if (alcoObject.volume > maxVolume.value ?: 0) maxVolume.value = alcoObject.volume
             val price = alcoObject.shopToPrice.values.sortedBy { it }[0] ?: BigDecimal.ZERO
-            if (price > maxPrice.value!!) maxPrice.value = price
+            if (price > maxPrice.value) maxPrice.value = price
+            val value = valueDecimal(alcoObject)
+            if (value > maxValue.value) maxValue.value = value
         }
 
         setPriceFilter(Pair(0f, maxPrice.value?.toFloat() ?: 1f))
         setVolumeFilter(Pair(0, maxVolume.value ?: 1))
+        setValueFilter(Pair(0f, maxValue.value?.toFloat() ?: 1f))
 
         update()
     }
@@ -93,6 +98,10 @@ class FilterViewModel : ViewModel() {
         return voltageFilter
     }
 
+    fun getValueFilter(): LiveData<Pair<Float, Float>?> {
+        return  valueFilter
+    }
+
     fun getFilteredList(): LiveData<List<AlcoObject>> {
         return filteredList
     }
@@ -103,6 +112,10 @@ class FilterViewModel : ViewModel() {
 
     fun getMaxVolume(): LiveData<Int> {
         return maxVolume
+    }
+
+    fun getMaxValue(): LiveData<BigDecimal> {
+        return maxValue
     }
 
     private fun update() {
