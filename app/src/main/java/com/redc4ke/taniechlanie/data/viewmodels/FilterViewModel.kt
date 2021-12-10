@@ -15,7 +15,8 @@ class FilterViewModel : ViewModel() {
     private val textFilter = MutableLiveData<String?>()
     private val volumeFilter = MutableLiveData<Pair<Int, Int>?>()
     private val voltageFilter = MutableLiveData<Pair<Float, Float>?>()
-    private val categoryFilter = MutableLiveData<ArrayList<Int>?>()
+    private val typeFilter = MutableLiveData<List<Int>?>()
+    private val categoryFilter = MutableLiveData<List<Int>?>()
     private val priceFilter = MutableLiveData<Pair<Float, Float>?>()
     private val valueFilter = MutableLiveData<Pair<Float, Float>?>()
     private var originalList: List<AlcoObject> = listOf()
@@ -29,7 +30,8 @@ class FilterViewModel : ViewModel() {
         textFilter.value = null
         volumeFilter.value = Pair(0, 1)
         voltageFilter.value = Pair(0f, 100f)
-        categoryFilter.value = arrayListOf()
+        categoryFilter.value = listOf()
+        typeFilter.value = listOf()
         priceFilter.value = Pair(0f, 1f)
         valueFilter.value = Pair(0f,1f)
 
@@ -58,32 +60,30 @@ class FilterViewModel : ViewModel() {
 
     fun setTextFilter(text: String?) {
         textFilter.value = text
-        update()
     }
 
     fun setVolumeFilter(volume: Pair<Int, Int>?) {
         volumeFilter.value = volume
-        update()
     }
 
     fun setVoltageFilter(voltage: Pair<Float, Float>?) {
         voltageFilter.value = voltage
-        update()
     }
 
-    fun setCategoryFilter(categories: ArrayList<Int>?) {
+    fun setCategoryFilter(categories: List<Int>?) {
         categoryFilter.value = categories
-        update()
+    }
+
+    fun setTypeFilter(types: List<Int>?) {
+        typeFilter.value = types
     }
 
     fun setPriceFilter(price: Pair<Float, Float>?) {
         priceFilter.value = price
-        update()
     }
 
     fun setValueFilter(value: Pair<Float, Float>?) {
         valueFilter.value = value
-        update()
     }
 
     fun getPriceFilter(): LiveData<Pair<Float, Float>?> {
@@ -102,6 +102,14 @@ class FilterViewModel : ViewModel() {
         return  valueFilter
     }
 
+    fun getCategoryFilter(): LiveData<List<Int>?> {
+        return categoryFilter
+    }
+
+    fun getTypeFilter(): LiveData<List<Int>?> {
+        return typeFilter
+    }
+
     fun getFilteredList(): LiveData<List<AlcoObject>> {
         return filteredList
     }
@@ -118,7 +126,7 @@ class FilterViewModel : ViewModel() {
         return maxValue
     }
 
-    private fun update() {
+    fun update() {
         val temporalFilteredList: MutableList<AlcoObject> = originalList.toMutableList()
 
         originalList.forEach { alcoObject ->

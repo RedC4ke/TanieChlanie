@@ -34,10 +34,11 @@
         <entry key="app/src/main/res/layout/fragment_availability_submit.xml" value="0.3138586956521739" />
         <entry key="app/src/main/res/layout/fragment_booze_data_change.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_category_add_remove.xml" value="0.2776268115942029" />
+        <entry key="app/src/main/res/layout/fragment_category_pick.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_confirmation.xml" value="0.4036458333333333" />
-        <entry key="app/src/main/res/layout/fragment_details.xml" value="2.0" />
+        <entry key="app/src/main/res/layout/fragment_details.xml" value="0.22334293948126802" />
         <entry key="app/src/main/res/layout/fragment_favourite.xml" value="0.3885416666666667" />
-        <entry key="app/src/main/res/layout/fragment_filter.xml" value="0.26182432432432434" />
+        <entry key="app/src/main/res/layout/fragment_filter.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_help.xml" value="0.33967391304347827" />
         <entry key="app/src/main/res/layout/fragment_informational.xml" value="0.33967391304347827" />
         <entry key="app/src/main/res/layout/fragment_menu.xml" value="0.3885416666666667" />
@@ -56,7 +57,11 @@
         <entry key="app/src/main/res/layout/fragment_sheet1.xml" value="0.30842391304347827" />
         <entry key="app/src/main/res/layout/fragment_shop.xml" value="0.2776268115942029" />
         <entry key="app/src/main/res/layout/fragment_spinner.xml" value="0.2803442028985507" />
+        <entry key="app/src/main/res/layout/row_about.xml" value="0.2546875" />
+        <entry key="app/src/main/res/layout/row_about_expanded.xml" value="0.2546875" />
+        <entry key="app/src/main/res/layout/row_about_help.xml" value="0.2546875" />
         <entry key="app/src/main/res/layout/row_alcohol.xml" value="0.3138586956521739" />
+        <entry key="app/src/main/res/layout/row_category_pick.xml" value="0.5" />
         <entry key="app/src/main/res/layout/row_profile.xml" value="0.3138586956521739" />
         <entry key="app/src/main/res/layout/row_report.xml" value="0.5" />
         <entry key="app/src/main/res/layout/row_review.xml" value="0.25" />

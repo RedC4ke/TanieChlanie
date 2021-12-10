@@ -1,21 +1,20 @@
-package com.redc4ke.taniechlanie.ui.popup
+package com.redc4ke.taniechlanie.ui.menu
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.lifecycle.ViewModelProvider
-import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectViewModel
+import androidx.navigation.fragment.findNavController
+import com.redc4ke.taniechlanie.R
+import com.redc4ke.taniechlanie.data.viewmodels.CategoryViewModel
 import com.redc4ke.taniechlanie.data.viewmodels.FilterViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentFilterBinding
-import com.redc4ke.taniechlanie.ui.AlcoListFragment
-import com.redc4ke.taniechlanie.ui.MainActivity
 import com.redc4ke.taniechlanie.ui.base.BaseDialogFragment
-import java.math.BigDecimal
+import com.redc4ke.taniechlanie.ui.base.BaseFragment
 
 class FilterFragment() :
-    BaseDialogFragment<FragmentFilterBinding>() {
+    BaseFragment<FragmentFilterBinding>() {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentFilterBinding
         get() = FragmentFilterBinding::inflate
@@ -23,13 +22,9 @@ class FilterFragment() :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        dialog?.window?.setLayout(
-            FrameLayout.LayoutParams.MATCH_PARENT,
-            FrameLayout.LayoutParams.MATCH_PARENT
-        )
-
         val provider = ViewModelProvider(requireActivity())
         val filterViewModel = provider[FilterViewModel::class.java]
+        val categoryViewModel = provider[CategoryViewModel::class.java]
 
         with(binding) {
             filterViewModel.getMaxPrice().observe(viewLifecycleOwner, {
@@ -61,7 +56,30 @@ class FilterFragment() :
 
             val valueFilter = filterViewModel.getValueFilter().value
             filterValueSLD.setValues(valueFilter?.first, valueFilter?.second)
-            
+
+            filterTypeEditBT.setOnClickListener {
+                val directions = FilterFragmentDirections.pickCategory(true)
+                findNavController().navigate(directions)
+            }
+            filterViewModel.getTypeFilter().observe(viewLifecycleOwner, {
+                var typeString = ""
+                it?.forEach {
+                    
+                }
+                filterTypeRemoveBT.visibility =
+                    if (!it.isNullOrEmpty()) View.VISIBLE
+                    else View.GONE
+            })
+
+            filterCategoryEditBT.setOnClickListener {
+                val directions = FilterFragmentDirections.pickCategory(false)
+                findNavController().navigate(directions)
+            }
+            filterViewModel.getCategoryFilter().observe(viewLifecycleOwner, {
+                filterCategoryRemoveBT.visibility =
+                    if (!it.isNullOrEmpty()) View.VISIBLE
+                    else View.GONE
+            })
         }
     }
 }

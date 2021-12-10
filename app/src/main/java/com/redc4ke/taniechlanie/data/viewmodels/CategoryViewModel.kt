@@ -11,16 +11,23 @@ class CategoryViewModel : ViewModel() {
     private val categoryLiveData = MutableLiveData<Map<Int, Category>>()
     private val tempMap = mutableMapOf<Int, Category>()
     private val majorCategories = MutableLiveData<Map<Int, Category>>()
+    private val notMajorCategories = MutableLiveData<Map<Int, Category>>()
     private val tempMajorMap = mutableMapOf<Int, Category>()
+    private val tempNotMajorMap = mutableMapOf<Int, Category>()
 
     fun add(id: Int, name: String, imageUrl: String?, major: Boolean) {
         val cat = Category(id, name, imageUrl, major)
         tempMap[id] = cat
         categoryLiveData.value = tempMap
+
         if (major) {
             tempMajorMap[id] = cat
+        } else {
+            tempNotMajorMap[id] = cat
         }
+
         majorCategories.value = tempMajorMap
+        notMajorCategories.value = tempNotMajorMap
     }
 
     fun getAll(): LiveData<Map<Int, Category>> {
@@ -29,6 +36,10 @@ class CategoryViewModel : ViewModel() {
 
     fun getAllMajor(): LiveData<Map<Int, Category>> {
         return majorCategories
+    }
+
+    fun getAllNotMajor(): LiveData<Map<Int, Category>> {
+        return notMajorCategories
     }
 
     fun getMajor(catList: List<Int>): Category? {

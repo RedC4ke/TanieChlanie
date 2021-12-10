@@ -43,4 +43,5 @@
             app:popUpTo="@id/alcoList_dest"
             app:popUpToInclusive="false" />
     </fragment>
+
 </navigation>

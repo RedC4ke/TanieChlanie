@@ -5,9 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
-import android.widget.Filter
 import android.widget.Toast
 import androidx.core.view.doOnPreDraw
 import androidx.lifecycle.ViewModelProvider
@@ -27,11 +25,9 @@ import com.redc4ke.taniechlanie.databinding.FragmentAlcoListBinding
 import com.redc4ke.taniechlanie.ui.base.BaseFragment
 import com.redc4ke.taniechlanie.ui.base.BaseListFragment
 import com.redc4ke.taniechlanie.ui.favourite.FavouriteFragment
-import com.redc4ke.taniechlanie.ui.popup.FilterFragment
-import java.math.BigDecimal
+import com.redc4ke.taniechlanie.ui.menu.FilterFragment
 import java.text.Normalizer
 import java.util.*
-import kotlin.collections.ArrayList
 
 // This could be done better and without the need of two separate parent fragments.
 // TODO: 24/08/2021
@@ -152,7 +148,7 @@ class AlcoListFragment : BaseFragment<FragmentAlcoListBinding>() {
 
         //Filter
         binding.alcoListFilterBT.setOnClickListener {
-            FilterFragment().show(parentFragmentManager, "filterFragment")
+            parent.findNavController().navigate(R.id.openFilter)
         }
     }
 

@@ -9,7 +9,11 @@
         android:id="@+id/list_dest"
         android:name="com.redc4ke.taniechlanie.ui.menu.MenuFragment"
         android:label="@string/list"
-        tools:layout="@layout/fragment_menu"/>
+        tools:layout="@layout/fragment_menu">
+        <action
+            android:id="@+id/openFilter"
+            app:destination="@id/filter_dest" />
+    </fragment>
 
     <fragment
         android:id="@+id/about_dest"
@@ -109,6 +113,22 @@
         <argument
             android:name="request"
             app:argType="com.redc4ke.taniechlanie.data.viewmodels.Report"/>
+    </fragment>
+    <fragment
+        android:id="@+id/filter_dest"
+        android:name="com.redc4ke.taniechlanie.ui.menu.FilterFragment"
+        android:label="@string/filters" >
+        <action
+            android:id="@+id/pickCategory"
+            app:destination="@id/catPick_dest" />
+    </fragment>
+    <fragment
+        android:id="@+id/catPick_dest"
+        android:name="com.redc4ke.taniechlanie.ui.menu.CategoryPickFragment"
+        android:label="@string/pick_categories" >
+        <argument
+            android:name="isMajor"
+            app:argType="boolean" />
     </fragment>
 
 </navigation>

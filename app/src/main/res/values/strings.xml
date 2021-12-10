@@ -18,6 +18,8 @@
     <string name="modpanel_details">Szczegóły</string>
     <string name="modpanel_pricechanges">Zmiany cen</string>
     <string name="modpanel_reports">Zgłoszenia</string>
+    <string name="filters">Filtry</string>
+    <string name="pick_categories">Wybierz kategorie</string>
 
     <!-- welcome -->
     <string name="start">Zaczynamy!</string>
