@@ -1,6 +1,7 @@
 package com.redc4ke.taniechlanie.data.menu
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +15,7 @@ class CategoryPickAdapter(private val context: Context) :
     RecyclerView.Adapter<CategoryPickViewHolder>() {
 
     private var mCatList = listOf<Category>()
-    private var selectedCategories: MutableList<Int> = mutableListOf()
+    private var selectedCategories: MutableList<Category> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryPickViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -31,13 +32,19 @@ class CategoryPickAdapter(private val context: Context) :
             Glide.with(context).load(category.image).into(holder.vb.rowCatPickIV)
         }
 
+        holder.vb.rowCatPickCHB.isChecked = selectedCategories.contains(mCatList[position])
+
         holder.vb.rowCatPickTV.text = category.name
+
+        holder.vb.root.setOnClickListener {
+            holder.vb.rowCatPickCHB.toggle()
+        }
 
         holder.vb.rowCatPickCHB.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                selectedCategories.add(category.id)
+                selectedCategories.add(category)
             } else {
-                selectedCategories.remove(category.id)
+                selectedCategories.remove(category)
             }
         }
     }
@@ -46,12 +53,23 @@ class CategoryPickAdapter(private val context: Context) :
         return mCatList.size
     }
 
-    fun update(catList: List<Category>) {
+    fun update(catList: List<Category>, selected: List<Category>) {
         mCatList = catList
+        selectedCategories = selected.toMutableList()
         notifyDataSetChanged()
     }
 
-    fun getSelected(): List<Int> {
+    fun selectAll() {
+        selectedCategories = mCatList.toMutableList()
+        notifyDataSetChanged()
+    }
+
+    fun deselectAll() {
+        selectedCategories = mutableListOf()
+        notifyDataSetChanged()
+    }
+
+    fun getSelected(): List<Category> {
         return selectedCategories
     }
 }

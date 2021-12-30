@@ -128,8 +128,6 @@ class BoozeDataChangeFragment(
                                 bdcVoltageET.text.toString().toBigDecimal(),
                                 object : RequestListener {
                                     override fun onComplete(resultCode: Int) {
-                                        Log.d("huj", "ffffff")
-
                                         dismiss()
                                         listener.onComplete(resultCode)
                                     }

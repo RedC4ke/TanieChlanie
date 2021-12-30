@@ -61,7 +61,6 @@ class ReportDetailsFragment : BaseFragment<FragmentReportDetailsBinding>() {
                 override fun onComplete(resultCode: Int) {
                     // if result is success
                     if (resultCode == RequestListener.SUCCESS) {
-                        Log.d("huj", "fffffff")
                         // if action is other than pass the report forward or block user
                         if (
                             (actionPosition < 6 && report.reportType == Report.ReportType.BOOZE)

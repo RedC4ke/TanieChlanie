@@ -1,6 +1,7 @@
 package com.redc4ke.taniechlanie.ui.menu
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,62 +25,110 @@ class FilterFragment() :
 
         val provider = ViewModelProvider(requireActivity())
         val filterViewModel = provider[FilterViewModel::class.java]
-        val categoryViewModel = provider[CategoryViewModel::class.java]
 
         with(binding) {
+
+            // Price
             filterViewModel.getMaxPrice().observe(viewLifecycleOwner, {
                 filterPriceSLD.valueFrom = 0f
                 filterPriceSLD.valueTo = it.toFloat()
             })
+            val priceFilter = filterViewModel.getPriceFilter().value
+            filterPriceSLD.setValues(priceFilter?.first, priceFilter?.second)
 
+            // Volume
             filterViewModel.getMaxVolume().observe(viewLifecycleOwner, {
                 filterVolumeSLD.valueFrom = 0f
                 filterVolumeSLD.valueTo = it.toFloat()
             })
+            val volumeFilter = filterViewModel.getVolumeFilter().value
+            filterVolumeSLD.setValues(
+                volumeFilter?.first?.toFloat(),
+                volumeFilter?.second?.toFloat()
+            )
 
+            // Voltage
             filterVoltageSLD.valueFrom = 0f
             filterVoltageSLD.valueTo = 100f
+            val voltageFilter = filterViewModel.getVoltageFilter().value
+            filterVoltageSLD.setValues(voltageFilter?.first, voltageFilter?.second)
 
+            // Value
             filterViewModel.getMaxValue().observe(viewLifecycleOwner, {
                 filterValueSLD.valueFrom = 0f
                 filterValueSLD.valueTo = it.toFloat()
             })
-
-            val priceFilter = filterViewModel.getPriceFilter().value
-            filterPriceSLD.setValues(priceFilter?.first, priceFilter?.second)
-
-            val volumeFilter = filterViewModel.getVolumeFilter().value
-            filterVolumeSLD.setValues(volumeFilter?.first?.toFloat(), volumeFilter?.second?.toFloat())
-
-            val voltageFilter = filterViewModel.getVoltageFilter().value
-            filterVoltageSLD.setValues(voltageFilter?.first, voltageFilter?.second)
-
             val valueFilter = filterViewModel.getValueFilter().value
             filterValueSLD.setValues(valueFilter?.first, valueFilter?.second)
 
+            // Type
             filterTypeEditBT.setOnClickListener {
                 val directions = FilterFragmentDirections.pickCategory(true)
                 findNavController().navigate(directions)
             }
             filterViewModel.getTypeFilter().observe(viewLifecycleOwner, {
                 var typeString = ""
-                it?.forEach {
-                    
+                it?.forEach { category ->
+                    typeString += category.name + ", "
                 }
+                typeString = typeString.dropLast(2)
+                filterTypeTV.text = typeString
+
                 filterTypeRemoveBT.visibility =
                     if (!it.isNullOrEmpty()) View.VISIBLE
                     else View.GONE
             })
+            filterTypeRemoveBT.setOnClickListener {
+                filterViewModel.setTypeFilter(listOf())
+            }
 
+            // Category
             filterCategoryEditBT.setOnClickListener {
                 val directions = FilterFragmentDirections.pickCategory(false)
                 findNavController().navigate(directions)
             }
             filterViewModel.getCategoryFilter().observe(viewLifecycleOwner, {
+                var categoryString = ""
+                it?.forEach { category ->
+                    categoryString += category.name + ", "
+                }
+                categoryString = categoryString.dropLast(2)
+                filterCategoryTV.text = categoryString
+
                 filterCategoryRemoveBT.visibility =
                     if (!it.isNullOrEmpty()) View.VISIBLE
                     else View.GONE
             })
+            filterCategoryRemoveBT.setOnClickListener {
+                filterViewModel.setCategoryFilter(listOf())
+            }
+
+            //Buttons
+            filterCancelBT.setOnClickListener {
+                filterViewModel.setMaxValues()
+                findNavController().popBackStack()
+            }
+            filterApplyBT.setOnClickListener {
+                with(filterPriceSLD) {
+                    filterViewModel.setPriceFilter(Pair(this.values[0], this.values[1]))
+                }
+                with(filterVolumeSLD) {
+                    filterViewModel.setVolumeFilter(
+                        Pair(
+                            this.values[0].toInt(),
+                            this.values[1].toInt()
+                        )
+                    )
+                }
+                with(filterVoltageSLD) {
+                    filterViewModel.setVoltageFilter(Pair(this.values[0], this.values[1]))
+                }
+                with(filterValueSLD) {
+                    filterViewModel.setValueFilter(Pair(this.values[0], this.values[1]))
+                }
+                filterViewModel.update()
+                findNavController().popBackStack()
+            }
         }
     }
 }

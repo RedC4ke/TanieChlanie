@@ -1,9 +1,11 @@
 package com.redc4ke.taniechlanie.data.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.redc4ke.taniechlanie.data.AlcoObject
+import com.redc4ke.taniechlanie.data.Category
 import com.redc4ke.taniechlanie.data.valueDecimal
 import java.math.BigDecimal
 import java.text.Normalizer
@@ -15,8 +17,8 @@ class FilterViewModel : ViewModel() {
     private val textFilter = MutableLiveData<String?>()
     private val volumeFilter = MutableLiveData<Pair<Int, Int>?>()
     private val voltageFilter = MutableLiveData<Pair<Float, Float>?>()
-    private val typeFilter = MutableLiveData<List<Int>?>()
-    private val categoryFilter = MutableLiveData<List<Int>?>()
+    private val typeFilter = MutableLiveData<List<Category>?>()
+    private val categoryFilter = MutableLiveData<List<Category>?>()
     private val priceFilter = MutableLiveData<Pair<Float, Float>?>()
     private val valueFilter = MutableLiveData<Pair<Float, Float>?>()
     private var originalList: List<AlcoObject> = listOf()
@@ -26,40 +28,65 @@ class FilterViewModel : ViewModel() {
     private var maxVolume = MutableLiveData<Int>()
     private var maxValue = MutableLiveData<BigDecimal>()
 
+    private var firstUpdate = true
+    private val isActive = MutableLiveData<Boolean>()
+
+    var allTypesSelected = false
+    var allCategoriesSelected = false
+
     init {
-        textFilter.value = null
+        textFilter.value = ""
         volumeFilter.value = Pair(0, 1)
         voltageFilter.value = Pair(0f, 100f)
         categoryFilter.value = listOf()
         typeFilter.value = listOf()
         priceFilter.value = Pair(0f, 1f)
-        valueFilter.value = Pair(0f,1f)
+        valueFilter.value = Pair(0f, 1f)
 
         maxPrice.value = BigDecimal.ONE
         maxVolume.value = 1
         maxValue.value = BigDecimal.ONE
+
+        isActive.value = false
+    }
+
+    fun setMaxValues() {
+        textFilter.value = ""
+        volumeFilter.value = Pair(0, maxVolume.value ?: 1)
+        voltageFilter.value = Pair(0f, 100f)
+        categoryFilter.value = listOf()
+        typeFilter.value = listOf()
+        priceFilter.value = Pair(0f, maxPrice.value?.toFloat() ?: 1f)
+        valueFilter.value = Pair(0f, maxValue.value?.toFloat() ?: 1f)
     }
 
     fun setAlcoObjectList(alcoObjectList: List<AlcoObject>) {
-        originalList = alcoObjectList
+        if (alcoObjectList.size != originalList.size) {
+            originalList = alcoObjectList
 
-        alcoObjectList.forEach { alcoObject ->
-            if (alcoObject.volume > maxVolume.value ?: 0) maxVolume.value = alcoObject.volume
-            val price = alcoObject.shopToPrice.values.sortedBy { it }[0] ?: BigDecimal.ZERO
-            if (price > maxPrice.value) maxPrice.value = price
-            val value = valueDecimal(alcoObject)
-            if (value > maxValue.value) maxValue.value = value
+            alcoObjectList.forEach { alcoObject ->
+                if (alcoObject.volume > maxVolume.value ?: 0) maxVolume.value = alcoObject.volume
+                val price = alcoObject.shopToPrice.values.sortedBy { it }[0] ?: BigDecimal.ZERO
+                if (price > maxPrice.value) maxPrice.value = price
+                val value = valueDecimal(alcoObject)
+                if (value > maxValue.value) maxValue.value = value
+            }
+
+            if (firstUpdate) {
+                volumeFilter.value = Pair(0, maxVolume.value?.toInt() ?: 1)
+                valueFilter.value = Pair(0f, maxValue.value?.toFloat() ?: 1f)
+                priceFilter.value = Pair(0f, maxPrice.value?.toFloat() ?: 1f)
+
+                firstUpdate = false
+            }
+
+            update()
         }
-
-        setPriceFilter(Pair(0f, maxPrice.value?.toFloat() ?: 1f))
-        setVolumeFilter(Pair(0, maxVolume.value ?: 1))
-        setValueFilter(Pair(0f, maxValue.value?.toFloat() ?: 1f))
-
-        update()
     }
 
     fun setTextFilter(text: String?) {
         textFilter.value = text
+        update()
     }
 
     fun setVolumeFilter(volume: Pair<Int, Int>?) {
@@ -70,11 +97,11 @@ class FilterViewModel : ViewModel() {
         voltageFilter.value = voltage
     }
 
-    fun setCategoryFilter(categories: List<Int>?) {
+    fun setCategoryFilter(categories: List<Category>?) {
         categoryFilter.value = categories
     }
 
-    fun setTypeFilter(types: List<Int>?) {
+    fun setTypeFilter(types: List<Category>?) {
         typeFilter.value = types
     }
 
@@ -99,14 +126,14 @@ class FilterViewModel : ViewModel() {
     }
 
     fun getValueFilter(): LiveData<Pair<Float, Float>?> {
-        return  valueFilter
+        return valueFilter
     }
 
-    fun getCategoryFilter(): LiveData<List<Int>?> {
+    fun getCategoryFilter(): LiveData<List<Category>?> {
         return categoryFilter
     }
 
-    fun getTypeFilter(): LiveData<List<Int>?> {
+    fun getTypeFilter(): LiveData<List<Category>?> {
         return typeFilter
     }
 
@@ -124,6 +151,10 @@ class FilterViewModel : ViewModel() {
 
     fun getMaxValue(): LiveData<BigDecimal> {
         return maxValue
+    }
+
+    fun isActive(): LiveData<Boolean> {
+        return isActive
     }
 
     fun update() {
@@ -159,11 +190,22 @@ class FilterViewModel : ViewModel() {
             }
 
             if (!categoryFilter.value.isNullOrEmpty()) {
-                categoryFilter.value?.forEach cat@ { category ->
-                    if (!alcoObject.categories.contains(category)) {
-                        temporalFilteredList.remove(alcoObject)
-                        return@forEach
-                    }
+                if (!alcoObject.categories.any { category ->
+                        categoryFilter.value?.map { it.id }?.contains(category) == true
+                    }) {
+
+                    temporalFilteredList.remove(alcoObject)
+                    return@forEach
+                }
+            }
+
+            if (!typeFilter.value.isNullOrEmpty()) {
+                if (!alcoObject.categories.any { category ->
+                        typeFilter.value?.map { it.id }?.contains(category) == true
+                    }) {
+
+                    temporalFilteredList.remove(alcoObject)
+                    return@forEach
                 }
             }
 
@@ -173,23 +215,26 @@ class FilterViewModel : ViewModel() {
                         ?: BigDecimal.ZERO
 
                 if (displayPrice < priceFilter.value?.first?.toBigDecimal() ||
-                    displayPrice > priceFilter.value?.second?.toBigDecimal()) {
-                        temporalFilteredList.remove(alcoObject)
-                        return@forEach
+                    displayPrice > priceFilter.value?.second?.toBigDecimal()
+                ) {
+                    temporalFilteredList.remove(alcoObject)
+                    return@forEach
                 }
             }
 
-            //if (valueFilter.value != null) {
-            //    val value = valueDecimal(alcoObject)
-//
-            //    if (value < valueFilter.value?.first?.toBigDecimal() ||
-            //        value > valueFilter.value?.second?.toBigDecimal()) {
-            //            temporalFilteredList.remove(alcoObject)
-            //            return@forEach
-            //    }
-            //}
+            if (valueFilter.value != null) {
+                val value = valueDecimal(alcoObject)
+
+                if (value < valueFilter.value?.first?.toBigDecimal() ||
+                    value > valueFilter.value?.second?.toBigDecimal()
+                ) {
+                    temporalFilteredList.remove(alcoObject)
+                    return@forEach
+                }
+            }
         }
         filteredList.value = temporalFilteredList.sortedBy { it.name }
+        isActive.value = filteredList.value?.size != originalList.size
     }
 
 }

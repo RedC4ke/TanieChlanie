@@ -137,7 +137,6 @@ class ReviewViewModel: ViewModel() {
                 }
             }
             .addOnFailureListener {
-                Log.w("huj", it.toString())
                 Toast.makeText(context, "Nieznany błąd", Toast.LENGTH_LONG).show()
             }
     }

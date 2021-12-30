@@ -291,6 +291,8 @@
          administratora.</string>
 
     <!-- other -->
+    <string name="selectall">Zaznacz wszystko</string>
+    <string name="clear">Wyczyść</string>
     <string name="rompers">Rompery</string>
     <string name="type">Typ</string>
     <string name="forwarded">Przekazane</string>

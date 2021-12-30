@@ -1,5 +1,6 @@
 package com.redc4ke.taniechlanie.data.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FieldValue
@@ -12,9 +13,14 @@ class AlcoObjectViewModel : ViewModel() {
     private val tempList = mutableListOf<AlcoObject>()
     private val alcoList = MutableLiveData(listOf<AlcoObject>())
     private val firestoreInstance = FirebaseFirestore.getInstance()
+    private var itemCount = 0
 
     private fun addObject(o: AlcoObject) {
         tempList.add(o)
+        if (tempList.size == itemCount) finalize()
+    }
+
+    private fun finalize() {
         alcoList.value = tempList
     }
 
@@ -33,6 +39,7 @@ class AlcoObjectViewModel : ViewModel() {
             .get()
             .addOnSuccessListener {
                 tempList.clear()
+                itemCount = 0
                 alcoList.value = listOf()
 
                 it.forEach { document ->
@@ -42,12 +49,18 @@ class AlcoObjectViewModel : ViewModel() {
                         "name" to document.getString("name"),
                         "volume" to document.getLong("volume")?.toInt(),
                         "voltage" to document.getLong("voltage")?.toBigDecimal(),
-                        "categories" to data["categories"] as? ArrayList<Int>,
+                        "categories" to data["categories"] as? List<Int>,
                         "photo" to document.getString("photo")
                     )
-                    getPrices(output as MutableMap<String, Any?>, firestoreRef, requestListener)
-                }
 
+                    itemCount += 1
+
+                    getPrices(
+                        output as MutableMap<String, Any?>,
+                        firestoreRef,
+                        requestListener
+                    )
+                }
                 requestListener.onComplete(RequestListener.SUCCESS)
             }
             .addOnFailureListener {
@@ -109,9 +122,10 @@ class AlcoObjectViewModel : ViewModel() {
             .addOnSuccessListener {
                 it.documents[0].reference
                     .update(
-                    "name", name,
-                    "volume", volume,
-                    "voltage", voltage.toDouble())
+                        "name", name,
+                        "volume", volume,
+                        "voltage", voltage.toDouble()
+                    )
                     .addOnSuccessListener {
                         listener.onComplete(RequestListener.SUCCESS)
                     }

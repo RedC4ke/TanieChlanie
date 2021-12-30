@@ -2,22 +2,23 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="primaryColor">#d32f2f</color>
-    <color name="primaryLightColor">#ff6659</color>
-    <color name="primaryDarkColor">#9a0007</color>
-    <color name="secondaryColor">#ffd54f</color>
-    <color name="secondaryLightColor">#ffff81</color>
-    <color name="secondaryDarkColor">#c8a415</color>
-    <color name="primaryTextColor">#ffffff</color>
-    <color name="secondaryTextColor">#000000</color>
     <color name="primary50">#ffebee</color>
     <color name="primary100">#ffcdd2</color>
     <color name="primary200">#ef9a9a</color>
     <color name="primary300">#E57373</color>
+    <color name="primaryLightColor">#ff6659</color>
     <color name="primary500">#f44336</color>
+    <color name="primaryColor">#d32f2f</color>
+    <color name="primaryDarkColor">#9a0007</color>
     <color name="secondary50">#fff8e1</color>
     <color name="secondary100">#ffecb3</color>
     <color name="secondary200">#ffe182</color>
+    <color name="secondaryLightColor">#ffff81</color>
+    <color name="secondaryColor">#ffd54f</color>
+    <color name="secondaryDarkColor">#c8a415</color>
+    <color name="primaryTextColor">#ffffff</color>
+    <color name="secondaryTextColor">#000000</color>
+
 
     <color name="dark">#1D201F</color>
     <color name="separator">#FFDCDCDC</color>

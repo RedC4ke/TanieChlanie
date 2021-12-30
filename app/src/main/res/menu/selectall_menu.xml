@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/selectallBT"
+        android:title="@string/selectall"
+        app:showAsAction="always|collapseActionView"
+        android:icon="@drawable/ic_baseline_check_box_outline_blank_24"
+        app:iconTint="@color/white"
+        />
+</menu>

@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.core.view.doOnPreDraw
@@ -13,7 +14,6 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.AlcoObject
@@ -23,9 +23,6 @@ import com.redc4ke.taniechlanie.data.viewmodels.AlcoObjectViewModel
 import com.redc4ke.taniechlanie.data.viewmodels.FilterViewModel
 import com.redc4ke.taniechlanie.databinding.FragmentAlcoListBinding
 import com.redc4ke.taniechlanie.ui.base.BaseFragment
-import com.redc4ke.taniechlanie.ui.base.BaseListFragment
-import com.redc4ke.taniechlanie.ui.favourite.FavouriteFragment
-import com.redc4ke.taniechlanie.ui.menu.FilterFragment
 import java.text.Normalizer
 import java.util.*
 
@@ -40,7 +37,6 @@ class AlcoListFragment : BaseFragment<FragmentAlcoListBinding>() {
     private lateinit var alAdapter: AlcoListAdapter
     private lateinit var alcoObjectViewModel: AlcoObjectViewModel
     private lateinit var filterViewModel: FilterViewModel
-    private var alcoObjectList = listOf<AlcoObject>()
     private val firestoreRef = FirebaseFirestore.getInstance()
 
     override fun onAttach(context: Context) {
@@ -75,35 +71,21 @@ class AlcoListFragment : BaseFragment<FragmentAlcoListBinding>() {
         alcoObjectViewModel =
             ViewModelProvider(requireActivity())[AlcoObjectViewModel::class.java]
 
-        alcoObjectViewModel.getAll().observe(viewLifecycleOwner, {
-            filterViewModel.setAlcoObjectList(it)
-        })
         filterViewModel.getFilteredList().observe(viewLifecycleOwner, {
             alAdapter.update(it)
         })
+        filterViewModel.isActive().observe(viewLifecycleOwner, {
+            binding.alcoListFilterIV.visibility = if (it) View.VISIBLE else View.GONE
+        })
 
-        val parent = parentFragment?.parentFragment as BaseListFragment<*>
-        parent.alcoObjectList.observe(viewLifecycleOwner, {
+        alcoObjectViewModel.getAll().observe(viewLifecycleOwner, {
             binding.alcoListPB.visibility = View.GONE
             if (it.isNotEmpty()) {
                 binding.alcoListTV.visibility = View.GONE
-                alcoObjectList = it
-                alAdapter.update(it)
             } else {
                 binding.alcoListTV.visibility = View.VISIBLE
             }
         })
-
-        // Favourite fragment doesn't exactly work with the progressbar in its current form
-        if (parent is FavouriteFragment) {
-            val auth = FirebaseAuth.getInstance()
-            binding.alcoListPB.visibility = View.GONE
-            binding.alcoListTV.text = if (auth.currentUser == null) {
-                getString(R.string.favourite_notloggedin)
-            } else {
-                getString(R.string.favourite_empty)
-            }
-        }
 
         binding.alcoListRV.run {
             this.adapter = alAdapter
@@ -148,7 +130,7 @@ class AlcoListFragment : BaseFragment<FragmentAlcoListBinding>() {
 
         //Filter
         binding.alcoListFilterBT.setOnClickListener {
-            parent.findNavController().navigate(R.id.openFilter)
+            findNavController().navigate(R.id.openFilter)
         }
     }
 

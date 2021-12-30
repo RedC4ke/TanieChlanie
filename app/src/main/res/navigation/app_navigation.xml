@@ -7,12 +7,19 @@
 
     <fragment
         android:id="@+id/list_dest"
-        android:name="com.redc4ke.taniechlanie.ui.menu.MenuFragment"
-        android:label="@string/list"
-        tools:layout="@layout/fragment_menu">
+        android:name="com.redc4ke.taniechlanie.ui.AlcoListFragment"
+        android:label="@string/list">
         <action
             android:id="@+id/openFilter"
             app:destination="@id/filter_dest" />
+        <action
+            android:id="@+id/openDetails"
+            app:destination="@id/details_dest"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_enter_anim" />
+        <action
+            android:id="@+id/openRequest"
+            app:destination="@id/request_dest" />
     </fragment>
 
     <fragment
@@ -48,10 +55,6 @@
             android:id="@+id/action_profile_dest_to_modpanel_dest"
             app:destination="@id/modpanel_dest" />
     </fragment>
-    <fragment
-        android:id="@+id/favourite_dest"
-        android:name="com.redc4ke.taniechlanie.ui.favourite.FavouriteFragment"
-        android:label="@string/favourite_page" />
     <fragment
         android:id="@+id/modpanel_dest"
         android:name="com.redc4ke.taniechlanie.ui.profile.modpanel.ModPanelFragment"
@@ -129,6 +132,30 @@
         <argument
             android:name="isMajor"
             app:argType="boolean" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/details_dest"
+        android:name="com.redc4ke.taniechlanie.ui.menu.details.DetailsFragment"
+        android:label="@string/details"
+        tools:layout="@layout/fragment_details">
+        <action
+            android:id="@+id/details_dest_pop"
+            app:popUpTo="@id/list_dest"
+            app:popUpToInclusive="false" />
+        <argument
+            android:name="alcoObject"
+            app:argType="com.redc4ke.taniechlanie.data.AlcoObject" />
+    </fragment>
+    <fragment
+        android:id="@+id/request_dest"
+        android:name="com.redc4ke.taniechlanie.ui.request.RequestFragment"
+        android:label="RequestFragment" >
+        <action
+            android:id="@+id/request_dets_pop"
+            app:destination="@id/list_dest"
+            app:popUpTo="@id/list_dest"
+            app:popUpToInclusive="false" />
     </fragment>
 
 </navigation>
