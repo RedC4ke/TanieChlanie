@@ -6,6 +6,7 @@ plugins {
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
     id 'com.google.firebase.firebase-perf'
+    id 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 }
 
 android {
@@ -18,8 +19,8 @@ android {
         applicationId "com.redc4ke.taniechlanie"
         minSdkVersion 25
         targetSdkVersion 31
-        versionCode 8
-        versionName "v0.8.3"
+        versionCode 86
+        versionName "v0.8.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -52,14 +53,14 @@ android {
 dependencies {
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'androidx.core:core-ktx:1.6.0'
-    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
     implementation "androidx.cardview:cardview:1.0.0"
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.google.android.gms:play-services-auth:19.2.0'
-    implementation "androidx.fragment:fragment-ktx:1.3.6"
+    implementation "androidx.fragment:fragment-ktx:1.4.0"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0"
 
     //Navigation
@@ -77,7 +78,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database'
 
     //Auth
-    implementation 'com.firebaseui:firebase-ui-auth:7.1.1'
+    implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
     implementation 'com.facebook.android:facebook-login:5.15.3'
 
     //DataProcessing
@@ -85,6 +86,8 @@ dependencies {
 
     //Additional
     implementation 'me.zhanghai.android.materialratingbar:library:1.4.0'
+    implementation 'com.onesignal:OneSignal:[4.0.0, 4.99.99]'
+    implementation 'com.android.support:cardview-v7:28.0.0'
 
 }
 

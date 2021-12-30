@@ -1,21 +1,26 @@
 package com.redc4ke.taniechlanie.ui
 
 import android.app.Activity
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Resources
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
@@ -24,10 +29,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
 import com.bumptech.glide.Glide
-import com.firebase.ui.auth.AuthMethodPickerLayout
-import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.auth.ErrorCodes
-import com.firebase.ui.auth.IdpResponse
+import com.firebase.ui.auth.*
+import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -35,8 +38,10 @@ import com.redc4ke.taniechlanie.R
 import com.redc4ke.taniechlanie.data.*
 import com.redc4ke.taniechlanie.data.viewmodels.*
 import com.redc4ke.taniechlanie.databinding.ActivityMainBinding
+import com.redc4ke.taniechlanie.ui.MainActivity.Utility.longToast
 import com.redc4ke.taniechlanie.ui.popup.WelcomeFragment
 import io.grpc.android.BuildConfig
+import kotlin.math.sign
 
 
 class MainActivity : AppCompatActivity() {
@@ -47,12 +52,24 @@ class MainActivity : AppCompatActivity() {
     private lateinit var categoryViewModel: CategoryViewModel
     private lateinit var userViewModel: UserViewModel
     private lateinit var faqViewModel: FaqViewModel
+    private lateinit var filterViewModel: FilterViewModel
     private lateinit var binding: ActivityMainBinding
     private lateinit var prefs: SharedPreferences
     lateinit var alcoObjectViewModel: AlcoObjectViewModel
-    private val loginRC = 1
     private val auth = FirebaseAuth.getInstance()
     private val firestoreRef = FirebaseFirestore.getInstance()
+
+    //Sign in
+    private val signInLauncher = registerForActivityResult(
+        FirebaseAuthUIActivityResultContract()
+    ) { res ->
+        this.onSignInResult(res)
+    }
+
+    //Prefs
+    object Preferences {
+        var roundedmr = false
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,14 +120,26 @@ class MainActivity : AppCompatActivity() {
         categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
         userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
         faqViewModel = ViewModelProvider(this)[FaqViewModel::class.java]
+        filterViewModel = ViewModelProvider(this)[FilterViewModel::class.java]
 
         //Firebase request
         getFirebaseData()
 
-        //Chceck current user
+        // Chceck current user
         auth.addAuthStateListener {
-            userViewModel.login(this, it.currentUser)
+            userViewModel.login(it.currentUser, false, object : RequestListener {
+                override fun onComplete(resultCode: Int) {
+                    if (resultCode != RequestListener.SUCCESS) {
+                        longToast(applicationContext, getString(R.string.toast_error))
+                    }
+                }
+            })
         }
+
+        //Setup the filter
+        alcoObjectViewModel.getAll().observe(this, {
+            filterViewModel.setAlcoObjectList(it)
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -186,29 +215,61 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        //Login
-        if (requestCode == loginRC) {
-            val response = IdpResponse.fromResultIntent(data)
+    private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
+        val response = result.idpResponse
 
-            if (resultCode == Activity.RESULT_OK) {
-                if (response!!.isNewUser) {
-                    userViewModel.login(this, auth.currentUser, true)
+        if (result.resultCode == Activity.RESULT_OK) {
+
+            // Testing TODO() remove
+            // Create the NotificationChannel, but only on API 26+ because
+            // the NotificationChannel class is new and not in the support library
+            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            //    val name = "xxx"
+            //    val descriptionText = "xxx"
+            //    val importance = NotificationManager.IMPORTANCE_DEFAULT
+            //    val channel = NotificationChannel("CH1", name, importance).apply {
+            //        description = descriptionText
+            //    }
+            //    // Register the channel with the system
+            //    val notificationManager: NotificationManager =
+            //        getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            //    notificationManager.createNotificationChannel(channel)
+            //}
+//
+            //val intent = Intent(this, MainActivity::class.java)
+            //val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+//
+            //val welcomeNF = NotificationCompat.Builder(this, "CH1")
+            //    .setSmallIcon(R.drawable.notification_default)
+            //    .setContentTitle("xxx")
+            //    .setContentText("ęąśćż")
+            //    .setPriority(NotificationCompat.PRIORITY_HIGH)
+            //    .setContentIntent(pendingIntent)
+            //    .setAutoCancel(true)
+//
+            //with (NotificationManagerCompat.from(this)) {
+            //    notify(0, welcomeNF.build())
+            //}
+
+            userViewModel.login(auth.currentUser, response!!.isNewUser, object : RequestListener {
+                override fun onComplete(resultCode: Int) {
+                    if (resultCode != RequestListener.SUCCESS) {
+                        longToast(applicationContext, getString(R.string.toast_error))
+                    }
                 }
-            } else if (response != null) {
-                val message =
-                    if (response.error?.errorCode == ErrorCodes.NO_NETWORK)
-                        getString(R.string.err_no_connection)
-                    else
-                        getString(R.string.error, response.error?.errorCode.toString())
-                Toast.makeText(
-                    applicationContext,
-                    message,
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+            })
+        } else if (response != null) {
+            val message =
+                if (response.error?.errorCode == ErrorCodes.NO_NETWORK)
+                    getString(R.string.err_no_connection)
+                else
+                    getString(R.string.error, response.error?.errorCode.toString())
+            Toast.makeText(
+                applicationContext,
+                message,
+                Toast.LENGTH_LONG
+            ).show()
         }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     fun getFirebaseData() {
@@ -251,8 +312,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkPrefs() {
-        val key = "VERSION_CODE"
-        val savedVersionCode = prefs.getInt(key, -1)
+        val savedVersionCode = prefs.getInt("VERSION_CODE", -1)
         val currentVersionCode = BuildConfig.VERSION_CODE
 
         when {
@@ -261,7 +321,9 @@ class MainActivity : AppCompatActivity() {
             savedVersionCode < currentVersionCode -> welcome()
         }
 
-        prefs.edit().putInt(key, currentVersionCode).apply()
+        prefs.edit().putInt("VERSION_CODE", currentVersionCode).apply()
+
+        Preferences.roundedmr = prefs.getBoolean("rounded_mR", false)
     }
 
     private fun welcome() {
@@ -270,6 +332,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun login() {
+
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(),
             AuthUI.IdpConfig.FacebookBuilder().build()
@@ -281,15 +344,14 @@ class MainActivity : AppCompatActivity() {
             .setFacebookButtonId(R.id.loginFbBT)
             .build()
 
-        startActivityForResult(
-            AuthUI.getInstance()
+        val signInIntent = AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
                 .setAuthMethodPickerLayout(layout)
                 .setTheme(R.style.Theme_taniechlanie_AuthUI)
-                .build(),
-            loginRC
-        )
+                .build()
+
+        signInLauncher.launch(signInIntent)
     }
 
     fun openBrowserFromTextView(view: View) {
@@ -306,7 +368,7 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    companion object Utility {
+    object Utility {
         fun longToast(context: Context, string: String) {
             Toast.makeText(context, string, Toast.LENGTH_LONG).show()
         }

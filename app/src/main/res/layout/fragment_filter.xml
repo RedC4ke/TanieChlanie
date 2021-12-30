@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:padding="12dp">
+
+        <Button
+            android:id="@+id/filterCancelBT"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/clear"
+            android:textSize="16dp"
+            app:cornerRadius="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/filterApplyBT" />
+
+        <Button
+            android:id="@+id/filterApplyBT"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="4dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/submit"
+            android:textSize="16dp"
+            app:cornerRadius="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline6" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/pricerange"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/filterPriceSLD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            app:labelBehavior="floating"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+        <TextView
+            android:id="@+id/textView31"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/rompers"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/filterPriceSLD" />
+
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/filterValueSLD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            app:labelBehavior="floating"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView31" />
+
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/voltage_req"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/filterValueSLD" />
+
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/filterVoltageSLD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            app:labelBehavior="floating"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView16" />
+
+        <TextView
+            android:id="@+id/textView28"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/volume_req"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/filterVoltageSLD" />
+
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/filterVolumeSLD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            app:labelBehavior="floating"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView28" />
+
+        <TextView
+            android:id="@+id/textView33"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/type"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/filterVolumeSLD" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/filterTypeEditBT"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="24dp"
+            app:layout_constraintStart_toEndOf="@+id/filterTypeRemoveBT"
+            app:layout_constraintTop_toBottomOf="@+id/textView33"
+            app:strokeColor="@color/primaryDarkColor"
+            app:strokeWidth="3dp">
+
+                <ImageView
+                    android:id="@+id/imageView18"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="6dp"
+                    app:srcCompat="@drawable/ic_baseline_edit_24"
+                    app:tint="@color/primaryDarkColor" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/filterTypeRemoveBT"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            app:cardCornerRadius="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView33"
+            app:strokeColor="@color/grey_outline"
+            app:strokeWidth="3dp"
+            tools:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/imageView22"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/ic_baseline_close_24"
+                    app:tint="@color/grey_outline" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/filterTypeTV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/open_sans_light"
+            android:maxLines="2"
+            android:minLines="2"
+            android:textColor="@color/grey_text"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/filterTypeEditBT"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/filterTypeEditBT"
+            app:layout_constraintTop_toTopOf="@+id/filterTypeEditBT"
+            tools:text="Piwo, Piwo, Piwooooo   Piwo, Piwo, Piwooooo   Piwo, Piwo, Piwooooo   Piwo, Piwo, Piwooooo   Piwo, Piwo, Piwooooo   Piwo, Piwo, Piwooooo   Piwo, Piwo, Piwooooo   " />
+
+        <TextView
+            android:id="@+id/textView36"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/categories"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/filterTypeEditBT" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/filterCategoryEditBT"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="24dp"
+            app:layout_constraintStart_toEndOf="@+id/filterCategoryRemoveBT"
+            app:layout_constraintTop_toBottomOf="@+id/textView36"
+            app:strokeColor="@color/primaryDarkColor"
+            app:strokeWidth="3dp">
+
+                <ImageView
+                    android:id="@+id/imageView19"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="6dp"
+                    app:srcCompat="@drawable/ic_baseline_edit_24"
+                    app:tint="@color/primaryDarkColor" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/filterCategoryRemoveBT"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            app:cardCornerRadius="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView36"
+            app:strokeColor="@color/grey_outline"
+            app:strokeWidth="3dp"
+            tools:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/imageView24"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/ic_baseline_close_24"
+                    app:tint="@color/grey_outline" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/filterCategoryTV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/open_sans_light"
+            android:maxLines="2"
+            android:minLines="2"
+            android:textColor="@color/grey_text"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/filterCategoryEditBT"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/filterCategoryEditBT"
+            app:layout_constraintTop_toTopOf="@+id/filterCategoryEditBT"
+            tools:text="ĄĄĄąaąąąąą ąą ąąąąą" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5013477" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

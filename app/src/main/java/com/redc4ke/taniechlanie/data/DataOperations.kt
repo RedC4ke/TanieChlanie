@@ -17,7 +17,20 @@ import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
 
-fun valueString(alcoObject: AlcoObject, context: MainActivity): String {
+fun valueString(alcoObject: AlcoObject, mainActivity: MainActivity): String {
+    var value = valueDecimal(alcoObject)
+    val rounded = MainActivity.Preferences.roundedmr
+
+    if (rounded) value = value.div(BigDecimal.valueOf(100))
+
+    val substring = value.toInt().toString()
+
+    val string = if (rounded) R.string.suff_rvalue else R.string.suff_mrvalue
+
+    return mainActivity.getString(string, substring)
+}
+
+fun valueDecimal(alcoObject: AlcoObject): BigDecimal {
     val volume = alcoObject.volume.toBigDecimal()
     val voltage = alcoObject.voltage
     val price = alcoObject.shopToPrice.entries
@@ -28,8 +41,6 @@ fun valueString(alcoObject: AlcoObject, context: MainActivity): String {
                 it.value!!
             }
         }?.value ?: BigDecimal.valueOf(0)
-    val rounded = context.getPreferences(MODE_PRIVATE)
-        .getBoolean("rounded_mR", false)
 
     val value =
         if (price != (0).toBigDecimal())
@@ -37,15 +48,7 @@ fun valueString(alcoObject: AlcoObject, context: MainActivity): String {
         else
             (0).toBigDecimal()
 
-    val substring = if (rounded) {
-        (value.setScale(0, RoundingMode.CEILING).div(100.toBigDecimal())).toString()
-    } else {
-        value.setScale(0, RoundingMode.CEILING).toInt().toString()
-    }
-
-    val string = if (rounded) R.string.suff_rvalue else R.string.suff_mrvalue
-
-    return context.getString(string, substring)
+    return value.setScale(0, RoundingMode.CEILING)
 }
 
 fun lowestPriceString(alcoObject: AlcoObject, context: Context): String {

@@ -14,6 +14,7 @@ import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
@@ -147,7 +148,7 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
             }
 
             requestCancelBT.setOnClickListener {
-                findNavController().navigate(R.id.alcoList_dest)
+                findNavController().navigate(R.id.list_dest)
                 this@RequestFragment.onDestroy()
             }
             requestSendBT.setOnClickListener {
@@ -205,7 +206,7 @@ class RequestFragment : BaseFragment<FragmentRequestBinding>(), DialogInterface.
                         val toastText = when (resultCode) {
                             RequestListener.SUCCESS -> getString(R.string.request_success).also {
                                 this@RequestFragment.findNavController()
-                                    .navigate(R.id.alcoList_dest)
+                                    .navigate(R.id.list_dest)
                                 this@RequestFragment.onDestroy()
                             }
                             RequestListener.REPEATING_CATEGORIES -> getString(R.string.request_repeatingcats)

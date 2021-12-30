@@ -37,7 +37,7 @@ class AvailabilityDetailsFragment : BaseFragment<FragmentAvailabilityDetailsBind
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val provider = ViewModelProvider(requireActivity() as MainActivity)
+        val provider = ViewModelProvider(requireActivity())
         val alcoObjectViewModel = provider[AlcoObjectViewModel::class.java]
         val modpanelViewModel = provider[ModpanelViewModel::class.java]
         val shopViewModel = provider[ShopViewModel::class.java]

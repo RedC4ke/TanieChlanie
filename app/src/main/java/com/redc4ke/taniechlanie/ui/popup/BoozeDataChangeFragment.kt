@@ -41,7 +41,7 @@ class BoozeDataChangeFragment(
         super.onViewCreated(view, savedInstanceState)
 
         val alcoObjectViewModel =
-            ViewModelProvider(requireActivity() as MainActivity)[AlcoObjectViewModel::class.java]
+            ViewModelProvider(requireActivity())[AlcoObjectViewModel::class.java]
 
         with(binding) {
             val alcoObject = alcoObjectViewModel.get(itemId)
@@ -128,8 +128,6 @@ class BoozeDataChangeFragment(
                                 bdcVoltageET.text.toString().toBigDecimal(),
                                 object : RequestListener {
                                     override fun onComplete(resultCode: Int) {
-                                        Log.d("huj", "ffffff")
-
                                         dismiss()
                                         listener.onComplete(resultCode)
                                     }

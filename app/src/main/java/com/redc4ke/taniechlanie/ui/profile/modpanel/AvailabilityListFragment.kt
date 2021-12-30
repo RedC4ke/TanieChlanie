@@ -22,7 +22,7 @@ class AvailabilityListFragment : BaseFragment<FragmentRequestListBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val provider = ViewModelProvider(requireActivity() as MainActivity)
+        val provider = ViewModelProvider(requireActivity())
         val categoryViewModel = provider[CategoryViewModel::class.java]
         val alcoObjectViewModel = provider[AlcoObjectViewModel::class.java]
         val modpanelViewModel = provider[ModpanelViewModel::class.java]

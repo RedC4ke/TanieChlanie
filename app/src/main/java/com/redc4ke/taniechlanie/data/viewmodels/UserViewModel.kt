@@ -29,7 +29,9 @@ class UserViewModel : ViewModel() {
     private var titles: MutableMap<Int, Map<String, Any>> = mutableMapOf()
     private val defaultAvatar =
         Uri.parse("https://firebasestorage.googleapis.com/v0/b/jabot-5ce1f.appspot.com/o/users%2Fdefault%2Favatar.png?alt=media&token=66bdbd65-2fd2-4688-b130-0c2ae045eb78")
-    private var currentUser = MutableLiveData<FirebaseUser?>()
+    private var currentUser = MutableLiveData<FirebaseUser?>().also {
+        it.value = null
+    }
     private val staticUser get() = currentUser.value
     private val userName = MutableLiveData<String>()
     private val userAvatar = MutableLiveData<Uri>()
@@ -44,17 +46,23 @@ class UserViewModel : ViewModel() {
         downloadTitles()
     }
 
-    fun login(context: Context, user: FirebaseUser?, new: Boolean = false) {
+    fun login(user: FirebaseUser?, new: Boolean = false, listener: RequestListener) {
         currentUser.value = user
 
         if (new) {
-            createUser(user!!, context)
+            createUser(user!!, listener)
         } else if (user != null) {
             downloadData()
+            listener.onComplete(RequestListener.SUCCESS)
         }
     }
 
-    private fun createUser(user: FirebaseUser, context: Context?) {
+    private fun createUser(user: FirebaseUser?, listener: RequestListener?) {
+
+        if (user == null) {
+            listener?.onComplete(RequestListener.OTHER)
+        }
+
         var avatar = defaultAvatar.toString()
         val stats = mapOf(
             "submits" to 0,
@@ -63,46 +71,39 @@ class UserViewModel : ViewModel() {
         )
 
         userStats.value = stats
-        userName.value = user.displayName
-        userEmail.value = user.email
+        userName.value = user?.displayName
+        userEmail.value = user?.email
 
-        if (user.photoUrl == null) {
+        if (user?.photoUrl == null) {
             setAvatarUrl(defaultAvatar, object : RequestListener {
                 override fun onComplete(resultCode: Int) {
                     userAvatar.value = defaultAvatar
                 }
             })
         } else {
-            avatar = user.photoUrl.toString()
+            avatar = user.photoUrl?.toString() ?: defaultAvatar.toString()
         }
 
         val data = mapOf(
-            "uid" to user.uid,
-            "name" to user.displayName,
+            "uid" to user?.uid,
+            "name" to user?.displayName,
             "created" to Timestamp.now(),
             "stats" to stats,
             "title" to 1,
             "avatar" to avatar
         )
 
-        firestore
-            .runTransaction {
-                it.set(firestore.collection("users").document(user.uid), data)
-                it.set(
-                    firestore.collection("security").document(user.uid),
-                    "permissionLevel" to 0
-                )
-            }
+        val writeBatch = firestore.batch()
+        val usersRef = firestore.collection("users").document(user?.uid ?: return)
+        writeBatch.set(usersRef, data)
+        writeBatch.commit()
             .addOnSuccessListener {
                 downloadData()
+                listener?.onComplete(RequestListener.SUCCESS)
             }
             .addOnFailureListener {
                 user.delete()
-                Toast.makeText(
-                    context,
-                    it.toString(),
-                    Toast.LENGTH_LONG
-                ).show()
+                listener?.onComplete(RequestListener.OTHER)
             }
     }
 
@@ -175,7 +176,7 @@ class UserViewModel : ViewModel() {
             firestore.collection("users").document(staticUser!!.uid).get()
                 .addOnSuccessListener {
                     if (!it.exists()) {
-                        createUser(staticUser!!, null)
+                        createUser(staticUser, null)
                         downloadData()
                     } else {
                         downloadPermissions()
@@ -374,6 +375,7 @@ class UserViewModel : ViewModel() {
             }
     }
 
+    // TODO: 07/12/2021 rewrite this to not use context
     fun deleteAccount(activity: MainActivity) {
         val uid = staticUser?.uid
         staticUser?.delete()
@@ -407,13 +409,13 @@ data class UserData(
 ) {
     fun integrityCheck(firestore: FirebaseFirestore, user: FirebaseUser) {
         if (uid == user.uid) {
-            if (name != user.displayName || avatar != user.photoUrl.toString()) {
+            if (name != user.displayName || avatar != user.photoUrl?.toString()) {
 
                 firestore.collection("users").document(uid)
                     .update(
                         mapOf(
                             "name" to user.displayName,
-                            "avatar" to user.photoUrl.toString()
+                            "avatar" to user.photoUrl?.toString()
                         )
                     )
             }

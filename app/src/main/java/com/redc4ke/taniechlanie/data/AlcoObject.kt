@@ -9,7 +9,7 @@ data class AlcoObject(
         var shopToPrice: Map<Int, BigDecimal?>,
         var volume: Int,
         var voltage: BigDecimal,
-        var categories: ArrayList<Int>,
+        var categories: List<Int>,
         var photo: String?,
         var description: String?
 ) : Serializable

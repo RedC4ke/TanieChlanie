@@ -47,7 +47,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
         //start fetching data for mod panel
         if (userViewModel.getPermissionLevel() > 0) {
             val modpanelViewModel =
-                ViewModelProvider(requireActivity() as MainActivity)[ModpanelViewModel::class.java]
+                ViewModelProvider(requireActivity())[ModpanelViewModel::class.java]
             modpanelViewModel.fetch()
         }
 

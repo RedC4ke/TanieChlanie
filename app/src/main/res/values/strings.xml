@@ -18,6 +18,8 @@
     <string name="modpanel_details">Szczegóły</string>
     <string name="modpanel_pricechanges">Zmiany cen</string>
     <string name="modpanel_reports">Zgłoszenia</string>
+    <string name="filters">Filtry</string>
+    <string name="pick_categories">Wybierz kategorie</string>
 
     <!-- welcome -->
     <string name="start">Zaczynamy!</string>
@@ -82,6 +84,9 @@
         <item>Recenzja zawiera obraźliwą wypowiedź</item>
         <item>Inny powód</item>
     </string-array>
+
+    <!-- filters -->
+    <string name="pricerange">Zakres cen</string>
 
     <!-- favourite page -->
     <string name="favourite_notloggedin">Zaloguj się i zacznij dodawać pozycje do ulubionych!</string>
@@ -286,6 +291,10 @@
          administratora.</string>
 
     <!-- other -->
+    <string name="selectall">Zaznacz wszystko</string>
+    <string name="clear">Wyczyść</string>
+    <string name="rompers">Rompery</string>
+    <string name="type">Typ</string>
     <string name="forwarded">Przekazane</string>
     <string name="success">Sukces!</string>
     <string name="actions">Akcje</string>

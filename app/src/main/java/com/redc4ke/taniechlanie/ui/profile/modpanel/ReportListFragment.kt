@@ -21,7 +21,7 @@ class ReportListFragment : BaseFragment<FragmentRequestListBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val provider = ViewModelProvider(requireActivity() as MainActivity)
+        val provider = ViewModelProvider(requireActivity())
         val modpanelViewModel = provider[ModpanelViewModel::class.java]
         val userViewModel = provider[UserViewModel::class.java]
 
