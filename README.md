@@ -5,6 +5,7 @@ It obviously lacks documentation due to a few reasons, mainly just because it is
 All services are provided by Firebase, but this is subject to change, especially with notifications arrival.
 
 Here are some more-or-less-actual screenshots:
+
 ![Screenshot 1](assets/1.jpg)
 ![Screenshot 2](assets/2.jpg)
 ![Screenshot 3](assets/3.jpg)
