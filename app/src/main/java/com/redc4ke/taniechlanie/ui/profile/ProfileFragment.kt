@@ -88,7 +88,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
                     getIntent.type = "image/*"
                     startActivityForResult(getIntent, pickAvatar)
                 }
-                userViewModel.getStats().observe(viewLifecycleOwner, {
+                userViewModel.getStats().observe(viewLifecycleOwner) {
                     profileSubmitsTV.text = getString(
                         R.string.profile_submits,
                         it?.get("submits") ?: "n/a"
@@ -97,14 +97,14 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
                         R.string.profile_reviews,
                         it?.get("reviews") ?: "n/a"
                     )
-                })
-                userViewModel.getTitle().observe(viewLifecycleOwner, {
+                }
+                userViewModel.getTitle().observe(viewLifecycleOwner) {
                     profileRankTV.text = it["name"] as String
-                })
-                userViewModel.getUserName().observe(viewLifecycleOwner, {
+                }
+                userViewModel.getUserName().observe(viewLifecycleOwner) {
                     profileNameTV.text = it
-                })
-                userViewModel.getAvatarUrl().observe(viewLifecycleOwner, {
+                }
+                userViewModel.getAvatarUrl().observe(viewLifecycleOwner) {
                     Glide
                         .with(requireContext())
                         .load(it)
@@ -139,7 +139,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
 
                         })
                         .into(profilePictureIV)
-                })
+                }
             } else {
                 profilePictureIV.setImageResource(R.drawable.ic_baseline_account_circle_24)
                 profileNameTV.text = getString(R.string.guest)

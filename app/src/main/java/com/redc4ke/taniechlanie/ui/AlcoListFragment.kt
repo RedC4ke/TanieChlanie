@@ -71,21 +71,21 @@ class AlcoListFragment : BaseFragment<FragmentAlcoListBinding>() {
         alcoObjectViewModel =
             ViewModelProvider(requireActivity())[AlcoObjectViewModel::class.java]
 
-        filterViewModel.getFilteredList().observe(viewLifecycleOwner, {
+        filterViewModel.getFilteredList().observe(viewLifecycleOwner) {
             alAdapter.update(it)
-        })
-        filterViewModel.isActive().observe(viewLifecycleOwner, {
+        }
+        filterViewModel.isActive().observe(viewLifecycleOwner) {
             binding.alcoListFilterIV.visibility = if (it) View.VISIBLE else View.GONE
-        })
+        }
 
-        alcoObjectViewModel.getAll().observe(viewLifecycleOwner, {
+        alcoObjectViewModel.getAll().observe(viewLifecycleOwner) {
             binding.alcoListPB.visibility = View.GONE
             if (it.isNotEmpty()) {
                 binding.alcoListTV.visibility = View.GONE
             } else {
                 binding.alcoListTV.visibility = View.VISIBLE
             }
-        })
+        }
 
         binding.alcoListRV.run {
             this.adapter = alAdapter

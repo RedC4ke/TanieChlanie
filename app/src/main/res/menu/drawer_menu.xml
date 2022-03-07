@@ -11,11 +11,6 @@
             android:checked="true" />
 
         <item
-            android:id="@+id/favourite_dest"
-            android:title="@string/favourite_page"
-            android:icon="@drawable/favourite_empty" />
-
-        <item
             android:id="@+id/about_dest"
             android:title="@string/about"
             android:icon="@drawable/about"/>

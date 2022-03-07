@@ -23,6 +23,8 @@ class FilterViewModel : ViewModel() {
     private val valueFilter = MutableLiveData<Pair<Float, Float>?>()
     private var originalList: List<AlcoObject> = listOf()
     private val filteredList = MutableLiveData<List<AlcoObject>>()
+    private val favoriteList = MutableLiveData<List<Long>>()
+    private var favOnlyFilter = false
 
     private var maxPrice = MutableLiveData<BigDecimal>()
     private var maxVolume = MutableLiveData<Int>()
@@ -50,7 +52,7 @@ class FilterViewModel : ViewModel() {
         isActive.value = false
     }
 
-    fun setMaxValues() {
+    fun clear() {
         textFilter.value = ""
         volumeFilter.value = Pair(0, maxVolume.value ?: 1)
         voltageFilter.value = Pair(0f, 100f)
@@ -58,6 +60,7 @@ class FilterViewModel : ViewModel() {
         typeFilter.value = listOf()
         priceFilter.value = Pair(0f, maxPrice.value?.toFloat() ?: 1f)
         valueFilter.value = Pair(0f, maxValue.value?.toFloat() ?: 1f)
+        favOnlyFilter = false
     }
 
     fun setAlcoObjectList(alcoObjectList: List<AlcoObject>) {
@@ -113,6 +116,14 @@ class FilterViewModel : ViewModel() {
         valueFilter.value = value
     }
 
+    fun setFavFilter(b: Boolean) {
+        favOnlyFilter = b
+    }
+
+    fun setFavList(list: List<Long>) {
+        favoriteList.value = list
+    }
+
     fun getPriceFilter(): LiveData<Pair<Float, Float>?> {
         return priceFilter
     }
@@ -153,6 +164,10 @@ class FilterViewModel : ViewModel() {
         return maxValue
     }
 
+    fun getFavFilter(): Boolean {
+        return favOnlyFilter
+    }
+
     fun isActive(): LiveData<Boolean> {
         return isActive
     }
@@ -161,6 +176,12 @@ class FilterViewModel : ViewModel() {
         val temporalFilteredList: MutableList<AlcoObject> = originalList.toMutableList()
 
         originalList.forEach { alcoObject ->
+            if (favOnlyFilter) {
+                if (favoriteList.value?.contains(alcoObject.id) == false) {
+                    temporalFilteredList.remove(alcoObject)
+                }
+            }
+
             if (!textFilter.value.isNullOrBlank()) {
                 val name = Normalizer.normalize(
                     alcoObject.name.lowercase(Locale.ROOT), Normalizer.Form.NFD

@@ -101,9 +101,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.profile_dest,
                 R.id.list_dest,
-                R.id.favourite_dest,
                 R.id.about_dest,
                 R.id.options_dest
             ),
@@ -137,9 +135,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         //Setup the filter
-        alcoObjectViewModel.getAll().observe(this, {
+        alcoObjectViewModel.getAll().observe(this) {
             filterViewModel.setAlcoObjectList(it)
-        })
+        }
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -155,7 +155,7 @@ class MainActivity : AppCompatActivity() {
         val loginTV = findViewById<TextView?>(R.id.drawerLoginTV)
         val avatarIV = findViewById<ImageView?>(R.id.drawerAvatarIV)
         val profileBT = findViewById<Button?>(R.id.drawerProfileBT)
-        userViewModel.getUser().observe(this, { user ->
+        userViewModel.getUser().observe(this) { user ->
             if (user != null) {
                 nameTV.text = user.displayName
                 loginTV.text = getString(R.string.profile)
@@ -164,9 +164,9 @@ class MainActivity : AppCompatActivity() {
                         .navigate(R.id.profile_dest)
                     mDrawerLayout.closeDrawer(GravityCompat.START)
                 }
-                userViewModel.getAvatarUrl().observe(this, {
+                userViewModel.getAvatarUrl().observe(this) {
                     Glide.with(this).load(it).into(avatarIV)
-                })
+                }
             } else {
                 avatarIV.setImageResource(R.drawable.ic_baseline_account_circle_24)
                 nameTV.text = getString(R.string.guest)
@@ -175,18 +175,20 @@ class MainActivity : AppCompatActivity() {
                     login()
                 }
             }
-        })
+        }
 
-        return super.onCreateOptionsMenu(menu)
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
         return item.onNavDestinationSelected(findNavController(R.id.alcoListNH))
                 || super.onOptionsItemSelected(item)
     }
 
     private fun setupNavigationMenu(navController: NavController) {
         val sideNavView = findViewById<NavigationView>(R.id.navigation)
+
         sideNavView?.setupWithNavController(navController)
     }
 
