@@ -6,9 +6,7 @@ All services are provided by Firebase, but this is subject to change, especially
 
 Here are some more-or-less-actual screenshots:
 
-![Screenshot 1](assets/1.jpg)
-![Screenshot 2](assets/2.jpg)
-![Screenshot 3](assets/3.jpg)
-![Screenshot 4](assets/4.jpg)
-![Screenshot 5](assets/5.jpg)
-![Screenshot 6](assets/6.jpg)
+![Screenshot 1](assets/1.jpg)![Screenshot 2](assets/2.jpg)
+![Screenshot 3](assets/3.jpg)![Screenshot 4](assets/4.jpg)
+![Screenshot 5](assets/5.jpg)![Screenshot 6](assets/8.jpg)
+![Screenshot 7](assets/7.jpg)![Screenshot 8](assets/6.jpg)
